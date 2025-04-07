@@ -1,0 +1,86 @@
+// --- 1. Projektthema -------------------------
+= SE I - Belegabgabe: {project-name}
+// --- 2. Teammitglieder -----------------------
+Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>
+// --- 3. Abgabedatum --------------------------
+01. Januar 2025
+// ---------------------------------------------
+:docs: ../docs
+include::{docs}/_includes/default-attributes.inc.adoc[]
+// ---
+:doctype: book
+:toc:
+:toclevels: 2
+:toc-title: Inhaltsverzeichnis
+:sectnums:
+:icons: font
+//:source-highlighter: highlightjs
+:source-highlighter: rouge
+:rouge-style: github
+:xrefstyle: full
+:experimental:
+:chapter-signifier:
+:figure-caption: Abbildung
+:table-caption: Tabelle
+:listing-caption: Listing
+:!example-caption:
+:experimental:
+// Folders
+:imagesdir-reset: {imagesdir}
+:docs-test2: {docs}/test2
+:docs-requirements: {docs}/requirements
+:docs-project-management: {docs}/project_management
+:docs-architecture: {docs}/architecture
+:docs-test: {docs}/test
+:docs-development: {docs}/development
+
+<<<
+
+// --- 4. include Pfade anpassen ---------------
+
+// --- Projektdokumentation ---
+= Projektdokumentation
+* Projektplan
+
+:imagesdir: {docs-project-management}/images
+
+// Projektplan
+include::{docs-project-management}/project_plan.adoc[lines=1..1;4..-1,leveloffset=+1]
+<<<
+
+// --- Technische Spezifikation ---
+= Technische Spezifikation
+* Produktvision
+* Glossar und Domänenmodel
+* UX-Konzept
+
+:imagesdir: {docs-requirements}/images
+
+// Produktvision
+include::{docs-requirements}/vision.adoc[lines=1..1;4..-1,leveloffset=+1]
+<<<
+// Glossar und Domänenmodell
+[#glossary]
+include::{docs-requirements}/glossary.adoc[lines=1..1;4..-1,leveloffset=+1]
+<<<
+// UX-Konzept
+include::{docs-requirements}/ux-concept.adoc[lines=1..1;4..-1,leveloffset=+1]
+<<<
+
+// --- Entwurfsdokumentation ---
+= Entwurfsdokumentation
+* Architektur-Notizbuch
+* Test Cases
+
+// Architektur-Notizbuch
+:imagesdir: {docs-architecture}/images
+include::{docs-architecture}/architecture_notebook.adoc[lines=1..1;4..-1,leveloffset=+1]
+<<<
+// Test Cases
+:imagesdir: {docs-test}/images
+include::{docs-test}/test_cases.adoc[lines=1..1;4..-1,leveloffset=+1]
+<<<
+
+// ---------------------------------------------
+
+:imagesdir: {imagesdir-reset}/images
