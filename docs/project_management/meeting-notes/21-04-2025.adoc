@@ -33,7 +33,8 @@ a|
 * Nachfragen ob Repo auf GitHub privat werden darf (Ben)
 * Mit Coach besprechen wie viel load die Rolle des Scrum Master und Product Owner hat
 * Abgabe der 1. Iteration Ende dieser Woche (27.04.2025 - Abends)
-* Jeder estellt dine Persona bzw Focus auf Ziele und Vision (Was man selbst von einem Finanztracker erwartet) bis Mittwoch Abend 19:00 Uhr und schickt dies Cedrick zu
+* Jeder estellt dine Persona bzw Focus auf Ziele und Vision (*Was man selbst von einem Finanztracker erwartet / was das Ziel ist?*) bis Mittwoch Abend 19:00 Uhr und schickt dies Cedrick zu
+
 * Samstag 26.04.2025 10:00 Urh Meeting für Vision
 * reserviert Raum für Präsens Meeting  (Paula)
 
