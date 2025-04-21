@@ -9,19 +9,50 @@ include::../_includes/default-attributes.inc.adoc[]
 //Kurze Beschreibung und Überblick zum Dokument.
 
 
+
 == Projektorganisation
 //Introduce the project team, team members, and roles that they play during this project. If applicable, introduce work areas, domains, or technical work packages that are assigned to team members. Introduce neighboring projects, relationships, and communication channels. If the project is introduced somewhere else, reference that location with a link.
 
+* Project Team: Wir sind ein Team von sieben Studierenden der HTW Dresden, die gemeinsam die App FinanzTracker im Rahmen des Moduls Software Engineering Projekt entwickeln.
+* Team Members (Roles): 
+- Elias Blume         ()
+- Ben Eisold          ()
+- Paula Grahlow       ()
+- Ahmad Ali Nabizada  ()
+- Tuan Khang Pham     ()
+- Christoph Prasser   ()
+- Cedrick Richter     ()
 
-== Praktiken und Bewertung
+* Communication Channels:
+- WhatsApp
+- GitHub
+- MS Teams
+- Miro-Board
+
+
+
+== Praktiken und Bewertung (Way of Working)
 //Describe or reference which management and technical practices will be used in the project, such as iterative development, continuous integration, independent testing and list any changes or particular configuration to the project. Specify how you will track progress in each practice. As an example, for iterative development the team may decide to use iteration assessments and iteration burndown reports and collect metrics such as velocity (completed work item points/ iteration).
+
+Scrum?
+
+Welche Meetings wie oft? (Weekly, Retro, Review, etc.)
+
+Wie werden Fortschritte getrackt? (GitHub Project Board, Issues, ...)
+
+Welche Entwicklungspraktiken werden genutzt?
+
 
 
 === Definition of Ready
 // Listen Sie hier die Kriterien auf, die ein Product Backlog Item (z.B. User Story) erfüllen muss, damit es bei der Sprint-Planung berücksichtigt werden kann
 
+Wann kommt eine Aufgabe in die Sprint-Planung?
+
 === Definition of Done
 // Listen Sie hier alle Kritierien auf, damit die Aufgabe eines bestimmten Typs (z.B. Task, User Story) als abgeschlossen gilt.
+
+Wann gilt eine Aufgabe als fertig?
 
 == Deployment
 //Outline the strategy for deploying the software (and its updates) into the production environment.

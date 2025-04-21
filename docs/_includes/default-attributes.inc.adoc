@@ -1,6 +1,6 @@
 // Meta
-:project-name: Projektthema (T00)
-:project-system-name: Software-Name
+:project-name: FinanzTracker (T1C)
+:project-system-name: FinApp
 // Settings:
 :toc:
 :toc-title: Inhaltsverzeichnis
