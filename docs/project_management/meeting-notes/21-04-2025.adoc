@@ -1,0 +1,50 @@
+=== Meeting‑Protokoll 14.04.2025
+
+*Teilnehmende:* Alle außer Cedrick
+*Dauer:* 60 min  
+*Leitung:* —  
+*Protokoll:* —  
+
+==== Beschlüsse
+
+|===
+| Thema | Entscheidung
+
+| Meetings In Persona
+| Meetings am Anfang und Ende des Sprints in Persona 
+
+| System name
+| FinApp
+
+| Struktur für Festlegen
+a|
+- Scrum Master - Paula (mit Vorbehalt)
+- Product Owner - Ben (mit Vorbehalt)
+- Development Team - (Alle außer Ben, Paula)
+- Organisation (Je nach Iteration wechselnd)
+- Ansprechpartner (Ben)
+| Meeting mit Coach
+| Nächste Woche Meeting mit Coach Online regulär
+| Präsens Meeting
+| Begin und Ende des Sprints in Persona Montags 13:00 Uhr ab 2. Sprint
+
+|===
+
+==== To‑Dos
+* Nachfragen ob Repo auf GitHub privat werden darf (Ben)
+* Mit Coach besprechen wie viel load die Rolle des Scrum Master und Product Owner hat
+* Abgabe der 1. Iteration Ende dieser Woche (27.04.2025 - Abends)
+* Jeder estellt dine Persona bzw Focus auf Ziele und Vision (Was man selbst von einem Finanztracker erwartet) bis Mittwoch Abend 19:00 Uhr und schickt dies Cedrick zu
+* Samstag 26.04.2025 10:00 Urh Meeting für Vision
+* reserviert Raum für Präsens Meeting  (Paula)
+
+
+==== Offene Fragen
+* Wie viel load hat die Rolle des Scrum Master und Product Owner?
+* Wann machen wir Präsens?
+
+
+
+
+
+
