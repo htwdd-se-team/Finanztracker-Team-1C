@@ -31,15 +31,15 @@ Siehe <<#glossary, Glossar>>.
 === Produktvision
 //Eine Produktvision beschreibt das Einsatzziel der Anwendung und sorgt für ein gemeinsames Ziel und Verständnis für alle Beteiligten im Projekt. Geben Sie in knapper Form übersichtsartig die Positionierung der angestrebten Lösung im Vergleich zu verfügbaren Alternativen dar. Das folgende Format kann dazu verwendet werden:
 
-
+Temporär: 
 [cols="1,3"]
 |===
-| Für | [Zielkunde / Persona]
-| der / die | [Angabe des Bedarfs oder Chance]
-| ist das  | [Produktname]
-| eine  | [Produktkategorie]
+| Für | [Studenten]
+| die | [bewusster mit Ihren Finanzen umgehen wollen]
+| ist  | [Fin-App]
+| eine  | [Finanzmanagement-Applikation]
 | der / die | [Aussage zum Hauptvorteil / Alleinstellungsmerkmal]
-| anders als | [wesentliche Lösungsalternative]
+| anders als | [momentan verbreitete Finanzanwendungen für Studenten]
 | kann unser Produkt | [Aussage zum Hauptunterschied]
 |===
 
