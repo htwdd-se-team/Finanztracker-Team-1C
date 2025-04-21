@@ -41,7 +41,7 @@ a|
 
 ==== Offene Fragen
 * Wie viel load hat die Rolle des Scrum Master und Product Owner?
-* Wann machen wir Präsens?
+
 
 
 
