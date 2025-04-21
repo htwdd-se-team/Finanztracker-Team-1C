@@ -9,8 +9,25 @@ include::../_includes/default-attributes.inc.adoc[]
 //Kurze Beschreibung und Überblick zum Dokument.
 
 
+
 == Projektorganisation
 //Introduce the project team, team members, and roles that they play during this project. If applicable, introduce work areas, domains, or technical work packages that are assigned to team members. Introduce neighboring projects, relationships, and communication channels. If the project is introduced somewhere else, reference that location with a link.
+
+* Project Team: Wir sind ein Team von sieben Studierenden der HTW Dresden, die gemeinsam die App FinanzTracker im Rahmen des Moduls Software Engineering Projekt entwickeln.
+* Team Members (Roles): 
+- Elias Blume         ()
+- Ben Eisold          ()
+- Paula Grahlow       ()
+- Ahmad Ali Nabizada  ()
+- Tuan Khang Pham     ()
+- Christoph Prasser   ()
+- Cedrick Richter     ()
+
+* Communication Channels:
+- WhatsApp
+- GitHub
+- Miro-Board
+
 
 
 == Praktiken und Bewertung
