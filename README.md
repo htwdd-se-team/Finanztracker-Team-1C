@@ -71,8 +71,8 @@ Stelle verwendet werden.
 
 ```asciidoc
 // Meta
-:project-name: <Projektname (T00)>
-:project-system-name: <Projektname-System>
+:project-name: FinanzTracker (T1C)
+:project-system-name: FinApp
 ```
 
 - `T` ... steht als Platzhalter für `I` ein internes bzw. `E` für ein externes Projektthema

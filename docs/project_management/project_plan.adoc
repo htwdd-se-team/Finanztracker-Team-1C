@@ -28,6 +28,7 @@ include::../_includes/default-attributes.inc.adoc[]
 * Communication Channels:
 - WhatsApp
 - GitHub
+- MS Teams
 - Miro-Board
 
 
