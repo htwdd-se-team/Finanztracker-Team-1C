@@ -15,13 +15,15 @@ include::../_includes/default-attributes.inc.adoc[]
 
 * Project Team: Wir sind ein Team von sieben Studierenden der HTW Dresden, die gemeinsam die App FinanzTracker im Rahmen des Moduls Software Engineering Projekt entwickeln.
 * Team Members (Roles): 
-- Elias Blume         ()
-- Ben Eisold          ()
-- Paula Grahlow       ()
-- Ahmad Ali Nabizada  ()
-- Tuan Khang Pham     ()
-- Christoph Prasser   ()
-- Cedrick Richter     ()
+- Elias Blume         (Dev)
+- Ben Eisold          (Ansprechpartner, Product Owner)
+- Paula Grahlow       (Scrum Master)
+- Ahmad Ali Nabizada  (Dev)
+- Tuan Khang Pham     (Dev)
+- Christoph Prasser   (Dev)
+- Cedrick Richter     (Dev)
+
+
 
 * Communication Channels:
 - WhatsApp
