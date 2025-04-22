@@ -120,10 +120,10 @@ a| * Streng, gestresst
 * Relativ extrovertiert (7/10), innovationsneutral (6/10), relativ risiko­scheu (7/10)
 * Besitzt 30 Jahre Berufserfahrung
 * Hat hohe Ansprüche an seine Studenten
-* Benutzt Computer und Smartphone nur noch selten außerhalb der Uni
+* Benutzt Computer und Smartphone nur noch selten außerhalb der Uni (30 m/Tag Handy, 3 h/Tag PC)
 a| * Ist für seine Studenten verantwortlich
 * Beantwortet Fragen rund um das Projekt
-* Sorgt für die Bereitstellung von Notwendigkeiten (wie z.B. der Datenbankanbindung) 
+* Sorgt für die Bereitstellung von Notwendigkeiten (wie z.B. der Datenbank) 
 
 | [Benennung des Stakeholders (als Rolle)]
 | [Kurze Beschreibung des Stakeholders und seiner Ziele]
