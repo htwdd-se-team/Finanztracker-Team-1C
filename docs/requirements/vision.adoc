@@ -72,15 +72,16 @@ a| * Kreativ, liebt Ästhetik
 * Lebt in Dresden
 * Nutzt hauptsächlich iPhone & iPad (5 h/Tag Handy, 3 h/Tag Tablet „Lernen")
 a| * Superschnelle Eingabe – Quittung abfotografieren, fertig
-* Schöne, minimalistische Visualisierung statt Tabellen
+* Schöne, minimalistische Visualisierung durch Diagramme statt Tabellen
 * Immer „alles auf einen Blick" (Saldo, Budget‑Status)
+* Hätte gerne einen Vergleich zu den Ausgaben anderer und "Sparvorschläge" durch die App
 * Möchte keine Wartezeiten – App muss sofort reagieren, offline‑fähig sein
 * Will sich nicht mit Technik befassen ("nicht belastend in der Nutzung")
 
 | *Mario Meier*
 20 J., Informatik‑Bachelor
 a| * Analytisch, daten‑affin
-* Introvertierter (3/10), innovationsoffen (9/10), ­scheu (8/10)
+* Introvertierter (3/10), innovationsoffen (9/10), ­risikoscheu (8/10)
 * Hat bereits Tools getestet
 * Spielt & programmiert gern
 * Desktop‑Power‑User (5 h/Tag PC, 1 h/Tag Handy)
@@ -88,7 +89,9 @@ a| * Sequenzielles Erfassen am PC (Tastatur‑Shortcut‑optimiert)
 * Tiefe Analysen (Kategorie‑Trends, Prognosen, Data-Export)
 * Regelmäßiger Abgleich zwischen unregel­mäßigen Einnahmen & Fixkosten
 * Hat Schwierigkeiten mit unregel­mäßigen Einnahmen/Ausgaben – Standard‑Budgets passen selten
+* Möchte beim Unterschreiten eines Finanzminimums benachrichtigt werden
 * War mit UI/UX existierender Tracker unzufrieden
+* Erwartet ein sicheres Produkt, welches er seine Daten ohne Sorgen anvertrauen kann
 
 | *Mark Hofmann*
 21 J., Informatik‑Bachelor
@@ -97,7 +100,7 @@ a| * Logisch, kreativ
 * Entwickelt seine erste App
 * Möchte ein gutes Produkt und eine gute Note erreichen
 * Aktiver Internetnutzer (6 h/Tag PC, 2 h/Tag Handy)
-a| * Ist Teil des Entwicklerteams
+a| * Möchte nach Abschluss der Entwicklung die App selber nutzen und seine Daten einfach von anderen Apps importieren können
 * Ist hauptsächlich für das UI-Design zuständig
 * Kümmert sich nebenbei um eine übersichtliche Dokumentation
 * Sucht bugs um die Qualität des Produkts hoch zu halten
