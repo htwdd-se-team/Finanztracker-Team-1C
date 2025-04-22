@@ -112,7 +112,7 @@ a| * Professionell, erfahren
 a| * Ist erster Ansprechpartner für die Studenten
 * Kümmert sich um 2 weitere Entwicklergruppen
 * Möchte sich passiv in die Entwicklung einbringen mit hilfreichen Tipps
-* Liebt übersichtlichen, sauben Code nach ISO-Standarts
+* Organisiert das Deployment der App
 
 | *Heinrich Kraemer*
 55 J., Professor, Doktor der Informatik
@@ -122,8 +122,8 @@ a| * Streng, gestresst
 * Hat hohe Ansprüche an seine Studenten
 * Benutzt Computer und Smartphone nur noch selten außerhalb der Uni
 a| * Ist für seine Studenten verantwortlich
-* Hat wenig Zeit um auf Emails zu antworten
-* Benutzt selbst nur Excel für die Verwaltung seiner Finanzen
+* Beantwortet Fragen rund um das Projekt
+* Sorgt für die Bereitstellung von Notwendigkeiten (wie z.B. der Datenbankanbindung) 
 
 | [Benennung des Stakeholders (als Rolle)]
 | [Kurze Beschreibung des Stakeholders und seiner Ziele]
