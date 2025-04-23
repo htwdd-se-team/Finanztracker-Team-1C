@@ -129,7 +129,7 @@ a| * Ist für seine Studenten verantwortlich
 * Beantwortet Fragen rund um das Projekt
 * Sorgt für die Bereitstellung von Notwendigkeiten (wie z.B. der Datenbank) 
 * Wird die App nur zum Testen nutzen, denn er vertraut seine Finanzen nur Excel an
-| Justus Mayer (Elias)
+| *Justus Mayer* (Elias) - Privater Nutzer und Student
 | Möchte seine persönlichen Finanzen unterwegs schnell, übersichtlich und sicher verwalten, um stets den Überblick über Einnahmen, Ausgaben, Budgets und Kontostände zu behalten.
 a|
 * Trägt neue Einnahmen / Ausgaben möglichst einfach am Smartphone ein  
