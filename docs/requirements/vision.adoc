@@ -65,38 +65,38 @@ Temporär:
 | Name | Beschreibung | Verantwortlichkeiten
 
 | *Magdalena Meier*
-24 J., Kunst‑Master
+24 J., Kunst-Master
 a| * Kreativ, liebt Ästhetik
 * Extrovertiert (7/10), innovationsoffen (8/10)
 * Kein eigener Computer
 * Lebt in Dresden
 * Nutzt hauptsächlich iPhone & iPad (5 h/Tag Handy, 3 h/Tag Tablet „Lernen")
-a| * Superschnelle Eingabe – Quittung abfotografieren, fertig
+a| * Superschnelle Eingabe - Quittung abfotografieren, fertig
 * Schöne, minimalistische Visualisierung durch Diagramme statt Tabellen
-* Immer „alles auf einen Blick" (Saldo, Budget‑Status)
+* Immer „alles auf einen Blick" (Saldo, Budget-Status)
 * Hätte gerne einen Vergleich zu den Ausgaben anderer und "Sparvorschläge" durch die App
-* Möchte keine Wartezeiten – App muss sofort reagieren, offline‑fähig sein
+* Möchte keine Wartezeiten - App muss sofort reagieren, offline-fähig sein
 * Will sich nicht mit Technik befassen ("nicht belastend in der Nutzung")
 
 | *Mario Meier*
-20 J., Informatik‑Bachelor
-a| * Analytisch, daten‑affin
-* Introvertierter (3/10), innovationsoffen (9/10), ­risikoscheu (8/10)
+20 J., Informatik-Bachelor
+a| * Analytisch, daten-affin
+* Introvertierter (3/10), innovationsoffen (9/10), risikoscheu (8/10)
 * Hat bereits Tools getestet
 * Spielt & programmiert gern
-* Desktop‑Power‑User (5 h/Tag PC, 1 h/Tag Handy)
-a| * Sequenzielles Erfassen am PC (Tastatur‑Shortcut‑optimiert)
-* Tiefe Analysen (Kategorie‑Trends, Prognosen, Data-Export)
+* Desktop-Power-User (5 h/Tag PC, 1 h/Tag Handy)
+a| * Sequenzielles Erfassen am PC (Tastatur-Shortcut-optimiert)
+* Tiefe Analysen (Kategorie-Trends, Prognosen, Data-Export)
 * Regelmäßiger Abgleich zwischen unregel­mäßigen Einnahmen & Fixkosten
-* Hat Schwierigkeiten mit unregel­mäßigen Einnahmen/Ausgaben – Standard‑Budgets passen selten
+* Hat Schwierigkeiten mit unregel­mäßigen Einnahmen/Ausgaben - Standard-Budgets passen selten
 * Möchte beim Unterschreiten eines Finanzminimums benachrichtigt werden
 * War mit UI/UX existierender Tracker unzufrieden
 * Erwartet ein sicheres Produkt, welches er seine Daten ohne Sorgen anvertrauen kann
 
 | *Mark Hofmann*
-21 J., Informatik‑Bachelor
+21 J., Informatik-Bachelor
 a| * Logisch, kreativ
-* Introvertierter (3/10), innovationsoffen (8/10), relativ risiko­scheu (7/10)
+* Introvertierter (3/10), innovationsoffen (8/10), relativ risikoscheu (7/10)
 * Entwickelt seine erste App
 * Möchte ein gutes Produkt und eine gute Note erreichen
 * Aktiver Internetnutzer (6 h/Tag PC, 2 h/Tag Handy)
@@ -154,44 +154,44 @@ Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mi
 
 [%header, cols="4,1,4,1"]
 |===
-| Bedarf | Priorität | Features / Funktionen | Geplantes Release
-| Schnelle, barriere­freie Erfassung von Ein‑ & Aus­gaben, ohne Tabellenwissen 
+| Bedarf | Priorität | Features / Funktionen | Geplantes Release
+| Schnelle, barriere­freie Erfassung von Ein- & Ausgaben, ohne Tabellenwissen 
 | Muss
 a| 
-- One‑Click‑Eingabe (Foto‑OCR, Sprach­eingabe)
-- Bank‑/Konto‑Import 
+- One-Click-Eingabe (Foto-OCR, Sprach­eingabe)
+- Bank-/Konto-Import 
 | xx
 | Sofort verständliche Finanz­übersicht für kreative Nutzer 
 | Muss 
 a| 
 - Minimalistisches, visuell ansprechendes Dashboard (Saldo, Budget, Sparziele) 
 | xx
-| Tiefgehende Analyse‑ und Export­möglichkeiten für daten­affine Nutzer 
+| Tiefgehende Analyse- und Exportmöglichkeiten für datenaffine Nutzer 
 | Soll 
-a| - Filter‑ & Drill‑Down‑Ansichten - CSV/Excel‑Export 
+a| - Filter- & Drill-Down-Ansichten - CSV/Excel-Export 
 | xx
-| Automatische Kategori­sierung & Budget­warnungen zum „Denken abnehmen“ 
+| Automatische Kategorisierung & Budgetwarnungen zum „Denken abnehmen“ 
 | Soll 
 a|
-- KI‑gestützte Kategorisierung 
-- Regel‑basierte Benachrichtigungen/Vorhersagen 
+- KI-gestützte Kategorisierung 
+- Regel-basierte Benachrichtigungen/Vorhersagen 
 | xx
-| Cross‑Device‑Nutzung inkl. Offline‑Modus 
-| Muss a| - Cloud‑Sync & lokaler Cache 
+| Cross-Device-Nutzung inkl. Offline-Modus 
+| Muss a| - Cloud-Sync & lokaler Cache 
 | xx
-| Sichere Nutzung trotz sensibler Finanz‑daten 
+| Sichere Nutzung trotz sensibler Finanz-daten 
 | Muss 
 a| 
-- Ende‑zu‑Ende‑Verschlüsselung - Zwei‑Faktor‑Authentifizierung 
+- Ende-zu-Ende-Verschlüsselung - Zwei-Faktor-Authentifizierung 
 | xx
-| Integration externer Banken / Apps (Open‑Banking)
+| Integration externer Banken / Apps (Open-Banking)
 | Kann 
 a| 
-- Schnittstellen für Giro‑ & Kredit‑karten‑konten 
+- Schnittstellen für Giro- & Kredit-karten-konten 
 | xx
-| Preis‑günstige Lösung speziell für Studierende 
+| Preis-günstige Lösung speziell für Studierende 
 | Soll 
-a| - Freemium‑Modell mit rabattierten Upgrade‑Plänen
+a| - Freemium-Modell mit rabattierten Upgrade-Plänen
 | xx
 |===
 
@@ -209,19 +209,19 @@ Hinweise:
 |===
 | Anforderung | Priorität | Geplantes Release
 
-| Plattformen: iOS 14+, Android 10+, Web (Chrome/Firefox/Safari akt.)
+| Plattformen: iOS 14+, Android 10+, Web (Chrome/Firefox/Safari akt.)
 | Hoch
 | xx
 
-| Performance: Reaktionszeit < 2 s bei Kernaktionen
+| Performance: Reaktionszeit < 2 s bei Kernaktionen
 | Hoch
 | xx
 
-| Offline‑Fähigkeit mit automatischer Synchronisierung
+| Offline-Fähigkeit mit automatischer Synchronisierung
 | Mittel
 | xx
 
-| Datenschutz & Compliance: DSGVO‑Konformität, Ende‑zu‑Ende‑Verschlüsselung, 2‑Faktor‑Auth
+| Datenschutz & Compliance: DSGVO-Konformität, Ende-zu-Ende-Verschlüsselung, 2-Faktor-Auth
 | Hoch
 | xx
 
@@ -229,27 +229,27 @@ Hinweise:
 | Hoch
 | xx
 
-| OCR‑Genauigkeit ≥ 90 % bei Standardbelegen
+| OCR-Genauigkeit ≥ 90 % bei Standardbelegen
 | Mittel
 | xx
 
-| Erweiterbarkeit: Modularer Architektur‑Ansatz (Plug‑in‑fähig)
+| Erweiterbarkeit: Modularer Architektur-Ansatz (Plug-in-fähig)
 | Niedrig
 | xx
 
-| Barrierefreiheit: WCAG 2.1 AA
+| Barrierefreiheit: WCAG 2.1 AA
 | Niedrig
 | xx
 
-| Dokumentation: In‑App‑Hilfe, Online‑Handbuch, Onboarding‑Tour
+| Dokumentation: In-App-Hilfe, Online-Handbuch, Onboarding-Tour
 | Mittel
 | xx
 
-| Integrationen: PSD2‑Bank‑APIs, Export an Steuer‑Tools (z. B. Elster)
+| Integrationen: PSD2-Bank-APIs, Export an Steuer-Tools (z. B. Elster)
 | Mittel
 | xx
 
-| Kostenmodell: Freemium, monatlich kündbar, Student‑Rabatt
+| Kostenmodell: Freemium, monatlich kündbar, Student-Rabatt
 | Mittel
 | xx
 |===
