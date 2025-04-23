@@ -89,7 +89,16 @@ a| * Sequenzielles Erfassen am PC (Tastatur‑Shortcut‑optimiert)
 * Regelmäßiger Abgleich zwischen unregel­mäßigen Einnahmen & Fixkosten
 * Hat Schwierigkeiten mit unregel­mäßigen Einnahmen/Ausgaben – Standard‑Budgets passen selten
 * War mit UI/UX existierender Tracker unzufrieden
-
+| Justus Mayer (Elias)
+| Möchte seine persönlichen Finanzen unterwegs schnell, übersichtlich und sicher verwalten, um stets den Überblick über Einnahmen, Ausgaben, Budgets und Kontostände zu behalten.
+a|
+* Trägt neue Einnahmen / Ausgaben möglichst einfach am Smartphone ein  
+* Kategorisiert Transaktionen, um Ausgabenschwerpunkte zu erkennen  
+* Erstellt und verwaltet Budgets für verschiedene Kategorien  
+* Beobachtet Trend-Visualisierungen (z. B. Monatsverlauf, Cash-Flow)  
+* Lässt sich warnen, wenn Budgets überschritten oder Kontostände kritisch werden  
+* Legt wiederkehrende Buchungen (Miete, Gehalt …) an  
+* Meldet Usability-Probleme oder Funktionswünsche an das Team
 | [Benennung des Stakeholders (als Rolle)]
 | [Kurze Beschreibung des Stakeholders und seiner Ziele]
 | [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
