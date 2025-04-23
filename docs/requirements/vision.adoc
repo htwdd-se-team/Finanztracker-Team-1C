@@ -70,25 +70,65 @@ a| * Kreativ, liebt Ästhetik
 * Extrovertiert (7/10), innovationsoffen (8/10)
 * Kein eigener Computer
 * Lebt in Dresden
-* Nutzt hauptsächlich iPhone & iPad (5 h/Tag Handy, 3 h Tablet „Lernen")
+* Nutzt hauptsächlich iPhone & iPad (5 h/Tag Handy, 3 h/Tag Tablet „Lernen")
 a| * Superschnelle Eingabe – Quittung abfotografieren, fertig
-* Schöne, minimalistische Visualisierung statt Tabellen
+* Schöne, minimalistische Visualisierung durch Diagramme statt Tabellen
 * Immer „alles auf einen Blick" (Saldo, Budget‑Status)
+* Hätte gerne einen Vergleich zu den Ausgaben anderer und "Sparvorschläge" durch die App
 * Möchte keine Wartezeiten – App muss sofort reagieren, offline‑fähig sein
 * Will sich nicht mit Technik befassen ("nicht belastend in der Nutzung")
 
 | *Mario Meier*
 20 J., Informatik‑Bachelor
 a| * Analytisch, daten‑affin
-* Introvertierter (3/10), innovationsoffen (9/10), eher risiko­scheu (8/10)
+* Introvertierter (3/10), innovationsoffen (9/10), ­risikoscheu (8/10)
 * Hat bereits Tools getestet
 * Spielt & programmiert gern
-* Desktop‑Power‑User (5 h/Tag PC, 1 h Handy)
+* Desktop‑Power‑User (5 h/Tag PC, 1 h/Tag Handy)
 a| * Sequenzielles Erfassen am PC (Tastatur‑Shortcut‑optimiert)
 * Tiefe Analysen (Kategorie‑Trends, Prognosen, Data-Export)
 * Regelmäßiger Abgleich zwischen unregel­mäßigen Einnahmen & Fixkosten
 * Hat Schwierigkeiten mit unregel­mäßigen Einnahmen/Ausgaben – Standard‑Budgets passen selten
+* Möchte beim Unterschreiten eines Finanzminimums benachrichtigt werden
 * War mit UI/UX existierender Tracker unzufrieden
+* Erwartet ein sicheres Produkt, welches er seine Daten ohne Sorgen anvertrauen kann
+
+| *Mark Hofmann*
+21 J., Informatik‑Bachelor
+a| * Logisch, kreativ
+* Introvertierter (3/10), innovationsoffen (8/10), relativ risiko­scheu (7/10)
+* Entwickelt seine erste App
+* Möchte ein gutes Produkt und eine gute Note erreichen
+* Aktiver Internetnutzer (6 h/Tag PC, 2 h/Tag Handy)
+a| * Möchte nach Abschluss der Entwicklung die App selber nutzen und seine Daten einfach von anderen Apps importieren können
+* Ist hauptsächlich für das UI-Design zuständig
+* Kümmert sich nebenbei um eine übersichtliche Dokumentation
+* Sucht bugs um die Qualität des Produkts hoch zu halten
+
+| *Martin Schubert*
+32 J., Übungsleiter, Dipl. Informatiker
+a| * Professionell, locker 
+* Neutral (5/10), innovationsoffen (8/10), eher risiko­scheu (6/10)
+* Hat ein erfolgreiches Nebenbusiness
+* Möchte von seinen Studenten etwas innovatives sehen
+* Computer- und Smartphone affin (5 h/Tag PC, 1.5 h/Tag Handy)
+a| * Ist erster Ansprechpartner für die Studenten
+* Kümmert sich um 2 weitere Entwicklergruppen
+* Möchte sich passiv in die Entwicklung einbringen mit hilfreichen Tipps
+* Liebt Code nach ISO-Standarts und hasst Spaghetti-Code
+* Organisiert das Deployment der App
+
+| *Heinrich Kraemer*
+55 J., Professor, Doktor der Informatik
+a| * Professionell, erfahren 
+* Relativ extrovertiert (7/10), innovationsneutral (6/10), relativ risiko­scheu (7/10)
+* Besitzt 30 Jahre Berufserfahrung
+* Hat hohe Ansprüche an seine Studenten
+* Benutzt Computer und Smartphone nur noch selten außerhalb der Uni (30 m/Tag Handy, 3 h/Tag PC)
+a| * Ist für seine Studenten verantwortlich
+* Beantwortet Fragen rund um das Projekt
+* Sorgt für die Bereitstellung von Notwendigkeiten (wie z.B. der Datenbank) 
+* Wird die App nur zum Testen nutzen, denn er vertraut seine Finanzen nur Excel an
 | Justus Mayer (Elias)
 | Möchte seine persönlichen Finanzen unterwegs schnell, übersichtlich und sicher verwalten, um stets den Überblick über Einnahmen, Ausgaben, Budgets und Kontostände zu behalten.
 a|
