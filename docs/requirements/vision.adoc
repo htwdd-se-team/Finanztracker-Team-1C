@@ -139,6 +139,13 @@ a|
 * Lässt sich warnen, wenn Budgets überschritten oder Kontostände kritisch werden  
 * Legt wiederkehrende Buchungen (Miete, Gehalt …) an  
 * Meldet Usability-Probleme oder Funktionswünsche an das Team
+| *Josef Lehmann* (Ben) -  Privater Nutzer und Student
+| Nutzt derzeit noch keinen Finanztracker und möchte sich erstmals einen allgemeinen Überblick über seine Ausgaben verschaffen. Dabei ist ihm wichtig, ein Tool zu verwenden, mit dem er Analysen durchführen und sein Sparziel festlegen kann.
+a| 
+* Legt Wert auf ausführliche Analysen mit verschiedenen Parametern
+* Möchte nur _sehr_ wichtige Benachrichtigungen erhalten, um Ablenkung zu vermeiden
+* Bevorzugt ein modernes, minimalistisches Design statt altmodischer Oberflächen
+* Bleibt nur dann motiviert, seine Ziele zu verfolgen, wenn spielerische Elemente (Gamification) integriert sind
 | [Benennung des Stakeholders (als Rolle)]
 | [Kurze Beschreibung des Stakeholders und seiner Ziele]
 | [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
