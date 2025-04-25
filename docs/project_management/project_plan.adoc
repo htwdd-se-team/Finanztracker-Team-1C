@@ -33,16 +33,43 @@ include::../_includes/default-attributes.inc.adoc[]
 
 
 
-== Praktiken und Bewertung (Way of Working)
+== Praktiken und Bewertung
 //Describe or reference which management and technical practices will be used in the project, such as iterative development, continuous integration, independent testing and list any changes or particular configuration to the project. Specify how you will track progress in each practice. As an example, for iterative development the team may decide to use iteration assessments and iteration burndown reports and collect metrics such as velocity (completed work item points/ iteration).
 
-Scrum?
 
-Welche Meetings wie oft? (Weekly, Retro, Review, etc.)
+=== Arbeitsweise (Way of Working)
 
-Wie werden Fortschritte getrackt? (GitHub Project Board, Issues, ...)
+Unser Team arbeitet in vierwöchigen Iterationen nach einem angepassten Scrum-Modell das auf die Anforderungen eines studentischen Teilzeitprojekts zugeschnitten ist. Ziel jeder Iteration ist die schrittweise Umsetzung eines funktionierenden Inkrements sowie die kontinuierliche Verbesserung der Zusammenarbeit.
 
-Welche Entwicklungspraktiken werden genutzt?
+Die Iteration beinhaltet folgende Scrum-Elemente:
+
+- **Sprint Planning (1,5–2 h)** zu Beginn jeder Iteration: Festlegung des Sprintziels und Auswahl der Product Backlog Items (PBIs), Aufteilung in Aufgaben.
+- **Weekly Stand-up (10–15 min)** pro Woche: Kurzes Meeting zur Synchronisation im Team, ersetzt das klassische Daily.
+- **Backlog Refinement Meetings (2x ca. 30 min in Woche 2 und 3)**: Pflege und Detaillierung der PBIs, inkl. Aufwandsabschätzung, Priorisierung und Vorbereitung des nächsten Sprints.
+- **Sprint Review (45–60 min)** in der letzten Woche: Vorstellung der Arbeitsergebnisse, Feedback der Stakeholder, ggf. Anpassung des Product Backlogs.
+- **Sprint Retrospektive (30–45 min)** am Ende jeder Iteration: Reflexion über den Prozess, identifizierte Hindernisse, Verbesserungsmaßnahmen.
+
+Aufgaben und Fortschritt werden über ein **GitHub Project Board** mit den Spalten „Backlog“, „In Progress“, "In Review" und „Done“ verwaltet. Die Aufgaben sind als **GitHub Issues** formuliert und werden durch das Team selbst priorisiert und übernommen.
+
+Zur Dokumentation unserer Arbeit führen wir Protokolle zu allen Meetings im Ordner `project_management/meeting-notes/` als AsciiDoc-Dateien. Diese enthalten Datum, Teilnehmende, Themen, Entscheidungen und ToDos und bilden die Grundlage für Nachverfolgung und Review.
+
+=== Entwicklungspraktiken
+
+//Zur Sicherung der Codequalität und der effizienten Zusammenarbeit setzen wir auf folgende technische Praktiken:
+
+//- Versionskontrolle mit **Git und GitHub**
+//- **Branching-Strategie** mit Feature-Branches und Pull Requests
+//- **Code Reviews** vor Merge ins Haupt-Branch
+//- Einhaltung gemeinsamer **Code Conventions**
+//- Manuelles Testing durch das Entwicklungsteam (automatisierte Tests optional)
+//- Verwendung von Markdown-Dokumentation und AsciiDoc für strukturierte Texte
+
+=== Fortschrittsverfolgung und Bewertung
+
+- Aufgaben werden im GitHub-Board verschoben (To Do → In Progress → In Review → Done)
+- Der Projektfortschritt wird regelmäßig im Weekly reflektiert und ggf. angepasst
+- Sprintziele und Erfüllung werden im Sprint Review besprochen
+- Die Retrospektive dient der kontinuierlichen Verbesserung (z. B. mit der Starfish-Methode)
 
 
 
