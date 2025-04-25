@@ -35,12 +35,12 @@ Temporär:
 [cols="1,3"]
 |===
 | Für | [Studenten]
-| die | [bewusster mit Ihren Finanzen umgehen wollen]
+| die | [alle Ihre Finanzen auf einen Blick haben wollen]
 | ist  | [Fin-App]
 | eine  | [Finanzmanagement-Applikation]
-| der / die | [Aussage zum Hauptvorteil / Alleinstellungsmerkmal]
-| anders als | [momentan verbreitete Finanzanwendungen für Studenten]
-| kann unser Produkt | [Aussage zum Hauptunterschied]
+| die | [einfach und flexibel auch offline die Finanzverwaltung erleichtert]
+| anders als | [momentan verbreitete Finanztracker]
+| kann unser Produkt | [KI-gestützte Vorschläge und Input an den User weitergeben]
 |===
 
 
