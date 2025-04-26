@@ -19,8 +19,8 @@ Dieses Visions-Dokument bezieht sich auf das System {project-system-name}, das v
 Siehe <<#glossary, Glossar>>.
 //Siehe <<./glossary.adoc#glossary, Glossar>>.
 
-=== Referenzen
-(hier externe Verweise zu anderen Dokumenten, Quellen, Standards etc. einfügen, sofern notwendig)
+// === Referenzen
+// (hier externe Verweise zu anderen Dokumenten, Quellen, Standards etc. einfügen, sofern notwendig)
 
 
 == Positionierung
@@ -28,10 +28,12 @@ Siehe <<#glossary, Glossar>>.
 === Fachliche Motivation
 //Erläutern Sie kurz den Hintergrund, in dem das Projekt angesiedelt ist. Welches Problem soll gelöst werden, wie ist es entstanden? Welche Verbesserung wird angestrebt. Achten Sie darauf, eine fachliche (organisatorische, betriebswirtschaftliche) Perspektive einzunehmen.
 
+
+
 === Produktvision
 //Eine Produktvision beschreibt das Einsatzziel der Anwendung und sorgt für ein gemeinsames Ziel und Verständnis für alle Beteiligten im Projekt. Geben Sie in knapper Form übersichtsartig die Positionierung der angestrebten Lösung im Vergleich zu verfügbaren Alternativen dar. Das folgende Format kann dazu verwendet werden:
 
-Temporär: 
+
 [cols="1,3"]
 |===
 | Für | [Studenten]
@@ -40,7 +42,7 @@ Temporär:
 | eine  | [Finanzmanagement-Applikation]
 | die | [einfach und flexibel auch offline die Finanzverwaltung erleichtert]
 | anders als | [momentan verbreitete Finanztracker]
-| kann unser Produkt | [KI-gestützte Vorschläge und Input an den User weitergeben]
+| kann unser Produkt | [kostenlos mit State-of-the-art Features einen einfachen überblick in die Finanzen liefern]
 |===
 
 
