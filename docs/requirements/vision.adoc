@@ -12,7 +12,7 @@ Der Zweck dieses Dokuments ist es, die wesentlichen Bedarfe und Funktionalitäte
 Der Zweck dieses Dokuments ist es, die wesentlichen Anforderungen an das System aus Sicht und mit den Begriffen der künftigen Anwender zu beschreiben.
 
 === Gültigkeitsbereich (Scope)
-Dieses Visions-Dokument bezieht sich auf das System {project-system-name}, das von T1C entwickelt wird. Das System wird es Studenten erlauben, Blitzschnelle Transaktionserfassung, intuitives/übersichtliches Dashboard, hohe Sicherheit,  Budget- und Kategorien-Management, Analyse, Vergleiche und Sparvorschläge, optimiert auf Desktop und Smartphone, zu nutzen, um damit  zu erreichen die eigenen Einnahmen und Ausgaben effizient zu managen und zu erleichtern und Engpässe sowie finanziell schwierige Situationen zu erleichtern/unterstützen und zu lösen.
+Dieses Visions-Dokument bezieht sich auf das System {project-system-name}, das von T1C entwickelt wird. {project-system-name} ermöglicht es Studierenden, ihre Finanzen effizient und unkompliziert zu verwalten. Das System bietet blitzschnelle Transaktionserfassung, ein intuitives und übersichtliches Dashboard, hohe Sicherheitsstandards sowie Budget- und Kategorienmanagement. Darüber hinaus zielt {project-system-name} darauf ab die finanzielle Situation durch Analysen, Vergleiche und individuelle Sparvorschläge zu optimieren. Beispielsweise kann die Entscheidungsfindung bei finanziellen Engpässen unterstützt werden und durch Planung in der Zukunft vermieden werden. Die Anwendung ist für die Nutzung auf Desktop und Smartphone optimiert, wodurch ein flexibler Zugriff jederzeit möglich ist.
 
 === Definitionen, Akronyme und Abkürzungen
 //Verweis passend zum Belegabgabe-Template se1_belegabgabe_t00.adoc
@@ -27,6 +27,7 @@ Siehe <<#glossary, Glossar>>.
 
 === Fachliche Motivation
 //Erläutern Sie kurz den Hintergrund, in dem das Projekt angesiedelt ist. Welches Problem soll gelöst werden, wie ist es entstanden? Welche Verbesserung wird angestrebt. Achten Sie darauf, eine fachliche (organisatorische, betriebswirtschaftliche) Perspektive einzunehmen.
+Derzeit sind Finanztracker entweder umfangreich und unübersichtlich oder Nutzer greifen gleich zu fragmentierten Excel-Tabellen. Daher wollen wir eine Lösung entwickeln, die sowohl zeitknappe als auch datenaffine Studenten anspricht. Erstere erhalten alle wichtigen Erkenntnisse, ohne sich tief in das Tool einarbeiten zu müssen. Letztere finden schnell umfangreiche Analysemöglichkeiten, ohne dabei direkt auf funktionale Einschränkungen zu stoßen. Unser Grundsatz ist es, dem Nutzer so viele Entscheidungen wie möglich abzunehmen, damit die Finanzverwaltung neben dem Studienalltag nicht zur lästigen Pflicht wird, sondern mit minimalem Aufwand wertvolle Impulse für ein nachhaltiges Ausgabeverhalten liefert.
 
 
 
