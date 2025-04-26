@@ -10,7 +10,7 @@
 a|
 - Umzug von Sprint 1 aufs große Projekt Board ist so abgesegnet
 - Änderungen an der Struktur vom Board werden zukünftig nur von Paula vorgenommen
-- Selbiges gilt für das Hinzufügen von Labels oder Änderungen am Template
+- Selbiges gilt für das Hinzufügen von Issue-Labels oder Änderungen am Issue-Template
 
 | Teamname
 | Vorerst auf T1C festgelegt, kann aber später noch verändert werden. Sollte kein großer Punkt im Meeting werden
