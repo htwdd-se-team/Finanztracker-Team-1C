@@ -1,5 +1,5 @@
 = Vision: {project-name}
-Vorname Nachname <email@domain.org>; Vorname2 Nachname2 <email2@domain.org>; Vorname3 Nachname3 <email3@domain.org>
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresdsen.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
@@ -12,7 +12,7 @@ Der Zweck dieses Dokuments ist es, die wesentlichen Bedarfe und Funktionalitäte
 Der Zweck dieses Dokuments ist es, die wesentlichen Anforderungen an das System aus Sicht und mit den Begriffen der künftigen Anwender zu beschreiben.
 
 === Gültigkeitsbereich (Scope)
-Dieses Visions-Dokument bezieht sich auf das System {project-system-name}, das von <Team> entwickelt wird. Das System wird es <Zielkunde/Auftraggeber> erlauben, <Hauptfunktionen> zu nutzen, um damit <Vorteile> zu erreichen / <Aufgabe> zu erleichtern / <Problem> zu lösen.
+Dieses Visions-Dokument bezieht sich auf das System {project-system-name}, das von T1C entwickelt wird. Das System wird es Studenten erlauben, Blitzschnelle Transaktionserfassung, intuitives/übersichtliches Dashboard, hohe Sicherheit,  Budget- und Kategorien-Management, Analyse, Vergleiche und Sparvorschläge, optimiert auf Desktop und Smartphone, zu nutzen, um damit  zu erreichen die eigenen Einnahmen und Ausgaben effizient zu managen und zu erleichtern und Engpässe sowie finanziell schwierige Situationen zu erleichtern/unterstützen und zu lösen.
 
 === Definitionen, Akronyme und Abkürzungen
 //Verweis passend zum Belegabgabe-Template se1_belegabgabe_t00.adoc
@@ -108,7 +108,7 @@ a| * Möchte nach Abschluss der Entwicklung die App selber nutzen und seine Date
 | *Martin Schubert*
 32 J., Übungsleiter, Dipl. Informatiker
 a| * Professionell, locker 
-* Neutral (5/10), innovationsoffen (8/10), eher risiko­scheu (6/10)
+* Neutral (5/10), innovationsoffen (8/10), eher risikoscheu (6/10)
 * Hat ein erfolgreiches Nebenbusiness
 * Möchte von seinen Studenten etwas innovatives sehen
 * Computer- und Smartphone affin (5 h/Tag PC, 1.5 h/Tag Handy)
@@ -121,7 +121,7 @@ a| * Ist erster Ansprechpartner für die Studenten
 | *Heinrich Kraemer*
 55 J., Professor, Doktor der Informatik
 a| * Professionell, erfahren 
-* Relativ extrovertiert (7/10), innovationsneutral (6/10), relativ risiko­scheu (7/10)
+* Relativ extrovertiert (7/10), innovationsneutral (6/10), relativ risikoscheu (7/10)
 * Besitzt 30 Jahre Berufserfahrung
 * Hat hohe Ansprüche an seine Studenten
 * Benutzt Computer und Smartphone nur noch selten außerhalb der Uni (30 m/Tag Handy, 3 h/Tag PC)
@@ -146,9 +146,9 @@ a|
 * Möchte nur _sehr_ wichtige Benachrichtigungen erhalten, um Ablenkung zu vermeiden
 * Bevorzugt ein modernes, minimalistisches Design statt altmodischer Oberflächen
 * Bleibt nur dann motiviert, seine Ziele zu verfolgen, wenn spielerische Elemente (Gamification) integriert sind
-| [Benennung des Stakeholders (als Rolle)]
-| [Kurze Beschreibung des Stakeholders und seiner Ziele]
-| [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
+// | [Benennung des Stakeholders (als Rolle)]
+// | [Kurze Beschreibung des Stakeholders und seiner Ziele]
+// | [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
 |===
 
 Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mittels Personas vorgenommen.
@@ -162,17 +162,33 @@ Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mi
 [%header, cols="4,1,4,1"]
 |===
 | Bedarf | Priorität | Features / Funktionen | Geplantes Release
-| Schnelle, barriere­freie Erfassung von Ein- & Ausgaben, ohne Tabellenwissen 
+
+| Authentication
+| Muss 
+| Account erstellen/Login
+| MVP
+
+
+| Schnelle, barrierefreie Erfassung von Ein- & Ausgaben, ohne Tabellenwissen 
 | Muss
 a| 
-- One-Click-Eingabe (Foto-OCR, Sprach­eingabe)
-- Bank-/Konto-Import 
-| xx
-| Sofort verständliche Finanz­übersicht für kreative Nutzer 
+- One-Click-Eingabe 
+- Schnell zu erreichender Button
+- einfache Kategorisierung
+| MVP
+
+| Sofort verständliche Finanzübersicht
 | Muss 
 a| 
 - Minimalistisches, visuell ansprechendes Dashboard (Saldo, Budget, Sparziele) 
-| xx
+| MVP
+
+| übersichtliche tabellarische Anzeige
+| Muss
+a|
+- Filter anbieten (Kategorien)
+| MVP
+
 | Tiefgehende Analyse- und Exportmöglichkeiten für datenaffine Nutzer 
 | Soll 
 a| - Filter- & Drill-Down-Ansichten - CSV/Excel-Export 
@@ -184,10 +200,10 @@ a|
 - Regel-basierte Benachrichtigungen/Vorhersagen 
 | xx
 | Cross-Device-Nutzung inkl. Offline-Modus 
-| Muss a| - Cloud-Sync & lokaler Cache 
+| Soll a| - Cloud-Sync & lokaler Cache 
 | xx
 | Sichere Nutzung trotz sensibler Finanz-daten 
-| Muss 
+| Kann 
 a| 
 - Ende-zu-Ende-Verschlüsselung - Zwei-Faktor-Authentifizierung 
 | xx
@@ -197,67 +213,64 @@ a|
 - Schnittstellen für Giro- & Kredit-karten-konten 
 | xx
 | Preis-günstige Lösung speziell für Studierende 
-| Soll 
+| Kann 
 a| - Freemium-Modell mit rabattierten Upgrade-Plänen
 | xx
+
+| OCR Scannen von Rechnungen und Belegen
+| Kann
+| Vollautomatische Eintragung von Rechnungen und Belegen 
+| xx
+
 |===
 
 === Zusätzliche Produktanforderungen
 //Zutreffendes angeben, nicht zutreffendes streichen oder auskommentieren
-Hinweise:
 
-. Führen Sie die wesentlichen anzuwendenden Standards, Hardware oder andere Plattformanforderungen, Leistungsanforderungen und Umgebungsanforderungen auf
-. Definieren Sie grob die Qualitätsanforderungen für Leistung, Robustheit, Ausfalltoleranz, Benutzbarkeit und ähnliche Merkmale, die Qualitätsanforderungen an das geplante Produkt beschreiben.
-. Notieren Sie alle Entwurfseinschränkungen, externe Einschränkungen, Annahmen oder andere Abhängigkeiten, die wenn Sie geändert werden, das Visions-Dokument beeinflussen. Ein Beispiel wäre die Annahme, dass ein bestimmtes Betriebssystem für die vom System erforderliche Hardware verfügbar ist. Ist das Betriebssystem nicht verfügbar, muss das Visions-Dokument angepasst werden.
-. Definieren Sie alle Dokumentationsanforderugen, inkl. Benutzerhandbücher, Onlinehilfe, Installations-, Kennzeichnungs- und Auslieferungsanforderungen.
-. Definieren Sie die Priorität für diese zusätzlichen Produktanforderungen. Ergänzen Sie, falls sinnvoll, Angaben zu Stabilität, Nutzen, Aufwand und Risiko für diese Anforderungen.
+// Hinweise:
+
+// . Führen Sie die wesentlichen anzuwendenden Standards, Hardware oder andere Plattformanforderungen, Leistungsanforderungen und Umgebungsanforderungen auf
+// . Definieren Sie grob die Qualitätsanforderungen für Leistung, Robustheit, Ausfalltoleranz, Benutzbarkeit und ähnliche Merkmale, die Qualitätsanforderungen an das geplante Produkt beschreiben.
+// . Notieren Sie alle Entwurfseinschränkungen, externe Einschränkungen, Annahmen oder andere Abhängigkeiten, die wenn Sie geändert werden, das Visions-Dokument beeinflussen. Ein Beispiel wäre die Annahme, dass ein bestimmtes Betriebssystem für die vom System erforderliche Hardware verfügbar ist. Ist das Betriebssystem nicht verfügbar, muss das Visions-Dokument angepasst werden.
+// . Definieren Sie alle Dokumentationsanforderugen, inkl. Benutzerhandbücher, Onlinehilfe, Installations-, Kennzeichnungs- und Auslieferungsanforderungen.
+// . Definieren Sie die Priorität für diese zusätzlichen Produktanforderungen. Ergänzen Sie, falls sinnvoll, Angaben zu Stabilität, Nutzen, Aufwand und Risiko für diese Anforderungen.
 
 [%header, cols="4,1,1"]
 |===
 | Anforderung | Priorität | Geplantes Release
 
-| Plattformen: iOS 14+, Android 10+, Web (Chrome/Firefox/Safari akt.)
+| Plattformen Modern Web (Chrome/Firefox/Safari akt.)
 | Hoch
-| xx
+| MVP
 
 | Performance: Reaktionszeit < 2 s bei Kernaktionen
 | Hoch
-| xx
+| MVP
+
+| Barrierefreiheit
+| Mittel
+| MVP
 
 | Offline-Fähigkeit mit automatischer Synchronisierung
-| Mittel
+| Niedrig
 | xx
 
 | Datenschutz & Compliance: DSGVO-Konformität, Ende-zu-Ende-Verschlüsselung, 2-Faktor-Auth
 | Hoch
 | xx
 
-| Robustheit: Kein Datenverlust bei Abbruch, automatische Wieder­herstellung
-| Hoch
+| Robustheit: Kein Datenverlust bei Abbruch, automatische Wiederherstellung
+| Mittel
 | xx
 
 | OCR-Genauigkeit ≥ 90 % bei Standardbelegen
-| Mittel
-| xx
-
-| Erweiterbarkeit: Modularer Architektur-Ansatz (Plug-in-fähig)
 | Niedrig
 | xx
 
-| Barrierefreiheit: WCAG 2.1 AA
-| Niedrig
-| xx
 
-| Dokumentation: In-App-Hilfe, Online-Handbuch, Onboarding-Tour
+| Dokumentation: In-App-Hilfe,  Onboarding-Tour
 | Mittel
 | xx
 
-| Integrationen: PSD2-Bank-APIs, Export an Steuer-Tools (z. B. Elster)
-| Mittel
-| xx
-
-| Kostenmodell: Freemium, monatlich kündbar, Student-Rabatt
-| Mittel
-| xx
 |===
 
