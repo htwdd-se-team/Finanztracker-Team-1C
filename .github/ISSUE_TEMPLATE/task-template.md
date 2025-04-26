@@ -1,7 +1,7 @@
 ---
 name: Task Template
 about: Create ordinary tasks
-title: "[Task]"
+title: ''
 labels: task
 assignees: ''
 

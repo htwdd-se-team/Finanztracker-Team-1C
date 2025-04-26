@@ -1,7 +1,7 @@
 ---
 name: Risk Template
 about: Define a Risk
-title: "[Risk]"
+title: ''
 labels: risk
 assignees: ''
 
