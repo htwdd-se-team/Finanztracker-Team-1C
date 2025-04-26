@@ -1,1 +1,38 @@
+=== Meeting‑Protokoll 26.04.2025
+*Teilnehmende:* Alle außer Ali (Unentschuldigt)
+*Dauer:* 120 min
+*Leitung:* Elias
 
+==== Beschlüsse
+|===
+| Thema | Entscheidung
+| Ticket Board
+a|
+- Umzug von Sprint 1 aufs große Projekt Board ist so abgesegnet
+- Änderungen an der Struktur vom Board werden zukünftig nur von Paula vorgenommen
+- Selbiges gilt für das Hinzufügen von Labels oder Änderungen am Template
+
+| Teamname
+| Vorerst auf T1C festgelegt, kann aber später noch verändert werden. Sollte kein großer Punkt im Meeting werden
+
+| Anpassungen im Visions-Dokument
+a|
+- Wir haben den Scope ergänzt
+- In Absprache mit dem PO wurden Produktanforderungen hinsichtlich Priorität und Release-Zugehörigkeit angepasst
+- Selbiges gilt für die Zusatzanforderungen
+
+| Repo Settings
+| Aus Sicherheitsgründen haben wir das Repo auf Private gesetzt. Rückmeldung von Dozent und Coach abwarten
+
+| App Design
+| Für das Design legen wir vorerst noch nicht eine zuständige Person fest. Unsere Idee ist, dass wir UI Libraries nutzen und gemeinsam ein Design-Template entwerfen, an das sich alle halten sollen
+
+| Meetings Allgemein
+| Vorbereitung und Moderation von Meetings fällt voraussichtlich in die Zuständigkeit vom Scrum Master
+
+|===
+
+
+==== To‑Dos
+* Ben ergänzt noch die fachliche Motivation im Visions-Dokument
+* Jeder liest sich sowohl Visionsdokument als auch Projektplan nochmal durch vor der Abgabe
