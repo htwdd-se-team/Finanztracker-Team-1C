@@ -62,7 +62,7 @@ Zusammenfassung der wichtigsten Erkenntnisse und Entscheidungen aus dem Gespräc
 
 
 === 2. Überprüfung des Vision-Dokuments
-Letzter Check des aktuellen Vision-Dokuments und eventuelle kleinere Anpassungen wenn nötig
+Letzter Check des finalen Vision-Dokuments und eventuelle kleinere Anpassungen wenn nötig
 
 *Notizen:* +
 - (...)
@@ -83,7 +83,7 @@ Letzter Check des aktuellen Vision-Dokuments und eventuelle kleinere Anpassungen
 
 
 
-== To-Dos
+== To-Do's
 - (Aufgaben, die sich aus allen Themen ergeben haben, auflisten. Tickets anlegen für alle To-Do's)
 
 == Nächstes Meeting
