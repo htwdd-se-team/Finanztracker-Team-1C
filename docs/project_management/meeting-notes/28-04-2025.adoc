@@ -1,0 +1,94 @@
+= Meeting‑Protokoll 28.04.2025
+
+*Datum:* 28.04.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Meetingbeginn:* 16:00 +
+*Meetingende:* +
+*Dauer:* +
+
+==== Anwesenheit: 
+- Elias +
+- Ben +
+- Paula +
+- Ali +
+- Khang +
+- Christoph +
+- Cedrick +
+
+Anwesenheit wird nach Meetingbeginn vervollständigt 
+
+
+== Tagesordnung
+
+== Meeting Teil 1: Gespräch mit Coach
+=== 1. Aufgabenverteilung/Workload von Scrum Master und Product Owner 
+
+Mit Coach die Verantwortlichkeiten und die erwartete Belastung der Rollen im Projekt klären.
+
+*Notizen:* +
+- (...)
+
+*Entscheidungen:* (falls notwendig) +
+ +
+
+=== 2. Repository-Sichtbarkeit (public/private)
+
+Muss das Repository unbedingt public sein. Unsere Präferenz wäre private.
+
+*Notizen:* +
+- (...)
+
+*Entscheidung:* +
+- (...) +
+ +
+
+
+=== 3. Weitere Fragen/Wünsche
+
+*Notizen:* +
+- (...) +
+ +
+
+
+== Meeting Teil 2: Internes Team-Meeting
+
+=== 1. Nachbesprechung Coach-Meeting
+Zusammenfassung der wichtigsten Erkenntnisse und Entscheidungen aus dem Gespräch
+
+*Notizen:* +
+- (...) +
+ +
+
+
+=== 2. Überprüfung des Vision-Dokuments
+Letzter Check des aktuellen Vision-Dokuments und eventuelle kleinere Anpassungen wenn nötig
+
+*Notizen:* +
+- (...)
+
+*Entscheidung:* +
+- (...) +
+ +
+
+
+=== 3. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- (...)
+
+*Entscheidung:* +
+- (...) +
+ +
+
+
+
+== To-Dos
+- (Aufgaben, die sich aus allen Themen ergeben haben, auflisten. Tickets anlegen für alle To-Do's)
+
+== Nächstes Meeting
+- Datum: 05.05.2025
+- Zeit: 13:45 Uhr
+- Ort: Bibliothek Gruppenraum B302a
+- Themen: - neue Itteration besprechen +
+          - 
