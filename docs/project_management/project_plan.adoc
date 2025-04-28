@@ -53,6 +53,8 @@ Aufgaben und Fortschritt werden über ein **GitHub Project Board** mit den Spalt
 
 Zur Dokumentation unserer Arbeit führen wir Protokolle zu allen Meetings im Ordner `project_management/meeting-notes/` als AsciiDoc-Dateien. Diese enthalten Datum, Teilnehmende, Themen, Entscheidungen und ToDos und bilden die Grundlage für Nachverfolgung und Review.
 
+Jeder liest das Iteration-dokument vor dem nächsten Meeting durch, macht sich Gedanken und/oder Notizen.
+
 === Entwicklungspraktiken
 
 //Zur Sicherung der Codequalität und der effizienten Zusammenarbeit setzen wir auf folgende technische Praktiken:

@@ -4,15 +4,15 @@
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula + (Elias Protokoll)
 *Meetingbeginn:* 16:00 +
-*Meetingende:* +
-*Dauer:* +
+*Meetingende:* 17:10+
+*Dauer:* 1:10h
 
 ==== Anwesenheit: 
 - Elias +
 - Ben +
 - Paula +
 - Ali +
-- Khang +
+- Khang nicht hat sich Abgemeldet
 - Christoph +
 - Cedrick +
 - Coach (Ruben David) +
@@ -27,9 +27,6 @@ Anwesenheit wird nach Meetingbeginn vervollständigt
 
 Mit Coach die Verantwortlichkeiten und die erwartete Belastung der Rollen im Projekt klären.
 
-*Notizen:* +
-- (...)
-
 *Entscheidungen:* +
  - Paula kann PO unterstützen
 
@@ -42,27 +39,22 @@ Muss das Repository unbedingt public sein. Unsere Präferenz wäre private.
 
 
 
-
-
 == Meeting Teil 2: Internes Team-Meeting
 
 === 1. Nachbesprechung Coach-Meeting
 Zusammenfassung der wichtigsten Erkenntnisse und Entscheidungen aus dem Gespräch
 
 *Notizen:* +
-- (...) +
- +
+- Ihn gerne involvieren wenn  nötig
+- Sind "Auf einem guten Weg"
 
 
 === 2. Überprüfung des Vision-Dokuments
 Letzter Check des finalen Vision-Dokuments und eventuelle kleinere Anpassungen wenn nötig
 
 *Notizen:* +
-- (...)
-
-*Entscheidung:* +
-- (...) +
- +
+- Unsere core features sollten funktionieren
+- AUTH to be checked later
 
 
 === 3. Weitere organisatorische Aufgaben und/oder offene Punkte
@@ -70,18 +62,15 @@ Letzter Check des finalen Vision-Dokuments und eventuelle kleinere Anpassungen w
 *Notizen:* +
 - Abgabe nach der 3. Iteration
 
-*Entscheidung:* +
-- (...) +
- +
-
-
 
 == To-Do's
 - (Aufgaben, die sich aus allen Themen ergeben haben, auflisten. Tickets anlegen für alle To-Do's)
 
 == Nächstes Meeting
 - Datum: 05.05.2025
-- Zeit: 13:45 Uhr
+- Zeit: *13:45* Uhr
 - Ort: Bibliothek Gruppenraum B302a
-- Themen: - neue Iteration besprechen +
-          - 
+- *Themen:*
+- Retro der letzten Iteration
+- neue Iteration besprechen
+          
