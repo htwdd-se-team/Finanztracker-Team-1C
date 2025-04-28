@@ -5,7 +5,7 @@
 *Leitung:* Paula +
 *Protokoll:* Elias +
 *Meetingbeginn:* 16:00 +
-*Meetingende:* 17:10+
+*Meetingende:* 17:10 +
 *Dauer:* 1:10h
 
 ==== Anwesenheit: 
@@ -39,9 +39,11 @@ Mit Coach die Verantwortlichkeiten und die erwartete Belastung der Rollen im Pro
 Muss das Repository unbedingt public sein. Unsere Präferenz wäre private.
 
 *Notizen:* +
-- Coach fragt beim Prof nach ob Private/Public
+- Coach fragt beim Prof nach ob Private/Public +
+ +
+ +
 
-
+==== Meeting mit Coach beendet 16:55
 
 == Meeting Teil 2: Internes Team-Meeting
 
