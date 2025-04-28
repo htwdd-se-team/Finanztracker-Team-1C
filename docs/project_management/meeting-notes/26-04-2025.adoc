@@ -1,7 +1,7 @@
 === Meeting‑Protokoll 26.04.2025
-*Teilnehmende:* Alle außer Ali (Unentschuldigt)
-*Dauer:* 120 min
-*Leitung:* Elias
+*Teilnehmende:* Alle außer Ali (Unentschuldigt) +
+*Dauer:* 120 min +
+*Leitung:* Elias +
 
 ==== Beschlüsse
 |===

@@ -167,9 +167,9 @@ Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mi
 | Bedarf | Priorität | Features / Funktionen | Geplantes Release
 
 | Authentication
-| Muss 
+| Soll 
 | Account erstellen/Login
-| MVP
+| (MVP)
 
 
 | Schnelle, barrierefreie Erfassung von Ein- & Ausgaben, ohne Tabellenwissen 
@@ -210,11 +210,11 @@ a|
 a| 
 - Ende-zu-Ende-Verschlüsselung - Zwei-Faktor-Authentifizierung 
 | xx
-| Integration externer Banken / Apps (Open-Banking)
-| Kann 
-a| 
-- Schnittstellen für Giro- & Kredit-karten-konten 
-| xx
+// | Integration externer Banken / Apps (Open-Banking)
+// | Kann 
+// a| 
+// - Schnittstellen für Giro- & Kredit-karten-konten 
+// | xx
 | Preis-günstige Lösung speziell für Studierende 
 | Kann 
 a| - Freemium-Modell mit rabattierten Upgrade-Plänen
@@ -258,7 +258,7 @@ a| - Freemium-Modell mit rabattierten Upgrade-Plänen
 | Niedrig
 | xx
 
-| Datenschutz & Compliance: DSGVO-Konformität, Ende-zu-Ende-Verschlüsselung, 2-Faktor-Auth
+| Datenschutz & Compliance (Ende-zu-Ende-Verschlüsselung)
 | Hoch
 | xx
 
