@@ -2,20 +2,21 @@
 
 *Datum:* 28.04.2025 +
 *Ort:* Online (MS Teams) +
-*Leitung:* Paula + (Elias Protokoll)
+*Leitung:* Paula +
+*Protokoll:* Elias +
 *Meetingbeginn:* 16:00 +
 *Meetingende:* 17:10+
 *Dauer:* 1:10h
 
 ==== Anwesenheit: 
-- Elias +
-- Ben +
-- Paula +
-- Ali +
-- Khang nicht hat sich Abgemeldet
-- Christoph +
-- Cedrick +
-- Coach (Ruben David) +
+- Elias
+- Ben
+- Paula
+- Ali
+- [line-through]#Khang# (ist abgemeldet)
+- Christoph
+- Cedrick
+- Coach (Ruben David)
 
 Anwesenheit wird nach Meetingbeginn vervollständigt 
 
@@ -27,6 +28,9 @@ Anwesenheit wird nach Meetingbeginn vervollständigt
 
 Mit Coach die Verantwortlichkeiten und die erwartete Belastung der Rollen im Projekt klären.
 
+*Notizen:* +
+- Workload des Scrum Masters kann schwanken, kann sich Aufgaben suchen wo benötigt wird
+
 *Entscheidungen:* +
  - Paula kann PO unterstützen
 
@@ -35,7 +39,7 @@ Mit Coach die Verantwortlichkeiten und die erwartete Belastung der Rollen im Pro
 Muss das Repository unbedingt public sein. Unsere Präferenz wäre private.
 
 *Notizen:* +
-- Coach fragt nach Private/Public
+- Coach fragt beim Prof nach ob Private/Public
 
 
 
@@ -47,6 +51,8 @@ Zusammenfassung der wichtigsten Erkenntnisse und Entscheidungen aus dem Gespräc
 *Notizen:* +
 - Ihn gerne involvieren wenn  nötig
 - Sind "Auf einem guten Weg"
+- Neuer Termin wird auf Absprache gemacht
+- Coach meldet sich nochmal mit Feedback bezüglich Vision-Dokument (direkt im Dokument)
 
 
 === 2. Überprüfung des Vision-Dokuments
@@ -56,21 +62,38 @@ Letzter Check des finalen Vision-Dokuments und eventuelle kleinere Anpassungen w
 - Unsere core features sollten funktionieren
 - AUTH to be checked later
 
+*Entscheidungen:* +
+- Vision-Dokument ist vollständig und fürs erste beendet, Issue wird geschlossen
 
-=== 3. Weitere organisatorische Aufgaben und/oder offene Punkte
+=== 3. Termin für Review-/ und Retro-Meeting
+Wann wollen wir das Review-/ und Retro-Meeting machen
 
 *Notizen:* +
-- Abgabe nach der 3. Iteration
+- Samstag wird eher nicht bevorzugt
+
+*Entscheidungen:* +
+- Meetings werden am Montag 5.5. vor der Sprintplanung gehalten
+
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- *Abgabe* nach der 3. Iteration
 
 
 == To-Do's
-- (Aufgaben, die sich aus allen Themen ergeben haben, auflisten. Tickets anlegen für alle To-Do's)
+- alle schließen ihre verbliebenen Issues
+- alle beschäftigen sich mit der kommenden Itteration, wenn diese hochgeladen ist (Notizen, gerne Fragen mitbringen)
+
+
+(Aufgaben, die sich aus allen Themen ergeben haben, auflisten. Tickets anlegen für alle To-Do's)
 
 == Nächstes Meeting
 - Datum: 05.05.2025
 - Zeit: *13:45* Uhr
 - Ort: Bibliothek Gruppenraum B302a
-- *Themen:*
-- Retro der letzten Iteration
+
+==== Themen
+- Review und Retro der letzten Iteration
 - neue Iteration besprechen
           
