@@ -1,0 +1,78 @@
+= Meeting-Protokoll 05.05.2025
+
+*Datum:* 05.05.2025 +
+*Ort:* Bibliothek Gruppenraum B302a +
+*Leitung:* Paula +
+*Protokoll:* (...) +
+*Meetingbeginn:* 13:45 +
+*Meetingende:* (...) +
+*Dauer:* (...) 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+Anwesenheit wird nach Meetingbeginn vervollständigt +
+ +
+ +
+
+
+== Tagesordnung
+
+=== 1. Review-Meeting
+(...)
+
+*Notizen:* +
+- (...) +
+
+*Entscheidungen:* +
+- (...)
+
+
+=== 2. Retro-Meeting
+(...)
+
+*Notizen:* +
+- (...)
+
+*Entscheidungen:* +
+- (...)
+
+=== 3. Sprint-Meeting (2. Itteration)
+(...)
+
+*Notizen:* +
+- (...)
+
+*Entscheidungen:* +
+- (...)
+
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- (...)
+
+*Entscheidungen:* +
+- (...)
+
+
+== To-Do's
+- (...)
+
+
+(Aufgaben, die sich aus allen Themen ergeben haben, auflisten. Tickets anlegen für alle To-Do's)
+
+== Nächstes Meeting
+- Datum: xx.05.2025
+- Zeit: *xx:xx* Uhr
+- Ort: xx
+
+==== Themen
+- (...)
+          
