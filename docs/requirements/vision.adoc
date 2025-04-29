@@ -27,7 +27,8 @@ Siehe <<#glossary, Glossar>>.
 
 === Fachliche Motivation
 //Erläutern Sie kurz den Hintergrund, in dem das Projekt angesiedelt ist. Welches Problem soll gelöst werden, wie ist es entstanden? Welche Verbesserung wird angestrebt. Achten Sie darauf, eine fachliche (organisatorische, betriebswirtschaftliche) Perspektive einzunehmen.
-Derzeit sind Finanztracker entweder umfangreich und unübersichtlich oder Nutzer greifen gleich zu fragmentierten Excel-Tabellen. Daher wollen wir eine Lösung entwickeln, die sowohl zeitknappe als auch datenaffine Studenten anspricht. Erstere erhalten alle wichtigen Erkenntnisse, ohne sich tief in das Tool einarbeiten zu müssen. Letztere finden schnell umfangreiche Analysemöglichkeiten, ohne dabei direkt auf funktionale Einschränkungen zu stoßen. Unser Grundsatz ist es, dem Nutzer so viele Entscheidungen wie möglich abzunehmen, damit die Finanzverwaltung neben dem Studienalltag nicht zur lästigen Pflicht wird, sondern mit minimalem Aufwand wertvolle Impulse für ein nachhaltiges Ausgabeverhalten liefert.
+
+[Ich würde noch auf das grundlegende Problem eingehen -> Warum Finanztracker? Was bringt mir der Tracker an sich?]Derzeit sind Finanztracker entweder umfangreich und unübersichtlich [könnt ihr Beispiele anführen?] oder Nutzer greifen gleich zu fragmentierten Excel-Tabellen. Daher wollen wir eine Lösung entwickeln, die sowohl zeitknappe [was ist ein zeitknapper / datenaffiner Student?] als auch datenaffine Studenten anspricht. Erstere erhalten alle wichtigen Erkenntnisse [welche wichtigen Erkentnisse?], ohne sich tief in das Tool einarbeiten zu müssen. Letztere finden schnell umfangreiche Analysemöglichkeiten, ohne dabei direkt auf funktionale Einschränkungen [welche funktionalen Einschränkungen könnte es geben?] zu stoßen. Unser Grundsatz ist es, dem Nutzer so viele Entscheidungen [gibt es auch hier beispiele für Entscheidungen?] wie möglich abzunehmen, damit die Finanzverwaltung neben dem Studienalltag nicht zur lästigen Pflicht wird, sondern mit minimalem Aufwand wertvolle Impulse für ein nachhaltiges Ausgabeverhalten liefert.
 
 
 
@@ -163,6 +164,7 @@ Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mi
 //Vermeiden Sie Angaben zum Entwurf. Nennen wesentliche Features (Produktmerkmale) auf allgemeiner Ebene. Fokussieren Sie sich auf die benötigten Fähigkeiten des Systems und warum (nicht wie!) diese realisiert werden sollen. Geben Sie die von den Stakeholdern vorgegebenen Prioritäten an.
 
 [%header, cols="4,1,4,1"]
+Hier bitte mehr auf Messbarkeit eingehen. Konkreter aufzeigen was die Funktionen tun und wie ihr abharken könnt dass ihr sie erreicht habt.
 |===
 | Bedarf | Priorität | Features / Funktionen | Geplantes Release
 
@@ -183,7 +185,7 @@ a|
 | Sofort verständliche Finanzübersicht
 | Muss 
 a| 
-- Minimalistisches, visuell ansprechendes Dashboard (Saldo, Budget, Sparziele) 
+- Minimalistisches, visuell ansprechendes Dashboard (Saldo, Budget, Sparziele) [was ist visiuell ansprechend?]
 | MVP
 
 | übersichtliche tabellarische Anzeige
