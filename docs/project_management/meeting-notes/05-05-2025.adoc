@@ -3,10 +3,10 @@
 *Datum:* 05.05.2025 +
 *Ort:* Bibliothek Gruppenraum B302a +
 *Leitung:* Paula +
-*Protokoll:* (...) +
+*Protokoll:* Christoph +
 *Meetingbeginn:* 13:45 +
-*Meetingende:* (...) +
-*Dauer:* (...) 
+*Meetingende:* 15:00 +
+*Dauer:* 75 min 
 
 ==== Anwesenheit: 
 - Elias
@@ -16,10 +16,6 @@
 - Khang
 - Christoph
 - Cedrick
-
-Anwesenheit wird nach Meetingbeginn vervollständigt +
- +
- +
 
 
 == Tagesordnung
@@ -32,9 +28,8 @@ Was war unser Ziel in Iteration 1?
 - Scrum-Struktur aufsetzen(Teamrollen klären, Meetingformate festlegen) +
 - Dokumentation anlegen (Projektplan, Grundstruktur des Repos + Ascii-Dokumentation, erste Protokolle und Meeting-Notes) +
 - Vision und Zielbild erarbeiten (erstellen des Vision-Dokuments, erste Überlegungen zu Nutzergruppen, Problemen, Nutzen, Funktionalität) +
-- Kommunikations- & Arbeitswerkzeuge einrichten (GitHub einrichten inkl. Project Board)
-- Grundlagen legen für weitere Planung
-- (...) +
+- Kommunikations- & Arbeitswerkzeuge einrichten (GitHub einrichten inkl. Project Board) +
+- Grundlagen legen für weitere Planung +
 
 
 
@@ -42,11 +37,9 @@ Was war unser Ziel in Iteration 1?
 Was haben wir tatsächlich umgesetzt? Was konnten wir nicht umsetzten und warum?
 
 *Notizen:* +
-- (...) +
-
-
-
-
+- Unsere Ziele von Iteration 1 konnten wir gut umsetzen +
+- Generell herrscht im Team Konsens darüber, dass wir dadurch auch für Iteration 2 bereits gut aufgestellt sind +
+- Einziges Manko: Im Visionsdokument hatten wir die Stakeholder falsch eingetragen, weil wir unsere Personas da eingefügt haben +
 
 
 
@@ -54,108 +47,51 @@ Was haben wir tatsächlich umgesetzt? Was konnten wir nicht umsetzten und warum?
 Wie lief die Zusammenarbeit, was wollen wir verbessern?
 
 *Notizen:* +
-- (...)
+- Wenn jemand seine Aufgabe nicht rechtzeitig schafft, dann *rechtzeitig* Bescheid geben, dass man Hilfe benötigt. *_Ganz besonders dann_*, wenn der Erfolg und Sinn vom Meeting davon abhängt +
+- Abgesehen davon lief die Zusammenarbeit gut und für alle zufriedenstellend, nachdem die erste Findungsphase überwunden war +
 
 *Entscheidungen:* +
-Starfishmodell sh. Vorlesung 5 +
-- start doing: +
-- keep doing: +
-- do more: +
+- start doing: Wer am Meeting nicht teilnehmen kann, meldet sich ordentlich ab und teilt seinen bisherigen Task-Fortschritt mit den anderen (falls sinnvoll) +
+- keep doing: GitHub Ticket Board +
+- do more: (Wenn sinnvoll) ggf kleine Taskforces bilden anstatt immer in der großen Gruppe _alles_ zu besprechen +
 - do less: +
-- stop doing: +
-
-- Konkrete Verbesserungen (2-3) die Umgesetzt werden sollen: +
--
-
-
+- stop doing: Nicht mehr ausschließlich Online Meetings durchführen (Besser für die Teamdynamik) +
 
 
 
 == 3. Sprint-Meeting (2. Iteration)
 === 3.1 Sprintziel
-*Vorschlag:*
 Wir wollen zentrale Anforderungen aus Nutzersicht in Form von User Stories dokumentieren, erste Systemstrukturen entwerfen und ein technisches Basisprojekt aufsetzen.
 
-
-
-*Notizen:* +
-- (...)
-
-*Entschiedenes Sprintziel:* +
--
-
 === 3.2 Sichtung und Auswahl der PBIs (Product Backlog Items)
-Welche Items schlagen PO und Team vor? +
-
-*Vorschläge*: +
-- Stakeholder aktualisieren (vision.adoc) +
-- Persona mit Nutzerkontext erstellen (ux-concept.adoc) +
-- Erste User Stories aus Persona ableiten +
-- User Stories regelmäßig verfeinern +
-- Review mit anderem Team planen +
-- Produktvision überarbeiten (nach Feedback) +
-- Glossar aufbauen (glossary.adoc)+
-- Architektur-Notizbuch anlegen (architecture-notebook.adoc) +
-- Technisches Basisprojekt aufsetzen (sh. \src) +
-- GitHub Project Board Link schicken +
-- evtl. Termin mit Coach +
-
-
-*Diskussion:*
- +
- +
- +
-
-
 
 *Ausgewählte PBIs für diesen Sprint:* +
-- (...) +
-- (...) +
-- (...) +
-
-
-
-=== 3.3 Aufgabenaufteilung und Arbeitsschritte
-Für jedes PBI: +
-- Was muss getan werden? +
-- Wer übernimmt was? +
-- Müssen Rückfragen geklärt werden? +
- +
-
-
-
-*PBI 1: ...* +
-- Aufgabe 1: (...) +
-- Aufgabe 2: (...) +
-- Zuständig: (...) +
-
-*PBI 2: ...* +
-- (...) +
-
+- Stakeholder aktualisieren (vision.adoc) <- Paula +
+- Persona mit Nutzerkontext erstellen (ux-concept.adoc) <- Ben +
+- Erste User Stories aus Persona ableiten <- Ben (2 Wochen Zeit) +
+- Verantwortliche Person fürs Glossar <- Ali +
+- Review unseres Produkts mit anderem Team planen <- Ben (und Elias, Paula) +
+- Am Review von externem Team teilnehmen <- Ali, Cedric, Khang, Christoph +
+- Produktvision überarbeiten (nach Feedback) <- zuständige Person noch offen +
+- Spike für die Devs: individuell informieren: welche Technologien / Frameworks / Sprache wollen wir nutzen? <- jeder Dev (2 Wochen)+
 
 
 
 == 4. Weitere organisatorische Aufgaben und/oder offene Punkte
 
-*Notizen:* +
-- (...)
-
 *Entscheidungen:* +
-- (...)
+- Die Dauer einer Iteration belassen wir bei 4 Wochen, einfach auch um zusätzlichen Overhead zu vermeiden. Falls wir in den nächsten Wochen merken, dass wir einen 2 wöchigen Sprint uns wünschen, können wir immer noch darauf reagieren + 
+- Das Glossar hat eine hauptverantwortliche Person, die dafür zuständig ist, dass es sinnvoll gefüllt wird mit Fachbegriffen, die bei Nutzung unserer App von Interesse sind. Das kann /soll in Absprache mit den anderen erfolgen. Neue Glossar Einträge können bspw. beim Review kurz vorgestellt werden +
 
 
 == To-Do's
 - Aufgaben in GitHub übernehmen (inkl. Labels + Verantworliche) +
-- (...)
+- Architektur-Notizbuch anlegen (architecture-notebook.adoc) +
+- Technisches Basisprojekt aufsetzen (sh. \src) +
 
-
-(Aufgaben, die sich aus allen Themen ergeben haben, auflisten. Tickets anlegen für alle To-Do's)
 
 == Nächstes Meeting
-- Datum: xx.05.2025
-- Zeit: *xx:xx* Uhr
-- Ort: xx
-
-==== Themen
-- (...)
+- Datum: 12.05.2025
+- Zeit: *16:00* Uhr
+- Ort: Online
           
