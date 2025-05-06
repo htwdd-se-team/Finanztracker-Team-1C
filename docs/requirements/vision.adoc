@@ -66,6 +66,38 @@ Derzeit sind Finanztracker entweder umfangreich und unübersichtlich oder Nutzer
 [%header, cols="1,3,3"]
 |===
 | Name | Beschreibung | Verantwortlichkeiten
+| Nutzer*innen (Student*innen)
+| Student*innen die die App benutzen wollen. Möchte die eigene finanzielle Situation verbessern/im Auge behalten
+| - Wünsche beeinflussen die Hauptfunktionen und Gestaltungsentscheidungen für die Anwendung + 
+ - will eine funktionnelle, leicht zu bedienende Anwendung
+
+| Projekt-Team
+| Entwickelt das System im Rahmen eines studentischen Softwareprojekts. Ziel ist ein funktionierender, nutzbarer Prototyp
+| Setzt fachliche und technische Anforderungen um, organisiert sich selbst, dokumentiert, testet und sorgt für methodisches Arbeiten
+
+| Coach / Dozent:in
+| Begleitet das Projekt als Lehrperson oder Modulverantwortliche:r, bewertet das Vorgehen und Ergebnis
+| Gibt methodisches Feedback, achtet auf Einhaltung der Projektstruktur, überprüft Dokumentation und Fortschritt
+
+| Review-Team
+| Testet das System im Sprint Review, um externe Rückmeldungen zur Nutzbarkeit und Verständlichkeit zu geben
+| Bewertet Funktionen aus Nutzersicht, gibt Hinweise zur Benutzerfreundlichkeit und erkennt ggf. Probleme in der Bedienung
+
+| Gesetzgeber
+| Gibt rechtliche Rahmenbedingungen z.B. zu Datenschutz, Datenspeicherung oder Nutzungsbedingungen vor
+| Stellt Anforderungen an den Umgang mit personenbezogenen Daten, an Transparenz (z.B. AGBs) und an rechtliche Sicherheit
+
+
+| [Benennung des Stakeholders (als Rolle)]
+| [Kurze Beschreibung des Stakeholders und seiner Ziele]
+| [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
+|===
+
+
+
+[%header, cols="1,3,3"]
+|===
+| Name | Beschreibung | Verantwortlichkeiten
 
 | *Magdalena Meier*
 24 J., Kunst-Master
