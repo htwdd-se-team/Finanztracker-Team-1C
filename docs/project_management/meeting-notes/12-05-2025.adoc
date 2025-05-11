@@ -1,0 +1,71 @@
+= Meeting-Protokoll 05.05.2025
+
+*Datum:* 12.05.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 16:00 +
+*Meetingende:* 16:xx +
+*Dauer:* ... min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Überarbeitung Stakeholder
+Stakeholder sind überarbeitet. Wer reviewt das?
+
+*Notizen:* +
+- ... +
+
+*Entscheidung* +
+- ... +
+ +
+ 
+
+=== 2. Personas ausarbeiten
+Wie ist der Stand?
+
+*Notizen:* +
+- ... +
+ +
+
+=== 3. User Stories
+Wie ist der Stand? +
+
+*Notizen*: +
+- ... +
+ +
+
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- +
+
+*Entscheidungen:* +
+- +
+
+
+== To-Do's
+- 
+ +
+
+
+== Nächstes Meeting
+- Datum: 19.05.2025
+- Zeit: *16:00* Uhr
+- Ort: Online
+
+=== Themen
+- 
+          
