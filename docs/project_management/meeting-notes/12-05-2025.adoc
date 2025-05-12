@@ -1,12 +1,12 @@
-= Meeting-Protokoll 05.05.2025
+= Meeting-Protokoll 12.05.2025
 
 *Datum:* 12.05.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Christoph +
 *Meetingbeginn:* 16:00 +
-*Meetingende:* 16:xx +
-*Dauer:* ... min 
+*Meetingende:* 16:20 +
+*Dauer:* 20 min 
 
 ==== Anwesenheit: 
 - Elias
@@ -25,48 +25,33 @@
 Stakeholder sind überarbeitet. Wer reviewt das?
 
 *Notizen:* +
-- ... +
-
-*Entscheidung* +
-- ... +
+- Gemeinsam im Team reviewt +
  +
  
 
-=== 2. Personas ausarbeiten
+=== 2. Personas und User Stories ausarbeiten
 Wie ist der Stand?
 
 *Notizen:* +
-- ... +
+- Ben hat heute angefangen und ist noch im Progress +
+- Auf ca. 2-4 Personas festlegen und davon User Stories ableiten, damit es nicht zu viel und wiederholend wird +
+- Personas sollen tatsächliche Nutzer darstellen (um gut User Stories ableiten zu können), also primär Studenten +
  +
-
-=== 3. User Stories
-Wie ist der Stand? +
-
-*Notizen*: +
-- ... +
- +
-
-
 
 === 4. Review Meeting mit Externen
 
 *Notizen/Diskussion*: +
-- +
+- Wir laden unsere Externen einfach ins reguläre Montags-Meeting ein und stellen ihnen kurz unsere Idee und unseren aktuellen Fortschritt vor +
+- Das Meeting sollte online stattfinden, da das einfach praktischer für die Externen ist +
+- Voraussichtlicher Termin: 26.05. (auch wenns nicht der letzte Termin der Iteration ist) +
  +
 
 
 === 5. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- +
-
-*Entscheidungen:* +
-- +
-
-
-== To-Do's
-- 
- +
+- Aktuelle Woche werden die User Stories ausgearbeitet +
+- In der Woche danach wird dann das Dev Team aktiv
 
 
 == Nächstes Meeting
@@ -75,5 +60,5 @@ Wie ist der Stand? +
 - Ort: Online
 
 === Themen
-- 
+- User Story Fortschritt, Erste Schritte Dev Team, Umzug des Repo in die Organisation geklappt?
           
