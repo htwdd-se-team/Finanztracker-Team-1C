@@ -30,9 +30,12 @@ a| * Alter: 24
 image:magdalena_meier.png[width=150]
 
 |*Verhaltensvariablen*
-a| * extrovertiert (7/10)
-* innovationsoffen (8/10)
-* budgetbewusst (2/10)
+a| * Budgetbewusst (2/10)
+* Technikaffin (4/10)
+* Risikofreudig (9/10)
+* Regelmäßige Kontrolle (7/10)
+* Gemeinschaftsorientiert (10/10) 
+// bezieht sich darauf anonyme Vergleiche mit anderen zu machen
 
 |*Technische Fähigkeiten / Technologie*
 a| * IPhone (4h / Tag)
@@ -41,10 +44,95 @@ a| * IPhone (4h / Tag)
 * Blender (an Uni Computer)
 
 |*Bedürfnisse / Ziele*
-a| * xxx
+a| * Superschnelle Eingabe von Ausgaben, z.B. durch Quittung abfotografieren
+* Schöne, minimalistische Visualisierung der Finanzen durch Diagramme
+* Immer „alles auf einen Blick" haben (Saldo, Budget-Status)
+* Vergleich der eigenen Ausgaben mit einem Durchschnittswert und Erhalten von Sparvorschlägen durch die App
 
 |*Hindernisse / Frustrationen*
-a| * yyy
+a| * Lange Wartezeiten oder Verzögerungen bei der Nutzung, fehlende Offline-Fähigkeit
+* Komplizierte oder technisch anspruchsvolle Bedienung, die als belastend empfunden wird
+|===
+
+[cols="1,3"]
+|===
+|*Name*
+|Alejandro Perez
+
+|*Demographie*
+a| * Alter: 28
+* Geschlecht: männlich
+* Studiengang: Ökologische Landwirtschaft - Bachelor
+* Familienstand: verheiratet
+* Wohnort: Leipzig
+
+*Bild folgt noch*
+//image:xxx.png[width=150]
+
+|*Verhaltensvariablen*
+a| * Budgetbewusst (9/10)
+* Technikaffin (2/10)
+* Plant größere Anschaffungen (10/10)
+* Regelmäßige Kontrolle (1/10)
+* Gemeinschaftsorientiert (7/10) 
+
+|*Technische Fähigkeiten / Technologie*
+a| * Google Pixel Smartphone (1h / Tag)
+* Laptop (2h / Tag), bevorzugt für Tabellenkalkulationen
+* Bevorzugt klassische Methoden für Finanzen (Papier, Notizbuch)
+* nutzt als Social-Media-Plattform nur X (Twiiter)
+
+|*Bedürfnisse / Ziele*
+a| * Nutzung eines Finanztrackers, der weniger Zeit beansprucht als das Führen eines Notizbuchs
+* Möchte sein Erspartes für das Studium möglichst schonend ausgeben, daher möchte er mindestens zwei Untergrenzen festlegen
+* Gelegentlich möchte er die App auf Spanisch nutzen, um den Kontext besser zu verstehen, und die Währung flexibel auf mexikanische Pesos umstellen können
+// Euro -> mexikanische Pesos
+
+|*Hindernisse / Frustrationen*
+a| * Fehlende Möglichkeit, Einnahmen und Ausgaben gemeinsam mit dem Partner zu verwalten
+* Komplizierte Umstellung der Sprache und Währung in der App
+* Fehlende Erinnerungsfunktion für wiederkehrende Zahlungen
+* Schwierigkeiten beim Importieren von Daten aus Papier-Notizbüchern oder anderen Apps
+* Fehlende Unterstützung für barrierearme Bedienung (z.B. große Schrift, Vorlesefunktion)
+|===
+
+[cols="1,3"]
+|===
+|*Name*
+|Mario Müller
+
+|*Demographie*
+a| * Alter: 20
+* Geschlecht: männlich
+* Studiengang: Informatik - Bachelor
+* Familienstand: ledig
+* Wohnort: Radeburg
+
+image:mario_mueller.png[width=150]
+
+|*Verhaltensvariablen*
+a| * budgetbewusst (7/10)
+* technikaffin (9/10)
+* risikofreudig (1/10)
+* regelmäßige Kontrolle (8/10)
+* gemeinschaftsorientiert (4/10) 
+
+|*Technische Fähigkeiten / Technologie*
+a| * Dektop-Power-User (6 h / Tag)
+* Samsung Handy (1,5 h / Tag)
+* 10 Jahre Gaming-Erfahrung in allen Kategorien
+* 3 Jahre Programmiererfahrung überwiegend mit Cloud-Diensten und Synchronisation zwischen Geräten
+
+|*Bedürfnisse / Ziele*
+a| * Sequenzielles Erfassen am PC, optimiert für Tastatur-Shortcuts
+* Durchführung tiefer Analysen (z.B. Kategorie-Trends, Prognosen, Datenexport)
+* Regelmäßiger Abgleich zwischen unregelmäßigen Einnahmen und Fixkosten
+* Benachrichtigung beim Unterschreiten eines definierten Finanzminimums
+* Erwartung eines sicheren Produkts, dem er seine Daten bedenkenlos anvertrauen kann
+
+|*Hindernisse / Frustrationen*
+a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da Standard-Budgets selten passen
+* Unzufriedenheit mit der UI/UX existierender Finanztracker
 |===
 
 == Nutzungskontext
