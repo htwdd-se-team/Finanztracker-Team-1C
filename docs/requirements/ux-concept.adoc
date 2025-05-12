@@ -24,6 +24,7 @@ In diesem Dokument werden die Benutzeroberflächen des Systems {project-system-n
 a| * Alter: 24
 * Geschlecht: weiblich
 * Studiengang: bildene Kunst - Master
+* Nebenjob: Servicekraft in der Gastronomie
 * Familienstand: ledig
 * Wohnort: Dresden
 
@@ -63,11 +64,11 @@ a| * Lange Wartezeiten oder Verzögerungen bei der Nutzung, fehlende Offline-Fä
 a| * Alter: 28
 * Geschlecht: männlich
 * Studiengang: Ökologische Landwirtschaft - Bachelor
+* Nebenjob: -
 * Familienstand: verheiratet
 * Wohnort: Leipzig
 
-*Bild folgt noch*
-//image:xxx.png[width=150]
+image:alejandro_perez.png[width=150]
 
 |*Verhaltensvariablen*
 a| * Budgetbewusst (9/10)
@@ -105,6 +106,7 @@ a| * Fehlende Möglichkeit, Einnahmen und Ausgaben gemeinsam mit dem Partner zu 
 a| * Alter: 20
 * Geschlecht: männlich
 * Studiengang: Informatik - Bachelor
+* Nebenjob: gelegentlicher Eventhelfer bei Konzerten, Festivals und Veranstaltungen
 * Familienstand: ledig
 * Wohnort: Radeburg
 
