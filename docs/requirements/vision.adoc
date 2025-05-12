@@ -85,13 +85,13 @@ Derzeit sind Finanztracker entweder umfangreich und unübersichtlich oder Nutzer
 
 | Gesetzgeber
 | Gibt rechtliche Rahmenbedingungen z.B. zu Datenschutz, Datenspeicherung oder Nutzungsbedingungen vor
-| Stellt Anforderungen an den Umgang mit personenbezogenen Daten, an Transparenz (z.B. AGBs) und an rechtliche Sicherheit
-
-
-| [Benennung des Stakeholders (als Rolle)]
-| [Kurze Beschreibung des Stakeholders und seiner Ziele]
-| [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
+| Stellt Anforderungen an den Umgang mit personenbezogenen Daten, an Transparenz und an rechtliche Sicherheit
 |===
+
+//| [Benennung des Stakeholders (als Rolle)]
+//| [Kurze Beschreibung des Stakeholders und seiner Ziele]
+//| [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
+
 
 Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mittels Personas vorgenommen.
 
