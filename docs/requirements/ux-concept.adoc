@@ -15,7 +15,37 @@ In diesem Dokument werden die Benutzeroberflächen des Systems {project-system-n
 * Angaben über die Gestaltung der Benutzeroberfläche, z.B. Styling, Bedienbarkeit, ...
 
 == Personas
-// Fügen Sie hier als Tabelle oder Bild die Persons der wichtigsten Stakeholder ein
+[cols="1,3"]
+|===
+|*Name*
+|Magdalena Meier
+
+|*Demographie*
+a| * Alter: 24
+* Geschlecht: weiblich
+* Studiengang: bildene Kunst - Master
+* Familienstand: ledig
+* Wohnort: Dresden
+
+image:magdalena_meier.png[width=150]
+
+|*Verhaltensvariablen*
+a| * extrovertiert (7/10)
+* innovationsoffen (8/10)
+* budgetbewusst (2/10)
+
+|*Technische Fähigkeiten / Technologie*
+a| * IPhone (4h / Tag)
+* IPad zum lernen (3h / Tag)
+* Adobe Photoshop (an Uni Computer)
+* Blender (an Uni Computer)
+
+|*Bedürfnisse / Ziele*
+a| * xxx
+
+|*Hindernisse / Frustrationen*
+a| * yyy
+|===
 
 == Nutzungskontext
 // Beschreiben Sie die Arbeitsaufgaben, Arbeitsmittel, physische und soziale Umgebung, in der das Produkt genutzt wird. 
