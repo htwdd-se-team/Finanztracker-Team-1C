@@ -144,13 +144,65 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 //Hier sind einige Anregungen:
 
 //Zutreffendes angeben, nicht zutreffendes streichen oder auskommentieren
-. Anzahl der Personen, die an der Erfüllung der Aufgabe beteiligt sind. Ändert sich das?
-. Wie lange dauert die Bearbeitung der Aufgabe? Wie viel Zeit wird für jeden Arbeitsschritt benötigt? Ändert sich das?
-. Gibt es besondere Umgebungsbedingungen, z.B. mobil, offline, Außeneinsatz, Touchbedienung, Nutzung durch seh- oder hörbeeinträchtigte Personen?
-. Welche Systemplattformen werden heute eingesetzt? Welche sind es ggf. zukünftig?
-. Welche anderen Anwendungen sind im Einsatz? Muss ihre Anwendung mit diesen integriert werden?
+//. Anzahl der Personen, die an der Erfüllung der Aufgabe beteiligt sind. Ändert sich das?
+//. Wie lange dauert die Bearbeitung der Aufgabe? Wie viel Zeit wird für jeden Arbeitsschritt benötigt? Ändert sich das?
+//. Gibt es besondere Umgebungsbedingungen, z.B. mobil, offline, Außeneinsatz, Touchbedienung, Nutzung durch seh- oder hörbeeinträchtigte Personen?
+//. Welche Systemplattformen werden heute eingesetzt? Welche sind es ggf. zukünftig?
+//. Welche anderen Anwendungen sind im Einsatz? Muss ihre Anwendung mit diesen integriert werden?
 
-Hier können zudem bei Bedarf Teile des Unternehmensmodells (Prozesse, Organigramme, IT-Landschaft, ...) eingefügt werden, um die beteiligten Aufgaben und Rollen zu skizzieren.
+//Hier können zudem bei Bedarf Teile des Unternehmensmodells (Prozesse, Organigramme, IT-Landschaft, ...) eingefügt werden, um die beteiligten Aufgaben und Rollen zu skizzieren.
+
+*Was müssen Nutzer mit dem Produkt tun?*
+
+* Belege erfassen, bearbeiten und löschen
+* Verschiedene Ansichten/Reiter für die Funktionen der Anwendung öffnen
+* Filter für die Kategorien oder Zeiträume setzen
+* Einstellungen anpassen für Budgets, Kategorien und generelle Konfigurationen
+
+*Welche Geräte werden verwendet?*
+
+* Desktop PC mit mehreren Bildschirmen
+* Laptop
+* Tablet
+* Smartphone
+
+*In welchem Umfeld findet die Anwendung des Tools statt?* +
+
+* Im Supermarkt gelegentlich unter Zeitdruck
+* Im Restaurant
+* Zuhause
+* Am Eisstand in der Sonne
+* Am Imbiss um 2 Uhr nachts
+* im Zug ohne Internet
+
+*Wie viele Personen sind an der Aufgabe beteiligt?*
+
+* In der Regel arbeitet eine Person eigenständig mit dem Tool
+// * Für Partner mit gemeinsamer Finanzverwaltung kann auch auf einem Account gearbeitet werden
+// reinnehmen oder nicht -> mehr Arbeit machen bzw. müssen wir ja nicht alles hier umsetzen?
+* Bei grundlegenden Fehlern kann/wird das Admin-Team kontaktiert
+
+*Welche typischen Fehler könnten Nutzer passieren?*
+
+* Falsche Eingabe eines Belegs oder fehlerhafte Einscannung
+* Dopplung eines Eintrags
+* Filter versehentlich gelöscht
+* Ansicht ungewollt verschoben
+* Durch Fehlklick an eine falscher Stelle gelangt
+* versehentlich Daten dauerhaft gelöscht
+
+*Wie häufig und wie lange braucht es, um die Aufgaben in der Anwendung zu erfüllen*
+
+* Neue Einträge erfassen dauert durchschnittlich maximal eine Minute, mehrmals täglich
+* Einen Gesamtüberblick gewinnen benötigt etwa 15 Minuten, zweimal im Monat
+* Einfache Analysen erstellen dauert rund fünf Minuten, einmal pro Woche
+* Einstellungen anpassen oder Kategorien verwalten dauert meist unter drei Minuten
+//* Datenimport (z.B. CSV) oder Export benötigt etwa fünf Minuten, je nach Umfang
+
+*Mit welchen bestehenden Anwendungen sollte unsere Anwendung idealerweise zusammenarbeiten oder integriert werden können?*
+
+* Standardmäßig wird Online-Banking genutzt, bei dem jeder Anbieter den Export in eine CSV-Datei ermöglicht, die als potenzieller Input dient. +
+* Zusätzlich verwenden Nutzer Excel oder Google Sheets
 
 == Wireframes und Wireflow
 // Fügen Sie Wireframes als Bilder oder als Link (z.B. zu einem Miroboard) ein
