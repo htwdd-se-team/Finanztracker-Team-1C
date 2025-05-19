@@ -3,7 +3,7 @@
 *Datum:* 19.05.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Elias +
 *Meetingbeginn:* 16:00 +
 *Meetingende:* 16:xx +
 *Dauer:* ... min 
@@ -27,13 +27,10 @@
 Kurze Vorstellung der Personas und des Nutzerkontextes. Verbesserungsvorschläge, sonstiges? +
 
 *Notizen/Diskussion:* +
-- ... +
- +
- 
+- wenn möglich Multi-Language-Support und Währungssupport / Währungsumrechnung +
 
-(*Entscheidung:*) +
-- ... +
- +
+
+
 
 
 
@@ -41,63 +38,43 @@ Kurze Vorstellung der Personas und des Nutzerkontextes. Verbesserungsvorschläge
 Vorstellung + Besprechung der User Stories +
 
 *Notizen/Diskussion:* +
-- ... +
- +
+- Ben möchte 90 minuten Arbeitstermin mit 2 weiteren Personen vereinbaren um die User Stories zu besprechen
 
 
 (*Entscheidung:*) +
-- ... +
- +
+- Ben, Elias, Christoph Mittwoch Abend 19:00 Uhr
 
 
 
 === 3. Wireframes/Wireflow?
 Was muss da gemacht werden? Wer macht das? +
 
-*Notizen/Diskussion*: +
-- ... +
- +
 
- 
 (*Entscheidung:*) +
-- ... +
- +
+- Ben, Elias, Christoph Mittwoch Abend 19:00 Uhr
 
 
 
 === 4. Dev-Meeting?
 Wann wollt ihr euch wo treffen? Was soll besprochen werden? Worüber soll sich jeder vorher informieren? +
 
-*Notizen/Diskussion:* +
-- ... +
- +
 
 
 (*Entscheidung:*) +
-- ... +
- +
-
+- Dev Meeting Montag 26.05.2025 15:00 Uhr
 
 
 === 5. Kommunikation mit anderen Teams für Sprint Review?
 Wie läuft die Kommunikation? Ist schon ein Termin für das Meeting der anderen Gruppe festgelegt worden? Absprache darüber was wir in unserem Sprint-Review zeigen wollen +
 
 *Notizen:* +
-- ... +
- +
-
-
-
-(*Entscheidung:*) +
-- ... +
- +
+- Ein Termin wann wir fertig sind und das andere Team Zeit hat wird noch gesucht
 
 
 === 6. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- ... +
- +
+- Der meeting Raum wird spontan gefunden (wer zuerst da ist schreibt es in die Gruppe)
 
 
 
