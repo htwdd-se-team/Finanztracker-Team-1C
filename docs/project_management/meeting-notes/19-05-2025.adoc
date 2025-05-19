@@ -1,0 +1,111 @@
+= Meeting-Protokoll 19.05.2025
+
+*Datum:* 19.05.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 16:00 +
+*Meetingende:* 16:xx +
+*Dauer:* ... min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+
+ 
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Personas/Nutzerkontext besprechen
+Kurze Vorstellung der Personas und des Nutzerkontextes. Verbesserungsvorschläge, sonstiges? +
+
+*Notizen/Diskussion:* +
+- ... +
+ +
+ 
+
+(*Entscheidung:*) +
+- ... +
+ +
+
+
+
+=== 2. User Stories besprechen
+Vorstellung + Besprechung der User Stories +
+
+*Notizen/Diskussion:* +
+- ... +
+ +
+
+
+(*Entscheidung:*) +
+- ... +
+ +
+
+
+
+=== 3. Wireframes/Wireflow?
+Was muss da gemacht werden? Wer macht das? +
+
+*Notizen/Diskussion*: +
+- ... +
+ +
+
+ 
+(*Entscheidung:*) +
+- ... +
+ +
+
+
+
+=== 4. Dev-Meeting?
+Wann wollt ihr euch wo treffen? Was soll besprochen werden? Worüber soll sich jeder vorher informieren? +
+
+*Notizen/Diskussion:* +
+- ... +
+ +
+
+
+(*Entscheidung:*) +
+- ... +
+ +
+
+
+
+=== 5. Kommunikation mit anderen Teams für Sprint Review?
+Wie läuft die Kommunikation? Ist schon ein Termin für das Meeting der anderen Gruppe festgelegt worden? Absprache darüber was wir in unserem Sprint-Review zeigen wollen +
+
+*Notizen:* +
+- ... +
+ +
+
+
+
+(*Entscheidung:*) +
+- ... +
+ +
+
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+ +
+
+
+
+== Nächstes Meeting
+- Datum: 26.05.2025
+- Zeit: *16:00* Uhr
+- Ort: Online
+
+=== Themen
+- Meeting mit dem Review-Team
+          
