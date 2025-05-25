@@ -1,0 +1,87 @@
+= Meeting-Protokoll 26.05.2025
+
+*Datum:* 26.05.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 16:00 +
+*Meetingende:* 16:xx +
+*Dauer:* ... min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+
+ 
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ergebnisse Meetings Wireframe/Wireflow
+Was kam bei den Meetings raus? Kurze Vorstellung der Ergebnisse +
+
+*Notizen/Diskussion:* +
+- ... +
+
+
+
+
+
+=== 2. Ergebnisse Dev-Team Meeting 
+Was kam bei dem Meeting raus? Kurze Vorstellung der Ergebnisse +
+
+*Notizen/Diskussion:* +
+- ... +
+
+
+
+
+=== 3. Wie machen wir das Meeting mit den Externen?
+... +
+
+*Notizen/Diskussion:* +
+- ... +
+
+
+
+(*Entscheidung:*) +
+- ... +
+
+
+
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- 
+
+
+
+== Nächstes Meeting
+
+=== Meeting mit Externen
+- Datum: 28.05.2025
+- Zeit: *18:00* Uhr
+- Ort: Online (Teams)
+
+=== Meeting bei anderer Gruppe
+- Datum: 30.05.2025
+- Zeit: *13:00* Uhr
+- Ort: Online (Discord)
+
+=== nächstes gemeinsames Meeting
+- Datum: 02.06.2025
+- Zeit: *13:00* Uhr
+- Ort: Präsenz (Raum wird vor Ort gesucht)
+
+
+
+=== Themen nächstes Meeting
+
+          
