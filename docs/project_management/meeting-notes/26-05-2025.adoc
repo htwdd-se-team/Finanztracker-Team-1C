@@ -43,7 +43,7 @@ Was kam bei dem Meeting raus? Kurze Vorstellung der Ergebnisse +
 
 
 === 3. Wie machen wir das Meeting mit den Externen?
-... +
+Was wollen wir wie besprechen/vortragen? +
 
 *Notizen/Diskussion:* +
 - ... +
@@ -55,11 +55,17 @@ Was kam bei dem Meeting raus? Kurze Vorstellung der Ergebnisse +
 
 
 
-
-=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+=== 4. Meeting mit Coach ausmachen?
 
 *Notizen:* +
-- 
+- ... +
+
+
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
 
 
 
@@ -83,5 +89,8 @@ Was kam bei dem Meeting raus? Kurze Vorstellung der Ergebnisse +
 
 
 === Themen nächstes Meeting
+- Was für Feedback haben wir bekommen?
+- Produktvision auf Basis des Feedbacks verfeinern
+- evtl. Review/Retro
 
           
