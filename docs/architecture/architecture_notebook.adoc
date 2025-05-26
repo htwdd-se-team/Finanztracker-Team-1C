@@ -100,7 +100,7 @@ PostgreSQL mit ORM/Query-Builder wie Prisma oder Knex.js. Persistenz und Datenma
 **System:** FinanzTracker
 
 **Akteure:**
-
+- Developer (Entwickler)
 - Nutzer (Privatpersonen)
 
 
