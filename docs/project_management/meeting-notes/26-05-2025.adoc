@@ -23,12 +23,11 @@
 === 1. Ergebnisse Meetings Wireframe/Wireflow
 Was kam bei den Meetings raus? Kurze Vorstellung der Ergebnisse +
 
-*Notizen/Diskussion:* +
-Ergebnisse: 
-Einsehbar im Miro-Board, geschafft wurden: 
-grundsätzliches Design von Dashboards Mobile/Desktop +  
-Login-Dialog und "Einträge-Erstellen" + 
-AI-Mockups zur Visualisierung
+*Ergebnisse:* +
+Einsehbar im Miro-Board, geschafft wurden: +
+- grundsätzliches Design von Dashboards Mobile/Desktop +
+- Login-Dialog und "Einträge-Erstellen" +
+- AI-Mockups zur Visualisierung +
 
 Grundsätzlich kein Wireflow, aber Strukturierung des Wireframes
 bietet Alternative.
@@ -40,23 +39,27 @@ Extra geschafft: Erstellung der User-Stories
 === 2. Ergebnisse Dev-Team Meeting 
 Was kam bei dem Meeting raus? Kurze Vorstellung der Ergebnisse +
 
-*Notizen/Diskussion:* +
-Ergebnisse:
-Einteilung des Teams auf Front/Backend
-Review-Prozess geleitet von Elias als Lead-Dev
-Einigung auf Entwicklung einer Webanwendung (weniger Aufwand)
-und Technologien für Client/Backend und Datenbank
+*Ergebnisse:* +
+- Einteilung des Teams auf Front/Backend +
+- Review-Prozess geleitet von Elias als Lead-Dev +
+- Einigung auf Entwicklung einer Webanwendung (weniger Aufwand)
+und Technologien für Client/Backend und Datenbank +
 
-Offen: Architektur-Notebook muss noch gefüllt werden
--> Elias und Cedrick
+*Entscheidungen:* +
+Offen: Architektur-Notebook muss noch gefüllt werden +
+-> Elias und Cedrick +
 
-Einrichtung des Grundprojektes.
--> Elias
-
-Plan bezüglich Serverbereitstellung
--> Elias sucht Server für Gruppe
- Bereitgestellte Machine nur per VPN erreichbar: fragwürdig besonders für Mobile und Development
- ~ 8 Euro/Monat : Mitgliedervotum: Sind einverstanden
+Einrichtung des Grundprojektes +
+-> Elias +
+ +
+ +
+Plan bezüglich Serverbereitstellung: +
+-> Elias sucht Server für Gruppe +
+ +
+ Bereitgestellte Machine nur per VPN erreichbar: fragwürdig besonders für Mobile und Development +
+ ~ 8 Euro/Monat für eigenen Server +
+ *Mitgliedervotum:* alle einverstanden eigenen Server mitzubezahlen +
+  +
 
 === 3. Wie machen wir das Meeting mit den Externen?
 Was wollen wir wie besprechen/vortragen? +
@@ -66,7 +69,7 @@ Was wollen wir wie besprechen/vortragen? +
 - Meeting kompakt halten, Userstories einzeln vorzustellen wäre trocken
 
 
-(*Entscheidung:*) +
+*Entscheidung:* +
 - Kompaktes Meeting, bei Lust und Laune Pitch-Powerpoint  
 - Zusammenfassung wird geschrieben von Paula
 
