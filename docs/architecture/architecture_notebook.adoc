@@ -119,7 +119,7 @@ Verarbeitet HTTP-Anfragen, kümmert sich um Auth, Validierung und Datenlogik
 Speichert Nutzer, Kategorien, Transaktionen etc.
 
 .Container-Diagramm der FinanzTracker-Architektur
-image::../images//architecture-diagram.png[Container-Diagramm,width=100%,align=center]
+image::images//architecture-diagram.png[Container-Diagramm,width=100%,align=center]
 
 
 === Components
