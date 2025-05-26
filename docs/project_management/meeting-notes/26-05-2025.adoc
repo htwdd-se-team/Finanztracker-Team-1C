@@ -71,24 +71,24 @@ Was wollen wir wie besprechen/vortragen? +
 
 == Nächstes Meeting
 
-=== Meeting mit Externen
+==== Meeting mit Externen
 - Datum: 28.05.2025
 - Zeit: *18:00* Uhr
 - Ort: Online (Teams)
 
-=== Meeting bei anderer Gruppe
+==== Meeting bei anderer Gruppe
 - Datum: 30.05.2025
 - Zeit: *13:00* Uhr
 - Ort: Online (Discord)
 
-=== nächstes gemeinsames Meeting
+==== nächstes gemeinsames Meeting
 - Datum: 02.06.2025
 - Zeit: *13:00* Uhr
 - Ort: Präsenz (Raum wird vor Ort gesucht)
 
 
 
-=== Themen nächstes Meeting
+===== Themen nächstes Meeting
 - Was für Feedback haben wir bekommen?
 - Produktvision auf Basis des Feedbacks verfeinern
 - evtl. Review/Retro
