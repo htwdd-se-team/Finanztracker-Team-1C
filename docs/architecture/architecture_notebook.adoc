@@ -6,46 +6,152 @@ include::../_includes/default-attributes.inc.adoc[]
 
 
 == Zweck
-Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Begründungen, wesentliche Elemente und andere übergreifende Aspekte des Systems, die Einfluss auf Entwurf und Implementierung haben.
-
+Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Begründungen, wesentliche Elemente und andere übergreifende Aspekte des Systems, die Einfluss auf Entwurf und Implementierung der plattformübergreifenden FinanzTracker-App haben. Ziel ist es, eine wartbare, performante und benutzerfreundliche Anwendung zu erstellen, die auf Desktop und mobilen Endgeräten über eine einheitliche Codebasis zugänglich ist.
 //Hinweise: Bearbeiten Sie immer die Abschnitte 2-6 dieser Vorlage. Nachfolgende Abschnitte sind empfohlen, aber optional und sollten je nach Umfang der künftigen Wartungsarbeiten, Fähigkeiten des Entwicklungsteams und Bedeutung anderer architektureller Belange.
 
 //Anmerkung: Die Architektur legt wesentliche EINSCHRÄNKUNGEN für den Systementwurf fest und ist ein Schlüssel für die Erfüllung nicht-funktionaler Eigenschaften!
 
 
-== Architekturziele 
+== Architekturziele
+- Plattformunabhängigkeit: Die App soll als Webanwendung laufen und auf mobilen Geräten und Desktop-Browsern nutzbar sein, ohne mehrfachen Entwicklungsaufwand.
+- Wartbarkeit: Klare Trennung von Frontend und Backend zur besseren Skalierbarkeit und Wartung.
+- Modularität: Backend und Frontend sollen unabhängig weiterentwickelbar sein.
+- Responsivität und UI/UX: Durch Nutzung von React mit der ShadCN-Library soll eine moderne, ansprechende und reaktive Benutzeroberfläche entstehen.
+- Sicherheit: Sensible Daten (z.B. Ausgaben/Einnahmen) sollen sicher gespeichert und übertragen werden (HTTPS, Authentifizierung).
+- Performance: Schnelle Reaktionszeiten durch effiziente Datenbankzugriffe und asynchrone Backend-Logik wo dies benötigt wird.
+- Skalierbarkeit: Die Architektur soll zukünftiges Wachstum ermöglichen, z.B. Hinzufügen weiterer Microservices oder Auth-Provider.
+
+
 //Hinweise: Beschreiben Sie den zentralen Ansatz für ihre Architektur. Identifizieren Sie alle Aspekte, die die Philosophie beeinflussen, z.B. komplexe Auslieferung Aspekte, Anpassung von Altsystemen oder besondere Geschwindigkeitsanforderungen. Muss es besonders robust sein, um eine langfristige Wartung und Pflege zu ermöglichen?
 
 //Formulieren Sie eine Reihe von Zielen, die die Architektur in ihrer Struktur und ihrem Verhalten erfüllen muss. Identifizieren Sie kritische Fragen, die von der Architektur adressiert werden müssen, z.B. besondere Hardware-Abhängigkeiten, die vom Rest des Systems isoliert werden sollten oder Sicherstellung der Funktionsfähigkeit unter besonderen Bedingungen (z.B. Offline-Nutzung).
 
 
 == Annahmen und Abhängigkeiten
+- Alle Teammitglieder sind mit JavaScript/TypeScript vertraut.
+- Die App wird initial als MVP (Minimum Viable Product) entwickelt und später erweitert.
+- PostgreSQL bzw. Prisma wird als zentrale relationale Datenbank genutzt.
+- Es gibt keine Abhängigkeit zu bestehenden Altsystemen.
+- Hosting erfolgt über die Plattformen Cloudflare Pages (Frontend) und einen Hetzner-Server (Backend + DB).
+- Die REST-API wird ausschließlich intern vom eigenen Frontend konsumiert.
+- Nutzer benötigen ein Benutzerkonto zum Zugriff (Registrierung/Login).
 //[List the assumptions and dependencies that drive architectural decisions. This could include sensitive or critical areas, dependencies on legacy interfaces, the skill and experience of the team, the availability of important resources, and so forth]
 
 
 == Architektur-relevante Anforderungen
+- Nutzerregistrierung und -authentifizierung (JWTs)
+- CRUD-Funktionalität für Einnahmen und Ausgaben
+- Kategorisierung von Transaktionen
+- Monatsübersicht und Filterfunktionen
+- Sichere Kommunikation über HTTPS
+- Skalierbare REST-API mit sauber dokumentierten Endpunkten (OpenAPI)
 //Fügen Sie eine Referenz / Link zu den Anforderungen ein, die implementiert werden müssen, um die Architektur zu erzeugen.
 
 
 == Entscheidungen, Nebenbedingungen und Begründungen
-//[List the decisions that have been made regarding architectural approaches and the constraints being placed on the way that the developers build the system. These will serve as guidelines for defining architecturally significant parts of the system. Justify each decision or constraint so that developers understand the importance of building the system according to the context created by those decisions and constraints. This may include a list of DOs and DON’Ts to guide the developers in building the system.]
+**Verwendung von React mit ShadCN:**
 
-. Entscheidung oder Einschränkung oder Begründung 1
-. Entscheidung oder Einschränkung oder Begründung 2
+Ermöglicht schnelles UI-Prototyping, konsistentes Design und gute Entwicklerproduktivität.
+
+**Node.js + Express für das Backend:**
+
+Ideal für schnelle REST-API-Entwicklung, besonders bei JS/TS-Teams. Leichtgewichtig, async-fähig, große Community.
+
+**PostgreSQL als relationale Datenbank:**
+
+Stabil, leistungsfähig und gut für strukturierte finanzielle Daten geeignet. Open Source.
+
+**REST statt GraphQL:**
+
+Einfacher Einstieg, gute Toolunterstützung, weniger Overhead für kleinere Projekte.
+
+**Trennung von Frontend und Backend:**
+
+Erhöht Flexibilität beim Deployment und Testing.
+
+**Verzicht auf native Apps:**
+
+Fokus liegt auf einer plattformübergreifenden WebApp, um Entwicklungsaufwand zu minimieren.
+//[List the decisions that have been made regarding architectural approaches and the constraints being placed on the way that the developers build the system. These will serve as guidelines for defining architecturally significant parts of the system. Justify each decision or constraint so that developers understand the importance of building the system according to the context created by those decisions and constraints. This may include a list of DOs and DON’Ts to guide the developers in building the system.]
 
 
 == Schichten oder Architektur-Framework
+Es wird ein klassisches 3-Schichten-Modell verwendet:
+
+**Präsentationsschicht:**
+
+React-Frontend mit ShadCN UI-Komponenten, zustandsbasiertes Rendering, API-Integration via Axios/Fetch.
+
+**Logikschicht:**
+
+Node.js + Express - Verarbeitung von Anfragen, Business-Logik, Validierung, Authentifizierung.
+
+**Datenzugriffsschicht:**
+
+PostgreSQL mit ORM/Query-Builder wie Prisma oder Knex.js. Persistenz und Datenmanipulation.
 //[Describe the architectural pattern that you will use or how the architecture will be consistent and uniform. This could be a simple reference to an existing or well-known architectural pattern, such as the Layer framework, a reference to a high-level model of the framework, or a description of how the major system components should be put together.]
 
 
 == Architektursichten (Views)
 //[Describe the architectural views that you will use to describe the software architecture. This illustrates the different perspectives that you will make available to review and to document architectural decisions.]
 
-=== Kontextabgrenzung
-//Level 1 im C4-Modell
+=== Kontextabgrenzung (C4 Level 1)
 
-=== Container
-//Level 2 im C4-Modell
+**System:** FinanzTracker
+
+**Akteure:**
+
+- Nutzer (Privatpersonen)
+
+
+=== Container (C4 Level 2)
+
+**Frontend (React, Browser)**
+
+Kommuniziert mit REST-API via HTTPS
+
+**Backend (Node.js, Express)**
+
+Verarbeitet HTTP-Anfragen, kümmert sich um Auth, Validierung und Datenlogik
+
+**Datenbank (PostgreSQL)**
+
+Speichert Nutzer, Kategorien, Transaktionen etc.
+
+[mermaid]
+....
+graph TB
+    subgraph "User Environment"
+        U[User<br/>Private individuals managing<br/>personal finances]
+    end
+    
+    subgraph "Cloudflare Pages"
+        FE[Frontend Container<br/>React + ShadCN UI<br/>TypeScript/JavaScript<br/>Responsive Web App]
+    end
+    
+    subgraph "Hetzner Server"
+        BE[Backend Container<br/>Node.js + Express<br/>REST API<br/>JWT Authentication<br/>Business Logic & Validation]
+        
+        DB[(Database Container<br/>PostgreSQL<br/>User data, transactions,<br/>categories)]
+    end
+    
+    %% User interactions
+    U -->|Uses web browser<br/>Desktop & Mobile| FE
+    
+    %% Frontend to Backend communication
+    FE -->|HTTPS REST API calls<br/>JSON data exchange<br/>JWT tokens| BE
+    BE -->|JSON responses<br/>Authentication results| FE
+    
+    %% Backend to Database communication
+    BE -->|SQL queries via<br/>Prisma ORM<br/>CRUD operations| DB
+    DB -->|Query results<br/>Transaction data| BE
+    
+    %% Styling
+    classDef default stroke-width:2px
+....
+
+[.text-center]
+_Abbildung 1: Container-Diagramm der FinanzTracker-Architektur_
 
 === Components
 //Level 3 im C4-Modell
@@ -53,4 +159,5 @@ Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Be
 
 === Verteilungsdiagramm (Deployment Diagramm)
 //Beschreibt die physischen Knoten (Rechner) des Systems und Komponenten, die in diesen Knoten ausgeführt werden. Diese Sicht wird nicht benötigt, wenn das System in einem einzelnen Prozess oder Thread ausgeführt wird.
+
 
