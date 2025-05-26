@@ -118,40 +118,9 @@ Verarbeitet HTTP-Anfragen, kümmert sich um Auth, Validierung und Datenlogik
 
 Speichert Nutzer, Kategorien, Transaktionen etc.
 
-[mermaid]
-....
-graph TB
-    subgraph "User Environment"
-        U[User<br/>Private individuals managing<br/>personal finances]
-    end
-    
-    subgraph "Cloudflare Pages"
-        FE[Frontend Container<br/>React + ShadCN UI<br/>TypeScript/JavaScript<br/>Responsive Web App]
-    end
-    
-    subgraph "Hetzner Server"
-        BE[Backend Container<br/>Node.js + Express<br/>REST API<br/>JWT Authentication<br/>Business Logic & Validation]
-        
-        DB[(Database Container<br/>PostgreSQL<br/>User data, transactions,<br/>categories)]
-    end
-    
-    %% User interactions
-    U -->|Uses web browser<br/>Desktop & Mobile| FE
-    
-    %% Frontend to Backend communication
-    FE -->|HTTPS REST API calls<br/>JSON data exchange<br/>JWT tokens| BE
-    BE -->|JSON responses<br/>Authentication results| FE
-    
-    %% Backend to Database communication
-    BE -->|SQL queries via<br/>Prisma ORM<br/>CRUD operations| DB
-    DB -->|Query results<br/>Transaction data| BE
-    
-    %% Styling
-    classDef default stroke-width:2px
-....
+.Container-Diagramm der FinanzTracker-Architektur
+image::../images//architecture-diagram.png[Container-Diagramm,width=100%,align=center]
 
-[.text-center]
-_Abbildung 1: Container-Diagramm der FinanzTracker-Architektur_
 
 === Components
 //Level 3 im C4-Modell
