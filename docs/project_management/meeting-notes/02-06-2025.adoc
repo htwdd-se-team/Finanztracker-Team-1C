@@ -1,0 +1,132 @@
+= Meeting-Protokoll 02.06.2025
+
+*Datum:* 02.06.2025 +
+*Ort:* Präsenz  +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 13:00 +
+*Meetingende:* 14:xx +
+*Dauer:* ... min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+
+=== 1. Nachbereitung Meeting mit Externen
+Was für Kritik gab es? Was können wir verbessern? +
+-> Produktvision verfeinern (sh. vision.adoc)
+
+*Notizen:* +
+- ... +
+
+
+*Entscheidungen:* +
+- ... +
+ +
+
+
+=== 2. Meeting bei anderem Team  
+Gibt es etwas was wir aus dem Meeting für uns selber mitnehmen wollen? 
+
+*Notizen/Diskussion:* +
+- ... +
+ +
+
+
+=== 3. architecture notebook vorstellen
+kurz die Ergebnisse vorstellen 
+
+*Notizen:* +
+- ... +
+ +
+
+
+=== 4. Basisprojekt
+Wurde das Basisprojekt schon aufgesetzt/ wie läufts?
+
+*Notizen:* +
+- ... +
+ +
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+
+== 6. Review
+=== 6.1 Ziel Iteration 2
+Was waren unsere Ziele in Iteration 2? +
+
+*Scrum praktisch anwenden:* +
+- Alle Meetings durchführen (inkl. Review und Retro) +
+- Scrum-Rollen aktiv ausführen +
+- GitHub Project Board nutzen +
+
+*Projektstruktur und Dokumentation:* +
+- Stakeholder in vision.adoc aktualisieren +
+- Personas mit nutzerkontext erstellen +
+- Glossar aufbauen +
+- Produktvision überarbeiten, basierend auf Feedback +
+
+
+*Inhalte und Anforderungen:* +
+- aus Personas/Nutzerkontext die User Stories konkretisieren +
+- Spikes bei Bedarf +
+- User Stories analysieren und prioriseren (im Refinement) +
+- Sprint Review mit potentiellen Nutzern (anderes Team) +
+
+
+*Technische Vorarbeit:* +
+- Ideen zur technischen Umsetzung im architectue notebook festhalten +
+- Basisprojekt einrichten +
+ +
+
+=== 6.2 Umsetzung Iteration 2
+Was haben wir geschafft? +
+Wie zufrieden sind wir mit unseren Ergebnissen? +
+ +
+- ... +
+
+
+
+== 7. Retro
+Wie lief die Zusammenarbeit, was wollen wir verbessern?
+
+*Notizen/Diskussion:* +
+- ... +
+
+
+*Entscheidungen:* +
+(mind. 2-3 Maßnahmen) +
+- ... +
+- ... +
+- ... +
+
+
+
+
+
+
+
+
+
+
+== Nächstes Meeting
+- Datum: xx.06.2025
+- Zeit: *xx:xx* Uhr
+- Ort: Online (Teams)
+
+
+===== Themen nächstes Meeting
+- ... +
+
+          
