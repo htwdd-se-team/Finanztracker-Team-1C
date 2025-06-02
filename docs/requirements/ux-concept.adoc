@@ -158,6 +158,8 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Verschiedene Ansichten/Reiter für die Funktionen der Anwendung öffnen
 * Filter für die Kategorien oder Zeiträume setzen
 * Einstellungen anpassen für Budgets, Kategorien und generelle Konfigurationen
+* fixe Ein-/Auszahlungen für den nachfolgenden Monat mit dem verbleibenden Budget
+* Budgetübersicht im Monatsvergleich
 
 *Welche Geräte werden verwendet?*
 
@@ -174,6 +176,7 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Am Eisstand in der Sonne
 * Am Imbiss um 2 Uhr nachts
 * im Zug ohne Internet
+* im Ausland
 
 *Wie viele Personen sind an der Aufgabe beteiligt?*
 
@@ -191,11 +194,11 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Durch Fehlklick an eine falscher Stelle gelangt
 * versehentlich Daten dauerhaft gelöscht
 
-*Wie häufig und wie lange braucht es, um die Aufgaben in der Anwendung zu erfüllen*
+*Wie häufig und wie lange braucht es, um die Aufgaben in der Anwendung zu erfüllen?*
 
 * Neue Einträge erfassen dauert durchschnittlich maximal eine Minute, mehrmals täglich
 * Einen Gesamtüberblick gewinnen benötigt etwa 15 Minuten, zweimal im Monat
-* Einfache Analysen erstellen dauert rund fünf Minuten, einmal pro Woche
+//* Einfache Analysen erstellen dauert rund fünf Minuten, einmal pro Woche
 * Einstellungen anpassen oder Kategorien verwalten dauert meist unter drei Minuten
 //* Datenimport (z.B. CSV) oder Export benötigt etwa fünf Minuten, je nach Umfang
 
@@ -207,6 +210,8 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 == Wireframes und Wireflow
 // Fügen Sie Wireframes als Bilder oder als Link (z.B. zu einem Miroboard) ein
 // Beziehen Sie ihre Wireframes auf konkrete User Stories oder Epics.
+image:wireframe_login.png[]
 
-Link zum Miro-Board: +
-https://miro.com/app/board/uXjVIDrW69I=/
+image:wireframe_start.png[]
+
+image:wireframe_add.png[]
