@@ -210,6 +210,9 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 == Wireframes und Wireflow
 // Fügen Sie Wireframes als Bilder oder als Link (z.B. zu einem Miroboard) ein
 // Beziehen Sie ihre Wireframes auf konkrete User Stories oder Epics.
+Link zum Miro-Board: +
+https://miro.com/app/board/uXjVIDrW69I=/
+
 image:wireframe_login.png[]
 
 image:wireframe_start.png[]
