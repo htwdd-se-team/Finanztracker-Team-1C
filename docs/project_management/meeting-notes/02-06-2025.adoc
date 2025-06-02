@@ -26,27 +26,33 @@ Was für Kritik gab es? Was können wir verbessern? +
 -> Produktvision verfeinern (sh. vision.adoc)
 
 *Notizen:* +
-- ... +
-
+-exportieren +
+-Ausgabe von dem letzten Tag als vorschlag angezeigt wird +
+-motivation liefern, damit man die App weiter nutzt +
+-Gamifikation(eher späteres Ziel) +
+-Graphenansicht +
++
 
 *Entscheidungen:* +
-- ... +
- +
+
+- +
++
 
 
 === 2. Meeting bei anderem Team  
 Gibt es etwas was wir aus dem Meeting für uns selber mitnehmen wollen? 
 
 *Notizen/Diskussion:* +
-- ... +
- +
+- intensiver Wireflow +
+- +
 
 
 === 3. architecture notebook vorstellen
 kurz die Ergebnisse vorstellen 
 
 *Notizen:* +
-- ... +
+- fertig +
+- elias muss in projekt plan das deployment anpassen +
  +
 
 
@@ -54,13 +60,18 @@ kurz die Ergebnisse vorstellen
 Wurde das Basisprojekt schon aufgesetzt/ wie läufts?
 
 *Notizen:* +
-- ... +
+- Domain holen für mehr Sicherheit +
  +
 
 === 5. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- ... +
+- Gamifikation und Graphenansicht übernimmt Ben +
+- Paula verantwortlich für Abgabe von Dokumentation 04.07.2025 +
+- maximal 7 minuten App vorstellenund  3 minuten Zeit für Fragen +
+- Elias erstellt die Architektur-Folie und Ben Produkt-Folie +
+- präsentation noch offen vielleicht auslösen +
+- Produktvision überarbeiten, basierend auf Feedback --> Ben +
 
 == 6. Review
 === 6.1 Ziel Iteration 2
@@ -94,7 +105,8 @@ Was waren unsere Ziele in Iteration 2? +
 Was haben wir geschafft? +
 Wie zufrieden sind wir mit unseren Ergebnissen? +
  +
-- ... +
+- noch eine andere Meeting für Dev-Team
+- Risiken erstellen Ben und Christoph +
 
 
 
@@ -107,8 +119,8 @@ Wie lief die Zusammenarbeit, was wollen wir verbessern?
 
 *Entscheidungen:* +
 (mind. 2-3 Maßnahmen) +
-- ... +
-- ... +
+- Meetings kurzer halten +
+- Terminvereinbarung verbessern +
 - ... +
 
 
@@ -121,12 +133,15 @@ Wie lief die Zusammenarbeit, was wollen wir verbessern?
 
 
 == Nächstes Meeting
-- Datum: xx.06.2025
-- Zeit: *xx:xx* Uhr
+- Datum: 09.06.2025
+- Zeit: *16:00* Uhr
+- Ort: Online (Teams)
+- Datum: 04.06.2025
+- Zeit: *08:00* Uhr
 - Ort: Online (Teams)
 
 
 ===== Themen nächstes Meeting
-- ... +
+- Datum: 04.06.2025 Dev-Meeting +
 
           
