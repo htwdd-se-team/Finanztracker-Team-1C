@@ -1,0 +1,11 @@
+# Redis Configuration
+REDIS_PASS=<super-secure-pw>
+
+
+# Database Configuration
+DATABASE_USER=<db-user>
+DATABASE_PW=<secure-password>
+DATABASE_NAME=<database-name>
+
+# PGAdmin Configuration
+PGADMIN_EMAIL=admin@example.com

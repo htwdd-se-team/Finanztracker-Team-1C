@@ -8,7 +8,6 @@
       "build": "pnpm run --recursive build",
       "build:frontend": "pnpm --filter frontend build",
       "build:backend": "pnpm --filter backend build",
-      "start": "pnpm run --parallel start",
       "test": "pnpm run --recursive test",
       "lint": "pnpm run --recursive lint",
       "clean": "pnpm run --recursive clean"

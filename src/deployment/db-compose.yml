@@ -9,7 +9,7 @@ services:
     restart: always
     image: "redis:alpine"
     hostname: redis
-    <<: *restart-net
+    <<: *restart
     command: redis-server --requirepass ${REDIS_PASS}
     expose:
       - "6379"
@@ -20,6 +20,7 @@ services:
   
   postgres:
     image: postgres:16-alpine
+    <<: *restart
     ulimits:
       memlock:
         soft: -1
@@ -43,7 +44,7 @@ services:
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
-    <<: *restart-net
+    <<: *restart
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PW}
