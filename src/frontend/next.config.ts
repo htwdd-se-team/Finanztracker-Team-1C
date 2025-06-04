@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   pageExtensions: ['tsx', 'mdx'],
   productionBrowserSourceMaps: false,
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || '<API_URL>',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3111',
   },
 };
 

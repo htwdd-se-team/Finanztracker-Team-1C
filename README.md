@@ -207,6 +207,19 @@ Folgende Schritte sind für eine Belegabgabe durchzuführen:
 Die Templates im Ordner `docs` und `belegabgabe_se1` unterliegen der
 [CC-BY-4.0](https://choosealicense.com/licenses/cc-by-4.0/) Lizenz.
 
+## Quick Dev Setup
+
+Wir benutzen `pnpm` + monorepo bitte stellen sie also sicher das `pnpm` installiert ist. Dafür können sie die Anleitung von pnpm [hier](https://pnpm.io/installation) nachlesen.
+
+Dependencies installieren: `pnpm i`
+
+- Backend starten: `pnpm dev:backend` bzw `cd src/backend && pnpm dev`
+- Frontend starten: `pnpm dev:frontend` bzw `cd src/frontend && pnpm dev`
+- oder beides: `pnpm dev` (im root dir) Frontend auf `http://localhost:3000` und Backend auf `http://localhost:3111`
+
+Dependencies hinzufügen für explicit backend/frontend: `pnpm add --filter <backend|frontend> <package-name>` bzw `cd src/backend|frontend && pnpm add <package-name>`
+
+
 ### Quellcode / Anderes
 
 Für das Repository bzw. die entstehende Software kann/muss eine separate Lizenz

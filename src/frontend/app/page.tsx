@@ -1,3 +1,5 @@
+import { Badge } from "@/components/ui/badge";
+
 export default function Home() {
   return (
     <div className="flex justify-center items-center px-4 min-h-screen">
@@ -11,9 +13,9 @@ export default function Home() {
           The smartest way to manage your finances and build your wealth
         </p>
         <div className="mt-8">
-          <div className="inline-block bg-muted backdrop-blur-sm px-6 py-2 border border-border rounded-full">
-            <span className="text-muted-foreground text-sm">Coming Soon</span>
-          </div>
+          <Badge variant="secondary" className="px-6 py-2 text-sm">
+            Coming Soon
+          </Badge>
         </div>
       </div>
     </div>
