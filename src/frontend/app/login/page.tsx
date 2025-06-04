@@ -31,11 +31,11 @@ export default function Home() {
             <CardContent className="gap-6 grid">
               <div className="gap-3 grid">
                 <Label htmlFor="tabs-demo-name">Name</Label>
-                <Input id="tabs-demo-name" defaultValue="Pedro Duarte" />
+                <Input id="tabs-demo-name"  />
               </div>
               <div className="gap-3 grid">
                 <Label htmlFor="tabs-demo-username">Username</Label>
-                <Input id="tabs-demo-username" defaultValue="@peduarte" />
+                <Input id="tabs-demo-username" />
               </div>
             </CardContent>
             <CardFooter>
