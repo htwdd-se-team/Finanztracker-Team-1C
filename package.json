@@ -4,7 +4,7 @@
     "scripts": {
       "dev": "pnpm run --parallel dev",
       "dev:frontend": "pnpm --filter frontend dev",
-      "dev:backend": "pnpm --filter backend dev",
+      "dev:backend": "pnpm --filter backend start",
       "build": "pnpm run --recursive build",
       "build:frontend": "pnpm --filter frontend build",
       "build:backend": "pnpm --filter backend build",
