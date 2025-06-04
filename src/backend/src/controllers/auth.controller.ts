@@ -2,7 +2,7 @@ import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from 'src/app.service';
 import { LoginResponseDto, LoginDto } from 'src/dto';
-import { PrismaService } from 'src/services';
+import { PrismaService, TestService } from 'src/services';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -10,6 +10,7 @@ export class AuthController {
   constructor(
     private readonly appService: AppService,
     private readonly prisma: PrismaService,
+    private readonly testService: TestService,
   ) {}
 
   private readonly logger = new Logger(AuthController.name);
@@ -24,6 +25,19 @@ export class AuthController {
 
     return {
       token: 'sample-token',
+    };
+  }
+
+  @Post('register')
+  @ApiOkResponse({ type: LoginResponseDto })
+  async register(@Body() body: LoginDto) {
+    // sample register logic
+    this.logger.debug(`Register attempt for ${body.email}`);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    return {
+      token: await this.testService.testIAmAFunction(),
     };
   }
 }

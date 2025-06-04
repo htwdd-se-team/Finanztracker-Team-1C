@@ -14,7 +14,7 @@ export default function Home() {
         </p>
         <div className="mt-8">
           <Badge variant="secondary" className="px-6 py-2 text-sm">
-            Coming Soon
+            Coming Soon (in 10 days)
           </Badge>
         </div>
       </div>

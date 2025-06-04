@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BackendConfig } from './backend.config';
 import { AuthController } from './controllers';
-import { PrismaService } from './services';
+import { PrismaService, TestService } from './services';
 
 @Module({
   imports: [
@@ -18,6 +18,6 @@ import { PrismaService } from './services';
     }),
   ],
   controllers: [AppController, AuthController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, TestService],
 })
 export class AppModule {}
