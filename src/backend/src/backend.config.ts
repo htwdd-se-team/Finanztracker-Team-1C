@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer';
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { Type } from "class-transformer";
+import { IsOptional, IsString, IsNumber } from "class-validator";
 
 export class BackendConfig {
   @IsOptional()

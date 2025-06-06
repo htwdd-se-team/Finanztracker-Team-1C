@@ -1,11 +1,11 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { AppService } from 'src/app.service';
-import { LoginResponseDto, LoginDto } from 'src/dto';
-import { PrismaService } from 'src/services';
+import { Body, Controller, Logger, Post } from "@nestjs/common";
+import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
+import { AppService } from "src/app.service";
+import { LoginResponseDto, LoginDto } from "src/dto";
+import { PrismaService } from "src/services";
 
-@ApiTags('Auth')
-@Controller('auth')
+@ApiTags("Auth")
+@Controller("auth")
 export class AuthController {
   constructor(
     private readonly appService: AppService,
@@ -14,7 +14,7 @@ export class AuthController {
 
   private readonly logger = new Logger(AuthController.name);
 
-  @Post('login')
+  @Post("login")
   @ApiOkResponse({ type: LoginResponseDto })
   async login(@Body() body: LoginDto) {
     // sample login logic
@@ -23,7 +23,7 @@ export class AuthController {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return {
-      token: 'sample-token',
+      token: "sample-token",
     };
   }
 }

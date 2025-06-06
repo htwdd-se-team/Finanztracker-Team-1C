@@ -1,18 +1,18 @@
-import { Module } from '@nestjs/common';
-import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
+import { Module } from "@nestjs/common";
+import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { BackendConfig } from './backend.config';
-import { AuthController } from './controllers';
-import { PrismaService } from './services';
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { BackendConfig } from "./backend.config";
+import { AuthController } from "./controllers";
+import { PrismaService } from "./services";
 
 @Module({
   imports: [
     TypedConfigModule.forRoot({
       isGlobal: true,
       load: dotenvLoader({
-        separator: '.',
+        separator: ".",
       }),
       schema: BackendConfig,
     }),

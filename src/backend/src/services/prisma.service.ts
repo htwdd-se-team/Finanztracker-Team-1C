@@ -4,10 +4,10 @@ import {
   Logger,
   OnModuleDestroy,
   OnModuleInit,
-} from '@nestjs/common';
-import { Prisma, PrismaClient } from '@prisma/client';
+} from "@nestjs/common";
+import { Prisma, PrismaClient } from "@prisma/client";
 
-import { BackendConfig } from '../backend.config';
+import { BackendConfig } from "../backend.config";
 
 @Global()
 @Injectable()

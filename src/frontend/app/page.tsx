@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge'
 
 export default function Home() {
   return (
@@ -19,5 +19,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }
