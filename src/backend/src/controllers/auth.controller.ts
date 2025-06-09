@@ -18,20 +18,12 @@ export class AuthController {
   @ApiOkResponse({ type: LoginResponseDto })
   async login(@Body() body: LoginDto) {
     // sample login logic
-    // const user = await this.prisma.user.findUnique({
-    //   where: {
-    //     email: body.email,
-    //   },
-    // });
-    // if (!user) {
-    //   throw new UnauthorizedException("Invalid credentials");
-    // }
-    // const isPasswordValid = await bcrypt.compare(
-    //   body.password,
-    //   user.passwordHash,
-    // );
-    // if (!isPasswordValid) {
-    //   throw new UnauthorizedException("Invalid credentials");
-    // }
+    this.logger.debug(`Login attempt for ${body.email}`);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    return {
+      token: "sample-token",
+    };
   }
 }
