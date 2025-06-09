@@ -3,10 +3,10 @@
 *Datum:* 09.06.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Ben +
-*Protokoll:* ... +
+*Protokoll:* Ben +
 *Meetingbeginn:* 13:30 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 15:00 - (DB-Schema erstellen Backend-Leute) +
+*Dauer:* 90 min 
 
 ==== Anwesenheit: 
 - Elias
@@ -24,10 +24,10 @@
 Passt das für alle so, muss was überarbeitet werden? +
 
 *Notizen:* +
-- ... +
+- E03 - Andere Idee: "Aufbewahrung und Sicherung meiner Daten +
 
 *Entscheidung:* +
-- ... +
+- Noch keine finale Entscheidung für E03 Titel gefallen +
  +
  +
 
@@ -36,19 +36,19 @@ Passt das für alle so, muss was überarbeitet werden? +
 Von wem werden die Tasks erstellt und zugeordnet?
 
 *Notizen:* +
-- ... +
+- Von Devs -> diese haben die User Stories und können in den Dev-Meeting nach und nach die Tasks verteilen+
  +
  +
 
 === 2. Alle Fragen zur Dokumentation (PO Fragen)
-Passen die überarbeite Produktvision und die überarbeiteten Persona's? +
-Definiton of Ready und Done reviewen mit dem Team +
-Wer hält das Risiko-Board im Auge? +
-Stand vom Glossar? +
-Wie viele User Stories -> keine feste Anzahl +
-Im Architekturnotizbuch C4-Modell auf Level 1 auch noch machen? +
-Hat sich schonmal wer mit dem Domänenmodell beschäftigt? +
-Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architektur, Vortrag Auslosung, Generelle Abgabeverantwortung, C4-1, Domänenmodell)
+1. Passen die überarbeite Produktvision und die überarbeiteten Persona's? +
+2. Definiton of Ready und Done reviewen mit dem Team +
+3. Wer hält das Risiko-Board im Auge? +
+4. Stand vom Glossar? +
+5. Wie viele User Stories -> keine feste Anzahl +
+6. Im Architekturnotizbuch C4-Modell auf Level 1 auch noch machen? +
+7. Hat sich schonmal wer mit dem Domänenmodell beschäftigt? +
+8. Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architektur, Vortrag Auslosung, Generelle Abgabeverantwortung, C4-1, Domänenmodell)
 
 
 
@@ -56,17 +56,19 @@ Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architek
 - ... +
 
 *Entscheidung:* +
-- 1. passt +
- 2. Formulierung ändern zwei bis drei Angestrebt, mindestens eine+
- 3. DoD Coding-Guidelines wird durch Elias geschrieben (Task erstellen (Elias, Ben) dann Review nächste Woche) +
-
-
-
+1. passt +
+2. Formulierung ändern zwei bis drei Angestrebt, mindestens eine+
+3. DoD Coding-Guidelines wird durch Elias geschrieben (Task erstellen (Elias, Ben) dann Review nächste Woche) +
+4. Ben macht Review von Glossar, danach abgehackt +
+5. passt +
+6. Elias und Cedrick überabreiten nochmal (Task erstellen)
+7. Domänenmodell anschauen und eine Task daraus formulieren (Ben)
+8. Alle Tasks anlegen
 
 === 3. Datenbank-Schema klären 
 
 *Notizen:* +
-- ... +
+- Wird in der Prisma Datei beschrieben  +
 
 
 *Entscheidungen:* +
@@ -77,7 +79,7 @@ Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architek
 === 4. Erste Tickets verteilen
 
 *Notizen:* +
-- ... +
+- Im Github vorhanden +
 
 *Entscheidungen:* +
 - ... +
@@ -88,8 +90,8 @@ Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architek
 === 5. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- wollen wir noch ein Meeting mit dem Coach? +
-- ... +
+- Wollen wir noch ein Meeting mit dem Coach? +
+Vormerker an ihn senden und dann nächste Woche einen Konkreten Plan machen, was wir vorstellen sollen (23.06. Meeting mit Coach)
 
 
 
@@ -102,4 +104,4 @@ Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architek
 
 
 ==== Themen nächstes Meeting
-- ...
+- E03 Titel
