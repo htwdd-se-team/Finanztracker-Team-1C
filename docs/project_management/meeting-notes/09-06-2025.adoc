@@ -5,7 +5,7 @@
 *Leitung:* Ben +
 *Protokoll:* Ben +
 *Meetingbeginn:* 13:30 +
-*Meetingende:* 15:00 - (DB-Schema erstellen Backend-Leute) +
+*Meetingende:* 15:00 - (DB-Schema erstellen Backend-Leute: 15:36) +
 *Dauer:* 90 min 
 
 ==== Anwesenheit: 
