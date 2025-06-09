@@ -40,7 +40,7 @@ Von wem werden die Tasks erstellt und zugeordnet?
  +
  +
 
- 
+
 
 === 2. Datenbank-Schema klären 
 
@@ -67,7 +67,8 @@ Von wem werden die Tasks erstellt und zugeordnet?
 === 4. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- wollen wir noch ein Meeting mit dem Coach?
+- wollen wir noch ein Meeting mit dem Coach? +
+- ... +
 
 
 
@@ -79,5 +80,5 @@ Von wem werden die Tasks erstellt und zugeordnet?
 
 
 
-===== Themen nächstes Meeting
+==== Themen nächstes Meeting
 - ...
