@@ -2,7 +2,7 @@
 
 *Datum:* 09.06.2025 +
 *Ort:* Online (MS Teams) +
-*Leitung:* Paula +
+*Leitung:* Ben +
 *Protokoll:* ... +
 *Meetingbeginn:* 13:30 +
 *Meetingende:* xx:xx +
@@ -40,9 +40,30 @@ Von wem werden die Tasks erstellt und zugeordnet?
  +
  +
 
+=== 2. Alle Fragen zur Dokumentation (PO Fragen)
+Passen die überarbeite Produktvision und die überarbeiteten Persona's? +
+Definiton of Ready und Done reviewen mit dem Team +
+Wer hält das Risiko-Board im Auge? +
+Stand vom Glossar? +
+Wie viele User Stories -> keine feste Anzahl +
+Im Architekturnotizbuch C4-Modell auf Level 1 auch noch machen? +
+Hat sich schonmal wer mit dem Domänenmodell beschäftigt? +
+Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architektur, Vortrag Auslosung, Generelle Abgabeverantwortung, C4-1, Domänenmodell)
 
 
-=== 2. Datenbank-Schema klären 
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+
+
+=== 3. Datenbank-Schema klären 
 
 *Notizen:* +
 - ... +
@@ -53,7 +74,7 @@ Von wem werden die Tasks erstellt und zugeordnet?
  +
  +
 
-=== 3. Erste Tickets verteilen
+=== 4. Erste Tickets verteilen
 
 *Notizen:* +
 - ... +
@@ -64,7 +85,7 @@ Von wem werden die Tasks erstellt und zugeordnet?
  +
 
 
-=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
 - wollen wir noch ein Meeting mit dem Coach? +
