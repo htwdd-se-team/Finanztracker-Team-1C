@@ -105,6 +105,7 @@ Wann gilt eine Aufgabe als fertig?
 *User-Story-spezifische Kritieren:*
 
 * Der Code ist in die Anwendung integriert und funktionsfähig (merge in main-Branch)
+* Die automatischen Coding-Guidelines werden über ES-Lint eingehalten
 * Die Coding-Guidelines XYZ wurden eingehalten
 * Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet wurden
 * Automatische Test laufen erfolgreich

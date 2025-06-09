@@ -56,9 +56,9 @@ Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architek
 - ... +
 
 *Entscheidung:* +
-- ... +
- +
- +
+- 1. passt +
+ 2. Formulierung ändern zwei bis drei Angestrebt, mindestens eine+
+ 3. DoD Coding-Guidelines wird durch Elias geschrieben (Task erstellen (Elias, Ben) dann Review nächste Woche) +
 
 
 

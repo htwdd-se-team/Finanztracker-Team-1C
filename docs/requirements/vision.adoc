@@ -150,7 +150,7 @@ a|
 - Ende-zu-Ende-Verschlüsselung - Zwei-Faktor-Authentifizierung 
 | xx
 | Gamification für das Motivationslevel 
-| Soll 
+| Kann 
 a|
 - Abzeichen
 - Streaks
