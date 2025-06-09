@@ -80,10 +80,34 @@ Jeder liest das Iteration-dokument vor dem nächsten Meeting durch, macht sich G
 
 Wann kommt eine Aufgabe in die Sprint-Planung?
 
+*Allgemeine Kriterien:*
+
+* Die Aufgabe wurde im Team/Dev-Meeting besprochen und abgestimmt, z.B. in Hinblick darauf, ob diese Task/Story in die Iteration passt
+* Die Aufgabe bringt einen klaren Mehrwert für das Projekt, dies wird durch die Anforderungen der Abgabe und durch die Formulierung der User Stories gewährleistet
+* Die Beschreibung ist detailliert genug, damit die umsetzende Person ohne Rückfragen direkt beginnen kann
+
+*User-Story-spezifische Kritieren:*
+
+* Die Referenz auf eine unserer Persona's muss erfolgen
+* Das Standard-User-Story-Schema wird verwendet (User Story, Verknüpfte Tasks, Aufwandsschätzung, Akzeptanzkriterien)
+* Die Schätzung des Aufwands wird durch das Dev-Team überprüft und akzeptiert
+* Die weiteren Produktanforderungen können eingehalten werden, zudem gibt es mindestens ein Akzeptanzkriterium, um eine Eingrenzung zu schaffen
+
 === Definition of Done
 // Listen Sie hier alle Kritierien auf, damit die Aufgabe eines bestimmten Typs (z.B. Task, User Story) als abgeschlossen gilt.
 
 Wann gilt eine Aufgabe als fertig?
+
+*Allgemeine Kriterien:*
+
+* Die Umsetzung der Aufgabe/User Story wurde mindestens von einem zweiten Teammitglied geprüft (Status: In Review -> Done)
+
+*User-Story-spezifische Kritieren:*
+
+* Der Code ist in die Anwendung integriert und funktionsfähig (merge in main-Branch)
+* Die Coding-Guidelines XYZ wurden eingehalten
+* Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet wurden
+* Automatische Test laufen erfolgreich
 
 == Deployment
 //Outline the strategy for deploying the software (and its updates) into the production environment.
