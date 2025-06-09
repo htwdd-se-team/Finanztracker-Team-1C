@@ -137,6 +137,44 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Unzufriedenheit mit der UI/UX existierender Finanztracker
 |===
 
+[cols="1,3"]
+|===
+|*Name*
+|Lena Schmidt
+
+|*Demographie*
+a| * Alter: 22  
+* Geschlecht: weiblich  
+* Studiengang: Psychologie - Bachelor  
+* Nebenjob: Tutorin für Statistik  
+* Familienstand: ledig  
+* Wohnort: Berlin  
+
+|*Verhaltensvariablen*
+a| * Budgetbewusst (4/10)  
+* Technikaffin (7/10)  
+* Risikofreudig (5/10)  
+* Wettbewerbsorientiert (9/10)  
+* Regelmäßige Kontrolle (6/10) 
+
+|*Technische Fähigkeiten / Technologie*
+a| * iPhone (3 h / Tag)  
+* MacBook (5 h / Tag)  
+* Erfahrung mit Duolingo und Habitica  
+* Erfahrung mit Datenanalyse-Tools wie Excel und Tableau
+
+|*Bedürfnisse / Ziele*
+a| * Motivation durch Belohnungen wie Abzeichen und Fortschrittsbalken  
+* Vergleich mit anderen Nutzern, um ihre Ausgaben zu optimieren  
+* Erreichen von Sparzielen durch Streaks  
+* Übersichtliche Darstellung von Fortschritten und Erfolgen  
+
+|*Hindernisse / Frustrationen*
+a| * Fehlende soziale Interaktion oder Vergleichsmöglichkeiten in der App  
+* Komplizierte Navigation oder überladene Benutzeroberfläche
+* Schwierigkeiten beim Nachvollziehen von Fortschritten  
+|===
+
 == Nutzungskontext
 // Beschreiben Sie die Arbeitsaufgaben, Arbeitsmittel, physische und soziale Umgebung, in der das Produkt genutzt wird. 
 // Eventuell sind Angaben zu Fehlerquellen, Häufigkeiten von Ereignisse sowie Bearbeitungsdauern von Vorgängen relevant
