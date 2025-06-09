@@ -1,0 +1,83 @@
+= Meeting-Protokoll 26.05.2025
+
+*Datum:* 09.06.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 13:30 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- [line-through]#Paula#  (abgemeldet)
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Überarbeitete User Stories besprechen
+Passt das für alle so, muss was überarbeitet werden? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+==== 1.1 Wie sollen Tasks erstellt werden?
+Von wem werden die Tasks erstellt und zugeordnet?
+
+*Notizen:* +
+- ... +
+ +
+ +
+
+ 
+
+=== 2. Datenbank-Schema klären 
+
+*Notizen:* +
+- ... +
+
+
+*Entscheidungen:* +
+- ... +
+ +
+ +
+
+=== 3. Erste Tickets verteilen
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+ +
+ +
+
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- wollen wir noch ein Meeting mit dem Coach?
+
+
+
+== Nächstes Meeting
+
+- Datum: 16.06.2025
+- Zeit: *16:00* Uhr
+- Ort: Online (Teams)
+
+
+
+===== Themen nächstes Meeting
+- ...
