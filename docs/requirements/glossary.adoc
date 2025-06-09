@@ -13,7 +13,26 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 |===
 | Begriff | Definition und Erläuterung | Synonyme
 //| Kommissionierung | Bereitstellung von Waren aus einem Lager entsprechend eines Kundenauftrags | (keine)
-| xx | xx | xx
+| Transaktion | Einzelner Finanzvorgang (z.B. Einnahme oder Ausgabe)| Buchung
+| Kategorie | Gruppierung von Transaktionen nach Zweck (z.B. Miete, Lebensmittel) |Kostenart
+| Dashbord | Übersichtseite mit zentralen Kennzahlen wie Saldo, Budget, Sparziele | Übersicht
+| Saldo | Aktueller Kontostand | Kontostand
+| Budget | Vom Nutzer festgelegter Maximalbetrag für Ausgaben in einem Zeitraum/Kategorie | Ausgabenlimit
+| Sparziel | Definierter Betrag, den der Nutzer ansparen möchte | Zielbetrag
+| Filter | Funktion zur Einschränkung der angezeigten Transaktionen(z. B  nach Kategorie) | Suchfunktion
+| Authentifizierung | Überprüfung der Identität eines Nutzers beim Login | Anmeldung
+| Export | Ausgabe von Daten (z.B. Transaktionen) in Formate wie CSV oder Excel | Datenausgabe
+| Import | Einlesen von Daten aus externen Quellen (z.B. CSV-Datei) | Upload/Datenimport
+| Synchronisierung | Abgleich von Daten zwischen Geräten oder mit der Cloud | Datenabgelich
+| Zwei-Faktor-Authentifizierung | Zusätzliche Sicherheitsmaßnahme beim Login z.B. durch SMS-Code | 2FA/Zwei-Faktor-Verifizierung
+| Rücklage | Zurückgelegtes Geld für zukünftige Ausgaben oder Notfälle | Reserve
+| Fixkosten | Regelmäßig anfallende, meist gleichbleibende Ausgaben | Laufende Kosten
+| Variable Kosten | Unregelmäßige oder in der Höhe schwankende Ausgaben | Flexible Ausgaben
+| Einnahme | Geldzufluss z.B. durch Gehalt | Zahlungseingang
+| Auswertung | Analyse der Finanzen über Zeiträume hinweg | Report, Bericht
+| Buchungszyklus | Wiederkehrendes Zeitintervall für Transaktionen (z.B. monatlich) | (keine)
+| Lastschrift | Automatische Abbuchung vom Konto durch Dritte | SEPA-Lastschrift
+| Benachrichtigung | Hinweis über bestimmte Ereignisse in der App | Alert, Hinweis
 |===
 
 
@@ -22,7 +41,17 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 |===
 | Abkürzung | Bedeutung | Erläuterung
 //| UP | Unified Process | Vorgehensmodell für die Softwareentwicklung
-| xx | xx | xx
+| CSV | Comma Separated Values | Textdateiformat zur Speicherung von tabellarischen Daten (z.B. für den Import oder Export von Transaktionen) Werte sind durch Kommas getrennt
+| OCR | Optical Character Recognition | Automatische Erkennung und Umwandlung von Text aus Bildern (z.B. Quittungen)
+| 2FA | Zwei-Faktor-Authentifizierung | Sicherheitsverfahren, das zwei unabhängige Nachweise zur Identitätsprüfung verlangt
+| API | Application Programming Interface | Schnittstelle, über die Programme miteinander kommunizieren und Daten austauschen können
+| UI | User Interface | Benutzeroberfläche der Anwendung
+| UX | User Experience | Nutzererlebnis bei der Bedienung der Anwendung
+| JWT | JSON Web Token | Standard für die sichere Übertragung von Authentifizierungsinformationen
+| MVP | Minimum Viable Product | Minimale funktionsfähige Version eine Produkts
+| IBAN | International Bank Account Number | Internationale Kontonummer zur eindeutigen Identifikation eines Bankkontos
+| TAN | Transaktionsnummer | Einmaliger Code zur Freigabe einer Transaktion
+| ETF | Exchange Traded Fund | Börsengehandelter Indexfonds
 |===
 
 == Verzeichnis der Datenstrukturen
@@ -31,16 +60,64 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | Bezeichnung | Definition | Format | Gültigkeitsregeln | Aliase
 
 | Anmeldedaten
-| Zusammensetzung von Benutzername und Passwort.
+| Zusammensetzung von Benutzername (E-Mail) und Passwort.
 | String
 | Emailadresse muss `@`-Zeichen und `.` Punkt enthalten.
 | Login
 
-| xx
-| xx
-| xx
-| xx
-| xx
+| Kategorie
+| Bezeichnung zur Gruppierung von Transaktionen.
+| String
+| Muss eindeutig sein, keine Sonderzeichen am Anfang.
+| Kostenart
+
+| Budget
+| Festgelegter Maximalbetrag für eine Kategorie oder Zeitraum.
+| Zahl (Float/Int)
+| Muss positiv sein.
+| Ausgabenlimit
+
+| Sparziel
+| Zielbetrag, den der Nutzer ansparen möchte.
+| Zahl (Float/Int)
+| Muss positiv sein.
+| Zielbetrag
+
+| Filter
+| Kriterien zur Einschränkung der Anzeige (z.B. Zeitraum, Kategorie).
+| Objekt (z.B. JSON)
+| Muss gültige Werte enthalten.
+| Suchkriterium
+
+| Benachrichtigung
+| Nachricht für Nutzer bei bestimmten Ereignissen.
+| Objekt (z.B. JSON)
+| Muss Titel, Typ, Zeitstempel enthalten.
+| Alert
+
+| Wiederkehrende Transaktion
+| Automatisch geplante, sich wiederholende Buchung.
+| Objekt
+| Muss Intervall, Startdatum und Betrag enthalten.
+| Wiederholungsbuchung
+
+| Sparplan
+| Regelmäßiger fixer Betrag, der automatisch einem Sparziel zugewiesen wird.
+| Objekt
+| Betrag größer als 0, Ziel vorhanden, Buchungszyklus definiert.
+| Auto-Sparen
+
+| Nutzerprofil
+| Grunddaten und Einstellungen des Users.
+| Objekt
+| E-Mail, Passwort, Sprache notwendig.
+| Benutzerkonto
+
+| Auswertung
+| Struktur für Finanzberichte mit Filtern, Zeitraum und aggregierten Daten.
+| Objekt
+| Muss Zeitraum und Ausgabentypen enthalten.
+| Analyse
 |===
 
 == Domänenmodell
