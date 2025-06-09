@@ -36,7 +36,7 @@ Passt das für alle so, muss was überarbeitet werden? +
 Von wem werden die Tasks erstellt und zugeordnet?
 
 *Notizen:* +
-- Von Devs -> diese haben die User Stories und können in den Dev-Meeting nach und nach die Tasks verteilen+
+- Von Devs -> diese haben die User Stories und können in den Dev-Meeting nach und nach die Tasks verteilen +
  +
  +
 
@@ -58,11 +58,12 @@ Von wem werden die Tasks erstellt und zugeordnet?
 *Entscheidung:* +
 1. passt +
 2. Formulierung ändern zwei bis drei Angestrebt, mindestens eine+
-3. DoD Coding-Guidelines wird durch Elias geschrieben (Task erstellen (Elias, Ben) dann Review nächste Woche) +
-4. Ben macht Review von Glossar, danach abgehackt +
+DoD Coding-Guidelines wird durch Elias geschrieben (Task erstellen (Elias, Ben) dann Review nächste Woche) +
+3. __ausgelassen__ +
+4. Ben macht Review von Glossar, danach abgehakt +
 5. passt +
-6. Elias und Cedrick überabreiten nochmal (Task erstellen)
-7. Domänenmodell anschauen und eine Task daraus formulieren (Ben)
+6. Elias und Cedrick überabreiten nochmal (Task erstellen) +
+7. Domänenmodell anschauen und eine Task daraus formulieren (Ben) +
 8. Alle Tasks anlegen
 
 === 3. Datenbank-Schema klären 
@@ -91,7 +92,7 @@ Von wem werden die Tasks erstellt und zugeordnet?
 
 *Notizen:* +
 - Wollen wir noch ein Meeting mit dem Coach? +
-Vormerker an ihn senden und dann nächste Woche einen Konkreten Plan machen, was wir vorstellen sollen (23.06. Meeting mit Coach)
+Vormerker an ihn senden und dann nächste Woche einen konkreten Plan machen, was wir vorstellen sollen (23.06. Meeting mit Coach)
 
 
 
@@ -105,3 +106,8 @@ Vormerker an ihn senden und dann nächste Woche einen Konkreten Plan machen, was
 
 ==== Themen nächstes Meeting
 - E03 Titel
+- Task für Abgabeverantwortung erstellen?
+- Domänenmodell Task verteilen
+- Auslosung Vorstellung in der Vorlesung
+- Wer hält das Risiko-Board im Auge?
+- Konkreten Plan machen für Meeting mit Coach
