@@ -1,0 +1,37 @@
+{
+  "recommendations": [
+    // Code formatting and linting
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    
+    // TypeScript and JavaScript support
+    "pmneo.tsimporter",
+    "bradlc.vscode-tailwindcss",
+
+    
+    // Database and ORM
+    "prisma.prisma",
+
+    // nestjs
+    "AbhijoyBasak.nestjs-files",
+    
+
+    // General productivity
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-rename-tag",
+    "mikestead.dotenv",
+
+    // Icons and theming
+    "vscode-icons-team.vscode-icons",
+
+    // docker
+    "ms-azuretools.vscode-containers"
+    
+   
+  ],
+  "unwantedRecommendations": [
+    // Extensions that might conflict or aren't needed
+    "hookyqr.beautify",
+   
+  ]
+} 
