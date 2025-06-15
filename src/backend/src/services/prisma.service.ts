@@ -1,5 +1,6 @@
 import {
   Global,
+  Inject,
   Injectable,
   Logger,
   OnModuleDestroy,
@@ -17,9 +18,9 @@ export class PrismaService
 {
   logger = new Logger(PrismaService.name);
 
-  constructor(public config: BackendConfig) {
+  constructor(@Inject(BackendConfig) public config: BackendConfig) {
     const prismaOptions: Prisma.PrismaClientOptions = {
-      ...{ datasources: { db: { url: config.DATABASE_URL } } },
+      datasources: { db: { url: config.DATABASE_URL } },
     };
 
     super(prismaOptions);

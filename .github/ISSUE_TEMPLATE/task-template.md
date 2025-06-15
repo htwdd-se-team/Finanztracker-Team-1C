@@ -1,14 +1,15 @@
 ---
 name: Task Template
 about: Create ordinary tasks
-title: ''
+title: ""
 labels: task
-assignees: ''
-
+assignees: ""
 ---
 
 ## Aufgabenbeschreibung
+
 <!-- Hier einfügen -->
 
 ## Zusätzliche Hinweise
+
 <!-- Hier einfügen -->
