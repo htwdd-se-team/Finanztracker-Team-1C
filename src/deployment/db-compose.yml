@@ -1,5 +1,4 @@
-version: '3.3'
-
+version: "3.3"
 
 x-restart: &restart
   restart: always
@@ -17,7 +16,7 @@ services:
       - "0.0.0.0:6379:6379"
     volumes:
       - redis-data:/data
-  
+
   postgres:
     image: postgres:16-alpine
     <<: *restart
@@ -26,9 +25,9 @@ services:
         soft: -1
         hard: -1
     environment:
-        POSTGRES_USER: ${DATABASE_USER}
-        POSTGRES_PASSWORD: ${DATABASE_PW}
-        POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PW}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
       - "0.0.0.0:5432:5432"
     expose:
@@ -48,7 +47,6 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PW}
-
 
 volumes:
   redis-data:

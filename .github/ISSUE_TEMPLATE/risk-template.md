@@ -1,14 +1,15 @@
 ---
 name: Risk Template
 about: Define a Risk
-title: ''
+title: ""
 labels: risk
-assignees: ''
-
+assignees: ""
 ---
 
 ## Risikobeschreibung
+
 <!-- Inhalt -->
 
 ## Bewältigungsstrategie
+
 <!-- Inhalt -->

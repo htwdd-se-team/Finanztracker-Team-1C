@@ -48,7 +48,8 @@ enum TransactionType {
   EXPENSE
 }
 
-enum RecurringTransactionType {
+
+ enum RecurringTransactionType {
   DAILY
   WEEKLY
   MONTHLY

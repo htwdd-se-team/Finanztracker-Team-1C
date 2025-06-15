@@ -50,7 +50,7 @@ Dieses Repository enthält Vorlagen im AsciiDoc-Format zur Dokumentation der ver
 ### Hinweis
 
 Falls Sie Fehler korrigieren oder Verbesserungen machen möchten, können Sie
-  dies gern über einen _Pull Request_ tun.
+dies gern über einen _Pull Request_ tun.
 
 ## Hinweise zu den AsciiDoc-Vorlagen
 
@@ -218,7 +218,6 @@ Dependencies installieren: `pnpm i`
 - oder beides: `pnpm dev` (im root dir) Frontend auf `http://localhost:3000` und Backend auf `http://localhost:3111`
 
 Dependencies hinzufügen für explicit backend/frontend: `pnpm add --filter <backend|frontend> <package-name>` bzw `cd src/backend|frontend && pnpm add <package-name>`
-
 
 ### Quellcode / Anderes
 

@@ -4,8 +4,9 @@ import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { BackendConfig } from "./backend.config";
-import { AuthController } from "./controllers";
+import { AuthController, EntryController } from "./controllers";
 import { PrismaService } from "./services";
+import { EntryService } from "./services/entry.service";
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { PrismaService } from "./services";
       schema: BackendConfig,
     }),
   ],
-  controllers: [AppController, AuthController],
-  providers: [AppService, PrismaService],
+  controllers: [AppController, AuthController, EntryController],
+  providers: [AppService, PrismaService, EntryService],
 })
 export class AppModule {}
