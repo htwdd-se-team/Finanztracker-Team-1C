@@ -3,16 +3,16 @@
 *Datum:* 16.06.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Christoph +
 *Meetingbeginn:* 16:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 16:50 +
+*Dauer:* 50 min 
 
 ==== Anwesenheit: 
 - Elias
 - Ben
 - Paula
-- Ali
+- Ali <- abwesend unentschuldigt
 - Khang
 - Christoph
 - Cedrick
@@ -23,35 +23,25 @@
 === 1. E03 Titel
 Welchen finalen Titel für E03? +
 
-*Notizen:* +
-- ... +
-
 *Entscheidung:* +
-- ... +
+- Aus dem Titel wird "sicher" gestrichen +
  +
  +
-
 
 === 2. Abgabeverantwortung
 Abgabeverantwortung festlegen + Task erstellen +
 
-*Notizen:* +
-- ... +
-
 *Entscheidung:* +
-- ... +
- +
+- Nochmal bestätigt, dass Paula die Hauptverantwortliche dafür ist +
+- Zugehörige Task wird noch erstellt +
  +
 
 
 === 3. Domänenmodelltask verteilen
 Wer macht's? +
 
-*Notizen:* +
-- ... +
-
 *Entscheidung:* +
-- ... +
+- Paula bearbeitet das und gibt im Laufe der Iteration nochmal Feedback ob Zuarbeit notwendig ist +
  +
  +
 
@@ -59,22 +49,16 @@ Wer macht's? +
 === 4. Vorstellung des Projektes
 Auslosung/Freiwillige? +
 
-*Notizen:* +
-- ... +
-
 *Entscheidung:* +
-- ... +
- +
+- Elias meldet sich freiwillig +
+- Wheel of Fortune hat Ali als zweiten Vortragenden ausgewählt +
  +
 
 === 5. Risiko-Board
 Wer hat das Risiko-Board im Auge? +
 
-*Notizen:* +
-- ... +
-
 *Entscheidung:* +
-- ... +
+- Im kommenden oder übernächsten Meeting nochmal analysieren, ob wir alles auf „Bewältigung“ setzen wollen oder nicht +
  +
  +
 
@@ -82,20 +66,20 @@ Wer hat das Risiko-Board im Auge? +
 === 6. Meeting mit Coach (23.06 16:00)
 Konkreter Plan für Meeting mit Coach +
 
-*Notizen:* +
-- ... +
-
-*Entscheidung:* +
-- ... +
- +
- +
-
+*Folgendes wäre gut wenn der Coach überprüft:* +
+- User Stories → Titel , Detailgrad +
+- Risk Board +
+- Folder Src, bzw Frontend / Backend +
+- DB Schema +
+- Wireframes, Wireflow, Mockups +
+- … wer noch weiteres hat, kann das auch einfach spontan fragen im Coach-Meeting
 
 === 7. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- ... +
-
+- Elias will ggf. nochmal ein Meeting mit den Devs machen um sicherzustellen, dass die Extensions, die gewisse Code Qualität und Konsistenz prüfen sollen, bei allen korrekt funktionieren (direkt im Anschluss ans Meeting stattgefunden) +
+- Das Verfassen der Code-Practices-Datei ist noch To Do +
+- Ben schreibt heute noch die Mail an den Coach mit unseren Anliegen +
 
 
 == Nächstes Meeting
@@ -103,8 +87,3 @@ Konkreter Plan für Meeting mit Coach +
 - Datum: 23.06.2025
 - Zeit: *16:00* Uhr
 - Ort: Online (Teams)
-
-
-
-==== Themen nächstes Meeting
-- ... +
