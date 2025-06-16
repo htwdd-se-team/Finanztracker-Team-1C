@@ -22,7 +22,9 @@ export default function LoginPage() {
           <CardContent>
             <form className="space-y-4">
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="pb-2">
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -31,7 +33,9 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="password">Passwort</Label>
+                <Label htmlFor="password" className="pb-2">
+                  Passwort
+                </Label>
                 <Input id="password" type="password" placeholder="" required />
               </div>
               <Button type="submit" className="w-full">

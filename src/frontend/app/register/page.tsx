@@ -22,15 +22,21 @@ export default function RegisterPage() {
           <CardContent>
             <form className="space-y-4">
               <div>
-                <Label htmlFor="firstname">Vorname</Label>
+                <Label htmlFor="firstname" className="pb-2">
+                  Vorname
+                </Label>
                 <Input id="firstname" type="text" placeholder="Max" required />
               </div>
               <div>
-                <Label htmlFor="lastname">Nachname (optional)</Label>
+                <Label htmlFor="lastname" className="pb-2">
+                  Nachname (optional)
+                </Label>
                 <Input id="lastname" type="text" placeholder="Mustermann" />
               </div>
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="pb-2">
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -39,7 +45,9 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="password">Passwort</Label>
+                <Label htmlFor="password" className="pb-2">
+                  Passwort
+                </Label>
                 <Input
                   id="password"
                   type="password"
