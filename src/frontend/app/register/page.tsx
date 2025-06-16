@@ -1,4 +1,5 @@
 import Background from '@/components/background'
+import Logo from '@/components/linked-logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -17,7 +18,9 @@ export default function RegisterPage() {
       <div className="flex items-center justify-center min-h-screen px-4">
         <Card className="w-full max-w-sm shadow-xl">
           <CardHeader>
-            <CardTitle className="text-2xl text-center">Registrieren</CardTitle>
+            <CardTitle className="text-2xl text-center">
+              Ein <Logo /> Konto erstellen
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4">
