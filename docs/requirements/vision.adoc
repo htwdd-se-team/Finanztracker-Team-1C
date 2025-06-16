@@ -105,7 +105,7 @@ Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mi
 |===
 | Bedarf | Priorität | Features / Funktionen | Geplantes Release
 
-| Authentication
+| Authentifizierung
 | Muss 
 | Account erstellen/Login
 | MVP
