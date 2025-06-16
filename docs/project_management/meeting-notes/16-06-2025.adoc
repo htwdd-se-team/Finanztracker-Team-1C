@@ -1,0 +1,110 @@
+= Meeting-Protokoll 16.06.2025
+
+*Datum:* 16.06.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 16:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. E03 Titel
+Welchen finalen Titel für E03? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 2. Abgabeverantwortung
+Abgabeverantwortung festlegen + Task erstellen +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 3. Domänenmodelltask verteilen
+Wer macht's? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 4. Vorstellung des Projektes
+Auslosung/Freiwillige? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+=== 5. Risiko-Board
+Wer hat das Risiko-Board im Auge? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 6. Meeting mit Coach (23.06 16:00)
+Konkreter Plan für Meeting mit Coach +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 7. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+
+
+
+== Nächstes Meeting
+
+- Datum: 23.06.2025
+- Zeit: *16:00* Uhr
+- Ort: Online (Teams)
+
+
+
+==== Themen nächstes Meeting
+- ... +
