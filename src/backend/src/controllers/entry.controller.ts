@@ -1,43 +1,53 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpCode,
-  HttpStatus,
-  UsePipes,
-  ValidationPipe,
-} from "@nestjs/common";
+import { Controller, Post, Body, UseGuards, Get, Query } from "@nestjs/common";
 import {
   ApiTags,
-  ApiCreatedResponse,
   ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiSecurity,
 } from "@nestjs/swagger";
-import { CreateEntryDto, EntryResponseDto } from "src/dto";
-import { EntryService } from "src/services/entry.service";
+import { User } from "@prisma/client";
+
+import { UserDecorator } from "../decorators";
+import {
+  CreateEntryDto,
+  EntryPageDto,
+  EntryPaginationParamsDto,
+  EntryResponseDto,
+} from "../dto";
+import { JwtAuthGuard } from "../guards";
+import { EntryService } from "../services";
 
 @ApiTags("entries")
 @Controller("entries")
+@ApiSecurity("user-jwt")
+@UseGuards(JwtAuthGuard)
 export class EntryController {
   constructor(private readonly entryService: EntryService) {}
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiCreatedResponse({
+  @Post("create")
+  @ApiOkResponse({
     type: EntryResponseDto,
     description: "Entry created successfully",
   })
   @ApiBadRequestResponse({ description: "Invalid input data" })
-  @UsePipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      forbidUnknownValues: true,
-    }),
-  )
   async create(
+    @UserDecorator() user: User,
     @Body() createEntryDto: CreateEntryDto,
   ): Promise<EntryResponseDto> {
-    const entry = await this.entryService.createEntry(createEntryDto);
+    const entry = await this.entryService.createEntry(user, createEntryDto);
     return entry;
+  }
+
+  @Get("list")
+  @ApiOkResponse({
+    type: EntryPageDto,
+    description: "Entries fetched successfully",
+  })
+  @ApiBadRequestResponse({ description: "Invalid input data" })
+  async list(
+    @UserDecorator() user: User,
+    @Query() paginationParams: EntryPaginationParamsDto,
+  ): Promise<EntryPageDto> {
+    return this.entryService.getEntries(user, paginationParams);
   }
 }
