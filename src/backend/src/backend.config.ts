@@ -9,6 +9,13 @@ export class BackendConfig {
   @IsString()
   public readonly DATABASE_URL: string;
 
+  @IsString()
+  public readonly JWT_SECRET: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly JWT_EXPIRATION = "31d";
+
   @IsNumber()
   @Type(() => Number)
   public readonly PORT = 3111;
