@@ -13,7 +13,17 @@ async function bootstrap() {
   const bootstrapLogger = new Logger("Bootstrap");
 
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      forbidUnknownValues: true,
+    }),
+  );
   const { CORS_ORIGIN, PORT } = app.get(BackendConfig);
 
   if (CORS_ORIGIN) {

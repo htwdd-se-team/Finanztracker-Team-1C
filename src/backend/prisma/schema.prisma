@@ -40,7 +40,7 @@ model Category {
 
   // if  a category is not associated with a user, it is a system category
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum TransactionType {
@@ -68,15 +68,15 @@ model Transaction {
   createdAt DateTime @default(now())
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  Category   Category? @relation(fields: [categoryId], references: [id])
+  Category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int?
 
   isRecurring Boolean @default(false)
 
   childTransaction  Transaction[] @relation("childTransaction")
-  parentTransaction Transaction?  @relation("childTransaction", fields: [transactionId], references: [id])
+  parentTransaction Transaction?  @relation("childTransaction", fields: [transactionId], references: [id], onDelete: Cascade)
   transactionId     Int?
 
   startDate DateTime?
