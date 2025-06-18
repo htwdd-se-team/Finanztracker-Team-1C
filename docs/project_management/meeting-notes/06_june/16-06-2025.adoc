@@ -35,6 +35,7 @@ Abgabeverantwortung festlegen + Task erstellen +
 - Nochmal bestätigt, dass Paula die Hauptverantwortliche dafür ist +
 - Zugehörige Task wird noch erstellt +
  +
+ +
 
 
 === 3. Domänenmodelltask verteilen
@@ -53,6 +54,8 @@ Auslosung/Freiwillige? +
 - Elias meldet sich freiwillig +
 - Wheel of Fortune hat Ali als zweiten Vortragenden ausgewählt +
  +
+ +
+
 
 === 5. Risiko-Board
 Wer hat das Risiko-Board im Auge? +
@@ -72,7 +75,10 @@ Konkreter Plan für Meeting mit Coach +
 - Folder Src, bzw Frontend / Backend +
 - DB Schema +
 - Wireframes, Wireflow, Mockups +
-- … wer noch weiteres hat, kann das auch einfach spontan fragen im Coach-Meeting
+- … wer noch weiteres hat, kann das auch einfach spontan fragen im Coach-Meeting +
+ +
+ +
+ 
 
 === 7. Weitere organisatorische Aufgaben und/oder offene Punkte
 
