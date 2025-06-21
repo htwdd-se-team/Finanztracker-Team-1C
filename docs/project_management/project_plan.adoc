@@ -116,3 +116,28 @@ Wann gilt eine Aufgabe als fertig?
 
 == Erkenntnisse (Lessons learned)
 // Führen Sie hier die wesentlichen Erkenntnisse auf, die Sie in den Retrospektiven gewonnen haben. Legen Sie besonderen Fokus auf die Maßnahmen, die Sie getroffen haben um Verbesserungen in den verschiedenen Aspekten des Projekts zu erzielen, z.B. dem Entwicklungsprozess, der technischen und organisatorischen Umgebung oder der Zusammenarbeit im Team.
+
+Im Verlauf der bisherigen Projektarbeit hat unser Team verschiedene Herausforderungen erlebt, aus denen wir konkrete Verbesserungsmaßnahmen abgeleitet haben. +
+
+*Kommunikation und Zuverlässigkeit im Team:* +
+Zu Beginn kam es vor, dass Teammitglieder unangekündigt nicht zu Meetings erschienen, was die Planung und Diskussionen teilweise erschwerte. Als Reaktion haben wir uns darauf verständigt, dass bei Verhinderung eine rechtzeitige Abmeldung erfolgt und falls nötig der aktuelle Bearbeitungsstand mit dem Team geteilt wird. Besonders bei Themen, zu denen eine Person wesentliche Informationen beiträgt, soll das Team vorher eine Zusammenfassung erhalten. Dieses Vorgehen hat zu mehr Transparenz und Verlässlichkeit beigetragen. +
+ +
+
+*Meetingkultur und Zusammenarbeit:* +
+Wir haben festgestellt, dass rein digitale Meetings auf Dauer zu einer Distanz im Team führen. Persönliche Treffen wirkten sich spürbar positiv auf die Teamdynamik aus. Daher wollen wir ca. aller vier Wochen unsere Review-/Retro-Meetings, sowie das Sprint-Planning nach Möglichkeit in Persona abhalten. Außerdem wurde angeregt, Meetings bewusster zeitlich zu begrenzen, um konzentrierter arbeiten zu können. Dazu zählt auch die klare Vorbereitung der Tagesordnung und das gezielte Moderieren der Meetings. +
+ +
+
+*Arbeitsorganisation und Toolnutzung:* +
+Die Arbeit mit dem GitHub Project Board hat sich als sehr hilfreich erwiesen, um Aufgaben, Zuständigkeiten und den Projektfortschritt jederzeit nachvollziehbar abzubilden. Dieses Tool wird daher weiterhin intensiv genutzt. Außerdem haben wir festgestellt, dass nicht alle Themen in der gesamten Gruppe effizient diskutiert werden können. Daher haben wir vermehrt auf kleinere Gruppen gesetzt, in denen ausgewählte Teammitglieder gezielt an einzelnen Aspekten gearbeitet und ihre Ergebnisse später dem gesamten Team vorgestellt haben. Dieses Vorgehen hat sich als besonders effektiv erwiesen und wird fortgeführt. +
+ +
+
+*Verantwortungsbewusstsein und Rollenfindung:* +
+Anfangs fiel es den meisten Teammitgliedern schwer, Verantwortung für Aufgaben oder größere Themenbereiche zu übernehmen. Im Projektverlauf zeigte sich jedoch eine positive Entwicklung: Die Bereitschaft zur aktiven Mitgestaltung, zur Übernahme von Rollen und zur selbstständigen Bearbeitung von Aufgaben ist deutlich gestiegen. Auch die Rollen des Scrum Masters und Product Owners wurden zunehmend als strukturgebende und unterstützende Instanzen wahrgenommen, was die Effizienz der Arbeit verbessert hat. +
+ +
+
+*Terminfindung als wiederkehrendes Problem:* +
+In mehreren Fällen war zwar im Voraus ein gemeinsamer Termin vereinbart worden, jedoch kam es am Tag des Meetings zu kurzfristigen Verschiebungswünschen einzelner Mitglieder. Dies führte zu unnötiger Unruhe und Zeitverlust. In Zukunft wollen wir eine verbindlichere Terminplanung etablieren, bei der einmal vereinbarte Zeiten nur in Ausnahmefällen kurzfristig verändert werden. +
+ +
+
+*Fazit:* +
+Insgesamt hat das Team in den ersten Iterationen deutlich an Struktur, Kommunikationsqualität und Selbstorganisation gewonnen. Viele der eingeführten Maßnahmen – wie die Arbeit mit Kleingruppen, die strukturiertere Meetingkultur und das transparente GitHub-Board – haben sich bewährt und bilden eine solide Grundlage für die kommenden Projektphasen.
