@@ -1,5 +1,5 @@
 = Projektplan: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresdsen.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
@@ -86,7 +86,7 @@ Wann kommt eine Aufgabe in die Sprint-Planung?
 * Die Aufgabe bringt einen klaren Mehrwert für das Projekt, dies wird durch die Anforderungen der Abgabe und durch die Formulierung der User Stories gewährleistet
 * Die Beschreibung ist detailliert genug, damit die umsetzende Person ohne Rückfragen direkt beginnen kann
 
-*User-Story-spezifische Kritieren:*
+*User-Story-spezifische Kriterien:*
 
 * Die Referenz auf eine unserer Persona's muss erfolgen
 * Das Standard-User-Story-Schema wird verwendet (User Story, Verknüpfte Tasks, Aufwandsschätzung, Akzeptanzkriterien)
@@ -102,12 +102,12 @@ Wann gilt eine Aufgabe als fertig?
 
 * Die Umsetzung der Aufgabe/User Story wurde mindestens von einem zweiten Teammitglied geprüft (Status: In Review -> Done)
 
-*User-Story-spezifische Kritieren:*
+*User-Story-spezifische Kriterien:*
 
 * Der Code ist in die Anwendung integriert und funktionsfähig (merge in main-Branch)
 * Die automatischen Coding-Guidelines werden über ES-Lint eingehalten
 * Die Coding-Guidelines XYZ wurden eingehalten
-* Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet wurden
+* Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet worden
 * Automatische Test laufen erfolgreich
 
 == Deployment

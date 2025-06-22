@@ -1,18 +1,18 @@
 = Glossar: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresdsen.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
 
 
 == Einführung
-In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fachdomäne) der <Projektthema-Systems> definiert. Zur besseren Übersichtlichkeit sind Begriffe, Abkürzungen und Datendefinitionen gesondert aufgeführt.
+In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fachdomäne) der {project-system-name} definiert. Zur besseren Übersichtlichkeit sind Begriffe, Abkürzungen und Datendefinitionen gesondert aufgeführt.
 
 == Begriffe
 [%header]
 |===
 | Begriff | Definition und Erläuterung | Synonyme
-//| Kommissionierung | Bereitstellung von Waren aus einem Lager entsprechend eines Kundenauftrags | (keine)
+// | Kommissionierung | Bereitstellung von Waren aus einem Lager entsprechend eines Kundenauftrags | (keine)
 | Transaktion | Einzelner Finanzvorgang (z.B. Einnahme oder Ausgabe)| Buchung
 | Kategorie | Gruppierung von Transaktionen nach Zweck (z.B. Miete, Lebensmittel) |Kostenart
 | Dashbord | Übersichtseite mit zentralen Kennzahlen wie Saldo, Budget, Sparziele | Übersicht
@@ -23,15 +23,15 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | Authentifizierung | Überprüfung der Identität eines Nutzers beim Login | Anmeldung
 | Export | Ausgabe von Daten (z.B. Transaktionen) in Formate wie CSV oder Excel | Datenausgabe
 | Import | Einlesen von Daten aus externen Quellen (z.B. CSV-Datei) | Upload/Datenimport
-| Synchronisierung | Abgleich von Daten zwischen Geräten oder mit der Cloud | Datenabgelich
+| Synchronisierung | Abgleich von Daten zwischen Geräten oder mit der Cloud | Datenabgleich
 | Zwei-Faktor-Authentifizierung | Zusätzliche Sicherheitsmaßnahme beim Login z.B. durch SMS-Code | 2FA/Zwei-Faktor-Verifizierung
-|Rücklage *(auskommentieren)* | Zurückgelegtes Geld für zukünftige Ausgaben oder Notfälle | Reserve
+// |Rücklage *(auskommentieren)* | Zurückgelegtes Geld für zukünftige Ausgaben oder Notfälle | Reserve
 | Fixkosten | Regelmäßig anfallende, meist gleichbleibende Ausgaben | Laufende Kosten
-| Variable Kosten *(auskommentieren)* | Unregelmäßige oder in der Höhe schwankende Ausgaben | Flexible Ausgaben
+// | Variable Kosten *(auskommentieren)* | Unregelmäßige oder in der Höhe schwankende Ausgaben | Flexible Ausgaben
 | Einnahme | Geldzufluss z.B. durch Gehalt | Zahlungseingang
 | Analyse | Betrachtung der Finanzen über Zeiträume und verschiedene Parameter | Auswertung, Bericht
-| Buchungszyklus *(auskommentieren)* | Wiederkehrendes Zeitintervall für Transaktionen (z.B. monatlich) | (keine)
-| Lastschrift *(auskommentieren)* | Automatische Abbuchung vom Konto durch Dritte | SEPA-Lastschrift
+// | Buchungszyklus *(auskommentieren)* | Wiederkehrendes Zeitintervall für Transaktionen (z.B. monatlich) | (keine)
+// | Lastschrift *(auskommentieren)* | Automatische Abbuchung vom Konto durch Dritte | SEPA-Lastschrift
 | Benachrichtigung | Hinweis über bestimmte Ereignisse in der App | Alert, Hinweis
 |===
 
@@ -40,18 +40,18 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 [%header]
 |===
 | Abkürzung | Bedeutung | Erläuterung
-//| UP | Unified Process | Vorgehensmodell für die Softwareentwicklung
+// | UP | Unified Process | Vorgehensmodell für die Softwareentwicklung
 | CSV | Comma Separated Values | Textdateiformat zur Speicherung von tabellarischen Daten (z.B. für den Import oder Export von Transaktionen) Werte sind durch Kommas getrennt
 | OCR | Optical Character Recognition | Automatische Erkennung und Umwandlung von Text aus Bildern (z.B. Quittungen)
 | 2FA | Zwei-Faktor-Authentifizierung | Sicherheitsverfahren, das zwei unabhängige Nachweise zur Identitätsprüfung verlangt
-| API *(auskommentieren)* | Application Programming Interface | Schnittstelle, über die Programme miteinander kommunizieren und Daten austauschen können
-| UI *(auskommentieren)* | User Interface | Benutzeroberfläche der Anwendung
-| UX *(auskommentieren)* | User Experience | Nutzererlebnis bei der Bedienung der Anwendung
-| JWT *(auskommentieren)* | JSON Web Token | Standard für die sichere Übertragung von Authentifizierungsinformationen
+// | API *(auskommentieren)* | Application Programming Interface | Schnittstelle, über die Programme miteinander kommunizieren und Daten austauschen können
+// | UI *(auskommentieren)* | User Interface | Benutzeroberfläche der Anwendung
+// | UX *(auskommentieren)* | User Experience | Nutzererlebnis bei der Bedienung der Anwendung
+// | JWT *(auskommentieren)* | JSON Web Token | Standard für die sichere Übertragung von Authentifizierungsinformationen
 | MVP | Minimum Viable Product | Minimale funktionsfähige Version eine Produkts
-| IBAN *(auskommentieren)* | International Bank Account Number | Internationale Kontonummer zur eindeutigen Identifikation eines Bankkontos
-| TAN *(auskommentieren)* | Transaktionsnummer | Einmaliger Code zur Freigabe einer Transaktion
-| ETF *(auskommentieren)* | Exchange Traded Fund | Börsengehandelter Indexfonds
+// | IBAN *(auskommentieren)* | International Bank Account Number | Internationale Kontonummer zur eindeutigen Identifikation eines Bankkontos
+// | TAN *(auskommentieren)* | Transaktionsnummer | Einmaliger Code zur Freigabe einer Transaktion
+// | ETF *(auskommentieren)* | Exchange Traded Fund | Börsengehandelter Indexfonds
 |===
 
 == Verzeichnis der Datenstrukturen
