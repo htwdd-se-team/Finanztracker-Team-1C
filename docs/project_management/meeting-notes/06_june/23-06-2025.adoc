@@ -34,16 +34,6 @@ Unsere Fragen an den Coach: +
  +
 
 
-=== 2. Ist das DB-Schema passend? +
-
-*Notizen:* +
-- ... +
-
-*Entscheidung:* +
-- ... +
- +
- +
-
 
 === 2. Ist das DB-Schema passend? +
 
