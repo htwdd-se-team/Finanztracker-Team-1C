@@ -50,8 +50,8 @@ Inhalt +
 
 == Weekly Stand-up/Backlog Refinement
 
-=== 1. ...
-Inhalt +
+=== 1. DoD & DoR Review?
+Wollen wir den Inhalt kurz besprechen oder wurde das schon gemacht? +
 
 *Notizen:* +
 - ... +
@@ -62,8 +62,8 @@ Inhalt +
  +
 
 
-=== 2. ...
-Inhalt +
+=== 2. Lesson Learned Review
+wird vorgestellt, evtl. Verbesserungsvorschläge +
 
 *Notizen:* +
 - ... +
@@ -74,7 +74,31 @@ Inhalt +
  +
 
 
-=== 3. Weitere organisatorische Aufgaben und/oder offene Punkte
+=== 3. Domänenmodell
+wie sind die Meinungen zu der ersten Ausarbeitung? Änderungswünsche? Verbesserungsvorschläge? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 4. Dev Fortschritt
+an die Devs: wie weit seid ihr, braucht ihr noch Unterstützung +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
 - ... +
@@ -86,8 +110,6 @@ Inhalt +
 - Datum: 30.06.2025
 - Zeit: *16:00* Uhr
 - Ort: Online (Teams)
-
-
 
 ==== Themen nächstes Meeting
 - ... +
