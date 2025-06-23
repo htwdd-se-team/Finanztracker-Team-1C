@@ -47,10 +47,57 @@ export class EntryService {
 
   async getEntries(
     user: User,
-    { take, cursorId, sortBy }: EntryPaginationParamsDto,
+    {
+      take,
+      cursorId,
+      sortBy = EntrySortBy.CREATED_AT_DESC,
+      dateFrom,
+      dateTo,
+      transactionType,
+      categoryIds,
+      amountMin,
+      amountMax,
+      title,
+    }: EntryPaginationParamsDto,
   ): Promise<EntryPageDto> {
+    const whereClause: Prisma.TransactionWhereInput = {
+      userId: user.id,
+      ...(dateFrom && {
+        createdAt: {
+          ...(dateTo ? { gte: dateFrom, lte: dateTo } : { gte: dateFrom }),
+        },
+      }),
+      ...(dateTo &&
+        !dateFrom && {
+          createdAt: {
+            lte: dateTo,
+          },
+        }),
+      ...(transactionType && {
+        type: transactionType,
+      }),
+      ...(categoryIds &&
+        categoryIds.length > 0 && {
+          categoryId: {
+            in: categoryIds,
+          },
+        }),
+      ...((amountMin !== undefined || amountMax !== undefined) && {
+        amount: {
+          ...(amountMin !== undefined && { gte: amountMin }),
+          ...(amountMax !== undefined && { lte: amountMax }),
+        },
+      }),
+      ...(title && {
+        description: {
+          contains: title,
+          mode: "insensitive",
+        },
+      }),
+    };
+
     const entries = await this.prisma.transaction.findMany({
-      where: { userId: user.id },
+      where: whereClause,
       ...(cursorId && {
         cursor: { id: cursorId },
         skip: 1,
