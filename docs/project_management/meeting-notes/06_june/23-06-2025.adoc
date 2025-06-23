@@ -23,8 +23,7 @@
 Unsere Fragen an den Coach: +
  +
 
-=== 1. Frage
-Inhalt +
+=== 1. Verbesserungsvorschläge für Code im frontend/backend?
 
 *Notizen:* +
 - ... +
@@ -35,8 +34,7 @@ Inhalt +
  +
 
 
-=== 2. Frage +
-Inhalt +
+=== 2. Ist das DB-Schema passend? +
 
 *Notizen:* +
 - ... +
@@ -46,6 +44,47 @@ Inhalt +
  +
  +
 
+
+=== 2. Ist das DB-Schema passend? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+=== 3. Verbesserungsmöglichkeiten für die Wireframes? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+=== 4. Risiko Board ausreichend? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+=== 5. User Stories ausreichend? +
+Name, Detailgrad, ...
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
 
 
 == Weekly Stand-up/Backlog Refinement
