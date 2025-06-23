@@ -13,6 +13,7 @@ interface AusgabeFieldsProps {
     titel: string
     betrag: number | string
     kategorie: string
+    budget?: number | string
   }
   onChange: (
     event:
@@ -33,7 +34,7 @@ export function AusgabeFields({
   return (
     <div className="grid gap-4">
       <div className="grid gap-2">
-        <Label htmlFor="titel">Titel</Label>
+        <Label htmlFor="titel">Titel der Ausgabe (optional)</Label>
         <Input
           type="text"
           id="titel"
@@ -60,6 +61,18 @@ export function AusgabeFields({
             Bitte einen gültigen Betrag eingeben
           </span>
         )}
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="budget">Budget (optional)</Label>
+        <Input
+          type="number"
+          id="budget"
+          name="budget"
+          value={values.budget ?? ''}
+          onChange={onChange}
+          min="0"
+          step="0.01"
+        />
       </div>
       <div className="grid gap-2">
         <Select
@@ -107,7 +120,7 @@ export function EinnahmeFields({
   return (
     <div className="grid gap-4">
       <div className="grid gap-2">
-        <Label htmlFor="titel">Titel der Einnahme</Label>
+        <Label htmlFor="titel">Titel der Einnahme (optional)</Label>
         <Input
           type="text"
           id="titel"
