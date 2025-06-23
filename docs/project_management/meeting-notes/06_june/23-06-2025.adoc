@@ -3,10 +3,10 @@
 *Datum:* 23.06.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Ben +
 *Meetingbeginn:* 16:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 17:05 +
+*Dauer:* 65 min 
 
 ==== Anwesenheit: 
 - Elias
@@ -26,55 +26,56 @@ Unsere Fragen an den Coach: +
 === 1. Verbesserungsvorschläge für Code im frontend/backend?
 
 *Notizen:* +
-- ... +
+Warum so viel händisch (keine Authentification Library)? +
+ -> für die Wiederverwendbarkeit von unserer Authentifikationsmethode +
 
-*Entscheidung:* +
-- ... +
- +
- +
+Warum Next im Frontend und Nest im Backend (also getrennt)? +
+  -> Getrenntes Frontend und Backend, wegen Offline-Funktion und abzukapseln für die Arbeitsteilung
 
+weitere Anmerkungen: +
+-> Backend gut ausgereift +
+-> Frontend noch nicht so viel +
 
 
 === 2. Ist das DB-Schema passend? +
 
 *Notizen:* +
-- ... +
+Child und Parent-Transaktionen sind etwas verwirrend. +
+-> Verwendung erst im nächsten Semester +
+   Bsp.: Gehalt ist wiederkehrend, aber aufgrund von Werkstudententätigkeit unterschiedlich
+
+weiter Anmerkungen:
+-> Schema ist gut, aber auch noch nicht zu viel
 
 *Entscheidung:* +
-- ... +
- +
- +
+Nochmal über die Umsetzung der wiederkehrenden Transaktionen nachdenken zum Umsetzungzeitpunkt in SE2 +
 
 === 3. Verbesserungsmöglichkeiten für die Wireframes? +
 
 *Notizen:* +
-- ... +
-
-*Entscheidung:* +
-- ... +
- +
- +
+Login ist okay (fertige Komponent) +
+Dark-Mode rauslassen für Kosistenz (bei mittlerem Handy Wireframe)
 
 === 4. Risiko Board ausreichend? +
 
 *Notizen:* +
-- ... +
-
-*Entscheidung:* +
-- ... +
- +
- +
+Risk 49 - Typo bei technische Schwachstellen +
 
 === 5. User Stories ausreichend? +
 Name, Detailgrad, ...
 
 *Notizen:* +
-- ... +
+Konsistent der User-Story Beschreibung nochmal prüfen. +
+  -> "Was soll erreicht werden" oder "User Story" +
 
-*Entscheidung:* +
-- ... +
- +
- +
+Undeutliche Formulierung mit Interpretationsspielraum löschen +
+  -> Wörter wie intuitiv, aussagekräftig ....
+
+=== 6. Gesamtentscheidung
+ - Architekturnotizbuch noch erwähnen, warum Nest und Next getrennt
+ - Typo beim Riskboard
+ - User Story Titel verbessern ("iniutive", "aussagekäftig") -> Nach Konsulation mit Herrn Anke
+ - DB-Schema Punkt später erst bearbeiten
 
 
 == Weekly Stand-up/Backlog Refinement
@@ -83,46 +84,38 @@ Name, Detailgrad, ...
 Wollen wir den Inhalt kurz besprechen oder wurde das schon gemacht? +
 
 *Notizen:* +
-- ... +
+- DoR und DoD schon in vorherigem Meeting geklärt. +
+- Es fehlt noch die Datei der Coding-Guidelines siehe Board
 
 *Entscheidung:* +
-- ... +
- +
- +
+- Elias macht heute noch die Datei +
 
 
 === 2. Lesson Learned Review
 wird vorgestellt, evtl. Verbesserungsvorschläge +
 
-*Notizen:* +
-- ... +
-
 *Entscheidung:* +
-- ... +
- +
- +
+- Passt Super 
 
 
 === 3. Domänenmodell
 wie sind die Meinungen zu der ersten Ausarbeitung? Änderungswünsche? Verbesserungsvorschläge? +
 
 *Notizen:* +
-- ... +
+- alles aus den Verzeichnis der Datenstrukturen raus, was nicht im Domänenmodell ist -> Paula +
+Das was im Domänenmodell steht muss sich auch technisch wiederfinden in der Datenbank -> Paula
 
 *Entscheidung:* +
-- ... +
- +
- +
-
+- Ben macht nochmal Review und dann in der Konsulation nochmal nachfragen  +
 
 === 4. Dev Fortschritt
 an die Devs: wie weit seid ihr, braucht ihr noch Unterstützung +
 
 *Notizen:* +
-- ... +
+- Nach dem jetzigen Team-Meeting aufschreiben, welche Tasks gibt es noch -> weiteres Dev-Meeting
 
 *Entscheidung:* +
-- ... +
+- alle Subissues, die wir uns vorgenommen haben ausformulieren und dann in den Product Backlog legen +
  +
  +
 
@@ -130,14 +123,17 @@ an die Devs: wie weit seid ihr, braucht ihr noch Unterstützung +
 === 5. Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- ... +
+- U513 - 11:30 -13:00 Konsulation nachfragen Mail bei Herrn Anke -> Ben +
+    1. User-Story Titel "initiuiv..." +
+    2. Domänemodell passt, Aufbau von dem ganzen? +
 
+Alle Fragen für die Konsulation bis Donnerstag 20Uhr in den Whatsapp Chat
 
 
 == Nächstes Meeting
 
-- Datum: 30.06.2025
-- Zeit: *16:00* Uhr
+- Datum: 28.06.2025 (extra Meeting, Samstag)
+- Zeit *16:00* Uhr
 - Ort: Online (Teams)
 
 ==== Themen nächstes Meeting
