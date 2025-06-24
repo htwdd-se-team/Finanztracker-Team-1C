@@ -185,11 +185,15 @@ export class EntryPaginationParamsDto extends PaginationDto {
   @Type(() => Number)
   @Transform(({ value }): number[] => {
     if (typeof value === "string") {
+      // If the input is a string, split it by commas to handle comma-separated values,
+      // then trim whitespace from each value, parse it as an integer, and filter out invalid numbers (NaN).
       return value
         .split(",")
         .map((id) => parseInt(id.trim(), 10))
         .filter((id) => !isNaN(id));
     }
+    // If the input is already an array, convert each element to a number.
+    // If it's a single value, wrap it in an array after converting it to a number.
     return Array.isArray(value) ? value.map((v) => Number(v)) : [Number(value)];
   })
   categoryIds?: number[];
