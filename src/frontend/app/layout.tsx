@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import Background from '@/components/background'
 import './globals.css'
-import { ClientProviders } from '@/components/provider/client-providers'
-import { ThemeProvider } from 'next-themes'
+import LayoutClient from './layout-client'
 import { Toaster } from '@/components/ui/sonner'
+import { ThemeProvider } from 'next-themes'
+
+import { ClientProviders } from '@/components/provider/client-providers'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,7 +35,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Toaster position="top-center" />
           <ClientProviders>
-            <Background>{children}</Background>
+            <LayoutClient>{children}</LayoutClient>
           </ClientProviders>
         </ThemeProvider>
       </body>
