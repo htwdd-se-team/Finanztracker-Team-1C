@@ -106,7 +106,7 @@ Wann gilt eine Aufgabe als fertig?
 
 * Der Code ist in die Anwendung integriert und funktionsfähig (merge in main-Branch)
 * Die automatischen Coding-Guidelines werden über ES-Lint eingehalten
-* Die Coding-Guidelines XYZ wurden eingehalten
+* Die link:../development/development-guidelines.adoc[Coding Guidelines] wurden eingehalten
 * Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet worden
 * Automatische Test laufen erfolgreich
 
