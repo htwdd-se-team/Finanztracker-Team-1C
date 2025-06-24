@@ -58,3 +58,5 @@ temp/
 
 # Local development
 .cache/
+
+generated/

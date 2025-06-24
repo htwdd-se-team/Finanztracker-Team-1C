@@ -9,7 +9,7 @@ import eslintNestJs from "@darraghor/eslint-plugin-nestjs-typed";
 
 export default tseslint.config(
   {
-    ignores: ["eslint.config.mjs"],
+    ignores: ["eslint.config.mjs", "prisma/generated/**"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
