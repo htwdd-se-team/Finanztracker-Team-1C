@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { TransactionType, RecurringTransactionType } from "@prisma/client";
-import { Type } from "class-transformer";
+import { Type, Transform } from "class-transformer";
 import {
   IsArray,
   IsBoolean,
@@ -11,6 +11,7 @@ import {
   IsPositive,
   IsString,
   ValidateNested,
+  Min,
 } from "class-validator";
 
 import { Currency } from "./currencies.dto";
@@ -135,10 +136,95 @@ export class EntryPaginationParamsDto extends PaginationDto {
     example: EntrySortBy.CREATED_AT_DESC,
     enum: EntrySortBy,
     enumName: "EntrySortBy",
+    default: EntrySortBy.CREATED_AT_DESC,
   })
   @IsEnum(EntrySortBy)
   @IsOptional()
-  sortBy?: EntrySortBy;
+  sortBy?: EntrySortBy = EntrySortBy.CREATED_AT_DESC;
+
+  @ApiPropertyOptional({
+    description: "Filter by date range - from date (inclusive)",
+    example: "2024-01-01",
+    type: String,
+  })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  dateFrom?: Date;
+
+  @ApiPropertyOptional({
+    description: "Filter by date range - to date (inclusive)",
+    example: "2024-12-31",
+    type: String,
+  })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  dateTo?: Date;
+
+  @ApiPropertyOptional({
+    description: "Filter by transaction type",
+    enum: TransactionType,
+    enumName: "TransactionType",
+    example: TransactionType.EXPENSE,
+  })
+  @IsEnum(TransactionType)
+  @IsOptional()
+  transactionType?: TransactionType;
+
+  @ApiPropertyOptional({
+    description:
+      "Filter by categories (multi-select). Can be provided as comma-separated values or multiple query parameters.",
+    example: [1, 2, 3],
+    type: Number,
+    isArray: true,
+  })
+  @IsOptional()
+  @IsArray()
+  @IsInt({ each: true })
+  @Type(() => Number)
+  @Transform(({ value }): number[] => {
+    if (typeof value === "string") {
+      // If the input is a string, split it by commas to handle comma-separated values,
+      // then trim whitespace from each value, parse it as an integer, and filter out invalid numbers (NaN).
+      return value
+        .split(",")
+        .map((id) => parseInt(id.trim(), 10))
+        .filter((id) => !isNaN(id));
+    }
+    // If the input is already an array, convert each element to a number.
+    // If it's a single value, wrap it in an array after converting it to a number.
+    return Array.isArray(value) ? value.map((v) => Number(v)) : [Number(value)];
+  })
+  categoryIds?: number[];
+
+  @ApiPropertyOptional({
+    description: "Filter by minimum amount (in cents)",
+    minimum: 0,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Type(() => Number)
+  amountMin?: number;
+
+  @ApiPropertyOptional({
+    description: "Filter by maximum amount (in cents)",
+    minimum: 0,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Type(() => Number)
+  amountMax?: number;
+
+  @ApiPropertyOptional({
+    description: "Search in transaction title/description",
+    example: "grocery",
+  })
+  @IsOptional()
+  @IsString()
+  title?: string;
 }
 
 export class EntryPageDto {

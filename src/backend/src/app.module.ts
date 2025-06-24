@@ -9,6 +9,7 @@ import {
   AuthController,
   EntryController,
   CategoryController,
+  UserController,
 } from "./controllers";
 import { JwtAuthGuard } from "./guards";
 import {
@@ -16,6 +17,7 @@ import {
   EntryService,
   PrismaService,
   CategoryService,
+  UserService,
 } from "./services";
 import { JwtStrategy } from "./strategies";
 
@@ -23,9 +25,7 @@ import { JwtStrategy } from "./strategies";
   imports: [
     TypedConfigModule.forRoot({
       isGlobal: true,
-      load: dotenvLoader({
-        separator: ".",
-      }),
+      load: dotenvLoader({ separator: "." }),
       schema: BackendConfig,
     }),
     JwtModule.registerAsync({
@@ -39,6 +39,7 @@ import { JwtStrategy } from "./strategies";
   ],
 
   controllers: [
+    UserController,
     AppController,
     AuthController,
     EntryController,
@@ -51,6 +52,7 @@ import { JwtStrategy } from "./strategies";
     EntryService,
     AuthService,
     CategoryService,
+    UserService,
     // guards
     JwtAuthGuard,
     // strategies

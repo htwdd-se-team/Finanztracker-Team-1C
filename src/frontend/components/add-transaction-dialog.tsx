@@ -1,127 +1,186 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { DialogHeader, DialogFooter } from '@/components/ui/dialog'
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
+  DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogClose,
+  DialogTrigger,
+  DialogFooter,
 } from '@/components/ui/dialog'
-import { AusgabeFields, EinnahmeFields } from './transaction-fields'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { CategorySelect } from '@/components/category-select'
+import { Plus, TrendingDown, TrendingUp } from 'lucide-react'
+import { SetStateAction, useState } from 'react'
+import { createTransactionEntry } from '@/lib/api/entries'
 
-interface AddTransactionDialogProps {
+type TransactionType = 'ausgabe' | 'einnahme'
+
+export function AddTransactionDialog({
+  children,
+}: {
   children: React.ReactNode
-}
+}) {
+  const [open, setOpen] = useState(false)
+  const [type, setType] = useState<TransactionType>('ausgabe')
+  const [titel, setTitel] = useState('')
+  const [betrag, setBetrag] = useState('')
+  const [kategorie, setKategorie] = useState('')
+  const [datum, setDatum] = useState('')
 
-const initialAusgabe = { titel: '', betrag: '', kategorie: '' }
-const initialEinnahme = { titel: '', betrag: '', kategorie: '' }
+  const handleSubmit = async () => {
+    if (!betrag.trim() || isNaN(Number(betrag))) return
 
-function AddTransactionDialog({ children }: AddTransactionDialogProps) {
-  const [type, setType] = useState<'ausgabe' | 'einnahme'>('ausgabe')
-  const [ausgabe, setAusgabe] = useState(initialAusgabe)
-  const [einnahme, setEinnahme] = useState(initialEinnahme)
-  const [errors, setErrors] = useState<{
-    [key: string]: string | undefined
-    betrag?: string
-  }>({})
+    try {
+      await createTransactionEntry({
+        type,
+        amount: Math.round(parseFloat(betrag) * 100), // store in cents
+        description: titel || undefined,
+        categoryId: kategorie ? parseInt(kategorie) : undefined,
+        startDate: datum || undefined,
+        currency: 'EUR', // or make dynamic if needed
+      })
 
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | { target: { name: string; value: string } }
-  ) => {
-    const { name, value } = e.target
-    if (type === 'ausgabe') {
-      setAusgabe(prev => ({ ...prev, [name]: value }))
-    } else {
-      setEinnahme(prev => ({ ...prev, [name]: value }))
+      // Reset & close
+      setTitel('')
+      setBetrag('')
+      setKategorie('')
+      setDatum('')
+      setOpen(false)
+    } catch (error) {
+      console.error(error)
+      // Optionally show toast notification here
     }
-  }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const values = type === 'ausgabe' ? ausgabe : einnahme
-    const betragValid =
-      values.betrag &&
-      !isNaN(Number(values.betrag)) &&
-      Number(values.betrag) > 0
-    if (!betragValid) {
-      setErrors({ betrag: 'Bitte geben Sie einen gültigen Betrag ein.' })
-      return
-    }
-    setErrors({})
-    // Submit logic here
-    // Reset form
-    setAusgabe(initialAusgabe)
-    setEinnahme(initialEinnahme)
-    // Optionally close dialog
-  }
-
-  const handleCancel = () => {
-    setAusgabe(initialAusgabe)
-    setEinnahme(initialEinnahme)
-    setErrors({})
+    setOpen(false)
+    setTitel('')
+    setBetrag('')
+    setKategorie('')
+    setDatum('')
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] w-full p-4">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
-            <DialogTitle>
-              {type === 'ausgabe'
-                ? 'Neue Ausgabe hinzufügen'
-                : 'Neue Einnahme hinzufügen'}
-            </DialogTitle>
-            <DialogDescription></DialogDescription>
-          </DialogHeader>
-          <RadioGroup
-            className="flex flex-row gap-6 mb-2"
-            value={type}
-            onValueChange={value => setType(value as 'ausgabe' | 'einnahme')}
-          >
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="ausgabe" id="ausgabe" />
-              <label htmlFor="ausgabe">Ausgabe</label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="einnahme" id="einnahme" />
-              <label htmlFor="einnahme">Einnahme</label>
-            </div>
-          </RadioGroup>
-          <div className="grid gap-4 w-full">
-            {type === 'ausgabe' ? (
-              <AusgabeFields
-                values={ausgabe}
-                onChange={handleChange}
-                errors={errors}
-              />
-            ) : (
-              <EinnahmeFields
-                values={einnahme}
-                onChange={handleChange}
-                errors={errors}
-              />
-            )}
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Plus className="w-5 h-5 text-primary" />
+            Transaktion hinzufügen
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="gap-4 grid">
+          {/* Typ */}
+          <div className="flex gap-1">
+            <Button
+              type="button"
+              variant={type === 'ausgabe' ? 'destructive' : 'outline'}
+              className="flex-1"
+              onClick={() => setType('ausgabe')}
+            >
+              <TrendingDown className="w-4 h-4" />
+              Ausgabe
+            </Button>
+            <Button
+              type="button"
+              variant={type === 'einnahme' ? 'default' : 'outline'}
+              className="flex-1"
+              onClick={() => setType('einnahme')}
+            >
+              <TrendingUp className="w-4 h-4" />
+              Einnahme
+            </Button>
           </div>
-          <DialogFooter className="flex flex-row gap-2 justify-end pt-2">
-            <DialogClose asChild>
-              <Button variant="outline" type="button" onClick={handleCancel}>
-                Abbrechen
-              </Button>
-            </DialogClose>
-            <Button type="submit">Speichern</Button>
-          </DialogFooter>
-        </form>
+
+          {/* Titel */}
+          <div className="gap-1 grid">
+            <Label htmlFor="Titel">
+              Titel<span className="text-muted-foreground">(optional)</span>
+            </Label>
+
+            <Input
+              id="titel"
+              placeholder="z. B. REWE Einkauf, Gehalt..."
+              value={titel}
+              onChange={e => setTitel(e.target.value)}
+            />
+          </div>
+
+          {/* Betrag */}
+          <div className="gap-1 grid">
+            <Label htmlFor="betrag">
+              Betrag<span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <span className="top-1/2 left-3 absolute text-muted-foreground text-sm -translate-y-1/2">
+                €
+              </span>
+              <Input
+                id="betrag"
+                type="number"
+                min="0"
+                step="0.01"
+                className="pl-7"
+                value={betrag}
+                onChange={e => setBetrag(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Kategorie */}
+          <div className="gap-1 grid">
+            <Label htmlFor="Kategorie">
+              Kategorie{' '}
+              <span className="text-muted-foreground">(optional)</span>
+            </Label>
+
+            <CategorySelect
+              value={kategorie}
+              onChange={(val: SetStateAction<string>) => setKategorie(val)}
+              placeholder="Kategorie auswählen"
+              options={[
+                { value: 'lebensmittel', label: 'Lebensmittel' },
+                { value: 'miete', label: 'Miete' },
+                { value: 'freizeit', label: 'Freizeit' },
+              ]}
+            />
+          </div>
+
+          {/* Datum */}
+          <div className="gap-1 grid">
+            <Label htmlFor="Datum">
+              Titel<span className="text-muted-foreground">(optional)</span>
+            </Label>
+
+            <Input
+              id="datum"
+              type="date"
+              value={datum}
+              onChange={e => setDatum(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <DialogFooter className="mt-4">
+          <Button
+            onClick={handleSubmit}
+            className="w-full"
+            disabled={!betrag.trim() || isNaN(Number(betrag))}
+          >
+            <Plus className="mr-2 w-4 h-4" />
+            Hinzufügen
+          </Button>
+        </DialogFooter>
+
+        <p className="mt-2 text-muted-foreground text-xs text-center">
+          Felder mit <span className="text-red-500">*</span> sind Pflichtfelder
+        </p>
       </DialogContent>
     </Dialog>
   )
 }
-
-export default AddTransactionDialog
