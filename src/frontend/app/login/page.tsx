@@ -57,7 +57,7 @@ export default function LoginPage() {
     onSuccess: data => {
       apiSetToken(data.token)
       toast.success('Login erfolgreich')
-      router.push('/')
+      router.push('/overview')
     },
     onError: () => {
       toast.error('Login fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.')

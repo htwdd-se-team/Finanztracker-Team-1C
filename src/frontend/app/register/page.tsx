@@ -65,7 +65,7 @@ export default function RegisterPage() {
     onSuccess: data => {
       toast.success('Konto erfolgreich erstellt')
       apiSetToken(data.token)
-      router.push('/login')
+      router.push('/overview')
     },
   })
 

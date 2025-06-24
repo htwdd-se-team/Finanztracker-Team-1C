@@ -9,11 +9,11 @@ export default function Background({ children }: BackgroundProps) {
     <div className="bg-background min-h-screen">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 dark:from-blue-900 via-white dark:via-black to-cyan-100 dark:to-cyan-900"></div>
-        <div className="top-0 left-1/4 absolute bg-blue-300/50 blur-3xl rounded-full w-96 h-96"></div>
-        <div className="right-1/4 bottom-0 absolute bg-cyan-300/45 blur-3xl rounded-full w-80 h-80"></div>
-        <div className="top-1/2 left-1/2 absolute bg-blue-200/40 blur-2xl rounded-full w-72 h-72 -translate-x-1/2 -translate-y-1/2 transform"></div>
-        <div className="top-1/4 right-1/3 absolute bg-sky-200/35 blur-3xl rounded-full w-64 h-64"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 dark:from-slate-800 via-background to-cyan-100 dark:to-slate-700"></div>
+        <div className="top-0 left-1/4 absolute bg-blue-300/50 dark:bg-blue-800/30 blur-3xl rounded-full w-96 h-96"></div>
+        <div className="right-1/4 bottom-0 absolute bg-cyan-300/45 dark:bg-slate-600/25 blur-3xl rounded-full w-80 h-80"></div>
+        <div className="top-1/2 left-1/2 absolute bg-blue-200/40 dark:bg-blue-900/20 blur-2xl rounded-full w-72 h-72 -translate-x-1/2 -translate-y-1/2 transform"></div>
+        <div className="top-1/4 right-1/3 absolute bg-sky-200/35 dark:bg-slate-700/22 blur-3xl rounded-full w-64 h-64"></div>
       </div>
 
       {/* Content */}
