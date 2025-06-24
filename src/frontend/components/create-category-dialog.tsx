@@ -37,29 +37,32 @@ export function AddCategoryDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md grid gap-4">
         <DialogHeader>
           <DialogTitle>Neue Kategorie erstellen</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="grid gap-4">
           <div>
-            <Label htmlFor="category-name">Name</Label>
+            <Label htmlFor="category-name" className="mb-2 mt-2">
+              Name<span className="text-red-500">*</span>
+            </Label>
             <Input
               id="category-name"
               placeholder="z. B. Lebensmittel"
               value={name}
               onChange={e => setName(e.target.value)}
               required
+              autoFocus
             />
           </div>
           <div>
-            <Label>Farbe</Label>
+            <Label className="mb-2 mt-1">Farbe</Label>
             <div className="border rounded p-2 text-sm text-muted-foreground">
               [Color Picker Placeholder]
             </div>
           </div>
           <div>
-            <Label>Icon</Label>
+            <Label className="mb-2 mt-1">Icon</Label>
             <div className="border rounded p-2 text-sm text-muted-foreground">
               [Icon Picker Placeholder]
             </div>

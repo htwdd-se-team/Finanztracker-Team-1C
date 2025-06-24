@@ -74,9 +74,6 @@ export function AddTransactionDialog({
 
         <div className="grid gap-4">
           {/* Typ */}
-          <Label htmlFor="Typ">
-            Typ<span className="text-red-500">*</span>
-          </Label>
           <div className="flex gap-1">
             <Button
               type="button"
