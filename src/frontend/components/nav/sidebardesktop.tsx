@@ -18,6 +18,7 @@ import { AddTransactionDialog } from '../add-transaction-dialog'
 import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { navItems } from '@/navigation-config'
+import Link from 'next/link'
 
 // Menu items.
 
@@ -27,7 +28,10 @@ export function SidebarDesktop() {
   const isActive = (url: string) => pathname === url
 
   return (
-    <Sidebar collapsible="none" className="h-full">
+    <Sidebar
+      collapsible="none"
+      className="hidden sm:flex shadow-2xl shadow-black/5 border-r w-64"
+    >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Platzhalter??</SidebarGroupLabel>
@@ -36,13 +40,13 @@ export function SidebarDesktop() {
               {navItems.map(item => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                    <a
+                    <Link
                       href={item.url}
                       className="flex items-center gap-2 hover:bg-muted px-3 py-2 rounded-md transition"
                     >
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -50,7 +54,7 @@ export function SidebarDesktop() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <AddTransactionDialog>
-                    <Button className="justify-start w-full" variant="ghost">
+                    <Button className="justify-start w-full">
                       <Plus className="mr-2 w-4 h-4" />
                       Neue Transaktion
                     </Button>
