@@ -31,7 +31,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox'
 import { Loader2 } from 'lucide-react'
 
-export const registerModel = z.object({
+const registerModel = z.object({
   email: z.string().email({
     message: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
   }),
