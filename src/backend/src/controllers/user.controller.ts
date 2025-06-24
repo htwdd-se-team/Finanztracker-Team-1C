@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { User } from "@prisma/client";
 
 import { UserDecorator } from "../decorators";
-import { UserResponseDto } from "../dto";
+import { UserBalanceResponseDto, UserResponseDto } from "../dto";
 import { JwtAuthGuard } from "../guards";
 import { UserService } from "../services";
 
@@ -20,5 +20,13 @@ export class UserController {
   @ApiOkResponse({ type: UserResponseDto })
   async getCurrentUser(@UserDecorator() user: User): Promise<UserResponseDto> {
     return this.userService.getUser(user);
+  }
+
+  @Get("balance")
+  @ApiOkResponse({ type: UserBalanceResponseDto })
+  async getBalance(
+    @UserDecorator() user: User,
+  ): Promise<UserBalanceResponseDto> {
+    return this.userService.getBalance(user);
   }
 }

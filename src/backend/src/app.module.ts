@@ -8,13 +8,16 @@ import { BackendConfig } from "./backend.config";
 import {
   AuthController,
   EntryController,
-  CategoryController,
   UserController,
+  CategoryController,
+  AnalyticsController,
 } from "./controllers";
 import { JwtAuthGuard } from "./guards";
 import {
+  AnalyticsService,
   AuthService,
   EntryService,
+  KyselyService,
   PrismaService,
   CategoryService,
   UserService,
@@ -37,22 +40,25 @@ import { JwtStrategy } from "./strategies";
       }),
     }),
   ],
-
   controllers: [
-    UserController,
     AppController,
     AuthController,
-    EntryController,
     CategoryController,
+    EntryController,
+    UserController,
+    AnalyticsController,
   ],
   providers: [
     // services
     AppService,
-    PrismaService,
-    EntryService,
+    AnalyticsService,
     AuthService,
+    EntryService,
     CategoryService,
     UserService,
+
+    KyselyService,
+    PrismaService,
     // guards
     JwtAuthGuard,
     // strategies
