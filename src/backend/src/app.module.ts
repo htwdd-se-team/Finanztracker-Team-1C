@@ -5,18 +5,21 @@ import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { BackendConfig } from "./backend.config";
-import { AuthController, EntryController } from "./controllers";
+import { AuthController, EntryController, UserController } from "./controllers";
 import { JwtAuthGuard } from "./guards";
-import { AuthService, EntryService, PrismaService } from "./services";
+import {
+  AuthService,
+  EntryService,
+  PrismaService,
+  UserService,
+} from "./services";
 import { JwtStrategy } from "./strategies";
 
 @Module({
   imports: [
     TypedConfigModule.forRoot({
       isGlobal: true,
-      load: dotenvLoader({
-        separator: ".",
-      }),
+      load: dotenvLoader({ separator: "." }),
       schema: BackendConfig,
     }),
     JwtModule.registerAsync({
@@ -29,13 +32,14 @@ import { JwtStrategy } from "./strategies";
     }),
   ],
 
-  controllers: [AppController, AuthController, EntryController],
+  controllers: [AppController, AuthController, EntryController, UserController],
   providers: [
     // services
     AppService,
     PrismaService,
     EntryService,
     AuthService,
+    UserService,
     // guards
     JwtAuthGuard,
     // strategies
