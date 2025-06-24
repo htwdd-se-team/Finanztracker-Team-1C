@@ -2,6 +2,8 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
 import { BackendConfig } from "./backend.config";
 import {
   AuthController,
@@ -39,6 +41,7 @@ import { JwtStrategy } from "./strategies";
     }),
   ],
   controllers: [
+    AppController,
     AuthController,
     CategoryController,
     EntryController,
@@ -47,6 +50,7 @@ import { JwtStrategy } from "./strategies";
   ],
   providers: [
     // services
+    AppService,
     AnalyticsService,
     AuthService,
     EntryService,
