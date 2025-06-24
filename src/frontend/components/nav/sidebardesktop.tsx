@@ -20,8 +20,6 @@ import { usePathname } from 'next/navigation'
 import { navItems } from '@/navigation-config'
 import Link from 'next/link'
 
-// Menu items.
-
 export function SidebarDesktop() {
   const pathname = usePathname()
 
