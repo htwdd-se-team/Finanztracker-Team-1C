@@ -15,11 +15,16 @@ import {
   Sun,
 } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useTheme as useNextTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { DateTime } from 'luxon'
+import {
+  Theme,
+  ThemeConfig,
+  useColorTheme,
+} from '@/components/provider/theme-provider'
+import { ThemeCard } from '@/components/settings/ThemeCard'
 
 export default function ProfilePage() {
   const { data: user } = useQuery({
@@ -29,12 +34,13 @@ export default function ProfilePage() {
     placeholderData: prev => prev,
   })
 
-  const { setTheme, theme: themeVariant } = useNextTheme()
+  const { themeVariant, setThemeVariant, colorTheme, setColorTheme } =
+    useColorTheme()
 
   const themes = [
-    { key: 'light', label: 'Hell', icon: Sun },
-    { key: 'dark', label: 'Dunkel', icon: Moon },
-    { key: 'system', label: 'System', icon: Monitor },
+    { key: Theme.LIGHT, label: 'Hell', icon: Sun },
+    { key: Theme.DARK, label: 'Dunkel', icon: Moon },
+    { key: Theme.SYSTEM, label: 'System', icon: Monitor },
   ]
 
   const fullName = `${user?.givenName} ${user?.familyName || ''}`.trim()
@@ -137,7 +143,7 @@ export default function ProfilePage() {
                         key={key}
                         variant={isActive ? 'default' : 'ghost'}
                         size="sm"
-                        onClick={() => setTheme(key)}
+                        onClick={() => setThemeVariant(key)}
                         className={cn(
                           'h-8 px-2 sm:px-3 transition-all duration-200 flex-1 sm:flex-none',
                           isActive
@@ -150,6 +156,16 @@ export default function ProfilePage() {
                       </Button>
                     )
                   })}
+                </div>
+                <div className="gap-3 grid grid-cols-2 sm:grid-cols-3">
+                  {ThemeConfig.map(theme => (
+                    <ThemeCard
+                      key={theme.key}
+                      theme={theme}
+                      isActive={colorTheme === theme.key}
+                      setColorTheme={setColorTheme}
+                    />
+                  ))}
                 </div>
               </div>
 

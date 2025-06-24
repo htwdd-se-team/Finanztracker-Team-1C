@@ -9,11 +9,36 @@ export default function Background({ children }: BackgroundProps) {
     <div className="bg-background min-h-screen">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 dark:from-slate-800 via-background to-cyan-100 dark:to-slate-700"></div>
-        <div className="top-0 left-1/4 absolute bg-blue-300/50 dark:bg-blue-800/30 blur-3xl rounded-full w-96 h-96"></div>
-        <div className="right-1/4 bottom-0 absolute bg-cyan-300/45 dark:bg-slate-600/25 blur-3xl rounded-full w-80 h-80"></div>
-        <div className="top-1/2 left-1/2 absolute bg-blue-200/40 dark:bg-blue-900/20 blur-2xl rounded-full w-72 h-72 -translate-x-1/2 -translate-y-1/2 transform"></div>
-        <div className="top-1/4 right-1/3 absolute bg-sky-200/35 dark:bg-slate-700/22 blur-3xl rounded-full w-64 h-64"></div>
+        <div
+          className="absolute inset-0 bg-gradient-to-br via-background blur-[1px]"
+          style={{
+            background: `linear-gradient(to bottom right, hsl(from var(--primary) h s l / 0.1), var(--background), hsl(from var(--secondary) h s l / 0.15))`,
+          }}
+        ></div>
+        <div
+          className="top-0 left-1/4 absolute blur-3xl rounded-full w-96 h-96"
+          style={{
+            backgroundColor: `hsl(from var(--primary) h s l / 0.2)`,
+          }}
+        ></div>
+        <div
+          className="right-1/4 bottom-0 absolute blur-3xl rounded-full w-80 h-80"
+          style={{
+            backgroundColor: `hsl(from var(--chart-3) h s l / 0.18)`,
+          }}
+        ></div>
+        <div
+          className="top-1/2 left-1/2 absolute blur-2xl rounded-full w-72 h-72 -translate-x-1/2 -translate-y-1/2 transform"
+          style={{
+            backgroundColor: `hsl(from var(--accent) h s l / 0.15)`,
+          }}
+        ></div>
+        <div
+          className="top-1/4 right-1/3 absolute blur-3xl rounded-full w-64 h-64"
+          style={{
+            backgroundColor: `hsl(from var(--secondary) h s l / 0.12)`,
+          }}
+        ></div>
       </div>
 
       {/* Content */}
