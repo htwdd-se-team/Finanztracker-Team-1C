@@ -1,10 +1,4 @@
-import {
-  Home,
-  ChartNoAxesCombined,
-  TableProperties,
-  UserRoundCog,
-  Plus,
-} from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 import {
   Sidebar,
@@ -17,36 +11,21 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { NavUser } from './nav-user'
 import { AddTransactionDialog } from '../add-transaction-dialog'
 import { Button } from '../ui/button'
+import { usePathname } from 'next/navigation'
+import { navItems } from '@/navigation-config'
 
 // Menu items.
-const items = [
-  {
-    title: 'Übersicht',
-    url: '#',
-    icon: Home,
-  },
-  {
-    title: 'Graphen',
-    url: '#',
-    icon: ChartNoAxesCombined,
-  },
-  {
-    title: 'Tabellen',
-    url: '#',
-    icon: TableProperties,
-  },
-  {
-    title: 'Profil',
-    url: '#',
-    icon: UserRoundCog,
-  },
-]
 
 export function SidebarDesktop() {
+  const pathname = usePathname()
+
+  const isActive = (url: string) => pathname === url
+
   return (
     <Sidebar collapsible="none" className="h-full">
       <SidebarContent>
@@ -54,9 +33,9 @@ export function SidebarDesktop() {
           <SidebarGroupLabel>Platzhalter??</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map(item => (
+              {navItems.map(item => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
                     <a
                       href={item.url}
                       className="flex items-center gap-2 hover:bg-muted px-3 py-2 rounded-md transition"
@@ -67,6 +46,7 @@ export function SidebarDesktop() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarSeparator />
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <AddTransactionDialog>

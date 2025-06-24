@@ -1,6 +1,5 @@
 'use client'
 
-import Background from '@/components/background'
 import Logo from '@/components/linked-logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -70,7 +69,7 @@ export default function LoginPage() {
   }
 
   return (
-    <Background>
+    <div className="w-full h-full">
       <div className="flex justify-center items-center px-4 min-h-screen">
         <Card className="shadow-xl w-full max-w-sm">
           <CardHeader>
@@ -140,6 +139,6 @@ export default function LoginPage() {
           </CardFooter>
         </Card>
       </div>
-    </Background>
+    </div>
   )
 }
