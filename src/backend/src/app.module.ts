@@ -5,9 +5,18 @@ import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { BackendConfig } from "./backend.config";
-import { AuthController, EntryController } from "./controllers";
+import {
+  AuthController,
+  EntryController,
+  CategoryController,
+} from "./controllers";
 import { JwtAuthGuard } from "./guards";
-import { AuthService, EntryService, PrismaService } from "./services";
+import {
+  AuthService,
+  EntryService,
+  PrismaService,
+  CategoryService,
+} from "./services";
 import { JwtStrategy } from "./strategies";
 
 @Module({
@@ -29,13 +38,19 @@ import { JwtStrategy } from "./strategies";
     }),
   ],
 
-  controllers: [AppController, AuthController, EntryController],
+  controllers: [
+    AppController,
+    AuthController,
+    EntryController,
+    CategoryController,
+  ],
   providers: [
     // services
     AppService,
     PrismaService,
     EntryService,
     AuthService,
+    CategoryService,
     // guards
     JwtAuthGuard,
     // strategies

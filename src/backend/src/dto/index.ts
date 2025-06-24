@@ -3,3 +3,7 @@ export * from "./create-entry.dto";
 export * from "./entry-response.dto";
 export * from "./pagination.dto";
 export * from "./currencies.dto";
+export * from "./category-pagination-parameter.dto";
+export * from "./create-category.dto";
+export * from "./update-category.dto";
+export * from "./category-response.dto";
