@@ -16,7 +16,6 @@ export class KyselyService extends Kysely<DB> {
   ) {
     super({
       dialect: new PostgresDialect({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
         pool: new Pool({ connectionString: options.DATABASE_URL }),
       }),
     });

@@ -2,14 +2,13 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { BackendConfig } from "./backend.config";
 import {
-  AnalyticsController,
   AuthController,
   EntryController,
   UserController,
+  CategoryController,
+  AnalyticsController,
 } from "./controllers";
 import { JwtAuthGuard } from "./guards";
 import {
@@ -18,6 +17,7 @@ import {
   EntryService,
   KyselyService,
   PrismaService,
+  CategoryService,
   UserService,
 } from "./services";
 import { JwtStrategy } from "./strategies";
@@ -38,23 +38,23 @@ import { JwtStrategy } from "./strategies";
       }),
     }),
   ],
-
   controllers: [
-    AppController,
     AuthController,
+    CategoryController,
     EntryController,
     UserController,
     AnalyticsController,
   ],
   providers: [
     // services
-    AppService,
-    PrismaService,
-    EntryService,
-    AuthService,
-    UserService,
     AnalyticsService,
+    AuthService,
+    EntryService,
+    CategoryService,
+    UserService,
+
     KyselyService,
+    PrismaService,
     // guards
     JwtAuthGuard,
     // strategies
