@@ -21,24 +21,31 @@ RUN pnpm --filter backend prisma:generate
 # Build the backend application
 RUN pnpm --filter backend build
 
-# Prune dev dependencies
-RUN pnpm --filter backend --prod prune
-
 # Production stage
 FROM node:20-alpine AS production
 
 RUN apk add --no-cache openssl openssl-dev
+RUN npm install -g pnpm
+
 WORKDIR /app
 
-# Copy built application
-COPY --from=builder /app/src/backend/dist ./dist
-COPY --from=builder /app/src/backend/node_modules ./node_modules
-COPY --from=builder /app/src/backend/package.json ./package.json
+# Copy workspace configuration files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Copy source files (needed for pnpm workspace)
+COPY src/backend ./src/backend
+
+# Install only production dependencies
+RUN pnpm --filter backend install --prod --frozen-lockfile
+
+# Copy built application from builder stage
+COPY --from=builder /app/src/backend/dist ./src/backend/dist
 
 # Copy Prisma client if generated
-COPY --from=builder /app/src/backend/prisma ./prisma
+COPY --from=builder /app/src/backend/prisma ./src/backend/prisma
 
 ENV NODE_ENV=production
 EXPOSE 3000
 
+WORKDIR /app/src/backend
 CMD ["node", "dist/main.js"]

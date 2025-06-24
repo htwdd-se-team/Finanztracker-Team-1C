@@ -1,5 +1,5 @@
 = Vision: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresdsen.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
@@ -105,10 +105,10 @@ Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mi
 |===
 | Bedarf | Priorität | Features / Funktionen | Geplantes Release
 
-| Authentication
-| Soll 
+| Authentifizierung
+| Muss 
 | Account erstellen/Login
-| (MVP)
+| MVP
 
 
 | Schnelle, barrierefreie Erfassung von Ein- & Ausgaben, ohne Tabellenwissen 
@@ -125,7 +125,7 @@ a|
 - Minimalistisches, visuell ansprechendes Dashboard (Saldo, Budget, Sparziele) 
 | MVP
 
-| übersichtliche tabellarische Anzeige
+| Übersichtliche tabellarische Anzeige
 | Muss
 a|
 - Filter anbieten (Kategorien)
@@ -144,10 +144,16 @@ a|
 | Cross-Device-Nutzung inkl. Offline-Modus 
 | Soll a| - Cloud-Sync & lokaler Cache 
 | xx
-| Sichere Nutzung trotz sensibler Finanz-daten 
+| Sichere Nutzung trotz sensibler Finanzdaten 
 | Kann 
 a| 
 - Ende-zu-Ende-Verschlüsselung - Zwei-Faktor-Authentifizierung 
+| xx
+| Gamification für das Motivationslevel 
+| Kann 
+a|
+- Abzeichen
+- Streaks
 | xx
 // | Integration externer Banken / Apps (Open-Banking)
 // | Kann 

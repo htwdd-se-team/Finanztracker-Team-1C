@@ -1,32 +1,44 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { ReactNode } from "react"
-import LayoutClient from "./layout-client"
+import type { Metadata } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
+import './globals.css'
+import LayoutClient from './layout-client'
+import { Toaster } from '@/components/ui/sonner'
+import { ThemeProvider } from 'next-themes'
+
+import { ClientProviders } from '@/components/provider/client-providers'
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
-  title: "FinApp",
-  description: "Best way to manage your money",
-};
+  title: 'FinApp',
+  description: 'Best way to manage your money',
+}
 
-export default function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <LayoutClient>{children}</LayoutClient>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LayoutClient>
+            <Toaster position="top-center" />
+            <ClientProviders>{children}</ClientProviders>
+          </LayoutClient>
+        </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

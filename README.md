@@ -50,7 +50,7 @@ Dieses Repository enthält Vorlagen im AsciiDoc-Format zur Dokumentation der ver
 ### Hinweis
 
 Falls Sie Fehler korrigieren oder Verbesserungen machen möchten, können Sie
-  dies gern über einen _Pull Request_ tun.
+dies gern über einen _Pull Request_ tun.
 
 ## Hinweise zu den AsciiDoc-Vorlagen
 
@@ -211,14 +211,15 @@ Die Templates im Ordner `docs` und `belegabgabe_se1` unterliegen der
 
 Wir benutzen `pnpm` + monorepo bitte stellen sie also sicher das `pnpm` installiert ist. Dafür können sie die Anleitung von pnpm [hier](https://pnpm.io/installation) nachlesen.
 
-Dependencies installieren: `pnpm i`
+Dependencies installieren: `pnpm i` (im root dir) 
+
+- möglicher weise muss noch im backend also `cd src/backend` prisma generiert werden mit `pnpm prisma generate`
 
 - Backend starten: `pnpm dev:backend` bzw `cd src/backend && pnpm dev`
 - Frontend starten: `pnpm dev:frontend` bzw `cd src/frontend && pnpm dev`
-- oder beides: `pnpm dev` (im root dir) Frontend auf `http://localhost:3000` und Backend auf `http://localhost:3111`
+- oder beides: `pnpm dev` (im root dir) Frontend auf `http://localhost:3000` und Backend auf `http://localhost:3111` (im root dir)
 
 Dependencies hinzufügen für explicit backend/frontend: `pnpm add --filter <backend|frontend> <package-name>` bzw `cd src/backend|frontend && pnpm add <package-name>`
-
 
 ### Quellcode / Anderes
 

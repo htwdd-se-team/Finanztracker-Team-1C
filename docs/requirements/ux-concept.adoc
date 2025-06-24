@@ -1,18 +1,19 @@
 = UX-Konzept: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresdsen.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
 
 
 == Einführung
-In diesem Dokument werden die Benutzeroberflächen des Systems {project-system-name} beschrieben. Dies können sein:
+In diesem Dokument wird das User-Experience-Konzept des Systems {project-system-name} beschrieben. Anhand von Personas, Nutzungskontext und Wireframes werden die Anforderungen an die Benutzeroberfläche und die Interaktionen mit dem System in eine Richtung geleitet. Diese Methoden dienen dazu, ein differenziertes Bild für die Gestaltung eines Finanztrackers zu gewinnen.
+//Dies können sein:
 
-* Personas der wichtigsten Stakeholder
-* Nutzerkontext
-* Wireframes relevanter Benutzeroberflächen
-* Zusammenhänge mittels Taskflow-Diagrammen
-* Angaben über die Gestaltung der Benutzeroberfläche, z.B. Styling, Bedienbarkeit, ...
+//* Personas der wichtigsten Stakeholder
+//* Nutzerkontext
+//* Wireframes relevanter Benutzeroberflächen
+//* Zusammenhänge mittels Taskflow-Diagrammen
+//* Angaben über die Gestaltung der Benutzeroberfläche, z.B. Styling, Bedienbarkeit, ...
 
 == Personas
 [cols="1,3"]
@@ -23,7 +24,7 @@ In diesem Dokument werden die Benutzeroberflächen des Systems {project-system-n
 |*Demographie*
 a| * Alter: 24
 * Geschlecht: weiblich
-* Studiengang: bildene Kunst - Master
+* Studiengang: Bildene Kunst - Master
 * Nebenjob: Servicekraft in der Gastronomie
 * Familienstand: ledig
 * Wohnort: Dresden
@@ -81,7 +82,7 @@ a| * Budgetbewusst (9/10)
 a| * Google Pixel Smartphone (1h / Tag)
 * Laptop (2h / Tag), bevorzugt für Tabellenkalkulationen
 * Bevorzugt klassische Methoden für Finanzen (Papier, Notizbuch)
-* nutzt als Social-Media-Plattform nur X (Twiiter)
+* Nutzt als Social-Media-Plattform nur X (Twitter)
 
 |*Bedürfnisse / Ziele*
 a| * Nutzung eines Finanztrackers, der weniger Zeit beansprucht als das Führen eines Notizbuchs
@@ -113,14 +114,14 @@ a| * Alter: 20
 image:mario_mueller.png[width=150]
 
 |*Verhaltensvariablen*
-a| * budgetbewusst (7/10)
-* technikaffin (9/10)
-* risikofreudig (1/10)
-* regelmäßige Kontrolle (8/10)
-* gemeinschaftsorientiert (4/10) 
+a| * Budgetbewusst (7/10)
+* Technikaffin (9/10)
+* Risikofreudig (1/10)
+* Regelmäßige Kontrolle (8/10)
+* Gemeinschaftsorientiert (4/10) 
 
 |*Technische Fähigkeiten / Technologie*
-a| * Dektop-Power-User (6 h / Tag)
+a| * Desktop-Power-User (6 h / Tag)
 * Samsung Handy (1,5 h / Tag)
 * 10 Jahre Gaming-Erfahrung in allen Kategorien
 * 3 Jahre Programmiererfahrung überwiegend mit Cloud-Diensten und Synchronisation zwischen Geräten
@@ -135,6 +136,46 @@ a| * Sequenzielles Erfassen am PC, optimiert für Tastatur-Shortcuts
 |*Hindernisse / Frustrationen*
 a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da Standard-Budgets selten passen
 * Unzufriedenheit mit der UI/UX existierender Finanztracker
+|===
+
+[cols="1,3"]
+|===
+|*Name*
+|Lena Schmidt
+
+|*Demographie*
+a| * Alter: 22  
+* Geschlecht: weiblich  
+* Studiengang: Psychologie - Bachelor  
+* Nebenjob: Tutorin für Statistik  
+* Familienstand: ledig  
+* Wohnort: Berlin  
+
+image:lena_schmidt.png[width=150]
+
+|*Verhaltensvariablen*
+a| * Budgetbewusst (4/10)  
+* Technikaffin (7/10)  
+* Risikofreudig (5/10)  
+* Wettbewerbsorientiert (9/10)  
+* Regelmäßige Kontrolle (6/10) 
+
+|*Technische Fähigkeiten / Technologie*
+a| * iPhone (3 h / Tag)  
+* MacBook (5 h / Tag)  
+* Erfahrung mit Duolingo und Habitica  
+* Erfahrung mit Datenanalyse-Tools wie Excel und Tableau
+
+|*Bedürfnisse / Ziele*
+a| * Motivation durch Belohnungen wie Abzeichen und Fortschrittsbalken  
+* Vergleich mit anderen Nutzern, um ihre Ausgaben zu optimieren  
+* Erreichen von Sparzielen durch Streaks  
+* Übersichtliche Darstellung von Fortschritten und Erfolgen  
+
+|*Hindernisse / Frustrationen*
+a| * Fehlende soziale Interaktion oder Vergleichsmöglichkeiten in der App  
+* Komplizierte Navigation oder überladene Benutzeroberfläche
+* Schwierigkeiten beim Nachvollziehen von Fortschritten  
 |===
 
 == Nutzungskontext
@@ -158,7 +199,7 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Verschiedene Ansichten/Reiter für die Funktionen der Anwendung öffnen
 * Filter für die Kategorien oder Zeiträume setzen
 * Einstellungen anpassen für Budgets, Kategorien und generelle Konfigurationen
-* fixe Ein-/Auszahlungen für den nachfolgenden Monat mit dem verbleibenden Budget
+* Fixe Ein-/Auszahlungen für den nachfolgenden Monat mit dem verbleibenden Budget
 * Budgetübersicht im Monatsvergleich
 
 *Welche Geräte werden verwendet?*
@@ -175,8 +216,8 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Zuhause
 * Am Eisstand in der Sonne
 * Am Imbiss um 2 Uhr nachts
-* im Zug ohne Internet
-* im Ausland
+* Im Zug ohne Internet
+* Im Ausland
 
 *Wie viele Personen sind an der Aufgabe beteiligt?*
 
@@ -191,8 +232,8 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Dopplung eines Eintrags
 * Filter versehentlich gelöscht
 * Ansicht ungewollt verschoben
-* Durch Fehlklick an eine falscher Stelle gelangt
-* versehentlich Daten dauerhaft gelöscht
+* Durch Fehlklick an eine falsche Stelle gelangt
+* Versehentlich Daten dauerhaft gelöscht
 
 *Wie häufig und wie lange braucht es, um die Aufgaben in der Anwendung zu erfüllen?*
 
@@ -207,7 +248,7 @@ a| * Schwierigkeiten im Umgang mit unregelmäßigen Einnahmen und Ausgaben, da S
 * Standardmäßig wird Online-Banking genutzt, bei dem jeder Anbieter den Export in eine CSV-Datei ermöglicht, die als potenzieller Input dient. +
 * Zusätzlich verwenden Nutzer Excel oder Google Sheets
 
-== Wireframes und Wireflow
+== Wireframes
 // Fügen Sie Wireframes als Bilder oder als Link (z.B. zu einem Miroboard) ein
 // Beziehen Sie ihre Wireframes auf konkrete User Stories oder Epics.
 

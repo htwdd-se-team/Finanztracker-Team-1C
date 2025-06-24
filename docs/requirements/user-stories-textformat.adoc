@@ -1,0 +1,368 @@
+== 1. Epic User Stories
+
+=== E01 - Ausgaben und Einnahmen erfassen
+
+User Story
+
+Als Magdalena Meier,
+möchte ich Ausgaben und Einnahmen blitzschnell erfassen können,
+damit ich meine Finanzen auch unterwegs und ohne großen Aufwand verwalten kann.
+
+Akzeptanzkriterien
+
+Es gibt einen gut sichtbaren Button zum Erfassen neuer Einträge auf allen Geräten. +
+Die Erfassung dauert im Schnitt weniger als 1 Minute. +
+Nach dem Speichern wird der neue Eintrag sofort in der Übersicht angezeigt. +
+
+Notizen
+
+weitere Gedanken:
+    Belege können per Foto (OCR) hinzugefügt werden. +
+    Die App funktioniert auch offline und synchronisiert später. +
+
+=== E02 - Finanzen visuell darstellen
+
+User Story
+
+Als Mario Müller
+möchte ich ein übersichtliches Dashboard mit aussagekräftigen Diagrammen, einer klaren Saldoanzeige und einer einfachen Tabellenansicht,
+damit ich jederzeit einen schnellen und verständlichen Überblick über meine finanzielle Situation habe.
+
+Akzeptanzkriterien
+
+Das Dashboard zeigt Saldo, Budget-Status und Sparziele aufeinen Blick. +
+Es gibt eine visuell ansprechende Darstellung (Diagramme,Balken, Torten). +
+Die wichtigsten Kennzahlen sind ohne Scrollen sichtbar. +
+Die Ansicht ist auf Desktop und Mobilgeräten optimiert. +
+
+=== E03 - Konto verwalten
+
+User Story
+
+Als Mario Müller,
+möchte ich meine Finanzdaten sicher speichern und verwalten,
+damit ich keine Sorge vor Datenverlust haben muss.
+
+Akzeptanzkriterien
+
+Es gibt eine Ende-zu-Ende-Verschlüsselung der Daten. +
+Zwei-Faktor-Authentifizierung ist verfügbar. +
+Bei Verbindungsabbruch gehen keine Daten verloren. +
+
+=== E04 - Finanzdaten analysieren
+
+User Story
+
+Als Mario Müller,
+möchte ich meine Finanzdaten filtern, analysieren und exportieren können,
+damit ich tiefergehende Auswertungen und Vergleiche durchführen kann.
+
+Akzeptanzkriterien
+
+Es gibt Filter für Kategorien, Zeiträume und individuelle Suchbegriffe. +
+Analysen können als CSV/Excel exportiert werden. +
+Drill-Down-Ansichten sind möglich (z.B. nach Kategorie, Monat). +
+Die Exportfunktion ist leicht auffindbar und funktioniertzuverlässig.
+
+=== E05 - Sprachen und Währungen einstellen
+
+User Story
+
+Als Alejandro Perez
+möchte ich die App in meiner bevorzugten Sprache und Währung nutzen können,
+um sprachliche Hürden durch verständlichere Begriffe zu überwinden und Preise direkt in meiner Heimatwährung angezeigt zu bekommen.
+
+Akzeptanzkriterien
+
+Die App bietet eine einfache Möglichkeit, die Sprache zuwechseln (z.B. Deutsch, Englisch, Spanisch). +
+Die Währung kann flexibel umgestellt werden (z.B. Euro,mexikanische Pesos). +
+Alle Beträge und Labels werden nach Umstellung korrektangezeigt.
+Die Umstellung ist ohne Neustart der App möglich. +
+
+=== E06 - Bankdaten einfügen
+
+User Story
+
+Als Magdalena Meier,
+möchte ich eine CSV-Datei meines Bank-Exports in die Anwendung importieren können,
+damit ich meine Transaktionen schnell und ohne manuelle Eingabe übernehmen kann.
+
+Akzeptanzkriterien:
+
+Verschlüsselung der sensiblen Finanzdaten +
+Es gibt eine gut sichtbare Funktion zum Hochladen einer CSV-Datei. +
+Nach dem Upload werden die Transaktionen korrekt eingelesen undangezeigt. +
+Der Nutzer erhält eine Rückmeldung, ob der Import erfolgreichwar oder Fehler aufgetreten sind. +
+Doppelte Einträge werden erkannt und können übersprungen oderzusammengeführt werden. +
+Kategorien werden – soweit möglich – automatisch zugeordnet,können aber nachträglich angepasst werden. +
+
+=== E07 - Motivationslevel aufrechterhalten
+
+User Story
+
+Als Lena Schmidt
+möchte ich motiviert werden,
+damit ich weiterhin eine Finanzverwaltung nutze und insbesondere meine Sparziele erreiche.
+
+Akzeptanzkritieren
+
+Notizen
+
+Erstmal als Vormerker, um dieses Bedürfnis nicht zu vergessen
+
+== 2. Sub User Stories
+
+=== zu E01
+*U01 - Unübersehbare Eintragungsmöglichkeit*
+
+User Story
+
+Als Magdalena Meier,
+möchte ich neu angefallene Ausgaben und Einnahmen intuitiv erfassen können,
+damit keine Zeit verliere und keine Beträge vergesse.
+
+Verknüpfte Tasks
+
+#58
+
+Schätzung des Aufwands
+
+Schätzungsskala: 2
+
+Akzeptanzkriterien
+
+Ein Button ist immer prominent im UI vertreten (groß genug)
+
+*U02 - Fenster für die Eintragung*
+
+User Story
+
+Als Magdalena Meier,
+möchte ich neu angefallene Ausgaben und Einnahmen wahlweise schnell oder mit zusätzlichen Details eintragen,
+damit ich effizient buche, mich nicht verklicke und dabei jederzeit den Überblick behalte.
+
+Verknüpfte Tasks
+
+#59
+#60
+#61
+#77
+#78
+#79
+
+Schätzung des Aufwands
+
+Schätzungsskala: 5
+
+Akzeptanzkriterien
+
+Nur der Betrag MUSS eingetragen werden, um eine Buchung abzuschließen +
+Das Hinzufügen ist mit maximal drei Klicks möglich (minimalster Detailgrad) +
+Titel und Kategorienauswahl sind immer sichtbar, jedoch nur optional +
+Auf Anfrage können weitere Optionen konfiguriert werden, diese sind aber ausgeblendet (by default) ((Funktionalität zum Ein- Ausblenden wird erst hinzugefügt, wenn mehr als nur Datum in den erweiterten Optionen konfigurierbar ist))
+
+*U03 - Unterstützung bei der Eingabe*
+
+User Story
+
+Als Magdalena Meier,
+möchte ich, dass mich die App bei der Dateneingabe unterstützt,
+damit ich auch unter ungünstigen Bedingungen wie im Bus oder auf dem Fahrrad korrekte Werte erfassen kann.
+
+Verknüpfte Tasks
+
+#75
+#76
+#77
+
+Schätzung des Aufwands
+
+Schätzungsskala: 5
+
+Akzeptanzkriterien
+
+Nummern Inputs erlauben NUR ausschließlich numerische Eingaben,sowie das passende Trennzeichen (Punkt, Komma) +
+Auf mobilen Geräten wird nur die Zahleneingabe angezeigt +
+Nummern Inputs sind immer vorformatiert mit "0,00" und werdenvon rechts nach links aufgefüllt +
+Kategorien werden auf Basis von vorherigen Eingaben sortiert +
+
+Notizen
+
+weitere Gedanken:
+
+Wenn Währungs- und Spracheinstellungen verfügbar sind, wird das Trennzeichen (Punkt, Komma) automatisch, je nach Sprache angepasst
+
+*U04 - Einträge hinzufügen ohne Internet*
+
+User Story
+
+Als Magdalena Meier,
+möchte ich Ausgaben und Einnahmen auch ohne Internet erfassen können,
+damit ich jederzeit die Möglichkeit habe neue Einträge hinzuzufügen.
+
+Verknüpfte Tasks
+
+Schätzung des Aufwands
+
+Schätzungsskala: 13
+
+Akzeptanzkriterien
+
+Einträge können offline hinzugefügt und sobald wieder Verbindung besteht auch gesynced werden +
+Einige Funktionen müssen bei fehlender Verbindung deaktiviert
+
+Notizen
+
+Nur das Hinzufügen von Einträgen muss offline funktionieren
+
+== zu E02
+
+*U05 - Auf-einen-Blick Dashboard*
+
+User Story
+
+Als Mario Müller
+möchte ich beim Öffnen der App direkt eine visuelle Übersicht meiner aktuellen Zahlen in verschiedenen Grafiken sehen,
+damit ich alle relevanten Informationen auf einen Blick erfassen kann.
+
+Verknüpfte Tasks
+
+#80
+#81
+#82
+#83
+
+Schätzung des Aufwands
+
+Schätzungsskala: 13
+
+Akzeptanzkriterien
+
+Verschiedene und in der Größe variierende Grafiken in einem Grid +
+Kontostand wird gut sichtbar angezeigt +
+Unter dem Grid ist die Tabelle mit allen Einträgen positioniert +
+
+*U06 - Navigation auf unterschiedlichen Geräten*
+
+User Story
+
+Als Mario Müller
+möchte ich sowohl auf dem Desktop als auch auf dem Handy alle Navigationspunkte einfach erreichen können,
+damit die Navigation innerhalb der App schnell und intuitiv ist.
+
+Verknüpfte Tasks
+
+#57
+
+Schätzung des Aufwands
+
+Schätzungsskala: 8
+
+Akzeptanzkriterien
+
+Auf dem Desktop wird eine linke Sidebar mit verschiedenen Menüpunkten angezeigt +
+Auf dem Handy befindet sich eine untere Navigationsleiste (Navbar) mit Icons zur Navigation +
+
+*U07 - Tabellarische Ansicht von Einträgen*
+
+User Story
+
+Als Mario Müller
+möchte ich meine Einträge in Tabellenform angezeigt bekommen,
+damit mir jeden einzelnen Eintrag anschauen kann.
+Verknüpfte Tasks
+
+Schätzung des Aufwands
+
+Schätzungsskala: 5
+
+Akzeptanzkriterien
+
+Pflicht sind als Überschriften: Titel, Preis, Kategorie, Datum
+
+Notizen
+
+Long-Press auf Mobile Devices öffnet Quick-Options-Menü
+
+*U08 - Bearbeiten von Einträgen*
+
+User Story
+
+Als Mario Müller
+möchte ich bestehende Einträge im Nachhinein abändern können,
+damit ich Fehler korrigieren kann.
+
+Verknüpfte Tasks
+
+#84
+
+Schätzung des Aufwands
+
+Schätzungsskala: 3
+
+Akzeptanzkriterien
+
+Alle Optionen werden ähnlich wie beim Creation-Menü angezeigt und sind bearbeitbar +
+Änderungen können gespeichert oder verworfen werden +
+
+Notizen
+
+Falls der "Löschen"-Button nicht auf die Table-View kommt, dann in dieses Menü
+
+*U09 - Filterung der Einträge*
+
+User Story
+
+Als Mario Müller
+möchte ich meine Einträge nach vielen verschiedene Merkmalen filtern können,
+damit ich bestimmte Phasen und Kategorien besser untersuchen kann.
+
+Verknüpfte Tasks
+
+#85
+#86
+
+Schätzung des Aufwands
+
+Schätzungsskala: 8
+
+Akzeptanzkriterien
+
+Mindestanforderungen sind Zeitraum, Kategorie und Typ +
+Filter speichern können +
+
+Notizen
+
+Vorschläge auf früheren Filterungen
+
+== zu E03
+
+*U10 - Konto erstellen und wiederverwenden*
+
+User Story
+
+Als Mario Müller,
+möchte ich mir ein Konto erstellen und mich wieder mit diesem Konto anmelden können,
+damit meine Daten synchronisiert werden und ich auf verschiedenen Geräten die Einträge verwalten kann.
+
+Verknüpfte Tasks
+
+#62
+#63
+
+#87
+#88
+
+Schätzung des Aufwands
+
+Schätzungsskala: 13
+
+Akzeptanzkriterien
+
+Anmeldeformular mit E-Mail + Passwort, Magic-Link sowie "Passwort vergessen"-Option +
+Registrierung mit E-Mail + 2x Passwort + neue Accounts müssen ihre E-Mail nicht bestätigen +
+
+Notizen
+
+Optional kann im Register Flow ein 2FA-Code angelegt werden
+

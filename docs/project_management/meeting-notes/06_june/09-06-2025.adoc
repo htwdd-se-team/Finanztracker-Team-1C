@@ -1,0 +1,113 @@
+= Meeting-Protokoll 09.06.2025
+
+*Datum:* 09.06.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Ben +
+*Protokoll:* Ben +
+*Meetingbeginn:* 13:30 +
+*Meetingende:* 15:00 - (DB-Schema erstellen Backend-Leute: 15:36) +
+*Dauer:* 90 min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- [line-through]#Paula#  (abgemeldet)
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Überarbeitete User Stories besprechen
+Passt das für alle so, muss was überarbeitet werden? +
+
+*Notizen:* +
+- E03 - Andere Idee: "Aufbewahrung und Sicherung meiner Daten +
+
+*Entscheidung:* +
+- Noch keine finale Entscheidung für E03 Titel gefallen +
+ +
+ +
+
+
+==== 1.1 Wie sollen Tasks erstellt werden?
+Von wem werden die Tasks erstellt und zugeordnet?
+
+*Notizen:* +
+- Von Devs -> diese haben die User Stories und können in den Dev-Meeting nach und nach die Tasks verteilen +
+ +
+ +
+
+=== 2. Alle Fragen zur Dokumentation (PO Fragen)
+1. Passen die überarbeite Produktvision und die überarbeiteten Persona's? +
+2. Definiton of Ready und Done reviewen mit dem Team +
+3. Wer hält das Risiko-Board im Auge? +
+4. Stand vom Glossar? +
+5. Wie viele User Stories -> keine feste Anzahl +
+6. Im Architekturnotizbuch C4-Modell auf Level 1 auch noch machen? +
+7. Hat sich schonmal wer mit dem Domänenmodell beschäftigt? +
+8. Generelle Tasks festlegen (Lessons Learned, Folie Produktkonzept, Folie Architektur, Vortrag Auslosung, Generelle Abgabeverantwortung, C4-1, Domänenmodell)
+
+
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+1. passt +
+2. Formulierung ändern zwei bis drei Angestrebt, mindestens eine+
+DoD Coding-Guidelines wird durch Elias geschrieben (Task erstellen (Elias, Ben) dann Review nächste Woche) +
+3. __ausgelassen__ +
+4. Ben macht Review von Glossar, danach abgehakt +
+5. passt +
+6. Elias und Cedrick überabreiten nochmal (Task erstellen) +
+7. Domänenmodell anschauen und eine Task daraus formulieren (Ben) +
+8. Alle Tasks anlegen
+
+=== 3. Datenbank-Schema klären 
+
+*Notizen:* +
+- Wird in der Prisma Datei beschrieben  +
+
+
+*Entscheidungen:* +
+- ... +
+ +
+ +
+
+=== 4. Erste Tickets verteilen
+
+*Notizen:* +
+- Im Github vorhanden +
+
+*Entscheidungen:* +
+- ... +
+ +
+ +
+
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- Wollen wir noch ein Meeting mit dem Coach? +
+Vormerker an ihn senden und dann nächste Woche einen konkreten Plan machen, was wir vorstellen sollen (23.06. Meeting mit Coach)
+
+
+
+== Nächstes Meeting
+
+- Datum: 16.06.2025
+- Zeit: *16:00* Uhr
+- Ort: Online (Teams)
+
+
+
+==== Themen nächstes Meeting
+- E03 Titel
+- Task für Abgabeverantwortung erstellen?
+- Domänenmodell Task verteilen
+- Auslosung Vorstellung in der Vorlesung
+- Wer hält das Risiko-Board im Auge?
+- Konkreten Plan machen für Meeting mit Coach

@@ -1,0 +1,41 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "files.eol": "\n",
+    "prettier.requireConfig": true,
+    "workbench.iconTheme": "vscode-icons",
+    "vsicons.presets.tsOfficial": true,
+    "vsicons.presets.nestjs": true,
+    "vsicons.associations.folders": [
+        {
+            "icon": "next",
+            "extensions": ["frontend"],
+            "format": "svg"
+        },
+        {
+            "icon": "api",
+            "extensions": ["backend"],
+            "format": "svg"
+        },
+        {
+            "icon": "docker",
+            "extensions": ["deployment"],
+            "format": "svg"
+        }
+    ],
+    "[javascript]": {
+        "editor.formatOnSave": false
+    },
+    "[typescript]": {
+        "editor.formatOnSave": false
+    },
+    "[typescriptreact]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

@@ -7,3 +7,97 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id Int @id @default(autoincrement())
+
+  givenName  String
+  familyName String?
+
+  email        String @unique
+  passwordHash String
+
+  createdAt DateTime @default(now())
+
+  Transaction Transaction[]
+  Category    Category[]
+  // SavingsGoal SavingsGoal[]
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  color String // preset color options from the frontend
+  icon  String // preset icon options from the frontend
+
+  // spendingLimit Int? // in cents
+  // spendingLimitCurrency String? @default("EUR")
+
+  createdAt DateTime @default(now())
+
+  Transaction Transaction[]
+
+  // if  a category is not associated with a user, it is a system category
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+
+ enum RecurringTransactionType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+model Transaction {
+  id Int @id @default(autoincrement())
+
+  type TransactionType @default(EXPENSE)
+
+  amount      Int // in cents
+  description String?
+  currency    String  @default("EUR")
+
+  createdAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  Category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int?
+
+  isRecurring Boolean @default(false)
+
+  childTransaction  Transaction[] @relation("childTransaction")
+  parentTransaction Transaction?  @relation("childTransaction", fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId     Int?
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  recurringType RecurringTransactionType?
+  recurringInterval Int?
+  // TODO: better  recurring interval
+}
+
+// model SavingsGoal {
+//   id Int @id @default(autoincrement())
+
+//   name        String
+//   description String?
+
+//   amount   Int // in cents
+//   currency String @default("EUR")
+
+//   createdAt DateTime @default(now())
+
+//   userId Int
+//   user   User @relation(fields: [userId], references: [id])
+// }

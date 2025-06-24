@@ -1,13 +1,14 @@
 import {
   Global,
+  Inject,
   Injectable,
   Logger,
   OnModuleDestroy,
   OnModuleInit,
-} from '@nestjs/common';
-import { Prisma, PrismaClient } from '@prisma/client';
+} from "@nestjs/common";
+import { Prisma, PrismaClient } from "@prisma/client";
 
-import { BackendConfig } from '../backend.config';
+import { BackendConfig } from "../backend.config";
 
 @Global()
 @Injectable()
@@ -17,9 +18,9 @@ export class PrismaService
 {
   logger = new Logger(PrismaService.name);
 
-  constructor(public config: BackendConfig) {
+  constructor(@Inject(BackendConfig) public config: BackendConfig) {
     const prismaOptions: Prisma.PrismaClientOptions = {
-      ...{ datasources: { db: { url: config.DATABASE_URL } } },
+      datasources: { db: { url: config.DATABASE_URL } },
     };
 
     super(prismaOptions);
