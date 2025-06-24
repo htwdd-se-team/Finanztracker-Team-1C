@@ -72,7 +72,7 @@ export function AddTransactionDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4">
+        <div className="gap-4 grid">
           {/* Typ */}
           <div className="flex gap-1">
             <Button
@@ -96,7 +96,7 @@ export function AddTransactionDialog({
           </div>
 
           {/* Titel */}
-          <div className="grid gap-1">
+          <div className="gap-1 grid">
             <Label htmlFor="Titel">
               Titel<span className="text-muted-foreground">(optional)</span>
             </Label>
@@ -110,12 +110,12 @@ export function AddTransactionDialog({
           </div>
 
           {/* Betrag */}
-          <div className="grid gap-1">
+          <div className="gap-1 grid">
             <Label htmlFor="betrag">
               Betrag<span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+              <span className="top-1/2 left-3 absolute text-muted-foreground text-sm -translate-y-1/2">
                 €
               </span>
               <Input
@@ -132,7 +132,7 @@ export function AddTransactionDialog({
           </div>
 
           {/* Kategorie */}
-          <div className="grid gap-1">
+          <div className="gap-1 grid">
             <Label htmlFor="Kategorie">
               Kategorie{' '}
               <span className="text-muted-foreground">(optional)</span>
@@ -151,7 +151,7 @@ export function AddTransactionDialog({
           </div>
 
           {/* Datum */}
-          <div className="grid gap-1">
+          <div className="gap-1 grid">
             <Label htmlFor="Datum">
               Titel<span className="text-muted-foreground">(optional)</span>
             </Label>
@@ -172,12 +172,12 @@ export function AddTransactionDialog({
             className="w-full"
             disabled={!betrag.trim() || isNaN(Number(betrag))}
           >
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="mr-2 w-4 h-4" />
             Hinzufügen
           </Button>
         </DialogFooter>
 
-        <p className="text-xs text-muted-foreground text-center mt-2">
+        <p className="mt-2 text-muted-foreground text-xs text-center">
           Felder mit <span className="text-red-500">*</span> sind Pflichtfelder
         </p>
       </DialogContent>

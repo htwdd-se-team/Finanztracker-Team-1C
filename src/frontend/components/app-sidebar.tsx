@@ -15,8 +15,8 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 
-import AddTransactionDialog from '@/components/add-transaction-dialog'
 import { NavUser } from '@/components/nav/nav-user'
+import { AddTransactionDialog } from '@/components/add-transaction-dialog'
 
 export function AppSidebar() {
   const isMobile = useIsMobile()
