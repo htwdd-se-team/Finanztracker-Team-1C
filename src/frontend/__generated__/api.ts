@@ -222,6 +222,30 @@ export interface ApiEntryPageDto {
   count?: number;
 }
 
+export interface ApiUserResponseDto {
+  /**
+   * The given name of the user
+   * @example "John"
+   */
+  givenName: string;
+  /**
+   * The family name of the user
+   * @example "Doe"
+   */
+  familyName?: string;
+  /**
+   * The email of the user
+   * @format email
+   * @example "john.doe@example.com"
+   */
+  email: string;
+  /**
+   * User creation timestamp
+   * @format date-time
+   */
+  createdAt: string;
+}
+
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -541,6 +565,24 @@ export class Api<
         path: `/entries/list`,
         method: "GET",
         query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  user = {
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerGetCurrentUser
+     * @request GET:/user/me
+     * @secure
+     */
+    userControllerGetCurrentUser: (params: RequestParams = {}) =>
+      this.request<ApiUserResponseDto, any>({
+        path: `/user/me`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,

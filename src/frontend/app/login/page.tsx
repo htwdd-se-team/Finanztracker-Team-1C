@@ -29,6 +29,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { ApiLoginDto } from '@/__generated__/api'
+import { LoggedInCard } from '@/components/user/logged-in-card'
 
 const loginModel = z.object({
   email: z.string().email({
@@ -127,11 +128,15 @@ export default function LoginPage() {
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex justify-between text-muted-foreground text-sm">
-            <span>Noch kein Konto?</span>
-            <Link href="/register" className="text-primary hover:underline">
-              Registrieren
-            </Link>
+
+          <CardFooter className="flex flex-col gap-2">
+            <LoggedInCard className="w-full" />
+            <div className="flex justify-between w-full text-muted-foreground text-sm">
+              <span>Noch kein Konto?</span>
+              <Link href="/register" className="text-primary hover:underline">
+                Registrieren
+              </Link>
+            </div>
           </CardFooter>
         </Card>
       </div>

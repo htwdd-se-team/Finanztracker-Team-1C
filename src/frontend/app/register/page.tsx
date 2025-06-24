@@ -15,7 +15,7 @@ import Link from 'next/link'
 import z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { apiClient } from '@/api/api-client'
+import { apiClient, apiSetToken } from '@/api/api-client'
 import { useMutation } from '@tanstack/react-query'
 import { ApiRegisterDto } from '@/__generated__/api'
 import { useRouter } from 'next/navigation'
@@ -63,9 +63,10 @@ export default function RegisterPage() {
     mutationKey: ['auth', 'register'],
     mutationFn: async (values: ApiRegisterDto) =>
       (await apiClient.auth.authControllerRegister(values)).data,
-    onSuccess: () => {
+    onSuccess: data => {
       toast.success('Konto erfolgreich erstellt')
-      router.push('/')
+      apiSetToken(data.token)
+      router.push('/login')
     },
   })
 
