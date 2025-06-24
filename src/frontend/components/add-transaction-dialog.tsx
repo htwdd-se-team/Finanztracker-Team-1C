@@ -15,6 +15,7 @@ import { CategorySelect } from '@/components/category-select'
 import { Plus, TrendingDown, TrendingUp } from 'lucide-react'
 import { SetStateAction, useState } from 'react'
 import { createTransactionEntry } from '@/lib/api/entries'
+import { FormattedCurrencyInput } from './ui/formatted-currency-input'
 
 type TransactionType = 'ausgabe' | 'einnahme'
 
@@ -118,8 +119,9 @@ export function AddTransactionDialog({
               <span className="top-1/2 left-3 absolute text-muted-foreground text-sm -translate-y-1/2">
                 €
               </span>
-              <Input
+              <FormattedCurrencyInput
                 id="betrag"
+                placeholder="0,00"
                 type="number"
                 min="0"
                 step="0.01"
@@ -127,6 +129,7 @@ export function AddTransactionDialog({
                 value={betrag}
                 onChange={e => setBetrag(e.target.value)}
                 required
+                name={''}
               />
             </div>
           </div>
