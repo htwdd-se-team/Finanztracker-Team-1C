@@ -14,6 +14,7 @@ export enum CategorySortBy {
 export class CategoryPaginationParamsDto extends PaginationDto {
   @ApiPropertyOptional({
     enum: CategorySortBy,
+    enumName: "CategorySortBy",
     example: CategorySortBy.USAGE_DESC,
   })
   @IsOptional()
