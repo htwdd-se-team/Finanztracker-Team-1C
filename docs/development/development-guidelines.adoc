@@ -1,0 +1,284 @@
+= Entwicklungsrichtlinien
+:toc:
+:toc-title: Inhaltsverzeichnis
+:sectnums:
+
+== Einführung
+
+Dieses Dokument beschreibt die Entwicklungsrichtlinien und Best Practices für unser SE-Projekt. Es dient als Leitfaden für alle Entwickler und stellt sicher, dass wir konsistent und qualitativ hochwertig arbeiten.
+
+== Quick Dev Setup
+
+=== Voraussetzungen
+
+Wir benutzen `pnpm` + monorepo, bitte stellen Sie also sicher, dass `pnpm` installiert ist. Dafür können Sie die Anleitung von pnpm https://pnpm.io/installation[hier] nachlesen.
+
+=== Installation und Setup
+
+. **Dependencies installieren**: `pnpm i` (im root directory)
+. **Prisma generieren** (möglicherweise erforderlich): `cd src/backend && pnpm prisma generate`
+
+=== Entwicklungsserver starten
+
+* **Backend starten**: `pnpm dev:backend` oder `cd src/backend && pnpm dev`
+* **Frontend starten**: `pnpm dev:frontend` oder `cd src/frontend && pnpm dev`
+* **Beide Services**: `pnpm dev` (im root directory)
+** Frontend läuft auf: `http://localhost:3000`
+** Backend läuft auf: `http://localhost:3111`
+
+=== Dependencies hinzufügen
+
+* **Für Backend**: `pnpm add --filter backend <package-name>` oder `cd src/backend && pnpm add <package-name>`
+* **Für Frontend**: `pnpm add --filter frontend <package-name>` oder `cd src/frontend && pnpm add <package-name>`
+* **Für Root**: `pnpm add -w <package-name>`
+
+== Projektstruktur
+
+Unser Projekt folgt einer Monorepo-Struktur:
+
+----
+SE-Projekt/
+├── src/
+│   ├── backend/          # NestJS Backend
+│   ├── frontend/         # Next.js Frontend
+│   └── deployment/       # Docker & Deployment configs
+├── docs/                 # Projektdokumentation
+├── package.json          # Root package.json mit Scripts
+├── pnpm-workspace.yaml   # PNPM Workspace Konfiguration
+└── pnpm-lock.yaml        # Lockfile
+----
+
+== Coding Standards
+
+=== Allgemeine Richtlinien
+
+* **Sprache**: Code, Kommentare und Variablennamen in Englisch
+* **Linting**: ESLint-Konfiguration muss befolgt werden
+* **Formatierung**: Prettier wird für konsistente Code-Formatierung verwendet
+* **TypeScript**: Strikte Typisierung ist Pflicht
+
+=== Backend (NestJS)
+
+* **Architektur**: Controller -> Service -> Repository Pattern
+* **DTOs**: Verwendung von Class Validators für Input-Validierung
+* **Error Handling**: Structured Exception Handling mit HTTP Status Codes
+
+
+=== Frontend (Next.js)
+
+* **Components**: Funktionale Komponenten mit TypeScript
+* **State Management**: React Hooks für lokalen State
+* **Styling**: Tailwind CSS für Styling
+* **UI Library**: Radix UI + shadcn/ui für Komponenten
+
+== Git Workflow
+
+=== Branch-Naming Convention
+
+* `feature/kurze-beschreibung` - Neue Features (z.B. `feature/add-transaction-display`)
+* `bugfix/kurze-beschreibung` - Bugfixes
+* `hotfix/kurze-beschreibung` - Kritische Hotfixes
+* `docs/kurze-beschreibung` - Dokumentations-Updates
+
+=== Commit Message Format
+
+----
+type(scope): kurze beschreibung
+
+[optional body]
+
+[optional footer]
+----
+
+**Types:**
+* `feat`: Neue Features
+* `fix`: Bugfixes
+* `docs`: Dokumentations-Änderungen
+* `style`: Code-Formatierung
+* `refactor`: Code-Refactoring
+* `test`: Test-Änderungen
+* `chore`: Build/Tool-Änderungen
+
+**Beispiel:**
+----
+feat(backend): add user authentication endpoints
+
+- Implement JWT authentication
+- Add login and registration endpoints
+- Add password hashing with bcrypt
+
+Closes #123
+----
+
+== Pull Request (PR) Guidelines
+
+=== PR-Erstellung
+
+. **Branch aktualisieren**: Merge vom neuesten `main` branch
+. **Linting prüfen**: Code muss lint-frei sein (Backend)
+. **Build prüfen**: Code muss kompilierbar sein
+. **Aussagekräftiger Titel**: Beschreibt die Änderung klar und präzise
+
+=== PR-Template
+
+----
+## Beschreibung
+Kurze Beschreibung der Änderungen
+----
+
+=== Review-Richtlinien
+
+* **Mindestens 1 Reviewer** erforderlich
+* **Code-Qualität prüfen**: Lesbarkeit, Performance, Sicherheit
+* **Pipeline-Status**: Alle Checks müssen grün sein (GitHub Actions + Cloudflare)
+* **Preview testen**: Cloudflare Preview-Link für Frontend-Änderungen nutzen
+* **Funktionalität validieren**: Manuelle Überprüfung der Änderungen
+
+== CI/CD Pipeline
+
+=== Automatische Checks
+
+Jeder PR und Branch löst automatische Checks aus:
+
+==== Backend Pipeline (`build-check-backend.yml`)
+
+Triggert bei Änderungen in:
+* `src/backend/**`
+* Pipeline-Konfigurationsdateien
+* Root package management Dateien
+
+**Checks:**
+* **Linting**: `pnpm --filter backend lint` für Code-Qualität
+* **Prisma Generate**: `pnpm --filter backend prisma:generate`
+* **Dependencies Installation**: `pnpm install --frozen-lockfile`
+
+**Docker Build** (nur bei Merge auf `main`):
+* Erstellt Docker Image mit Tag `ghcr.io/[owner]/finapp-backend:[branch-name]`
+
+
+==== Frontend Pipeline (Cloudflare Pages)
+
+**Automatische Builds:**
+* Build wird für **jeden Branch** ausgeführt
+* Build-Status wird an GitHub zurückgemeldet
+* Preview-URLs werden für Feature-Branches erstellt
+
+**Deployment:**
+* Nur der `main` Branch wird automatisch deployed
+* Feature-Branches erhalten Preview-Links zum Testen
+
+=== Pipeline-Status
+
+* **Grün**: Alle Checks erfolgreich -> Merge möglich
+* **Gelb**: Pipeline läuft -> Warten
+* **Rot**: Checks fehlgeschlagen -> Fix erforderlich
+
+**Zusätzliche Cloudflare Checks:**
+* **Build**: Frontend Build auf Cloudflare Pages
+* **Deploy Preview**: Preview-Link für Branch verfügbar
+
+=== Lokale Validierung
+
+Vor dem Push sollten folgende Befehle lokal ausgeführt werden:
+
+----
+# Backend Linting
+pnpm --filter backend lint
+
+# Prisma Client generieren
+pnpm --filter backend prisma:generate
+
+# Dependencies installieren
+pnpm install
+----
+
+== Testing
+
+=== Manuelle Tests
+
+Bis zur Implementierung automatischer Tests sollten Änderungen manuell getestet werden:
+
+* **Backend**: API Endpoints mit Swagger UI
+* **Frontend**: UI-Funktionalität im Browser
+* **Integration**: Vollständige User Flows
+
+== Deployment
+
+=== Umgebungen
+
+* **Development**: Lokale Entwicklung
+* **Preview**: Cloudflare Pages Preview (jeder Branch)
+* **Production**: Live-System (nur `main` Branch)
+
+=== Deployment-Process
+
+==== Frontend (Cloudflare Pages)
+
+. **Branch Build**: Automatischer Build für jeden Branch
+. **Preview URL**: Cloudflare erstellt Preview-Link für Feature-Branches
+. **Review**: Code Review mit Preview-Testing
+. **Merge to Main**: Automatisches Production-Deployment
+
+==== Backend (Docker/Manual)
+
+. **PR Review**: Code Review und Approval
+. **Pipeline Success**: Alle Checks grün
+. **Merge to Main**: Docker Image wird erstellt
+. **Manual Deployment**: Production Deployment nach Bedarf
+
+=== Preview-Links
+
+Cloudflare Pages erstellt für jeden Branch automatisch einen Preview-Link:
+
+* **URL-Format**: `https://[commit-hash].finanztracker-team-1c.pages.dev/`
+* **Zugriff**: Links werden in PR-Kommentaren oder Cloudflare Dashboard angezeigt
+* **Testing**: Ideale Möglichkeit für Reviewer, Änderungen live zu testen
+
+== Datenbank
+
+=== Prisma Migration
+
+* **Neue Migration**: `pnpm --filter backend prisma migrate dev`
+* **Reset Database**: `pnpm --filter backend prisma migrate reset`
+* **Deploy Migration**: `pnpm --filter backend prisma migrate deploy`
+
+=== Schema Änderungen
+
+. Schema in `prisma/schema.prisma` bearbeiten
+. Migration erstellen: `prisma migrate dev --name beschreibung`
+. Prisma Client generieren: `prisma generate`
+. Tests und Code entsprechend anpassen
+
+== Troubleshooting
+
+=== Häufige Probleme
+
+**Problem**: `pnpm dev` startet nicht
+
+*Lösung*:
+. Dependencies neu installieren: `pnpm i`
+. Prisma generieren: `cd src/backend && pnpm prisma generate`
+. Cache löschen: `pnpm store prune`
+
+**Problem**: Backend-Verbindungsfehler
+
+*Lösung*:
+. Database läuft: Docker Compose prüfen
+. Environment Variables: `.env` Dateien vorhanden
+. Port-Konflikte: Andere Services auf Port 3111 beenden
+
+**Problem**: Frontend Build Fehler
+
+*Lösung*:
+. Type Errors beheben: `pnpm --filter frontend tsc --noEmit`
+. Dependencies prüfen: `pnpm --filter frontend outdated`
+. Node Modules löschen: `rm -rf node_modules && pnpm i`
+
+
+== Ressourcen
+
+* **pnpm Dokumentation**: https://pnpm.io/
+* **NestJS Docs**: https://docs.nestjs.com/
+* **Next.js Docs**: https://nextjs.org/docs
+* **Prisma Docs**: https://www.prisma.io/docs
+* **Tailwind CSS**: https://tailwindcss.com/docs 
