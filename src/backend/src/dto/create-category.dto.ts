@@ -1,19 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty } from "class-validator";
+import { OmitType } from "@nestjs/swagger";
 
-export class CreateCategoryDto {
-  @ApiProperty({ example: "Lebensmittel" })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+import { CategoryResponseDto } from "./category-response.dto";
 
-  @ApiProperty({ example: "Gruen" })
-  @IsString()
-  @IsNotEmpty()
-  color: string;
-
-  @ApiProperty({ example: "shopping-cart" })
-  @IsString()
-  @IsNotEmpty()
-  icon: string;
-}
+export class CreateCategoryDto extends OmitType(CategoryResponseDto, [
+  "id",
+  "createdAt",
+  "usageCount",
+]) {}
