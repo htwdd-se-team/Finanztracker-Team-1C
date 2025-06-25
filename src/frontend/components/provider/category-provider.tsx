@@ -59,16 +59,15 @@ export const CategoryProvider = ({
     queryClient.setQueryData(
       ['categories'],
       (oldCategories: Category[] | undefined) => {
-        if (!oldCategories) return [newCategory]
-
-        // Transform the new category to match the expected format
         const transformedCategory: Category = {
           ...newCategory,
           icon: newCategory.icon as IconNames,
           color: newCategory.color as CategoryColors,
         }
+        // If no categories exist, return the new category
+        if (!oldCategories) return [transformedCategory]
 
-        // Add to the beginning of the array (most recent first)
+        // Otherwise, add the new category to the beginning of the array
         return [transformedCategory, ...oldCategories]
       }
     )
