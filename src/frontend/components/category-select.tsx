@@ -32,6 +32,7 @@ export function CategorySelect({
   getCategoryFromId,
 }: CategorySelectProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
+  // Removed unused localCategories state
 
   return (
     <>
@@ -89,7 +90,13 @@ export function CategorySelect({
         </SelectContent>
       </Select>
 
-      <AddCategoryDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <AddCategoryDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onCategoryCreated={newCategory => {
+          onChange(newCategory.id.toString())
+        }}
+      />
     </>
   )
 }

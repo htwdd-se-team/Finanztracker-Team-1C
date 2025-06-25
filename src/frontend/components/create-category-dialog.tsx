@@ -30,10 +30,12 @@ import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { ApiCreateCategoryDto } from '@/__generated__/api'
 import { cn } from '@/lib/utils'
+import { Category } from './provider/category-provider'
 
 interface AddCategoryDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCategoryCreated?: (category: Category) => void
 }
 
 const createCategorySchema = z.object({
@@ -78,6 +80,7 @@ function CategoryPreview({
 export function AddCategoryDialog({
   open,
   onOpenChange,
+  onCategoryCreated,
 }: AddCategoryDialogProps) {
   const queryClient = useQueryClient()
 
@@ -97,11 +100,21 @@ export function AddCategoryDialog({
     mutationKey: ['categories', 'create'],
     mutationFn: async (values: z.infer<typeof createCategorySchema>) =>
       (await apiClient.categories.categoryControllerCreate(values)).data,
-    onSuccess: () => {
+    onSuccess: newCategory => {
       toast.success('Kategorie erfolgreich erstellt')
       queryClient.invalidateQueries({ queryKey: ['categories'] })
+
       form.reset()
       onOpenChange(false)
+
+      // Inform parent component
+      if (onCategoryCreated) {
+        onCategoryCreated({
+          ...newCategory,
+          icon: IconNames[newCategory.icon as keyof typeof IconNames],
+          color: CategoryColors[newCategory.color as keyof typeof CategoryColors],
+        })
+      }
     },
     onError: () => {
       toast.error('Fehler beim Erstellen der Kategorie')
