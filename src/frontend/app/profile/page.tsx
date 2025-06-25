@@ -1,7 +1,5 @@
 'use client'
 
-import { apiClient } from '@/api/api-client'
-import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -25,14 +23,10 @@ import {
   useColorTheme,
 } from '@/components/provider/theme-provider'
 import { ThemeCard } from '@/components/settings/ThemeCard'
+import { useUser } from '@/components/provider/user-provider'
 
 export default function ProfilePage() {
-  const { data: user } = useQuery({
-    queryKey: ['user'],
-    queryFn: apiClient.user.userControllerGetCurrentUser,
-    select: res => res.data,
-    placeholderData: prev => prev,
-  })
+  const { user } = useUser()
 
   const { themeVariant, setThemeVariant, colorTheme, setColorTheme } =
     useColorTheme()
