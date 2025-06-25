@@ -1,28 +1,14 @@
 import { Spinner } from '@/components/ui/spinner'
 import Background from '../background'
+import { TrendingUp } from 'lucide-react'
 
-// CSS-based FinApp Logo Component
 const FinAppLogo = () => {
   return (
     <div className="flex justify-center items-center mb-8">
-      {/* Logo Container */}
       <div className="relative flex items-center space-x-2">
-        {/* Icon - Financial Chart/Growth Symbol */}
         <div className="relative flex justify-center items-center bg-primary shadow-lg rounded-lg w-10 h-10">
-          {/* Chart bars */}
-          <div className="flex items-end space-x-0.5">
-            <div className="bg-background rounded-sm w-1 h-3"></div>
-            <div className="bg-background rounded-sm w-1 h-5"></div>
-            <div className="bg-background rounded-sm w-1 h-2"></div>
-            <div className="bg-background rounded-sm w-1 h-6"></div>
-          </div>
-          {/* Growth arrow */}
-          <div className="-top-1 -right-1 absolute w-3 h-3">
-            <div className="border-primary border-b-2 border-l-2 w-0 h-0 rotate-45 transform"></div>
-          </div>
+          <TrendingUp className="w-6 h-6 text-background" />
         </div>
-
-        {/* Text Logo */}
         <div className="flex flex-col">
           <span className="font-bold text-foreground text-2xl tracking-tight">
             Fin<span className="text-primary">App</span>
