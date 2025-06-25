@@ -60,3 +60,6 @@ temp/
 .cache/
 
 generated/
+
+workbox-*.js
+sw.js
