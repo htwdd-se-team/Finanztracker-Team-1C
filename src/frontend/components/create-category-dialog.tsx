@@ -24,16 +24,21 @@ import { CategoryColors, getCategoryColorClasses } from '@/lib/color-map'
 import { IconNames, IconRender } from '@/lib/icon-map'
 import { ColorPicker } from '@/components/ui/color-picker'
 import { IconPicker } from '@/components/ui/icon-picker'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
-import { ApiCreateCategoryDto } from '@/__generated__/api'
+import {
+  ApiCategoryResponseDto,
+  ApiCreateCategoryDto,
+} from '@/__generated__/api'
 import { cn } from '@/lib/utils'
+import { useCategory } from './provider/category-provider'
 
 interface AddCategoryDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCreated?: (category: ApiCategoryResponseDto) => void
 }
 
 const createCategorySchema = z.object({
@@ -46,7 +51,6 @@ const createCategorySchema = z.object({
   }),
 }) satisfies z.ZodType<ApiCreateCategoryDto>
 
-// Live Preview Component
 function CategoryPreview({
   name,
   color,
@@ -78,8 +82,9 @@ function CategoryPreview({
 export function AddCategoryDialog({
   open,
   onOpenChange,
+  onCreated,
 }: AddCategoryDialogProps) {
-  const queryClient = useQueryClient()
+  const { addCategory } = useCategory()
 
   const form = useForm<z.infer<typeof createCategorySchema>>({
     resolver: zodResolver(createCategorySchema),
@@ -97,11 +102,15 @@ export function AddCategoryDialog({
     mutationKey: ['categories', 'create'],
     mutationFn: async (values: z.infer<typeof createCategorySchema>) =>
       (await apiClient.categories.categoryControllerCreate(values)).data,
-    onSuccess: () => {
+    onSuccess: data => {
+      addCategory(data)
+
       toast.success('Kategorie erfolgreich erstellt')
-      queryClient.invalidateQueries({ queryKey: ['categories'] })
       form.reset()
-      onOpenChange(false)
+      requestAnimationFrame(() => {
+        onCreated?.(data)
+        onOpenChange(false)
+      })
     },
     onError: () => {
       toast.error('Fehler beim Erstellen der Kategorie')
@@ -121,13 +130,31 @@ export function AddCategoryDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent
+        className="sm:max-w-lg"
+        onEscapeKeyDown={e => {
+          e.stopPropagation()
+        }}
+        onPointerDownOutside={e => {
+          e.stopPropagation()
+        }}
+        onInteractOutside={e => {
+          e.stopPropagation()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Neue Kategorie erstellen</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              e.stopPropagation()
+              form.handleSubmit(onSubmit)(e)
+            }}
+            className="space-y-4"
+          >
             <CategoryPreview
               name={watchedValues.name}
               color={watchedValues.color}
@@ -201,7 +228,13 @@ export function AddCategoryDialog({
               >
                 Abbrechen
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button
+                type="submit"
+                disabled={isPending}
+                onClick={e => {
+                  e.stopPropagation()
+                }}
+              >
                 {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
                 Erstellen
               </Button>
