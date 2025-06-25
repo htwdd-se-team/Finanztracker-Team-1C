@@ -10,6 +10,13 @@
  * ---------------------------------------------------------------
  */
 
+export enum ApiGranularity {
+  DAY = "DAY",
+  WEEK = "WEEK",
+  MONTH = "MONTH",
+  YEAR = "YEAR",
+}
+
 export enum ApiEntrySortBy {
   CreatedAtAsc = "createdAt_asc",
   CreatedAtDesc = "createdAt_desc",
@@ -39,6 +46,14 @@ export enum ApiCurrency {
 export enum ApiTransactionType {
   INCOME = "INCOME",
   EXPENSE = "EXPENSE",
+}
+
+export enum ApiCategorySortBy {
+  UsageDesc = "usage_desc",
+  CreatedAtDesc = "createdAt_desc",
+  CreatedAtAsc = "createdAt_asc",
+  AlphaAsc = "alpha_asc",
+  AlphaDesc = "alpha_desc",
 }
 
 export interface ApiLoginDto {
@@ -91,6 +106,77 @@ export interface ApiRegisterDto {
   familyName?: string;
 }
 
+export interface ApiCreateCategoryDto {
+  /**
+   * Category name
+   * @example "Lebensmittel"
+   */
+  name: string;
+  /**
+   * Category color string
+   * @example "Blue"
+   */
+  color: string;
+  /**
+   * Category icon name
+   * @example "shopping-cart"
+   */
+  icon: string;
+}
+
+export interface ApiCategoryResponseDto {
+  /**
+   * Category ID
+   * @min 1
+   * @example 1
+   */
+  id: number;
+  /**
+   * Category name
+   * @example "Lebensmittel"
+   */
+  name: string;
+  /**
+   * Category color string
+   * @example "Blue"
+   */
+  color: string;
+  /**
+   * Category icon name
+   * @example "shopping-cart"
+   */
+  icon: string;
+  /**
+   * Creation timestamp
+   * @format date-time
+   * @example "2025-06-24T23:34:49.879Z"
+   */
+  createdAt: string;
+  /**
+   * Usage count of this category
+   * @example 12
+   */
+  usageCount?: number;
+}
+
+export interface ApiUpdateCategoryDto {
+  /**
+   * Category name
+   * @example "Lebensmittel"
+   */
+  name?: string;
+  /**
+   * Category color string
+   * @example "Blue"
+   */
+  color?: string;
+  /**
+   * Category icon name
+   * @example "shopping-cart"
+   */
+  icon?: string;
+}
+
 export interface ApiCreateEntryDto {
   /** @example "EXPENSE" */
   type: ApiTransactionType;
@@ -110,11 +196,6 @@ export interface ApiCreateEntryDto {
    * @example "EUR"
    */
   currency: ApiCurrency;
-  /**
-   * Creation timestamp
-   * @format date-time
-   */
-  createdAt: string;
   /**
    * Category ID
    * @example 3
@@ -144,6 +225,11 @@ export interface ApiCreateEntryDto {
    * @example null
    */
   transactionId?: number;
+  /**
+   * Creation timestamp. If not provided, defaults to the current date and time.
+   * @format date-time
+   */
+  createdAt?: string;
 }
 
 export interface ApiEntryResponseDto {
@@ -244,6 +330,47 @@ export interface ApiUserResponseDto {
    * @format date-time
    */
   createdAt: string;
+}
+
+export interface ApiUserBalanceResponseDto {
+  /**
+   * The balance of the user in cents
+   * @example 100
+   */
+  balance: number;
+  /**
+   * The number of transactions the user has made
+   * @example 10
+   */
+  transactionCount: number;
+}
+
+export interface ApiTransactionBreakdownItemDto {
+  /**
+   * Date for this data point
+   * @example "21-02-2025"
+   */
+  date: string;
+  /**
+   * Transaction type (INCOME or EXPENSE)
+   * @example "EXPENSE"
+   */
+  type: ApiTransactionType;
+  /**
+   * Transaction amount in cents
+   * @example "2122"
+   */
+  value: string;
+  /**
+   * Category ID (only included if withCategory is true)
+   * @example 12
+   */
+  category?: number;
+}
+
+export interface ApiTransactionBreakdownResponseDto {
+  /** Array of transaction breakdown data */
+  data: ApiTransactionBreakdownItemDto[];
 }
 
 import type {
@@ -482,11 +609,109 @@ export class Api<
         ...params,
       }),
   };
+  categories = {
+    /**
+     * No description
+     *
+     * @tags categories
+     * @name CategoryControllerCreate
+     * @summary Create a new category
+     * @request POST:/categories
+     * @secure
+     */
+    categoryControllerCreate: (
+      data: ApiCreateCategoryDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiCategoryResponseDto, void>({
+        path: `/categories`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags categories
+     * @name CategoryControllerList
+     * @summary List all categories with pagination
+     * @request GET:/categories
+     * @secure
+     */
+    categoryControllerList: (
+      query: {
+        /**
+         * The number of items to return
+         * @min 1
+         * @max 30
+         * @default 10
+         */
+        take: number;
+        /** The ID of the last item in the previous page */
+        cursorId?: number;
+        sortBy?: ApiCategorySortBy;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiCategoryResponseDto[], any>({
+        path: `/categories`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags categories
+     * @name CategoryControllerUpdate
+     * @summary Update a category
+     * @request PATCH:/categories/{id}
+     * @secure
+     */
+    categoryControllerUpdate: (
+      id: number,
+      data: ApiUpdateCategoryDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiCategoryResponseDto, void>({
+        path: `/categories/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags categories
+     * @name CategoryControllerDelete
+     * @summary Delete a category
+     * @request DELETE:/categories/{id}
+     * @secure
+     */
+    categoryControllerDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void>({
+        path: `/categories/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+  };
   entries = {
     /**
      * No description
      *
-     * @tags entries
+     * @tags Entry
      * @name EntryControllerCreate
      * @request POST:/entries/create
      * @secure
@@ -508,7 +733,7 @@ export class Api<
     /**
      * No description
      *
-     * @tags entries
+     * @tags Entry
      * @name EntryControllerList
      * @request GET:/entries/list
      * @secure
@@ -583,6 +808,64 @@ export class Api<
       this.request<ApiUserResponseDto, any>({
         path: `/user/me`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerGetBalance
+     * @request GET:/user/balance
+     * @secure
+     */
+    userControllerGetBalance: (params: RequestParams = {}) =>
+      this.request<ApiUserBalanceResponseDto, any>({
+        path: `/user/balance`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  analytics = {
+    /**
+     * No description
+     *
+     * @tags analytics
+     * @name AnalyticsControllerGetTransactionBreakdown
+     * @request GET:/analytics/transaction-breakdown
+     * @secure
+     */
+    analyticsControllerGetTransactionBreakdown: (
+      query: {
+        /**
+         * Start date for the analytics period (inclusive)
+         * @example "2025-01-01"
+         */
+        startDate: string;
+        /**
+         * End date for the analytics period (inclusive)
+         * @example "2025-02-28"
+         */
+        endDate: string;
+        /** Granularity for grouping the data */
+        granularity: ApiGranularity;
+        /**
+         * Whether to include category information in the response. If not provided, defaults to false.
+         * @default false
+         * @example true
+         */
+        withCategory?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiTransactionBreakdownResponseDto, any>({
+        path: `/analytics/transaction-breakdown`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
