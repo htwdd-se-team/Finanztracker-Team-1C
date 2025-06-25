@@ -1,6 +1,5 @@
 'use client'
 
-import Logo from '@/components/linked-logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -29,6 +28,7 @@ import {
 } from '@/components/ui/form'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Loader2 } from 'lucide-react'
+import FinAppLogo from '@/components/nav/finapp-logo'
 
 const registerModel = z.object({
   email: z.string().email({
@@ -82,8 +82,11 @@ export default function RegisterPage() {
     <div className="flex justify-center items-center px-4 min-h-screen">
       <Card className="shadow-xl w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">
-            Ein <Logo /> Konto erstellen
+          <CardTitle>
+            <div className="flex justify-center items-center">
+              <FinAppLogo className="text-2xl" />
+            </div>
+            <div className="text-2xl text-center">Konto erstellen</div>
           </CardTitle>
         </CardHeader>
         <CardContent>

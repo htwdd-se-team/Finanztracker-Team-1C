@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { Button } from '@/components/ui/button'
 import { CheckCircle2, Home } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
@@ -13,8 +12,6 @@ interface LoggedInCardProps {
 }
 
 export function LoggedInCard({ className }: LoggedInCardProps) {
-  const router = useRouter()
-
   const { data: user, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () =>
@@ -44,8 +41,8 @@ export function LoggedInCard({ className }: LoggedInCardProps) {
             Bereits angemeldet als {user.email}
           </p>
         </div>
-        <Button onClick={() => router.push('/')} size="sm" asChild>
-          <Link href="/">
+        <Button size="sm" asChild>
+          <Link href="/overview">
             <Home className="mr-1 w-4 h-4" />
             Zur App
           </Link>
