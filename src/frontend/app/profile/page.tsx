@@ -24,6 +24,7 @@ import {
 } from '@/components/provider/theme-provider'
 import { ThemeCard } from '@/components/settings/ThemeCard'
 import { useUser } from '@/components/provider/user-provider'
+import { CategoryManagement } from '@/components/settings/category-management'
 
 export default function ProfilePage() {
   const { user } = useUser()
@@ -40,18 +41,18 @@ export default function ProfilePage() {
   const fullName = `${user?.givenName} ${user?.familyName || ''}`.trim()
 
   return (
-    <div className="mx-auto p-6 max-w-4xl container">
+    <div className="mx-auto p-6 max-w-6xl container">
       <div className="mb-6">
         <h1 className="flex items-center gap-2 font-bold text-3xl">
           <User className="w-8 h-8" />
           Profil
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Verwalten Sie Ihre Kontoeinstellungen
+          Verwalten Sie Ihre Kontoeinstellungen und Kategorien
         </p>
       </div>
 
-      <div className="gap-6 grid md:grid-cols-2">
+      <div className="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
         {/* User Information Card */}
         {user ? (
           <Card>
@@ -171,6 +172,11 @@ export default function ProfilePage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Category Management - spans full width on larger screens */}
+        <div className="md:col-span-2 lg:col-span-3">
+          <CategoryManagement />
+        </div>
       </div>
     </div>
   )

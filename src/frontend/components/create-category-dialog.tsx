@@ -31,17 +31,21 @@ import { Loader2 } from 'lucide-react'
 import {
   ApiCategoryResponseDto,
   ApiCreateCategoryDto,
+  ApiUpdateCategoryDto,
 } from '@/__generated__/api'
 import { cn } from '@/lib/utils'
-import { useCategory } from './provider/category-provider'
+import { useCategory } from '@/components/provider/category-provider'
+import { useEffect } from 'react'
 
 interface AddCategoryDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  editId?: number
   onCreated?: (category: ApiCategoryResponseDto) => void
+  onUpdated?: (category: ApiCategoryResponseDto) => void
 }
 
-const createCategorySchema = z.object({
+const categorySchema = z.object({
   name: z.string().min(1, 'Name ist erforderlich').max(50, 'Name ist zu lang'),
   color: z.nativeEnum(CategoryColors, {
     errorMap: () => ({ message: 'Bitte wählen Sie eine Farbe aus' }),
@@ -49,45 +53,22 @@ const createCategorySchema = z.object({
   icon: z.nativeEnum(IconNames, {
     errorMap: () => ({ message: 'Bitte wählen Sie ein Icon aus' }),
   }),
-}) satisfies z.ZodType<ApiCreateCategoryDto>
-
-function CategoryPreview({
-  name,
-  color,
-  icon,
-}: {
-  name: string
-  color: CategoryColors
-  icon: IconNames
-}) {
-  return (
-    <div className="flex flex-col items-center space-y-2 bg-muted/50 p-4 border-2 border-muted-foreground/20 border-dashed rounded-lg">
-      <div
-        className={cn(
-          'flex items-center gap-2 px-3 py-2 rounded-md border text-sm font-medium transition-colors',
-          getCategoryColorClasses(color)
-        )}
-      >
-        <IconRender iconName={icon} className="w-4 h-4" />
-        {name && name.length > 0 ? (
-          <span>{name}</span>
-        ) : (
-          <span className="text-muted-foreground">Kategorie Name</span>
-        )}
-      </div>
-    </div>
-  )
-}
+}) satisfies z.ZodType<ApiCreateCategoryDto & ApiUpdateCategoryDto>
 
 export function AddCategoryDialog({
   open,
   onOpenChange,
+  editId,
   onCreated,
+  onUpdated,
 }: AddCategoryDialogProps) {
-  const { addCategory } = useCategory()
+  const { addCategory, updateCategory, getCategoryFromId } = useCategory()
 
-  const form = useForm<z.infer<typeof createCategorySchema>>({
-    resolver: zodResolver(createCategorySchema),
+  const isEditing = editId !== undefined
+  const categoryToEdit = isEditing ? getCategoryFromId(editId) : undefined
+
+  const form = useForm<z.infer<typeof categorySchema>>({
+    resolver: zodResolver(categorySchema),
     defaultValues: {
       name: '',
       color: CategoryColors.BLUE,
@@ -95,29 +76,70 @@ export function AddCategoryDialog({
     },
   })
 
+  // Reset form when dialog opens or editId changes
+  useEffect(() => {
+    if (open) {
+      if (isEditing && categoryToEdit && categoryToEdit.id !== -1) {
+        form.reset({
+          name: categoryToEdit.name,
+          color: categoryToEdit.color,
+          icon: categoryToEdit.icon,
+        })
+      } else if (!isEditing) {
+        form.reset({
+          name: '',
+          color: CategoryColors.BLUE,
+          icon: IconNames.SHOPPING_CART,
+        })
+      }
+    }
+  }, [open, isEditing, categoryToEdit, form])
+
   // Watch form values for live preview
   const watchedValues = form.watch()
 
   const { mutate, isPending } = useMutation({
-    mutationKey: ['categories', 'create'],
-    mutationFn: async (values: z.infer<typeof createCategorySchema>) =>
-      (await apiClient.categories.categoryControllerCreate(values)).data,
+    mutationKey: ['categories', isEditing ? 'update' : 'create', editId],
+    mutationFn: async (values: z.infer<typeof categorySchema>) => {
+      if (isEditing && editId) {
+        return (
+          await apiClient.categories.categoryControllerUpdate(editId, values)
+        ).data
+      } else {
+        return (await apiClient.categories.categoryControllerCreate(values))
+          .data
+      }
+    },
     onSuccess: data => {
-      addCategory(data)
+      if (isEditing && editId) {
+        updateCategory(editId, data)
+        toast.success('Kategorie erfolgreich aktualisiert')
+        requestAnimationFrame(() => {
+          onUpdated?.(data)
+        })
+      } else {
+        addCategory(data)
+        toast.success('Kategorie erfolgreich erstellt')
+        requestAnimationFrame(() => {
+          onCreated?.(data)
+        })
+      }
 
-      toast.success('Kategorie erfolgreich erstellt')
       form.reset()
       requestAnimationFrame(() => {
-        onCreated?.(data)
         onOpenChange(false)
       })
     },
     onError: () => {
-      toast.error('Fehler beim Erstellen der Kategorie')
+      toast.error(
+        isEditing
+          ? 'Fehler beim Aktualisieren der Kategorie'
+          : 'Fehler beim Erstellen der Kategorie'
+      )
     },
   })
 
-  function onSubmit(values: z.infer<typeof createCategorySchema>) {
+  function onSubmit(values: z.infer<typeof categorySchema>) {
     mutate(values)
   }
 
@@ -143,7 +165,9 @@ export function AddCategoryDialog({
         }}
       >
         <DialogHeader>
-          <DialogTitle>Neue Kategorie erstellen</DialogTitle>
+          <DialogTitle>
+            {isEditing ? 'Kategorie bearbeiten' : 'Neue Kategorie erstellen'}
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -236,12 +260,40 @@ export function AddCategoryDialog({
                 }}
               >
                 {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
-                Erstellen
+                {isEditing ? 'Speichern' : 'Erstellen'}
               </Button>
             </DialogFooter>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
+  )
+}
+
+function CategoryPreview({
+  name,
+  color,
+  icon,
+}: {
+  name: string
+  color: CategoryColors
+  icon: IconNames
+}) {
+  return (
+    <div className="flex flex-col items-center space-y-2 bg-muted/50 p-4 border-2 border-muted-foreground/20 border-dashed rounded-lg">
+      <div
+        className={cn(
+          'flex items-center gap-2 px-3 py-2 rounded-md border text-sm font-medium transition-colors',
+          getCategoryColorClasses(color)
+        )}
+      >
+        <IconRender iconName={icon} className="w-4 h-4" />
+        {name && name.length > 0 ? (
+          <span>{name}</span>
+        ) : (
+          <span className="text-muted-foreground">Kategorie Name</span>
+        )}
+      </div>
+    </div>
   )
 }

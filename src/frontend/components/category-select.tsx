@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 import { getCategoryColorClasses } from '@/lib/color-map'
 import { Plus } from 'lucide-react'
 import { ApiCategoryResponseDto } from '@/__generated__/api'
+import { Button } from './ui/button'
 
 interface CategorySelectProps {
   value: string
@@ -66,8 +67,9 @@ export function CategorySelect({
           )}
         </SelectTrigger>
         <SelectContent>
-          <div
-            className="flex items-center hover:bg-muted px-2 py-1.5 rounded-sm text-muted-foreground text-sm cursor-pointer"
+          <Button
+            variant="secondary"
+            className="px-2 py-1.5 rounded-sm w-full text-sm cursor-pointer"
             onClick={e => {
               e.preventDefault()
               e.stopPropagation()
@@ -82,7 +84,7 @@ export function CategorySelect({
             }}
           >
             <Plus className="mr-2 w-4 h-4" /> Kategorie hinzufügen
-          </div>
+          </Button>
 
           <SelectSeparator />
 
