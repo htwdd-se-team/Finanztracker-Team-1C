@@ -108,7 +108,7 @@ export default function ProfilePage() {
         )}
 
         {/* Settings Card */}
-        <Card>
+        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="w-5 h-5" />
@@ -117,11 +117,7 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div
-                className={cn(
-                  'flex flex-col justify-between items-center gap-3'
-                )}
-              >
+              <div className={'flex flex-col  gap-3'}>
                 <div className="space-y-0.5">
                   <Label>Farbschema</Label>
 
