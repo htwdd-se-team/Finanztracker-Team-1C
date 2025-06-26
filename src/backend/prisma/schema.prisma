@@ -44,7 +44,6 @@ model Category {
 
   Transaction Transaction[]
 
-  // if  a category is not associated with a user, it is a system category
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -76,7 +75,7 @@ model Transaction {
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  Category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  Category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   categoryId Int?
 
   isRecurring Boolean @default(false)

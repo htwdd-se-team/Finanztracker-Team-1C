@@ -230,7 +230,7 @@ export class EntryPaginationParamsDto extends PaginationDto {
 export class EntryPageDto {
   @ApiProperty({
     description: "Entries",
-    type: [EntryResponseDto],
+    type: EntryResponseDto,
     isArray: true,
   })
   @IsArray()

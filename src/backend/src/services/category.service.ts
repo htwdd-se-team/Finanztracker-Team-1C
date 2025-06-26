@@ -59,31 +59,7 @@ export class CategoryService {
     userId: number,
     params: CategoryPaginationParamsDto,
   ): Promise<CategoryResponseDto[]> {
-    let orderBy: Prisma.CategoryOrderByWithRelationInput;
-
-    switch (params.sortBy) {
-      case CategorySortBy.USAGE_DESC:
-        orderBy = {
-          Transaction: {
-            _count: "desc",
-          },
-        };
-        break;
-      case CategorySortBy.CREATED_AT_ASC:
-        orderBy = { createdAt: "asc" };
-        break;
-      case CategorySortBy.CREATED_AT_DESC:
-        orderBy = { createdAt: "desc" };
-        break;
-      case CategorySortBy.ALPHA_ASC:
-        orderBy = { name: "asc" };
-        break;
-      case CategorySortBy.ALPHA_DESC:
-        orderBy = { name: "desc" };
-        break;
-      default:
-        orderBy = { createdAt: "desc" };
-    }
+    const orderBy = CategoryService.buildOrderBy(params.sortBy);
 
     const categories = await this.prisma.category.findMany({
       where: { userId },
@@ -100,6 +76,29 @@ export class CategoryService {
     return categories.map((c) =>
       this.mapToResponseDto(c, c._count?.Transaction ?? 0),
     );
+  }
+
+  private static buildOrderBy(
+    sortBy: CategorySortBy,
+  ): Prisma.CategoryOrderByWithRelationInput {
+    switch (sortBy) {
+      case CategorySortBy.USAGE_DESC:
+        return {
+          Transaction: {
+            _count: "desc",
+          },
+        };
+      case CategorySortBy.CREATED_AT_ASC:
+        return { createdAt: "asc" };
+      case CategorySortBy.CREATED_AT_DESC:
+        return { createdAt: "desc" };
+      case CategorySortBy.ALPHA_ASC:
+        return { name: "asc" };
+      case CategorySortBy.ALPHA_DESC:
+        return { name: "desc" };
+      default:
+        return { createdAt: "desc" };
+    }
   }
 
   private async getUsageCount(categoryId: number): Promise<number> {
