@@ -14,6 +14,8 @@ interface CategoryContextType {
   categories: Category[]
   getCategoryFromId: (id: number) => Category
   addCategory: (newCategory: ApiCategoryResponseDto) => void
+  updateCategory: (id: number, updatedCategory: ApiCategoryResponseDto) => void
+  removeCategory: (id: number) => void
 }
 
 const CategoryProviderContext = createContext<CategoryContextType | undefined>(
@@ -73,9 +75,48 @@ export const CategoryProvider = ({
     )
   }
 
+  const updateCategory = (
+    id: number,
+    updatedCategory: ApiCategoryResponseDto
+  ) => {
+    queryClient.setQueryData(
+      ['categories'],
+      (oldCategories: Category[] | undefined) => {
+        if (!oldCategories) return []
+
+        return oldCategories.map(category => {
+          if (category.id === id) {
+            return {
+              ...updatedCategory,
+              icon: updatedCategory.icon as IconNames,
+              color: updatedCategory.color as CategoryColors,
+            }
+          }
+          return category
+        })
+      }
+    )
+  }
+
+  const removeCategory = (id: number) => {
+    queryClient.setQueryData(
+      ['categories'],
+      (oldCategories: Category[] | undefined) => {
+        if (!oldCategories) return []
+        return oldCategories.filter(category => category.id !== id)
+      }
+    )
+  }
+
   return (
     <CategoryProviderContext.Provider
-      value={{ categories: categories ?? [], getCategoryFromId, addCategory }}
+      value={{
+        categories: categories ?? [],
+        getCategoryFromId,
+        addCategory,
+        updateCategory,
+        removeCategory,
+      }}
     >
       {children}
     </CategoryProviderContext.Provider>
