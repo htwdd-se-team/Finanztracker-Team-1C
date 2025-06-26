@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { Loader2, Wallet } from 'lucide-react'
 
 function BalanceTile() {
-  // Mock data for now since there's no balance endpoint
   const { data, isLoading, error } = useQuery({
     queryKey: ['balance'],
     queryFn: apiClient.user.userControllerGetBalance,
@@ -32,16 +31,15 @@ function BalanceTile() {
   }
 
   return (
-    <Card className="h-24 lg:h-32">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 font-medium text-sm">
-          <Wallet className="w-4 h-4" />
-          Kontostand
+    <Card className="h-20 p-3">
+      <CardHeader className="p-0 flex">
+        <CardTitle className="flex items-center gap-2 font-medium">
+          <Wallet className="w-4 h-4 shrink-0" /> Kontostand
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 -mt-3">
         <div className="font-bold text-2xl">
-          {data?.balance.toLocaleString('de-DE', {
+          {(data?.balance / 100).toLocaleString('de-DE', {
             style: 'currency',
             currency: 'EUR',
           })}
