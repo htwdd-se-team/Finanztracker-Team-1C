@@ -30,8 +30,8 @@ damit ich jederzeit einen schnellen und verständlichen Überblick über meine f
 
 Akzeptanzkriterien
 
-Das Dashboard zeigt Saldo, Budget-Status und Sparziele aufeinen Blick. +
-Es gibt eine visuell ansprechende Darstellung (Diagramme,Balken, Torten). +
+Das Dashboard zeigt Saldo, Budget-Status und Sparziele auf einen Blick. +
+Es gibt eine visuell ansprechende Darstellung (Diagramme, Balken, Torten). +
 Die wichtigsten Kennzahlen sind ohne Scrollen sichtbar. +
 Die Ansicht ist auf Desktop und Mobilgeräten optimiert. +
 
@@ -62,7 +62,7 @@ Akzeptanzkriterien
 Es gibt Filter für Kategorien, Zeiträume und individuelle Suchbegriffe. +
 Analysen können als CSV/Excel exportiert werden. +
 Drill-Down-Ansichten sind möglich (z.B. nach Kategorie, Monat). +
-Die Exportfunktion ist leicht auffindbar und funktioniertzuverlässig.
+Die Exportfunktion ist leicht auffindbar und funktioniert zuverlässig.
 
 === E05 - Sprachen und Währungen einstellen
 
@@ -74,8 +74,8 @@ um sprachliche Hürden durch verständlichere Begriffe zu überwinden und Preise
 
 Akzeptanzkriterien
 
-Die App bietet eine einfache Möglichkeit, die Sprache zuwechseln (z.B. Deutsch, Englisch, Spanisch). +
-Die Währung kann flexibel umgestellt werden (z.B. Euro,mexikanische Pesos). +
+Die App bietet eine einfache Möglichkeit, die Sprache zu wechseln (z.B. Deutsch, Englisch, Spanisch). +
+Die Währung kann flexibel umgestellt werden (z.B. Euro, mexikanische Pesos). +
 Alle Beträge und Labels werden nach Umstellung korrektangezeigt.
 Die Umstellung ist ohne Neustart der App möglich. +
 
@@ -91,9 +91,9 @@ Akzeptanzkriterien:
 
 Verschlüsselung der sensiblen Finanzdaten +
 Es gibt eine gut sichtbare Funktion zum Hochladen einer CSV-Datei. +
-Nach dem Upload werden die Transaktionen korrekt eingelesen undangezeigt. +
-Der Nutzer erhält eine Rückmeldung, ob der Import erfolgreichwar oder Fehler aufgetreten sind. +
-Doppelte Einträge werden erkannt und können übersprungen oderzusammengeführt werden. +
+Nach dem Upload werden die Transaktionen korrekt eingelesen und angezeigt. +
+Der Nutzer erhält eine Rückmeldung, ob der Import erfolgreich war oder Fehler aufgetreten sind. +
+Doppelte Einträge werden erkannt und können übersprungen oder zusammengeführt werden. +
 Kategorien werden – soweit möglich – automatisch zugeordnet,können aber nachträglich angepasst werden. +
 
 === E07 - Motivationslevel aufrechterhalten
@@ -183,7 +183,7 @@ Akzeptanzkriterien
 
 Nummern Inputs erlauben NUR ausschließlich numerische Eingaben,sowie das passende Trennzeichen (Punkt, Komma) +
 Auf mobilen Geräten wird nur die Zahleneingabe angezeigt +
-Nummern Inputs sind immer vorformatiert mit "0,00" und werdenvon rechts nach links aufgefüllt +
+Nummern Inputs sind immer vorformatiert mit "0,00" und werden von rechts nach links aufgefüllt +
 Kategorien werden auf Basis von vorherigen Eingaben sortiert +
 
 Notizen
@@ -270,6 +270,7 @@ User Story
 Als Mario Müller
 möchte ich meine Einträge in Tabellenform angezeigt bekommen,
 damit mir jeden einzelnen Eintrag anschauen kann.
+
 Verknüpfte Tasks
 
 Schätzung des Aufwands
