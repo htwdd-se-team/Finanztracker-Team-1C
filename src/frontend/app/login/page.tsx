@@ -1,6 +1,5 @@
 'use client'
 
-import Logo from '@/components/linked-logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -29,6 +28,7 @@ import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { ApiLoginDto } from '@/__generated__/api'
 import { LoggedInCard } from '@/components/user/logged-in-card'
+import FinAppLogo from '@/components/nav/finapp-logo'
 
 const loginModel = z.object({
   email: z.string().email({
@@ -74,7 +74,10 @@ export default function LoginPage() {
         <Card className="shadow-xl w-full max-w-sm">
           <CardHeader>
             <CardTitle className="text-2xl text-center">
-              Bei <Logo className="text-2xl" /> anmelden
+              <div className="flex justify-center items-center">
+                <FinAppLogo className="text-2xl" />
+              </div>
+              <div className="text-2xl text-center">Anmelden</div>
             </CardTitle>
           </CardHeader>
           <CardContent>

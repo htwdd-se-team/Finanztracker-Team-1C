@@ -2,7 +2,7 @@ import { ApiCategoryResponseDto, ApiCategorySortBy } from '@/__generated__/api'
 import { apiClient } from '@/api/api-client'
 import { CategoryColors } from '@/lib/color-map'
 import { IconNames } from '@/lib/icon-map'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createContext, useContext } from 'react'
 
 export type Category = ApiCategoryResponseDto & {
@@ -13,6 +13,9 @@ export type Category = ApiCategoryResponseDto & {
 interface CategoryContextType {
   categories: Category[]
   getCategoryFromId: (id: number) => Category
+  addCategory: (newCategory: ApiCategoryResponseDto) => void
+  updateCategory: (id: number, updatedCategory: ApiCategoryResponseDto) => void
+  removeCategory: (id: number) => void
 }
 
 const CategoryProviderContext = createContext<CategoryContextType | undefined>(
@@ -24,6 +27,8 @@ export const CategoryProvider = ({
 }: {
   children: React.ReactNode
 }) => {
+  const queryClient = useQueryClient()
+
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
@@ -52,9 +57,66 @@ export const CategoryProvider = ({
     )
   }
 
+  const addCategory = (newCategory: ApiCategoryResponseDto) => {
+    queryClient.setQueryData(
+      ['categories'],
+      (oldCategories: Category[] | undefined) => {
+        const transformedCategory: Category = {
+          ...newCategory,
+          icon: newCategory.icon as IconNames,
+          color: newCategory.color as CategoryColors,
+        }
+        // If no categories exist, return the new category
+        if (!oldCategories) return [transformedCategory]
+
+        // Otherwise, add the new category to the beginning of the array
+        return [transformedCategory, ...oldCategories]
+      }
+    )
+  }
+
+  const updateCategory = (
+    id: number,
+    updatedCategory: ApiCategoryResponseDto
+  ) => {
+    queryClient.setQueryData(
+      ['categories'],
+      (oldCategories: Category[] | undefined) => {
+        if (!oldCategories) return []
+
+        return oldCategories.map(category => {
+          if (category.id === id) {
+            return {
+              ...updatedCategory,
+              icon: updatedCategory.icon as IconNames,
+              color: updatedCategory.color as CategoryColors,
+            }
+          }
+          return category
+        })
+      }
+    )
+  }
+
+  const removeCategory = (id: number) => {
+    queryClient.setQueryData(
+      ['categories'],
+      (oldCategories: Category[] | undefined) => {
+        if (!oldCategories) return []
+        return oldCategories.filter(category => category.id !== id)
+      }
+    )
+  }
+
   return (
     <CategoryProviderContext.Provider
-      value={{ categories: categories ?? [], getCategoryFromId }}
+      value={{
+        categories: categories ?? [],
+        getCategoryFromId,
+        addCategory,
+        updateCategory,
+        removeCategory,
+      }}
     >
       {children}
     </CategoryProviderContext.Provider>

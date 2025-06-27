@@ -15,6 +15,8 @@ import { IconRender } from '@/lib/icon-map'
 import { cn } from '@/lib/utils'
 import { getCategoryColorClasses } from '@/lib/color-map'
 import { Plus } from 'lucide-react'
+import { ApiCategoryResponseDto } from '@/__generated__/api'
+import { Button } from './ui/button'
 
 interface CategorySelectProps {
   value: string
@@ -32,6 +34,15 @@ export function CategorySelect({
   getCategoryFromId,
 }: CategorySelectProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
+
+  const handleDialogOpenChange = (open: boolean) => {
+    setDialogOpen(open)
+  }
+
+  const handleCategoryCreated = (category: ApiCategoryResponseDto) => {
+    onChange(category.id.toString())
+    setDialogOpen(false)
+  }
 
   return (
     <>
@@ -56,16 +67,24 @@ export function CategorySelect({
           )}
         </SelectTrigger>
         <SelectContent>
-          <div
-            className="flex items-center hover:bg-muted px-2 py-1.5 rounded-sm text-muted-foreground text-sm cursor-pointer"
+          <Button
+            variant="secondary"
+            className="px-2 py-1.5 rounded-sm w-full text-sm cursor-pointer"
             onClick={e => {
               e.preventDefault()
               e.stopPropagation()
               setDialogOpen(true)
             }}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                e.stopPropagation()
+                setDialogOpen(true)
+              }
+            }}
           >
             <Plus className="mr-2 w-4 h-4" /> Kategorie hinzufügen
-          </div>
+          </Button>
 
           <SelectSeparator />
 
@@ -89,7 +108,11 @@ export function CategorySelect({
         </SelectContent>
       </Select>
 
-      <AddCategoryDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <AddCategoryDialog
+        open={dialogOpen}
+        onOpenChange={handleDialogOpenChange}
+        onCreated={handleCategoryCreated}
+      />
     </>
   )
 }

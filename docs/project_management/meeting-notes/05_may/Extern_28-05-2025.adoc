@@ -1,0 +1,25 @@
+*Meeting mit Externer Gruppe*
+
+*Ablauf:*
+-	Produktbeschreibung/Produktvision +
+o	Corefeatures +
+-	Kurze Aussage über Aufbau der Anwendung +
+-	Personas und Nutzungsbedürfnisse (grob beschreiben) +
+-	Epics/User Stories (grob beschreiben) +
+-	Wireframes im Miro-Board zeigen +
+
+-	Fragen stellen +
+o	Was ist euch aufgefallen? +
+o	Was gefällt euch gut? +
+o	Was würdet ihr verbessern? +
+
+o	Entspricht der dargestellte Ablauf euren Erwartungen an eine Finanzverwaltungs-App? +
+o	Gibt es zentrale Aspekte die aktuell fehlen? +
+o	Welche Funktionen wirken hilfreich – welche überladen oder unnötig? +
+
+*-	Verbesserungsvorschläge die wir mitnehmen* +
+o	Fragen von Alex Chi -> Unterschiede zwischen Desktop and Mobile bei der Dashboard Übersicht (noch Wireframe also nicht richtig repräsentativ), Bankverbindung hinterlegen (geht leider nicht, weil keine Lizenz) +
+o	Fragen von Leo -> Lenkungsfunktion? (Sparziele, Warnung bei Unterschreitung einer Grenze) +
+o	Vorschläge: Zentralen Graphen der Kontostand anzeigt; genauere Analysen in separaten Tab, um Überladung zu verhindern; Export als CSV; Darkmode (sollte ja passen mit Lib) +
+o	AI-Mockup als gut erachtet, weil „Traderepublic Vibe“  Vielleicht weiterverfolgen? +
+o	Verbesserungsideen: Ausgaben vom letzten Tag zum review/readden vorschlagen, Motivation seine Ausgaben dort überhaupt einzutragen (Streak, Badges also Gamification) +

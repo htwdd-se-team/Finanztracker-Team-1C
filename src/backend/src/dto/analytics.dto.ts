@@ -19,7 +19,7 @@ export enum Granularity {
   YEAR = "YEAR",
 }
 
-export class TransactionBreakdownParamsDto {
+export class TransactionBalanceHistoryParamsDto {
   @ApiProperty({
     description: "Start date for the analytics period (inclusive)",
     example: "2025-01-01",
@@ -46,7 +46,9 @@ export class TransactionBreakdownParamsDto {
   })
   @IsEnum(Granularity)
   granularity: Granularity;
+}
 
+export class TransactionBreakdownParamsDto extends TransactionBalanceHistoryParamsDto {
   @ApiPropertyOptional({
     description:
       "Whether to include category information in the response. If not provided, defaults to false.",
@@ -59,14 +61,24 @@ export class TransactionBreakdownParamsDto {
   withCategory?: boolean;
 }
 
-export class TransactionBreakdownItemDto {
+export class TransactionItemDto {
   @ApiProperty({
     description: "Date for this data point",
     example: "21-02-2025",
   })
   @IsString()
-  date: string;
+  @Type(() => Date)
+  date: Date;
 
+  @ApiProperty({
+    description: "Transaction amount in cents",
+    example: "2122",
+  })
+  @IsString()
+  value: string;
+}
+
+export class TransactionBreakdownItemDto extends TransactionItemDto {
   @ApiProperty({
     description: "Transaction type (INCOME or EXPENSE)",
     enum: TransactionType,
@@ -75,13 +87,6 @@ export class TransactionBreakdownItemDto {
   })
   @IsEnum(TransactionType)
   type: TransactionType;
-
-  @ApiProperty({
-    description: "Transaction amount in cents",
-    example: "2122",
-  })
-  @IsString()
-  value: string;
 
   @ApiPropertyOptional({
     description: "Category ID (only included if withCategory is true)",

@@ -4,8 +4,10 @@ import { User } from "@prisma/client";
 
 import { UserDecorator } from "../decorators";
 import {
+  TransactionBalanceHistoryParamsDto,
   TransactionBreakdownParamsDto,
   TransactionBreakdownResponseDto,
+  TransactionItemDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
 import { AnalyticsService } from "../services";
@@ -27,5 +29,18 @@ export class AnalyticsController {
     @Query() params: TransactionBreakdownParamsDto,
   ): Promise<TransactionBreakdownResponseDto> {
     return this.analyticsService.getTransactionBreakdown(user, params);
+  }
+
+  @Get("transaction-balance-history")
+  @ApiOkResponse({
+    type: TransactionItemDto,
+    description: "Transaction balance history fetched successfully",
+    isArray: true,
+  })
+  async getTransactionBalanceHistory(
+    @UserDecorator() user: User,
+    @Query() params: TransactionBalanceHistoryParamsDto,
+  ): Promise<TransactionItemDto[]> {
+    return this.analyticsService.getTransactionBalanceHistory(user, params);
   }
 }

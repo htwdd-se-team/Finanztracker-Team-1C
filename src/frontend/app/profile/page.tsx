@@ -1,7 +1,5 @@
 'use client'
 
-import { apiClient } from '@/api/api-client'
-import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -25,14 +23,11 @@ import {
   useColorTheme,
 } from '@/components/provider/theme-provider'
 import { ThemeCard } from '@/components/settings/ThemeCard'
+import { useUser } from '@/components/provider/user-provider'
+import { CategoryManagement } from '@/components/settings/category-management'
 
 export default function ProfilePage() {
-  const { data: user } = useQuery({
-    queryKey: ['user'],
-    queryFn: apiClient.user.userControllerGetCurrentUser,
-    select: res => res.data,
-    placeholderData: prev => prev,
-  })
+  const { user } = useUser()
 
   const { themeVariant, setThemeVariant, colorTheme, setColorTheme } =
     useColorTheme()
@@ -46,18 +41,18 @@ export default function ProfilePage() {
   const fullName = `${user?.givenName} ${user?.familyName || ''}`.trim()
 
   return (
-    <div className="mx-auto p-6 max-w-4xl container">
+    <div className="mx-auto p-6 max-w-6xl container">
       <div className="mb-6">
         <h1 className="flex items-center gap-2 font-bold text-3xl">
           <User className="w-8 h-8" />
           Profil
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Verwalten Sie Ihre Kontoeinstellungen
+          Verwalten Sie Ihre Kontoeinstellungen und Kategorien
         </p>
       </div>
 
-      <div className="gap-6 grid md:grid-cols-2">
+      <div className="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
         {/* User Information Card */}
         {user ? (
           <Card>
@@ -113,7 +108,7 @@ export default function ProfilePage() {
         )}
 
         {/* Settings Card */}
-        <Card>
+        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="w-5 h-5" />
@@ -122,11 +117,7 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div
-                className={cn(
-                  'flex flex-col justify-between items-center gap-3'
-                )}
-              >
+              <div className={'flex flex-col  gap-3'}>
                 <div className="space-y-0.5">
                   <Label>Farbschema</Label>
 
@@ -177,6 +168,11 @@ export default function ProfilePage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Category Management - spans full width on larger screens */}
+        <div className="md:col-span-2 lg:col-span-3">
+          <CategoryManagement />
+        </div>
       </div>
     </div>
   )

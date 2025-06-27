@@ -19,19 +19,11 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useQuery } from '@tanstack/react-query'
-import { apiClearToken, apiClient } from '@/api/api-client'
-import { useRouter } from 'next/navigation'
+
+import { useUser } from '../provider/user-provider'
 
 export function NavUser() {
-  const router = useRouter()
-
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['user'],
-    queryFn: apiClient.user.userControllerGetCurrentUser,
-    select: res => res.data,
-    placeholderData: prev => prev,
-  })
+  const { user, isLoading, logout } = useUser()
 
   const { isMobile } = useSidebar()
 
@@ -123,8 +115,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                apiClearToken()
-                router.push('/login')
+                logout()
               }}
             >
               <LogOut />

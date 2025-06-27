@@ -27,6 +27,10 @@
   .animation-delay-4000 {
     animation-delay: 4s;
   }
+
+  .animate-spinner-leaf-fade {
+    animation: spinner-leaf-fade 800ms linear infinite;
+  }
 }
 
 @keyframes blob {
@@ -41,6 +45,15 @@
   }
   100% {
     transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes spinner-leaf-fade {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
   }
 }
 
