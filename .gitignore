@@ -58,3 +58,8 @@ temp/
 
 # Local development
 .cache/
+
+generated/
+
+workbox-*.js
+sw.js

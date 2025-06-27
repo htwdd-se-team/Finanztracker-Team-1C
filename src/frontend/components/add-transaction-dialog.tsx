@@ -10,61 +10,131 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { CategorySelect } from '@/components/category-select'
-import { Plus, TrendingDown, TrendingUp } from 'lucide-react'
-import { SetStateAction, useState } from 'react'
-import { createTransactionEntry } from '@/lib/api/entries'
+import { Plus, TrendingDown, TrendingUp, Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import { FormattedCurrencyInput } from './ui/formatted-currency-input'
+import { useCategory } from '@/components/provider/category-provider'
+import {
+  ApiCreateEntryDto,
+  ApiCurrency,
+  ApiTransactionType,
+} from '@/__generated__/api'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { apiClient } from '@/api/api-client'
+import { toast } from 'sonner'
 
-type TransactionType = 'ausgabe' | 'einnahme'
+const createEntrySchema = z.object({
+  type: z.nativeEnum(ApiTransactionType),
+  amount: z.number().min(0.01, 'Betrag muss größer als 0 sein'),
+  description: z.string().optional(),
+  categoryId: z.number().optional(),
+  currency: z.nativeEnum(ApiCurrency),
+  createdAt: z.string().optional(),
+}) satisfies z.ZodType<ApiCreateEntryDto>
+
+// Transaction Type Selector Component
+function TransactionTypeSelector({
+  value,
+  onValueChange,
+}: {
+  value: ApiTransactionType
+  onValueChange: (type: ApiTransactionType) => void
+}) {
+  return (
+    <div className="flex gap-2">
+      <Button
+        type="button"
+        variant={
+          value === ApiTransactionType.EXPENSE ? 'destructive' : 'outline'
+        }
+        className="flex-1"
+        onClick={() => onValueChange(ApiTransactionType.EXPENSE)}
+      >
+        <TrendingDown className="mr-2 w-4 h-4" />
+        Ausgabe
+      </Button>
+      <Button
+        type="button"
+        variant={value === ApiTransactionType.INCOME ? 'default' : 'outline'}
+        className="flex-1"
+        onClick={() => onValueChange(ApiTransactionType.INCOME)}
+      >
+        <TrendingUp className="mr-2 w-4 h-4" />
+        Einnahme
+      </Button>
+    </div>
+  )
+}
 
 export function AddTransactionDialog({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const { categories, getCategoryFromId } = useCategory()
   const [open, setOpen] = useState(false)
-  const [type, setType] = useState<TransactionType>('ausgabe')
-  const [titel, setTitel] = useState('')
-  const [betrag, setBetrag] = useState('')
-  const [kategorie, setKategorie] = useState('')
-  const [datum, setDatum] = useState('')
+  const queryClient = useQueryClient()
 
-  const handleSubmit = async () => {
-    if (!betrag.trim() || isNaN(Number(betrag))) return
+  const form = useForm<z.infer<typeof createEntrySchema>>({
+    resolver: zodResolver(createEntrySchema),
+    defaultValues: {
+      type: ApiTransactionType.EXPENSE,
+      amount: 0,
+      description: '',
+      categoryId: undefined,
+      currency: ApiCurrency.EUR,
+      createdAt: new Date().toISOString().split('T')[0], // Today's date
+    },
+  })
 
-    try {
-      await createTransactionEntry({
-        type,
-        amount: Math.round(parseFloat(betrag) * 100), // store in cents
-        description: titel || undefined,
-        categoryId: kategorie ? parseInt(kategorie) : undefined,
-        startDate: datum || undefined,
-        currency: 'EUR', // or make dynamic if needed
-      })
-
-      // Reset & close
-      setTitel('')
-      setBetrag('')
-      setKategorie('')
-      setDatum('')
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['entries', 'create'],
+    mutationFn: async (values: z.infer<typeof createEntrySchema>) => {
+      // Convert amount to cents for API
+      const apiValues = {
+        ...values,
+        amount: Math.round(values.amount * 100),
+      }
+      return (await apiClient.entries.entryControllerCreate(apiValues)).data
+    },
+    onSuccess: () => {
+      toast.success('Transaktion erfolgreich erstellt')
+      queryClient.invalidateQueries({ queryKey: ['entries'] })
+      form.reset()
       setOpen(false)
-    } catch (error) {
-      console.error(error)
-      // Optionally show toast notification here
-    }
+    },
+    onError: () => {
+      toast.error('Fehler beim Erstellen der Transaktion')
+    },
+  })
 
-    setOpen(false)
-    setTitel('')
-    setBetrag('')
-    setKategorie('')
-    setDatum('')
+  function onSubmit(values: z.infer<typeof createEntrySchema>) {
+    mutate(values)
+  }
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen && !isPending) {
+      form.reset()
+    }
+    setOpen(newOpen)
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Plus className="w-5 h-5 text-primary" />
@@ -72,114 +142,149 @@ export function AddTransactionDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="gap-4 grid">
-          {/* Typ */}
-          <div className="flex gap-1">
-            <Button
-              type="button"
-              variant={type === 'ausgabe' ? 'destructive' : 'outline'}
-              className="flex-1"
-              onClick={() => setType('ausgabe')}
-            >
-              <TrendingDown className="w-4 h-4" />
-              Ausgabe
-            </Button>
-            <Button
-              type="button"
-              variant={type === 'einnahme' ? 'default' : 'outline'}
-              className="flex-1"
-              onClick={() => setType('einnahme')}
-            >
-              <TrendingUp className="w-4 h-4" />
-              Einnahme
-            </Button>
-          </div>
-
-          {/* Titel */}
-          <div className="gap-1 grid">
-            <Label htmlFor="Titel">
-              Titel<span className="text-muted-foreground">(optional)</span>
-            </Label>
-
-            <Input
-              id="titel"
-              placeholder="z. B. REWE Einkauf, Gehalt..."
-              value={titel}
-              onChange={e => setTitel(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Transaction Type */}
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Typ</FormLabel>
+                  <FormControl>
+                    <TransactionTypeSelector
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          {/* Betrag */}
-          <div className="gap-1 grid">
-            <Label htmlFor="betrag">
-              Betrag<span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <span className="top-1/2 left-3 absolute text-muted-foreground text-sm -translate-y-1/2">
-                €
-              </span>
-              <Input
-                id="betrag"
-                type="number"
-                min="0"
-                step="0.01"
-                className="pl-7"
-                value={betrag}
-                onChange={e => setBetrag(e.target.value)}
-                required
+            {/* Description */}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Beschreibung{' '}
+                    <span className="text-muted-foreground">(optional)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="z. B. REWE Einkauf, Gehalt..."
+                      disabled={isPending}
+                      autoComplete="off"
+                      spellCheck={false}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Amount */}
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Betrag <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <span className="top-1/2 left-3 absolute text-muted-foreground text-sm -translate-y-1/2 transform">
+                        €
+                      </span>
+                      <FormattedCurrencyInput
+                        placeholder="0,00"
+                        className="pl-7"
+                        disabled={isPending}
+                        autoComplete="off"
+                        spellCheck={false}
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        value={field.value?.toString() || ''}
+                        onChange={e =>
+                          field.onChange(parseFloat(e.target.value) || 0)
+                        }
+                        name="amount"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Category and Date Row */}
+            <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
+              {/* Category */}
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Kategorie{' '}
+                      <span className="text-muted-foreground">(optional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <CategorySelect
+                        value={field.value?.toString() || ''}
+                        onChange={val =>
+                          field.onChange(val ? parseInt(val) : undefined)
+                        }
+                        placeholder="Kategorie auswählen"
+                        categories={categories}
+                        getCategoryFromId={getCategoryFromId}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Date */}
+              <FormField
+                control={form.control}
+                name="createdAt"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Datum{' '}
+                      <span className="text-muted-foreground">(optional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="date" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-          </div>
 
-          {/* Kategorie */}
-          <div className="gap-1 grid">
-            <Label htmlFor="Kategorie">
-              Kategorie{' '}
-              <span className="text-muted-foreground">(optional)</span>
-            </Label>
-
-            <CategorySelect
-              value={kategorie}
-              onChange={(val: SetStateAction<string>) => setKategorie(val)}
-              placeholder="Kategorie auswählen"
-              options={[
-                { value: 'lebensmittel', label: 'Lebensmittel' },
-                { value: 'miete', label: 'Miete' },
-                { value: 'freizeit', label: 'Freizeit' },
-              ]}
-            />
-          </div>
-
-          {/* Datum */}
-          <div className="gap-1 grid">
-            <Label htmlFor="Datum">
-              Titel<span className="text-muted-foreground">(optional)</span>
-            </Label>
-
-            <Input
-              id="datum"
-              type="date"
-              value={datum}
-              onChange={e => setDatum(e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <DialogFooter className="mt-4">
-          <Button
-            onClick={handleSubmit}
-            className="w-full"
-            disabled={!betrag.trim() || isNaN(Number(betrag))}
-          >
-            <Plus className="mr-2 w-4 h-4" />
-            Hinzufügen
-          </Button>
-        </DialogFooter>
-
-        <p className="mt-2 text-muted-foreground text-xs text-center">
-          Felder mit <span className="text-red-500">*</span> sind Pflichtfelder
-        </p>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOpenChange(false)}
+                disabled={isPending}
+              >
+                Abbrechen
+              </Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
+                <Plus className="mr-2 w-4 h-4" />
+                Hinzufügen
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

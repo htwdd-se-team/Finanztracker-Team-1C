@@ -1,7 +1,5 @@
 'use client'
 
-import Background from '@/components/background'
-import Logo from '@/components/linked-logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -30,6 +28,7 @@ import {
 } from '@/components/ui/form'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Loader2 } from 'lucide-react'
+import FinAppLogo from '@/components/nav/finapp-logo'
 
 const registerModel = z.object({
   email: z.string().email({
@@ -66,7 +65,7 @@ export default function RegisterPage() {
     onSuccess: data => {
       toast.success('Konto erfolgreich erstellt')
       apiSetToken(data.token)
-      router.push('/login')
+      router.push('/overview')
     },
   })
 
@@ -80,138 +79,130 @@ export default function RegisterPage() {
   }
 
   return (
-    <Background>
-      <div className="flex justify-center items-center px-4 min-h-screen">
-        <Card className="shadow-xl w-full max-w-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">
-              Ein <Logo /> Konto erstellen
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="gap-4 grid"
-              >
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
+    <div className="flex justify-center items-center px-4 min-h-screen">
+      <Card className="shadow-xl w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>
+            <div className="flex justify-center items-center">
+              <FinAppLogo className="text-2xl" />
+            </div>
+            <div className="text-2xl text-center">Konto erstellen</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="gap-4 grid">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="you@example.com"
+                        disabled={isPending}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="givenName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Vorname</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Max"
+                        disabled={isPending}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="familyName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Nachname
+                      <span className="text-muted-foreground text-xs">
+                        Optional
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Mustermann"
+                        disabled={isPending}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Passwort</FormLabel>
+                    <FormControl>
+                      <Input type="password" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="acceptTerms"
+                render={({ field }) => (
+                  <FormItem className="gap-2 grid">
+                    <div className="flex flex-row items-center gap-2">
                       <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="you@example.com"
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
                           disabled={isPending}
-                          {...field}
                         />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="givenName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vorname</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Max"
-                          disabled={isPending}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="familyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Nachname
-                        <span className="text-muted-foreground text-xs">
-                          Optional
-                        </span>
+                      <FormLabel className="font-normal text-sm cursor-pointer">
+                        Ich stimme den{' '}
+                        <Button variant="link" className="p-0 h-auto" asChild>
+                          <Link href="/legal/terms">Nutzungsbedingungen</Link>
+                        </Button>{' '}
+                        zu.
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Mustermann"
-                          disabled={isPending}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Passwort</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          disabled={isPending}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="acceptTerms"
-                  render={({ field }) => (
-                    <FormItem className="gap-2 grid">
-                      <div className="flex flex-row items-center gap-2">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            disabled={isPending}
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal text-sm cursor-pointer">
-                          Ich stimme den{' '}
-                          <Button variant="link" className="p-0 h-auto" asChild>
-                            <Link href="/legal/terms">Nutzungsbedingungen</Link>
-                          </Button>{' '}
-                          zu.
-                        </FormLabel>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="w-full" disabled={isPending}>
-                  {isPending && (
-                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                  )}
-                  Registrieren
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-          <CardFooter className="flex justify-between text-muted-foreground text-sm">
-            <span>Schon registriert?</span>
-            <Link href="/login" className="text-primary hover:underline">
-              Einloggen
-            </Link>
-          </CardFooter>
-        </Card>
-      </div>
-    </Background>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
+                Registrieren
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-between text-muted-foreground text-sm">
+          <span>Schon registriert?</span>
+          <Link href="/login" className="text-primary hover:underline">
+            Einloggen
+          </Link>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }

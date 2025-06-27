@@ -17,7 +17,7 @@ import {
 import { JwtAuthGuard } from "../guards";
 import { EntryService } from "../services";
 
-@ApiTags("entries")
+@ApiTags("Entry")
 @Controller("entries")
 @ApiSecurity("user-jwt")
 @UseGuards(JwtAuthGuard)
