@@ -7,6 +7,7 @@ import {
   TransactionBreakdownParamsDto,
   TransactionBreakdownResponseDto,
   TransactionItemDto,
+  TransactionBalanceHistoryParamsDto,
 } from "../dto";
 
 import { KyselyService } from "./kysely.service";
@@ -18,6 +19,8 @@ export class AnalyticsService {
     private readonly prisma: PrismaService,
     private readonly kysely: KyselyService,
   ) {}
+
+  private TIMEZONE = "Europe/Berlin";
 
   async getTransactionBreakdown(
     user: User,
@@ -40,7 +43,10 @@ export class AnalyticsService {
             .where("createdAt", "<=", endDate)
             .select((eb) => [
               eb
-                .fn("date_trunc", [eb.val(dateTruncPeriod), "createdAt"])
+                .fn("date_trunc", [
+                  eb.val(dateTruncPeriod),
+                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+                ])
                 .as("date_period"),
               "type",
               "categoryId",
@@ -78,7 +84,10 @@ export class AnalyticsService {
             .where("createdAt", "<=", endDate)
             .select((eb) => [
               eb
-                .fn("date_trunc", [eb.val(dateTruncPeriod), "createdAt"])
+                .fn("date_trunc", [
+                  eb.val(dateTruncPeriod),
+                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+                ])
                 .as("date_period"),
               "type",
               "amount",
@@ -105,34 +114,48 @@ export class AnalyticsService {
     }
   }
 
-  /**
-   * Get the transaction balance history for a user
-   * @param user - The user to get the transaction balance history for
-   * @param {TransactionBalanceHistoryParamsDto} params - The parameters for the transaction balance history
-   * @returns {Promise<TransactionItemDto[]>} The transaction balance history
-   * for example [
-   *  {
-   *    date: Date, <--- date of the balance
-   *    value: string, <--- balance in cents on date X
-   *  }
-   * ]
-   */
   async getTransactionBalanceHistory(
     user: User,
-    { startDate, endDate, granularity }: TransactionBreakdownParamsDto,
+    { startDate, endDate, granularity }: TransactionBalanceHistoryParamsDto,
   ): Promise<TransactionItemDto[]> {
     const dateTruncPeriod = this.getDateTruncPeriod(granularity);
 
     const results = await this.kysely
+      // Get the initial balance similar to getBalance in user.service.ts
+      .with("initial_balance", (db) =>
+        db
+          .selectFrom("Transaction")
+          .where("userId", "=", user.id)
+          .where("createdAt", "<", startDate)
+          .where("createdAt", "<=", sql<Date>`NOW()`)
+          .select((eb) => [
+            eb.fn
+              .sum(
+                eb
+                  .case()
+                  .when("type", "=", "INCOME")
+                  .then(eb.ref("amount"))
+                  .when("type", "=", "EXPENSE")
+                  .then(eb.neg(eb.ref("amount")))
+                  .else(0)
+                  .end(),
+              )
+              .as("initial_balance"),
+          ]),
+      )
       .with("transaction_impacts", (db) =>
         db
           .selectFrom("Transaction")
           .where("userId", "=", user.id)
           .where("createdAt", ">=", startDate)
           .where("createdAt", "<=", endDate)
+          .where("createdAt", "<=", sql<Date>`NOW()`)
           .select((eb) => [
             eb
-              .fn("date_trunc", [eb.val(dateTruncPeriod), "createdAt"])
+              .fn("date_trunc", [
+                eb.val(dateTruncPeriod),
+                sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+              ])
               .as("period_date"),
             eb
               .case()
@@ -156,9 +179,10 @@ export class AnalyticsService {
           .orderBy("period_date"),
       )
       .selectFrom("period_totals")
+      .crossJoin("initial_balance")
       .select([
         "period_date as date",
-        sql<string>`sum(net_amount) over (order by period_date)`.as(
+        sql<string>`COALESCE(initial_balance, 0) + sum(net_amount) over (order by period_date)`.as(
           "cumulative_balance",
         ),
       ])
