@@ -21,95 +21,21 @@ type HistoryTileProps = {
   // ggf. weitere Props
 }
 
-const chartData = [
-  { date: '2025-04-01', kontostand: 429 },
-  { date: '2025-04-02', kontostand: 418 },
-  { date: '2025-04-03', kontostand: 408 },
-  { date: '2025-04-04', kontostand: 431 },
-  { date: '2025-04-05', kontostand: 400 },
-  { date: '2025-04-06', kontostand: 368 },
-  { date: '2025-04-07', kontostand: 361 },
-  { date: '2025-04-08', kontostand: 373 },
-  { date: '2025-04-09', kontostand: 347 },
-  { date: '2025-04-10', kontostand: 329 },
-  { date: '2025-04-11', kontostand: 333 },
-  { date: '2025-04-12', kontostand: 330 },
-  { date: '2025-04-13', kontostand: 318 },
-  { date: '2025-04-14', kontostand: 346 },
-  { date: '2025-04-15', kontostand: 347 },
-  { date: '2025-04-16', kontostand: 349 },
-  { date: '2025-04-17', kontostand: 340 },
-  { date: '2025-04-18', kontostand: 327 },
-  { date: '2025-04-19', kontostand: 349 },
-  { date: '2025-04-20', kontostand: 352 },
-  { date: '2025-04-21', kontostand: 361 },
-  { date: '2025-04-22', kontostand: 351 },
-  { date: '2025-04-23', kontostand: 385 },
-  { date: '2025-04-24', kontostand: 368 },
-  { date: '2025-04-25', kontostand: 332 },
-  { date: '2025-04-26', kontostand: 325 },
-  { date: '2025-04-27', kontostand: 349 },
-  { date: '2025-04-28', kontostand: 347 },
-  { date: '2025-04-29', kontostand: 338 },
-  { date: '2025-04-30', kontostand: 333 },
-  { date: '2025-05-01', kontostand: 314 },
-  { date: '2025-05-02', kontostand: 360 },
-  { date: '2025-05-03', kontostand: 386 },
-  { date: '2025-05-04', kontostand: 369 },
-  { date: '2025-05-05', kontostand: 401 },
-  { date: '2025-05-06', kontostand: 429 },
-  { date: '2025-05-07', kontostand: 444 },
-  { date: '2025-05-08', kontostand: 430 },
-  { date: '2025-05-09', kontostand: 450 },
-  { date: '2025-05-10', kontostand: 440 },
-  { date: '2025-05-11', kontostand: 408 },
-  { date: '2025-05-12', kontostand: 426 },
-  { date: '2025-05-13', kontostand: 445 },
-  { date: '2025-05-14', kontostand: 447 },
-  { date: '2025-05-15', kontostand: 473 },
-  { date: '2025-05-16', kontostand: 450 },
-  { date: '2025-05-17', kontostand: 458 },
-  { date: '2025-05-18', kontostand: 419 },
-  { date: '2025-05-19', kontostand: 457 },
-  { date: '2025-05-20', kontostand: 441 },
-  { date: '2025-05-21', kontostand: 485 },
-  { date: '2025-05-22', kontostand: 455 },
-  { date: '2025-05-23', kontostand: 492 },
-  { date: '2025-05-24', kontostand: 471 },
-  { date: '2025-05-25', kontostand: 480 },
-  { date: '2025-05-26', kontostand: 451 },
-  { date: '2025-05-27', kontostand: 453 },
-  { date: '2025-05-28', kontostand: 409 },
-  { date: '2025-05-29', kontostand: 406 },
-  { date: '2025-05-30', kontostand: 409 },
-  { date: '2025-05-31', kontostand: 401 },
-  { date: '2025-06-01', kontostand: 375 },
-  { date: '2025-06-02', kontostand: 345 },
-  { date: '2025-06-03', kontostand: 335 },
-  { date: '2025-06-04', kontostand: 366 },
-  { date: '2025-06-05', kontostand: 325 },
-  { date: '2025-06-06', kontostand: 283 },
-  { date: '2025-06-07', kontostand: 314 },
-  { date: '2025-06-08', kontostand: 296 },
-  { date: '2025-06-09', kontostand: 263 },
-  { date: '2025-06-10', kontostand: 235 },
-  { date: '2025-06-11', kontostand: 231 },
-  { date: '2025-06-12', kontostand: 210 },
-  { date: '2025-06-13', kontostand: 224 },
-  { date: '2025-06-14', kontostand: 236 },
-  { date: '2025-06-15', kontostand: 192 },
-  { date: '2025-06-16', kontostand: 155 },
-  { date: '2025-06-17', kontostand: 182 },
-  { date: '2025-06-18', kontostand: 210 },
-  { date: '2025-06-19', kontostand: 240 },
-  { date: '2025-06-20', kontostand: 220 },
-  { date: '2025-06-21', kontostand: 234 },
-  { date: '2025-06-22', kontostand: 232 },
-  { date: '2025-06-23', kontostand: 260 },
-  { date: '2025-06-24', kontostand: 270 },
-  { date: '2025-06-25', kontostand: 240 },
-  { date: '2025-06-26', kontostand: 214 },
-]
+
+const startDate = new Date('2024-06-26')
+  const chartData = []
+  let kontostand = 1200 // Startwert
+  for (let i = 0; i < 365; i++) {
+    const date = new Date(startDate)
+    date.setDate(startDate.getDate() + i)
+    chartData.push({
+      date: date.toISOString().slice(0, 10),
+      kontostand: Math.round(kontostand),
+    })
+    // Schwankung zwischen -10 und +10
+    kontostand += Math.floor(Math.random() * 21) - 10
+  }
+
 
 const chartConfig = {
   kontostand: {
@@ -120,19 +46,24 @@ const chartConfig = {
 
 export default function HistoryTile({ timeRange }: HistoryTileProps) {
 
-const referenceDate = new Date() // <-- aktuelles Datum
-let daysToSubtract = 90
-if (timeRange === "30d") daysToSubtract = 30
-if (timeRange === "7d") daysToSubtract = 7
-
-const startDate = new Date(referenceDate)
-startDate.setDate(startDate.getDate() - daysToSubtract)
-
-// Filter, aber prüfe, dass die Einträge im Datenarray auch <= heute sind!
-const filteredData = chartData.filter(item => {
-  const date = new Date(item.date)
-  return date >= startDate && date <= referenceDate
-})
+  const referenceDate = new Date(); // aktuelles Datum
+  let filteredData;
+  if (timeRange === "all") {
+    filteredData = chartData.filter(item => {
+      const date = new Date(item.date);
+      return date <= referenceDate; // Nur Werte bis heute
+    });
+  } else {
+    let daysToSubtract = 90;
+    if (timeRange === "30d") daysToSubtract = 30;
+    if (timeRange === "7d") daysToSubtract = 7;
+    const startDate = new Date(referenceDate);
+    startDate.setDate(startDate.getDate() - daysToSubtract);
+    filteredData = chartData.filter(item => {
+      const date = new Date(item.date);
+      return date >= startDate && date <= referenceDate;
+    });
+  }
 
   // Calculate y-axis range
   const yValues = filteredData.map(d => d.kontostand)
@@ -153,9 +84,9 @@ const filteredData = chartData.filter(item => {
 }
 
   return (
-    <Card className="h-46 p-3">
+    <Card className="h-46 p-1.5">
       <CardHeader className="p-0 flex flex-row justify-between">
-        <CardTitle className="flex items-center gap-2 font-medium">
+        <CardTitle className="flex items-center gap-1 font-medium">
           <TrendingUp className="w-4 h-4 shrink-0"/> Kontoverlauf
         </CardTitle>
       </CardHeader>
@@ -173,7 +104,7 @@ const filteredData = chartData.filter(item => {
             </defs>
             <CartesianGrid vertical={false} />
             <YAxis
-              width={41}
+              width={44}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}

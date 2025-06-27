@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { TrendingUp, TrendingDown } from 'lucide-react'
 
 function DeltaTile() {
@@ -8,17 +8,15 @@ function DeltaTile() {
   const isPositive = delta > 0
 
   return (
-    <Card className="h-48 lg:h-64">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 font-medium text-sm">
-          {isPositive ? (
-            <TrendingUp className="w-4 h-4 text-green-500" />
-          ) : (
-            <TrendingDown className="w-4 h-4 text-red-500" />
-          )}
-          Einnahmen/Ausgaben
-        </CardTitle>
-      </CardHeader>
+    <Card className="h-48 p-1.5">
+      <CardTitle className="flex items-center gap-1 font-medium">
+        {isPositive ? (
+          <TrendingUp className="w-4 h-4 text-green-500" />
+        ) : (
+          <TrendingDown className="w-4 h-4 text-red-500" />
+        )}
+        Einnahmen / Ausgaben
+      </CardTitle>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
           <span className="text-muted-foreground text-sm">Einnahmen:</span>
