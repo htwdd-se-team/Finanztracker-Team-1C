@@ -59,67 +59,83 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 |===
 | Bezeichnung | Definition | Format | Gültigkeitsregeln | Aliase
 
-| Anmeldedaten
-| Zusammensetzung von Benutzername (E-Mail) und Passwort.
-| String
-| Emailadresse muss `@`-Zeichen und `.` Punkt enthalten.
-| Login
+// | Anmeldedaten
+// | Zusammensetzung von Benutzername (E-Mail) und Passwort.
+// | String
+// | Emailadresse muss `@`-Zeichen und `.` Punkt enthalten.
+// | Login
+
+| Nutzer
+| Enthält persönliche Daten und Einstellungen eines Users.
+| Objekt
+| E-Mail muss gültig sein, Sprache notwendig, Passwort mit Mindestlänge
+| Nutzerkonto, User
+
+| Konto
+| Finanzkonto des Nutzers zur Erfassung von Transaktionen.
+| Objekt
+| IBAN muss gültig sein, Saldo ist numerisch
+| Finanzkonto
+
+| Transaktion
+| Einzelner Finanzvorgang, entweder Einnahme oder Ausgabe
+| Objekt
+| Betrag muss numerisch und ≥ 0 sein, Datum gültig formatiert, Kategorie vorhanden
+| Buchung
 
 | Kategorie
-| Bezeichnung zur Gruppierung von Transaktionen.
-| String
-| Muss eindeutig sein, keine Sonderzeichen am Anfang.
+| Gruppierung von Transaktionen nach Zweck
+| Objekt
+| Muss eindeutig sein, keine Sonderzeichen am Anfang
 | Kostenart
 
+| Filter
+| Kriteriensatz zur Einschränkung der angezeigten Transaktionen
+| Objekt
+| Muss gültige Werte (Zeitraum, Kategorie, Betragsspanne etc.) enthalten
+| Suchkriterium
+
+| Analyse
+| Struktur zur Darstellung und Auswertung aggregierter Finanzdaten
+| Objekt
+| Zeitraum erforderlich, Filter optional
+| Auswertung
+
 | Budget
-| Festgelegter Maximalbetrag für eine Kategorie oder Zeitraum.
-| Zahl (Float/Int)
-| Muss positiv sein.
+| Festgelegter Maximalbetrag für Ausgaben in einem Zeitraum oder einer Kategorie
+| Objekt
+| Betrag muss positiv sein, Kategorie muss zugewiesen sein
 | Ausgabenlimit
 
 | Sparziel
-| Zielbetrag, den der Nutzer ansparen möchte.
-| Zahl (Float/Int)
-| Muss positiv sein.
+| Zielbetrag, den der Nutzer ansparen möchte
+| Objekt
+| Zielbetrag muss positiv sein, aktueller Stand ≥ 0
 | Zielbetrag
 
-| Filter
-| Kriterien zur Einschränkung der Anzeige (z.B. Zeitraum, Kategorie).
-| Objekt (z.B. JSON)
-| Muss gültige Werte enthalten.
-| Suchkriterium
-
-| Benachrichtigung
-| Nachricht für Nutzer bei bestimmten Ereignissen.
-| Objekt (z.B. JSON)
-| Muss Titel, Typ, Zeitstempel enthalten.
-| Alert
-
-| Wiederkehrende Transaktion
-| Automatisch geplante, sich wiederholende Buchung.
-| Objekt
-| Muss Intervall, Startdatum und Betrag enthalten.
-| Wiederholungsbuchung
-
 | Sparplan
-| Regelmäßiger fixer Betrag, der automatisch einem Sparziel zugewiesen wird.
+| Regelmäßiger Betrag, der automatisch einem Sparziel zugewiesen wird
 | Objekt
-| Betrag größer als 0, Ziel vorhanden, Buchungszyklus definiert.
+| Betrag muss positiv sein, Intervall gültig (z. B. monatlich)
 | Auto-Sparen
 
-| Nutzerprofil
-| Grunddaten und Einstellungen des Users.
+| Benachrichtigung
+| Nachricht über ein Ereignis innerhalb der Anwendung
 | Objekt
-| E-Mail, Passwort, Sprache notwendig.
-| Benutzerkonto
+| Titel, Typ und Zeitstempel erforderlich
+| Hinweis, Alert
 
-| Analyse
-| Struktur für Finanzberichte mit Filtern, Zeitraum und aggregierten Daten.
-| Objekt
-| Muss Zeitraum und Ausgabentypen enthalten.
-| Auswertung
 |===
+
+
+// | Wiederkehrende Transaktion
+// | Automatisch geplante, sich wiederholende Buchung.
+// | Objekt
+// | Muss Intervall, Startdatum und Betrag enthalten.
+// | Wiederholungsbuchung
+
+
 
 == Domänenmodell
 // Fügen Sie hier eine Abbildung mit ihrem Domänenmodell ein
-image::Domänenmodell5.drawio.png[]
+image::Domänenmodell6.drawio.png[]
