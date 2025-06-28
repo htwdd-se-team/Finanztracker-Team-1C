@@ -23,7 +23,7 @@ function DataTable() {
     queryKey: ['entries'],
     queryFn: async () => {
       const response = await apiClient.entries.entryControllerList({
-        take: 30,
+        take: 4,
       })
       return response.data
     },
@@ -52,28 +52,35 @@ function DataTable() {
     )
   }
 
+const cellStyle = {
+  paddingTop: 4,
+  paddingBottom: 4,
+  paddingLeft: 4,
+  paddingRight: 0,
+}
+
   return (
-    <Card className="p-1.5">
+    <Card className="p-1.5 gap-2 mx-2">
         <CardTitle className="flex items-center gap-1 font-medium">
           <ArrowRightLeft className="w-4 h-4 shrink-0" />
           Letzte Transaktionen
         </CardTitle>
       <CardContent className="p-0">
-        <Table>
+        <Table className="gap-2">
           <TableHeader>
             <TableRow>
-              <TableHead>Beschreibung</TableHead>
-              <TableHead>Typ</TableHead>
-              <TableHead className="text-right">Betrag</TableHead>
+              <TableHead className="font-semibold" style={cellStyle}>Beschreibung</TableHead>
+              <TableHead className="font-semibold" style={{paddingLeft: 22}}>Typ</TableHead>
+              <TableHead className="font-semibold text-right" style={cellStyle}>Betrag</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {entries?.map((entry: ApiEntryResponseDto) => (
               <TableRow key={entry.id}>
-                <TableCell className="font-medium">
-                  {entry.description || 'Keine Beschreibung'}
+                <TableCell className="font-medium" style={cellStyle}>
+                  {entry.description || '---'}
                 </TableCell>
-                <TableCell>
+                <TableCell style={cellStyle}>
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       entry.type === ApiTransactionType.INCOME
@@ -86,7 +93,7 @@ function DataTable() {
                       : 'Ausgabe'}
                   </span>
                 </TableCell>
-                <TableCell className="font-mono text-right">
+                <TableCell className="font-mono text-right" style={cellStyle}>
                   <span
                     className={
                       entry.type === ApiTransactionType.INCOME

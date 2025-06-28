@@ -15,7 +15,7 @@ function GraphGrids() {
   return (
     <div>
       {/* Grid 1st Row */ }
-      <div className="gap-2 grid grid-cols-3 mx-2">
+      <div className="gap-2 pt-2 grid grid-cols-3 mx-2">
         {/* Kontostand - Full width on mobile, 1 col on desktop */}
         <div className="col-span-2 w-full h-full justify-center">
           <BalanceTile/>

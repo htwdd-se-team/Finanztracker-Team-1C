@@ -14,7 +14,7 @@ function SelectorTile({ value, onValueChange}: SelectorTileProps) {
     const tabTriggerClass = "bg-[var(--card)] data-[state=active]:border-[var(--color-chart-2)] data-[state=active]:bg-[color:var(--color-chart-2)/0.1]"
 
     return (
-        <Card className="flex items-stretch h-20 p-0">
+        <Card className="flex items-stretch h-18 p-0">
         <CardContent className="h-full w-full p-0 flex">
             <Tabs value={value} onValueChange={onValueChange} className="w-full h-full flex">
                 <TabsList className="w-full h-full grid grid-cols-2 grid-rows-2 bg-var(--card)">
