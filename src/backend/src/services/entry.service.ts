@@ -6,6 +6,7 @@ import {
   EntryPageDto,
   EntryPaginationParamsDto,
   EntrySortBy,
+  UpdateEntryDto,
   type CreateEntryDto,
   type EntryResponseDto,
 } from "../dto";
@@ -126,7 +127,7 @@ export class EntryService {
   async updateEntry(
     user: User,
     entryId: number,
-    data: Partial<CreateEntryDto>,
+    data: UpdateEntryDto,
   ): Promise<EntryResponseDto> {
     const updated = await this.prisma.transaction.updateMany({
       where: {
