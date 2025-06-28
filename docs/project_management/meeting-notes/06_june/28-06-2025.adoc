@@ -1,0 +1,68 @@
+= Meeting-Protokoll 28.06.2025
+
+*Datum:* 28.06.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 16:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Ali
+- Khang
+- Christoph
+- Cedrick
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Domänenmodell
+nochmal drüber sprechen, Verbesserungsvorschläge? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+=== 2. Dev-Fortschritt
+wie ist der aktuelle Stand? Brauch jemand Hilfe/ hat jemand Fragen? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+
+=== 3. Präsentation am Dienstag
+Wie ist der Stand? Was müssen wir noch besprechen? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+ 
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+
+
+== Nächstes Meeting
+
+- Datum: 30.06.2025
+- Zeit: *16:00* Uhr
+- Ort: Online (Teams)
