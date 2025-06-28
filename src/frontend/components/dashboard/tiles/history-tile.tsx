@@ -24,7 +24,7 @@ type HistoryTileProps = {
 
 const startDate = new Date('2024-06-26')
   const chartData = []
-  let kontostand = 1200 // Startwert
+  let kontostand = 2200 // Startwert
   for (let i = 0; i < 365; i++) {
     const date = new Date(startDate)
     date.setDate(startDate.getDate() + i)
@@ -84,7 +84,7 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
 }
 
   return (
-    <Card className="h-46 p-1.5">
+    <Card className="h-48 p-1.5">
       <CardHeader className="p-0 flex flex-row justify-between">
         <CardTitle className="flex items-center gap-1 font-medium">
           <TrendingUp className="w-4 h-4 shrink-0"/> Kontoverlauf
@@ -93,7 +93,7 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
       <CardContent className="p-0">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[130px] w-full -mt-2"
+          className="aspect-auto h-[150px] w-full -mt-2 mb-0"
         >
           <AreaChart data={filteredData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
             <defs>
@@ -104,7 +104,7 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
             </defs>
             <CartesianGrid vertical={false} />
             <YAxis
-              width={44}
+              width={50}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}
@@ -152,143 +152,3 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
     </Card>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart'
-import { useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/api/api-client'
-import { Loader2, TrendingUp } from 'lucide-react'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-import {
-  ApiGranularity,
-  ApiTransactionBreakdownItemDto,
-} from '@/__generated__/api'
-
-function HistoryTile() {
-  const startDate = new Date()
-  startDate.setMonth(startDate.getMonth() - 1)
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'transaction-breakdown'],
-    queryFn: async () => {
-      const response =
-        await apiClient.analytics.analyticsControllerGetTransactionBreakdown({
-          startDate: startDate.toISOString().split('T')[0],
-          endDate: new Date().toISOString().split('T')[0],
-          granularity: ApiGranularity.WEEK,
-          // withCategory: false,
-        })
-      return response.data
-    },
-  })
-
-  if (isLoading) {
-    return (
-      <Card className="h-48 lg:h-64">
-        <CardContent className="flex justify-center items-center h-full">
-          <Loader2 className="w-6 h-6 animate-spin" />
-        </CardContent>
-      </Card>
-    )
-  }
-
-  if (error) {
-    return (
-      <Card className="h-48 lg:h-64">
-        <CardContent className="flex justify-center items-center h-full">
-          <p className="text-muted-foreground text-sm">Fehler beim Laden</p>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  const chartData =
-    data?.data?.map((item: ApiTransactionBreakdownItemDto, index: number) => ({
-      week: `W${index + 1}`,
-      balance: parseInt(item.value) / 100,
-    })) || []
-
-  const chartConfig = {
-    balance: {
-      label: 'Saldo',
-      color: 'var(--chart-1)',
-    },
-  } satisfies ChartConfig
-
-  return (
-    <Card className="h-48 p-3">
-      <CardHeader className="p-0 flex">
-        <CardTitle className="flex items-center gap-2 font-medium">
-          <TrendingUp className="w-4 h-4" />
-          Kontostand Historie
-        </CardTitle>
-        <CardDescription>Wöchentliche Saldenentwicklung</CardDescription>
-      </CardHeader>
-      <CardContent className="pt-0">
-        <ChartContainer config={chartConfig} className="h-32">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="week"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="balance" fill="var(--color-balance)" radius={8} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
-  )
-}
-
-export default HistoryTile
-*/
