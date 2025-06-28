@@ -1,9 +1,21 @@
-import { Controller, Post, Body, UseGuards, Get, Query } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Delete,
+  Patch,
+  Get,
+  Query,
+  Param,
+  ParseIntPipe,
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiBadRequestResponse,
   ApiOkResponse,
   ApiSecurity,
+  ApiNotFoundResponse,
 } from "@nestjs/swagger";
 import { User } from "@prisma/client";
 
@@ -49,5 +61,34 @@ export class EntryController {
     @Query() paginationParams: EntryPaginationParamsDto,
   ): Promise<EntryPageDto> {
     return this.entryService.getEntries(user, paginationParams);
+  }
+
+  @Delete(":id")
+  @ApiOkResponse({ description: "Entry deleted successfully" })
+  @ApiNotFoundResponse({
+    description: "Entry not found or not authorized to delete",
+  })
+  async delete(
+    @UserDecorator() user: User,
+    @Param("id", ParseIntPipe) entryId: number,
+  ): Promise<void> {
+    await this.entryService.deleteEntry(user, entryId);
+  }
+
+  @Patch(":id")
+  @ApiOkResponse({
+    type: EntryResponseDto,
+    description: "Entry updated successfully",
+  })
+  @ApiNotFoundResponse({
+    description: "Entry not found or not authorized to update",
+  })
+  @ApiBadRequestResponse({ description: "Invalid input data" })
+  async update(
+    @UserDecorator() user: User,
+    @Param("id", ParseIntPipe) entryId: number,
+    @Body() data: Partial<CreateEntryDto>,
+  ): Promise<EntryResponseDto> {
+    return this.entryService.updateEntry(user, entryId, data);
   }
 }

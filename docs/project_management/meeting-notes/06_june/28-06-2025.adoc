@@ -3,10 +3,10 @@
 *Datum:* 28.06.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Khang +
 *Meetingbeginn:* 16:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 17:04 +
+*Dauer:* 64 min 
 
 ==== Anwesenheit: 
 - Elias
@@ -24,25 +24,40 @@
 nochmal drüber sprechen, Verbesserungsvorschläge? +
 
 *Notizen:* +
-- ... +
+ Analyse und Filter  über Transaktionen Tabelle -> Extra Abstraktion die nicht in DB sein werden, für Verständlichkeit i.O.
+ 
+ Budget und Sparziel noch nicht in SE1 aber Budget macht Sinn
+  +
 
 *Entscheidung:* +
-- ... +
+- Fix fürs Modell: 
+Nutzer Richtung Konto
+1 Konto nur 1 Nutzer, eineindeutig +
  +
  +
 
 === 2. Dev-Fortschritt
 wie ist der aktuelle Stand? Brauch jemand Hilfe/ hat jemand Fragen? +
+
 - Wireframe so lassen, in der Umsetzung dann anders gelaufen, wo sollen wir begründen, warum wir es anders gemacht haben? -> Frage an Anke
 - Hover an einigen Stellen eintragen (Randnotiz)
 - Bitte Definition of Done und Ready so gut es geht einhalten → Done → Erst Review und im Meeting abhaken
 
 *Notizen:* +
-- ... +
+- - Desktop-View unausgereift
+- Einträge bearbeiten und löschen fehlt
+- Tabellendarstellung auch fehlend
+- Startseite erschlägt User -> Weniger auf Dashboard, Farben zu viel Kontrast
+- Aufgabenverteilung: 
+Elias: Filtern
+Khang: Bearbeiten und Löschen von Einträgen
+Christoph: Weiter Arbeiten an Graphen etc.
+Ali: Button für Transaktion bearbeiten, Dialog fixen
+Cedrick: Tabellen darstellen +
 
 *Entscheidung:* +
-- ... +
- +
+- Bearbeiten der Devaufgaben +
+- Einhaltung von Flow von also zuerst "In Review" -> "Done" +
  +
 
 
@@ -54,7 +69,9 @@ Wie ist der Stand? Was müssen wir noch besprechen? +
 - Montag Generalprobe Folien im Meeting?
 
 *Notizen:* +
-- ... +
+- Ben stellt statt Ali Produktkonzept vor
+- Elias muss noch Slide machen kopiert von Ben und fixt diese -> Design- Konsistenz
+- Ben baut Titelfolie und fragt in Konsultation nach ob diese in Vorstellung sein darf +
 
 *Entscheidung:* +
 - ... +
@@ -68,7 +85,7 @@ Wie ist der Stand? Was müssen wir noch besprechen? +
 - Reiter im SE-Board sinnvoll umbennen (Product Backlog….)
 
 *Notizen:* +
-- ... +
+- Ben guckt Folien an und klärt in Konsultation wie Sprint-Backlog und Product-Backlog besser dargestellt und gefixed werden können +
 
 
 == Nächstes Meeting
@@ -76,3 +93,8 @@ Wie ist der Stand? Was müssen wir noch besprechen? +
 - Datum: 30.06.2025
 - Zeit: *16:00* Uhr
 - Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Generalprobe
+- Abgabedokument-Check
