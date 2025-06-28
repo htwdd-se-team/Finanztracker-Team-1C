@@ -4,7 +4,7 @@ import { IsOptional, IsString, IsNumber } from "class-validator";
 export class BackendConfig {
   @IsOptional()
   @IsString()
-  public readonly CORS_ORIGIN = "http://localhost:3000";
+  public readonly CORS_ORIGIN = "http://localhost:*";
 
   @IsString()
   public readonly DATABASE_URL: string;

@@ -27,7 +27,44 @@ async function bootstrap() {
   const { CORS_ORIGIN, PORT } = app.get(BackendConfig);
 
   if (CORS_ORIGIN) {
-    app.enableCors({ origin: CORS_ORIGIN.split(",") });
+    const allowedOrigins = CORS_ORIGIN.split(",").map((origin) =>
+      origin.trim(),
+    );
+
+    app.enableCors({
+      origin: (
+        origin: string | undefined,
+        callback: (err: Error | null, allow?: boolean) => void,
+      ) => {
+        if (!origin) {
+          callback(null, true);
+          return;
+        }
+
+        const isAllowed = allowedOrigins.some((allowedOrigin) => {
+          // Handle wildcards
+          if (allowedOrigin.includes("*")) {
+            // Escape special regex characters except for *
+            const escapedOrigin = allowedOrigin.replace(
+              /[.+?^${}()|[\]\\]/g,
+              "\\$&",
+            );
+            // Replace * with .* for wildcard matching
+            const regexPattern = "^" + escapedOrigin.replace(/\*/g, ".*") + "$";
+            const regex = new RegExp(regexPattern);
+            return regex.test(origin);
+          }
+          // Exact match
+          return allowedOrigin === origin;
+        });
+
+        if (isAllowed) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+    });
   }
 
   const customOptions: SwaggerCustomOptions = {
