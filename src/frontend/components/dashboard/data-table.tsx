@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
-import { Loader2, Receipt } from 'lucide-react'
+import { Loader2, ArrowRightLeft } from 'lucide-react'
 import { ApiEntryResponseDto, ApiTransactionType } from '@/__generated__/api'
 
 function DataTable() {
@@ -52,35 +52,46 @@ function DataTable() {
     )
   }
 
+  const cellStyle = {
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 4,
+    paddingRight: 0,
+  }
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 font-semibold text-lg">
-          <Receipt className="w-5 h-5" />
-          Letzte Transaktionen
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Table>
+    <Card className="gap-2 mx-2 p-1.5">
+      <CardTitle className="flex items-center gap-1 font-medium">
+        <ArrowRightLeft className="w-4 h-4 shrink-0" />
+        Letzte Transaktionen
+      </CardTitle>
+      <CardContent className="p-0">
+        <Table className="gap-2">
           <TableHeader>
             <TableRow>
-              <TableHead>Beschreibung</TableHead>
-              <TableHead>Typ</TableHead>
-              <TableHead className="text-right">Betrag</TableHead>
+              <TableHead className="font-semibold" style={cellStyle}>
+                Beschreibung
+              </TableHead>
+              <TableHead className="font-semibold" style={{ paddingLeft: 22 }}>
+                Typ
+              </TableHead>
+              <TableHead className="font-semibold text-right" style={cellStyle}>
+                Betrag
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {entries?.map((entry: ApiEntryResponseDto) => (
               <TableRow key={entry.id}>
-                <TableCell className="font-medium">
-                  {entry.description || 'Keine Beschreibung'}
+                <TableCell className="font-medium" style={cellStyle}>
+                  {entry.description || '---'}
                 </TableCell>
-                <TableCell>
+                <TableCell style={cellStyle}>
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       entry.type === ApiTransactionType.INCOME
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                        : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200'
+                        : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
                     }`}
                   >
                     {entry.type === ApiTransactionType.INCOME
@@ -88,12 +99,12 @@ function DataTable() {
                       : 'Ausgabe'}
                   </span>
                 </TableCell>
-                <TableCell className="font-mono text-right">
+                <TableCell className="font-mono text-right" style={cellStyle}>
                   <span
                     className={
                       entry.type === ApiTransactionType.INCOME
-                        ? 'text-green-600'
-                        : 'text-red-600'
+                        ? 'text-green-400'
+                        : 'text-red-400'
                     }
                   >
                     {entry.type === ApiTransactionType.INCOME ? '+' : '-'}

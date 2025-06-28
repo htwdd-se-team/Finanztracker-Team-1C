@@ -1,107 +1,138 @@
 'use client'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { TrendingUp } from 'lucide-react'
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
-import { Loader2, TrendingUp } from 'lucide-react'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-import {
-  ApiGranularity,
-  ApiTransactionBreakdownItemDto,
-} from '@/__generated__/api'
+import { useQuery } from '@tanstack/react-query'
+import { DateTime } from 'luxon'
+import { ApiGranularity } from '@/__generated__/api'
 
-function HistoryTile() {
-  const startDate = new Date()
-  startDate.setMonth(startDate.getMonth() - 1)
+type HistoryTileProps = {
+  timeRange: string // 1d, 7d, 30d, 90d, 180d, all
+}
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'transaction-breakdown'],
-    queryFn: async () => {
-      const response =
-        await apiClient.analytics.analyticsControllerGetTransactionBreakdown({
-          startDate: startDate.toISOString().split('T')[0],
-          endDate: new Date().toISOString().split('T')[0],
-          granularity: ApiGranularity.WEEK,
-          withCategory: false,
-        })
-      return response.data
-    },
+const chartConfig = {
+  kontostand: {
+    label: 'Kontostand',
+    color: 'hsl(var(--chart-1))',
+  },
+} satisfies ChartConfig
+
+export default function HistoryTile({ timeRange }: HistoryTileProps) {
+  const days = timeRange === 'all' ? 365 : Number(timeRange.split('d')[0])
+  const today = DateTime.now()
+  const startDate = today.minus({ days: days })
+
+  const { data } = useQuery({
+    queryKey: ['transactions', 'history-tile', timeRange],
+    queryFn: () =>
+      apiClient.analytics.analyticsControllerGetTransactionBalanceHistory({
+        startDate: startDate.toISO(),
+        endDate: today.toISO(),
+        granularity: ApiGranularity.DAY,
+      }),
   })
 
-  if (isLoading) {
-    return (
-      <Card className="h-48 lg:h-64">
-        <CardContent className="flex justify-center items-center h-full">
-          <Loader2 className="w-6 h-6 animate-spin" />
-        </CardContent>
-      </Card>
-    )
-  }
+  if (!data) return null
 
-  if (error) {
-    return (
-      <Card className="h-48 lg:h-64">
-        <CardContent className="flex justify-center items-center h-full">
-          <p className="text-muted-foreground text-sm">Fehler beim Laden</p>
-        </CardContent>
-      </Card>
-    )
-  }
+  const graphData = data.data.map(item => ({
+    date: new Date(item.date).toISOString(),
+    kontostand: Math.round(Number(item.value) / 100),
+  }))
 
-  const chartData =
-    data?.data?.map((item: ApiTransactionBreakdownItemDto, index: number) => ({
-      week: `W${index + 1}`,
-      balance: parseInt(item.value) / 100,
-    })) || []
-
-  const chartConfig = {
-    balance: {
-      label: 'Saldo',
-      color: 'hsl(var(--chart-1))',
-    },
-  } satisfies ChartConfig
+  const roundedMinY =
+    Math.floor(Math.min(...graphData.map(item => item.kontostand)) / 1000) *
+    1000
+  const roundedMaxY =
+    Math.ceil(Math.max(...graphData.map(item => item.kontostand)) / 1000) * 1000
 
   return (
-    <Card className="h-48 lg:h-64">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 font-medium text-sm">
-          <TrendingUp className="w-4 h-4" />
-          Kontostand Historie
+    <Card className="p-1.5 h-48">
+      <CardHeader className="flex flex-row justify-between p-0">
+        <CardTitle className="flex items-center gap-1 font-medium">
+          <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf
         </CardTitle>
-        <CardDescription>Wöchentliche Saldenentwicklung</CardDescription>
       </CardHeader>
-      <CardContent className="pt-0">
-        <ChartContainer config={chartConfig} className="h-32">
-          <BarChart accessibilityLayer data={chartData}>
+      <CardContent className="p-0">
+        <ChartContainer
+          config={chartConfig}
+          className="-mt-2 mb-0 w-full h-[150px] aspect-auto"
+        >
+          <AreaChart
+            data={graphData}
+            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+          >
+            <defs>
+              <linearGradient id="fillKontostand" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-chart-2)"
+                  stopOpacity={0.7}
+                />
+                <stop
+                  offset="99%"
+                  stopColor="var(--color-chart-2)"
+                  stopOpacity={0.05}
+                />
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="week"
+            <YAxis
+              width={50}
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              tick={{ fontSize: 11 }}
+              tickCount={3}
+              domain={[roundedMinY, 'auto']}
+              tickFormatter={value =>
+                roundedMaxY >= 10000 ? `${value / 1000}k €` : `${value} €`
+              }
+            />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={value => {
+                const date = new Date(value)
+                return date.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                })
+              }}
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={value => {
+                    return new Date(value).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  }}
+                  indicator="dot"
+                />
+              }
             />
-            <Bar dataKey="balance" fill="var(--color-balance)" radius={8} />
-          </BarChart>
+            <Area
+              dataKey="kontostand"
+              type="natural"
+              fill="url(#fillKontostand)"
+              stroke="var(--color-chart-2)"
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
   )
 }
-
-export default HistoryTile

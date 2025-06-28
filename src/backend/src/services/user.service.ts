@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { User } from "@prisma/client";
+import { sql } from "kysely";
 
 import { UserBalanceResponseDto, UserResponseDto } from "../dto";
 
@@ -29,6 +30,7 @@ export class UserService {
     const result = await this.kysely
       .selectFrom("Transaction")
       .where("userId", "=", user.id)
+      .where("createdAt", "<=", sql<Date>`NOW()`)
       .select((eb) => [
         eb
           .fn("sum", [
