@@ -49,7 +49,7 @@ export function CategorySelect({
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           className={cn(
-            'w-full',
+            'w-full cursor-pointer',
             value &&
               getCategoryColorClasses(getCategoryFromId(parseInt(value)).color)
           )}
