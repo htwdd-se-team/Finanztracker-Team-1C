@@ -33,6 +33,9 @@ nochmal drüber sprechen, Verbesserungsvorschläge? +
 
 === 2. Dev-Fortschritt
 wie ist der aktuelle Stand? Brauch jemand Hilfe/ hat jemand Fragen? +
+- Wireframe so lassen, in der Umsetzung dann anders gelaufen, wo sollen wir begründen, warum wir es anders gemacht haben? -> Frage an Anke
+- Hover an einigen Stellen eintragen (Randnotiz)
+- Bitte Definition of Done und Ready so gut es geht einhalten → Done → Erst Review und im Meeting abhaken
 
 *Notizen:* +
 - ... +
@@ -45,6 +48,10 @@ wie ist der aktuelle Stand? Brauch jemand Hilfe/ hat jemand Fragen? +
 
 === 3. Präsentation am Dienstag
 Wie ist der Stand? Was müssen wir noch besprechen? +
+- Folie Produktkonzept vorstellen
+- Demo auch mit Handy-Layout emulierbar oder den Leuten sagen öffnet die App -> keine gute Idee?
+- Termin zu Finalisierung und zur Zeit Durchprobe Vorstellung?
+- Montag Generalprobe Folien im Meeting?
 
 *Notizen:* +
 - ... +
@@ -56,6 +63,9 @@ Wie ist der Stand? Was müssen wir noch besprechen? +
  
 
 === 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+- Wann wird C4-Schema Aufgabe erledigt?
+- Reiter im SE-Board sinnvoll umbennen (Product Backlog….)
 
 *Notizen:* +
 - ... +
