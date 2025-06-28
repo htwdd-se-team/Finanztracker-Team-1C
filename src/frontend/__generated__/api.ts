@@ -149,7 +149,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-06-24T23:34:49.879Z"
+   * @example "2025-06-28T13:31:04.647Z"
    */
   createdAt: string;
   /**
@@ -295,7 +295,7 @@ export interface ApiEntryResponseDto {
 
 export interface ApiEntryPageDto {
   /** Entries */
-  entries: any[][];
+  entries: ApiEntryResponseDto[];
   /**
    * Next cursor ID
    * @example 2
@@ -348,19 +348,20 @@ export interface ApiUserBalanceResponseDto {
 export interface ApiTransactionBreakdownItemDto {
   /**
    * Date for this data point
+   * @format date-time
    * @example "21-02-2025"
    */
   date: string;
-  /**
-   * Transaction type (INCOME or EXPENSE)
-   * @example "EXPENSE"
-   */
-  type: ApiTransactionType;
   /**
    * Transaction amount in cents
    * @example "2122"
    */
   value: string;
+  /**
+   * Transaction type (INCOME or EXPENSE)
+   * @example "EXPENSE"
+   */
+  type: ApiTransactionType;
   /**
    * Category ID (only included if withCategory is true)
    * @example 12
@@ -371,6 +372,20 @@ export interface ApiTransactionBreakdownItemDto {
 export interface ApiTransactionBreakdownResponseDto {
   /** Array of transaction breakdown data */
   data: ApiTransactionBreakdownItemDto[];
+}
+
+export interface ApiTransactionItemDto {
+  /**
+   * Date for this data point
+   * @format date-time
+   * @example "21-02-2025"
+   */
+  date: string;
+  /**
+   * Transaction amount in cents
+   * @example "2122"
+   */
+  value: string;
 }
 
 import type {
@@ -864,6 +879,40 @@ export class Api<
     ) =>
       this.request<ApiTransactionBreakdownResponseDto, any>({
         path: `/analytics/transaction-breakdown`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags analytics
+     * @name AnalyticsControllerGetTransactionBalanceHistory
+     * @request GET:/analytics/transaction-balance-history
+     * @secure
+     */
+    analyticsControllerGetTransactionBalanceHistory: (
+      query: {
+        /**
+         * Start date for the analytics period (inclusive)
+         * @example "2025-01-01"
+         */
+        startDate: string;
+        /**
+         * End date for the analytics period (inclusive)
+         * @example "2025-02-28"
+         */
+        endDate: string;
+        /** Granularity for grouping the data */
+        granularity: ApiGranularity;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiTransactionItemDto[], any>({
+        path: `/analytics/transaction-balance-history`,
         method: "GET",
         query: query,
         secure: true,

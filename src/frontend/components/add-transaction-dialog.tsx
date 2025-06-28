@@ -208,10 +208,8 @@ export function AddTransactionDialog({
                         spellCheck={false}
                         autoCorrect="off"
                         autoCapitalize="off"
-                        value={field.value?.toString() || ''}
-                        onChange={e =>
-                          field.onChange(parseFloat(e.target.value) || 0)
-                        }
+                        value={field.value === undefined ? '' : field.value}
+                        onChange={field.onChange}
                         name="amount"
                       />
                     </div>
