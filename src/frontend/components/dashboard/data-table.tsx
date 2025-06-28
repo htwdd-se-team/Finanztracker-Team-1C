@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardContent , CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -23,7 +23,7 @@ function DataTable() {
     queryKey: ['entries'],
     queryFn: async () => {
       const response = await apiClient.entries.entryControllerList({
-        take: 4,
+        take: 30,
       })
       return response.data
     },
@@ -52,26 +52,32 @@ function DataTable() {
     )
   }
 
-const cellStyle = {
-  paddingTop: 4,
-  paddingBottom: 4,
-  paddingLeft: 4,
-  paddingRight: 0,
-}
+  const cellStyle = {
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 4,
+    paddingRight: 0,
+  }
 
   return (
-    <Card className="p-1.5 gap-2 mx-2">
-        <CardTitle className="flex items-center gap-1 font-medium">
-          <ArrowRightLeft className="w-4 h-4 shrink-0" />
-          Letzte Transaktionen
-        </CardTitle>
+    <Card className="gap-2 mx-2 p-1.5">
+      <CardTitle className="flex items-center gap-1 font-medium">
+        <ArrowRightLeft className="w-4 h-4 shrink-0" />
+        Letzte Transaktionen
+      </CardTitle>
       <CardContent className="p-0">
         <Table className="gap-2">
           <TableHeader>
             <TableRow>
-              <TableHead className="font-semibold" style={cellStyle}>Beschreibung</TableHead>
-              <TableHead className="font-semibold" style={{paddingLeft: 22}}>Typ</TableHead>
-              <TableHead className="font-semibold text-right" style={cellStyle}>Betrag</TableHead>
+              <TableHead className="font-semibold" style={cellStyle}>
+                Beschreibung
+              </TableHead>
+              <TableHead className="font-semibold" style={{ paddingLeft: 22 }}>
+                Typ
+              </TableHead>
+              <TableHead className="font-semibold text-right" style={cellStyle}>
+                Betrag
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
