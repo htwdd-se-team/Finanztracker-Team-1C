@@ -238,15 +238,15 @@ Cloudflare Pages erstellt für jeden Branch automatisch einen Preview-Link:
 
 === Prisma Migration
 
-* **Neue Migration**: `pnpm --filter backend prisma migrate dev`
-* **Reset Database**: `pnpm --filter backend prisma migrate reset`
-* **Deploy Migration**: `pnpm --filter backend prisma migrate deploy`
+* **Neue Migration**: `pnpm --filter backend prisma:migrate`
+// * **Reset Database**: `pnpm --filter backend prisma migrate reset`
+// * **Deploy Migration**: `pnpm --filter backend prisma:migrate`
 
 === Schema Änderungen
 
 . Schema in `prisma/schema.prisma` bearbeiten
-. Migration erstellen: `prisma migrate dev --name beschreibung`
-. Prisma Client generieren: `prisma generate`
+. Migration erstellen: `pnpm --filter backend prisma:migrate`
+. Prisma Client generieren: `pnpm --filter backend prisma:generate`
 . Tests und Code entsprechend anpassen
 
 == Troubleshooting
