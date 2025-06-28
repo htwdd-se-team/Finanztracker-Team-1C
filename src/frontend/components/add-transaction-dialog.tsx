@@ -208,20 +208,8 @@ export function AddTransactionDialog({
                         spellCheck={false}
                         autoCorrect="off"
                         autoCapitalize="off"
-                        value={
-                          field.value
-                            ? Math.round(Number(field.value) * 100).toString()
-                            : ''
-                        }
-                        onChange={e => {
-                          // e.target.value ist ein Cent-String, z.B. '10220'
-                          // Wir speichern im Form-Field den Euro-Betrag als Float
-                          field.onChange(
-                            e.target.value
-                              ? parseInt(e.target.value, 10) / 100
-                              : ''
-                          )
-                        }}
+                        value={field.value === undefined ? '' : field.value}
+                        onChange={field.onChange}
                         name="amount"
                       />
                     </div>
