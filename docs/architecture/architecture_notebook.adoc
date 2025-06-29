@@ -141,7 +141,7 @@ PostgreSQL mit Prisma ORM für typsichere Datenbankzugriffe. Kysely als zusätzl
   * ACID-Eigenschaften für Datenkonsistenz
 
 .Container-Diagramm der FinanzTracker-Architektur
-image:architecture-diagram.png[Container-Diagramm,width=100%,align=center]
+image:images/architecture-diagram-drawio.png[Container-Diagramm,width=100%,align=center]
 
 
 === Components (C4 Level 3)
