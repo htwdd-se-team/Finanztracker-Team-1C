@@ -20,7 +20,7 @@ export default function MetaWrapper() {
         sizes="48x48"
         href="/images/favicon-48x48.png"
       />
-      <link rel="manifest" href="/images/manifest.webmanifest" />
+      <link rel="manifest" href="/manifest.json" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="theme-color" content="#3B82F6" />
       <meta name="application-name" content="FinApp" />
