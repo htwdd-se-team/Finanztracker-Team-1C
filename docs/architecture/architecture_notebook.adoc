@@ -49,30 +49,30 @@ Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Be
 
 
 == Entscheidungen, Nebenbedingungen und Begründungen
-**Verwendung von React mit ShadCN:**
+**Verwendung von React mit Next.js und ShadCN:**
 
-Ermöglicht schnelles UI-Prototyping, konsistentes Design und gute Entwicklerproduktivität.
+Next.js ermöglicht SSR/SSG für bessere Performance und SEO. ShadCN bietet vorgefertigte, hochwertige UI-Komponenten für schnelles Prototyping und konsistentes Design.
 
-**Node.js + Express für das Backend:**
+**NestJS statt Express für das Backend:**
 
-Ideal für schnelle REST-API-Entwicklung, besonders bei JS/TS-Teams. Leichtgewichtig, async-fähig, große Community.
+NestJS bietet eine strukturierte, dekorator-basierte Architektur mit eingebauter OpenAPI-Unterstützung, Dependency Injection und TypeScript-First-Ansatz.
 
 **PostgreSQL als relationale Datenbank:**
 
-Stabil, leistungsfähig und gut für strukturierte finanzielle Daten geeignet. Open Source.
+Stabil, leistungsfähig und gut für strukturierte finanzielle Daten geeignet. Open Source. Prisma ORM für typsichere Datenbankzugriffe.
 
 **REST statt GraphQL:**
 
-Einfacher Einstieg, gute Toolunterstützung, weniger Overhead für kleinere Projekte.
+Einfacher Einstieg, gute Toolunterstützung, weniger Overhead für kleinere Projekte. Swagger/OpenAPI für automatische Dokumentation.
 
 **Trennung von Frontend und Backend:**
 
-Erhöht Flexibilität beim Deployment und Testing.
+Erhöht Flexibilität beim Deployment und Testing. Verschiedene Hosting-Strategien möglich.
 
 **Verzicht auf native Apps:**
 
 Fokus liegt auf einer plattformübergreifenden WebApp, um Entwicklungsaufwand zu minimieren.
-//[List the decisions that have been made regarding architectural approaches and the constraints being placed on the way that the developers build the system. These will serve as guidelines for defining architecturally significant parts of the system. Justify each decision or constraint so that developers understand the importance of building the system according to the context created by those decisions and constraints. This may include a list of DOs and DON’Ts to guide the developers in building the system.]
+//[List the decisions that have been made regarding architectural approaches and the constraints being placed on the way that the developers build the system. These will serve as guidelines for defining architecturally significant parts of the system. Justify each decision or constraint so that developers understand the importance of building the system according to the context created by those decisions and constraints. This may include a list of DOs and DON'Ts to guide the developers in building the system.]
 
 
 == Schichten oder Architektur-Framework
@@ -80,15 +80,20 @@ Es wird ein klassisches 3-Schichten-Modell verwendet:
 
 **Präsentationsschicht:**
 
-React-Frontend mit ShadCN UI-Komponenten, zustandsbasiertes Rendering, API-Integration via Axios/Fetch.
+React-Frontend mit Next.js Framework, ShadCN UI-Komponenten, zustandsbasiertes Rendering, API-Integration via automatisch generierte TypeScript-Client.
 
 **Logikschicht:**
 
-Node.js + Express - Verarbeitung von Anfragen, Business-Logik, Validierung, Authentifizierung.
+NestJS Backend mit modularer Controller-Service-Architektur:
+- AuthController: Benutzerregistrierung und -anmeldung
+- UserController: Benutzerprofilverwaltung
+- CategoryController: Kategorienverwaltung
+- EntryController: Transaktionsverwaltung
+- AnalyticsController: Berichte und Statistiken
 
 **Datenzugriffsschicht:**
 
-PostgreSQL mit ORM/Query-Builder wie Prisma oder Knex.js. Persistenz und Datenmanipulation.
+PostgreSQL mit Prisma ORM für typsichere Datenbankzugriffe. Kysely als zusätzlicher Query-Builder für komplexe Abfragen.
 //[Describe the architectural pattern that you will use or how the architecture will be consistent and uniform. This could be a simple reference to an existing or well-known architectural pattern, such as the Layer framework, a reference to a high-level model of the framework, or a description of how the major system components should be put together.]
 
 
@@ -106,27 +111,124 @@ PostgreSQL mit ORM/Query-Builder wie Prisma oder Knex.js. Persistenz und Datenma
 
 === Container (C4 Level 2)
 
-**Frontend (React, Browser)**
+**Frontend Container (React/Next.js)**
+- Technologie: Next.js, React, TypeScript, ShadCN UI
+- Deployment: Cloudflare Pages
+- Verantwortlichkeiten:
+  * Benutzeroberfläche für alle Finanzfunktionen
+  * Responsive Design für Desktop und Mobile
+  * Client-seitige Validierung
+  * JWT-Token-Management
+  * Routing zwischen verschiedenen Views (Übersicht, Graphen, Tabellen, Profil)
 
-Kommuniziert mit REST-API via HTTPS
+**Backend Container (NestJS API)**
+- Technologie: NestJS, TypeScript, JWT
+- Deployment: Hetzner VPS
+- Verantwortlichkeiten:
+  * REST API mit OpenAPI-Dokumentation
+  * Benutzerauthentifizierung und -autorisierung
+  * Geschäftslogik für Transaktionen und Kategorien
+  * Datenvalidierung und -transformation
+  * Analytics und Berichtsfunktionen
 
-**Backend (Node.js, Express)**
-
-Verarbeitet HTTP-Anfragen, kümmert sich um Auth, Validierung und Datenlogik
-
-**Datenbank (PostgreSQL)**
-
-Speichert Nutzer, Kategorien, Transaktionen etc.
+**Datenbank Container (PostgreSQL)**
+- Technologie: PostgreSQL 16, Prisma ORM
+- Deployment: Docker auf Hetzner VPS
+- Verantwortlichkeiten:
+  * Persistierung von Benutzerdaten
+  * Speicherung von Transaktionen und Kategorien
+  * Unterstützung für wiederkehrende Transaktionen
+  * ACID-Eigenschaften für Datenkonsistenz
 
 .Container-Diagramm der FinanzTracker-Architektur
 image:architecture-diagram.png[Container-Diagramm,width=100%,align=center]
 
 
-=== Components
-//Level 3 im C4-Modell
+=== Components (C4 Level 3)
+
+Das Frontend und Backend bestehen aus spezialisierten Komponenten, die jeweils klare Verantwortlichkeiten haben.
+
+==== Frontend-Komponenten
 
 
-=== Verteilungsdiagramm (Deployment Diagramm)
-//Beschreibt die physischen Knoten (Rechner) des Systems und Komponenten, die in diesen Knoten ausgeführt werden. Diese Sicht wird nicht benötigt, wenn das System in einem einzelnen Prozess oder Thread ausgeführt wird.
+**Seiten-Komponenten:**
+- `page.tsx` (Landing Page mit Hero-Section)
+- `login/page.tsx` (Benutzeranmeldung mit Formularvalidierung)
+- `register/page.tsx` (Benutzerregistrierung)
+- `overview/page.tsx` (Haupt-Dashboard mit Übersicht)
+- `graphs/page.tsx` (Analytische Graphen und Visualisierungen)
+- `table/page.tsx` (Detaillierte Transaktionsliste)
+- `profile/page.tsx` (Benutzerprofil und Einstellungen)
+
+**Dashboard-Komponenten:**
+- `DataTable` (Transaktionsübersicht mit Pagination)
+- `GraphGrids` (Responsive Kachel-Layout für Charts)
+- `BalanceTile` (Kontostand-Anzeige mit visuellen Indikatoren)
+- `DeltaTile` (Änderungsanzeige)
+- `PieChartTile` (Interaktive Kategorienverteilung)
+
+**Navigation-Komponenten:**
+- `SidebarDesktop` (Desktop-Navigation mit Menüstruktur)
+- `NavbarMobile` (Touch-freundliche Mobile-Navigation)
+- `AppSidebar` (Hauptnavigation mit Benutzerkontext)
+
+**State-Management:**
+- `UserProvider` (Authentifizierungsstatus und Benutzerdaten)
+- `CategoryProvider` (Kategorienverwaltung mit lokalem Cache)
+- `ThemeProvider` (Dark/Light-Mode-Management)
+- `API Client` (Typsichere Backend-Kommunikation)
+- `Query Client` (Daten-Caching und Background-Updates)
+
+==== Backend-Komponenten
+
+
+**Controller-Layer (API-Endpunkte):**
+- `AuthController` (POST /auth/login, POST /auth/register)
+- `UserController` (GET /user/me, GET /user/balance)
+- `CategoryController` (CRUD für Kategorien mit Pagination)
+- `EntryController` (CRUD für Transaktionen mit Filterung)
+- `AnalyticsController` (Berichte und Datenanalyse)
+
+**Service-Layer (Geschäftslogik):**
+- `AuthService` (JWT-Generierung, Passwort-Hashing, Benutzervalidierung)
+- `UserService` (Benutzerverwaltung, Bilanzberechnung)
+- `CategoryService` (Kategorienverwaltung, Validierung)
+- `EntryService` (Transaktionslogik, Filterung)
+- `AnalyticsService` (Datenaggregation, Berichtsgenerierung)
+
+**Data-Access-Layer:**
+- `PrismaService` (Typsichere ORM-Zugriffe, Verbindungsmanagement)
+- `KyselyService` (Query-Builder für komplexe SQL-Abfragen)
+
+**Security-Layer:**
+- `JwtAuthGuard` (Route-Schutz, Token-Validierung)
+- `JwtStrategy` (JWT-Dekodierung, Benutzerextraktion)
+
+==== Datenbank-Schema
+
+**Hauptentitäten:**
+- `User` (Benutzerdaten, E-Mail, Passwort-Hash, Namen)
+- `Category` (Kategorien mit Farben, Icons, Benutzer-Zuordnung)
+- `Transaction` (Transaktionen mit Typ INCOME/EXPENSE, Beträge in Cent)
+- Unterstützung für wiederkehrende Transaktionen mit verschiedenen Intervallen
+
+=== Deployment-Diagramm
+
+**Cloudflare Pages:**
+- Hosting des React-Frontends
+- CDN für globale Verfügbarkeit
+- Automatisches HTTPS
+- Edge-Computing-Funktionen
+
+**Hetzner VPS:**
+- Docker-Container für Backend und Datenbank
+- PostgreSQL-Instanz
+- Redis für Session-Management
+- PgAdmin für Datenbankadministration
+
+**Kommunikation:**
+- Frontend <-> Backend: HTTPS/REST mit JSON
+- Backend <-> Datenbank: PostgreSQL-Protokoll über lokales Netzwerk
+- Authentifizierung: JWT-Bearer-Token
 
 

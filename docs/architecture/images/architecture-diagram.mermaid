@@ -1,28 +1,29 @@
-graph TB
-    subgraph "User Environment"
-        U[User<br/>Private individuals managing<br/>personal finances]
-    end
-    
-    subgraph "Cloudflare Pages"
-        FE[Frontend Container<br/>React + ShadCN UI<br/>TypeScript/JavaScript<br/>Responsive Web App]
-    end
-    
-    subgraph "Hetzner Server"
-        BE[Backend Container<br/>Node.js + Express<br/>REST API<br/>JWT Authentication<br/>Business Logic & Validation]
+C4Container
+    title Container Diagram - FinanzTracker System
+
+    Person(user, "👤 Benutzer", "Privatpersonen die ihre<br/>Finanzen verwalten")
+
+    System_Boundary(finapp, "FinanzTracker System") {
+        Container(frontend, "🌐 Frontend", "React, Next.js<br/>ShadCN UI", "Web-App für<br/>Finanzmanagement")
         
-        DB[(Database Container<br/>PostgreSQL<br/>User data, transactions,<br/>categories)]
-    end
+        Container(backend, "⚙️ Backend API", "NestJS<br/>TypeScript", "REST API für<br/>Geschäftslogik")
+        
+        ContainerDb(database, "🗄️ Datenbank", "PostgreSQL<br/>Prisma ORM", "Persistiert alle<br/>Anwendungsdaten")
+    }
+
+    System_Ext(cloudflare, "☁️ Cloudflare Pages", "Frontend Hosting")
+    System_Ext(hetzner, "🖥️ Hetzner Server", "Backend & DB Hosting")
+
+    Rel(user, frontend, "Nutzt", "HTTPS")
+    Rel(frontend, backend, "API Calls", "REST/JSON")
+    Rel(backend, database, "Queries", "SQL")
     
-    %% User interactions
-    U -->|Uses web browser<br/>Desktop & Mobile| FE
-    
-    %% Frontend to Backend communication
-    FE -->|HTTPS REST API calls<br/>JSON data exchange<br/>JWT tokens| BE
-    BE -->|JSON responses<br/>Authentication results| FE
-    
-    %% Backend to Database communication
-    BE -->|SQL queries via<br/>Prisma ORM<br/>CRUD operations| DB
-    DB -->|Query results<br/>Transaction data| BE
-    
-    %% Styling
-    classDef default stroke-width:2px
+    Rel(frontend, cloudflare, "Hosted on")
+    Rel(backend, hetzner, "Hosted on")
+    Rel(database, hetzner, "Runs on")
+
+    UpdateElementStyle(frontend, $bgColor="#E1F5FE", $fontColor="#000000", $borderColor="#0277BD")
+    UpdateElementStyle(backend, $bgColor="#F3E5F5", $fontColor="#000000", $borderColor="#7B1FA2")
+    UpdateElementStyle(database, $bgColor="#E8F5E8", $fontColor="#000000", $borderColor="#388E3C")
+    UpdateElementStyle(cloudflare, $bgColor="#FFF3E0", $fontColor="#000000", $borderColor="#F57C00")
+    UpdateElementStyle(hetzner, $bgColor="#FFF3E0", $fontColor="#000000", $borderColor="#F57C00")
