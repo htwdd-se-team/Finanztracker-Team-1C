@@ -2,32 +2,222 @@
   "name": "FinApp",
   "short_name": "FinApp",
   "description": "Best way to manage your money",
-  "start_url": "/",
+  "dir": "auto",
+  "lang": "en-US",
   "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "background_color": "#D6EBFE",
+  "theme_color": "#3B82F6",
   "icons": [
     {
-      "src": "images/manifest-icon-192.maskable.png",
+      "src": "/images/android-chrome-36x36.png",
+      "sizes": "36x36",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/android-chrome-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/android-chrome-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/android-chrome-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/android-chrome-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "images/manifest-icon-192.maskable.png",
-      "sizes": "192x192",
+      "src": "/images/android-chrome-256x256.png",
+      "sizes": "256x256",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
-      "src": "images/manifest-icon-512.maskable.png",
+      "src": "/images/android-chrome-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View Overview",
+      "short_name": "Overview",
+      "description": "View your financial overview and dashboard",
+      "url": "/overview",
+      "icons": [
+        {
+          "src": "/images/shortcut1-36x36.png",
+          "sizes": "36x36",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut1-48x48.png",
+          "sizes": "48x48",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut1-72x72.png",
+          "sizes": "72x72",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut1-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut1-144x144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut1-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
-      "src": "images/manifest-icon-512.maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "name": "Add Transaction",
+      "short_name": "Add",
+      "description": "Quickly add a new transaction",
+      "url": "/table",
+      "icons": [
+        {
+          "src": "/images/shortcut2-36x36.png",
+          "sizes": "36x36",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut2-48x48.png",
+          "sizes": "48x48",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut2-72x72.png",
+          "sizes": "72x72",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut2-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut2-144x144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut2-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "View Graphs",
+      "short_name": "Graphs",
+      "description": "View your financial graphs and analytics",
+      "url": "/graphs",
+      "icons": [
+        {
+          "src": "/images/shortcut3-36x36.png",
+          "sizes": "36x36",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut3-48x48.png",
+          "sizes": "48x48",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut3-72x72.png",
+          "sizes": "72x72",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut3-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut3-144x144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut3-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Profile Settings",
+      "short_name": "Profile",
+      "description": "Manage your profile and app settings",
+      "url": "/profile",
+      "icons": [
+        {
+          "src": "/images/shortcut4-36x36.png",
+          "sizes": "36x36",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut4-48x48.png",
+          "sizes": "48x48",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut4-72x72.png",
+          "sizes": "72x72",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut4-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut4-144x144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+        },
+        {
+          "src": "/images/shortcut4-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
