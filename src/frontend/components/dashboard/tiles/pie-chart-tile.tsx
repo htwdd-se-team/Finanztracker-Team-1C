@@ -170,6 +170,8 @@ function renderCustomizedLabel({ cx, cy, midAngle, innerRadius, outerRadius, ind
                 outerRadius="95%"
                 labelLine={false}
                 label={renderCustomizedLabel}
+                stroke="var(--background)"
+                strokeWidth={1}
               >
                 <Label
                   position="center"

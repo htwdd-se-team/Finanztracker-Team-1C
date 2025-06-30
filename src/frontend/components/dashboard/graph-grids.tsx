@@ -6,7 +6,7 @@ import BalanceTile from './tiles/balance-tile'
 import DeltaTile from './tiles/delta-tile'
 import HistoryTile from './tiles/history-tile'
 import SavingsGoal from './tiles/savings-goal-tile'
-import PieChartTileIcons from './tiles/pie-chart-tile-icons'
+import PieChartTile from './tiles/pie-chart-tile'
 
 function GraphGrids() {
   const [timeRange, setTimeRange] = useState('90d')
