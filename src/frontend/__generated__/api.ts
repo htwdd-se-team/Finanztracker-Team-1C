@@ -648,6 +648,31 @@ export class Api<
         ...params,
       }),
 
+      /**
+     * No description
+     *
+     * @tags categories
+     * @name CategoryControllerUpdate
+     * @summary Update a category
+     * @request PATCH:/categories/{id}
+     * @secure
+     */
+    categoryControllerUpdate: (
+      id: number,
+      data: ApiUpdateCategoryDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiCategoryResponseDto, void>({
+        path: `/categories/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+
     /**
      * No description
      *
@@ -681,30 +706,7 @@ export class Api<
         ...params,
       }),
 
-    /**
-     * No description
-     *
-     * @tags categories
-     * @name CategoryControllerUpdate
-     * @summary Update a category
-     * @request PATCH:/categories/{id}
-     * @secure
-     */
-    categoryControllerUpdate: (
-      id: number,
-      data: ApiUpdateCategoryDto,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApiCategoryResponseDto, void>({
-        path: `/categories/${id}`,
-        method: "PATCH",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
+    
     /**
      * No description
      *
@@ -745,6 +747,20 @@ export class Api<
         ...params,
       }),
 
+    entryControllerUpdate: (
+      id: number,
+      data: ApiCreateEntryDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiEntryResponseDto, void>({ path: `/entries/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+        
     /**
      * No description
      *

@@ -19,14 +19,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { CategorySelect } from '@/components/category-select'
-import { Plus, TrendingDown, TrendingUp, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { Pencil, Plus, TrendingDown, TrendingUp, Loader2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { FormattedCurrencyInput } from './ui/formatted-currency-input'
 import { useCategory } from '@/components/provider/category-provider'
 import {
-  ApiCreateEntryDto,
   ApiCurrency,
   ApiTransactionType,
+  ApiEntryResponseDto,
 } from '@/__generated__/api'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -35,92 +35,114 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { toast } from 'sonner'
 
-const createEntrySchema = z.object({
-  type: z.nativeEnum(ApiTransactionType),
-  amount: z.number().min(0.01, 'Betrag muss größer als 0 sein'),
-  description: z.string().optional(),
-  categoryId: z.number().optional(),
-  currency: z.nativeEnum(ApiCurrency),
-  createdAt: z.string().optional(),
-}) satisfies z.ZodType<ApiCreateEntryDto>
-
-// Transaction Type Selector Component
-function TransactionTypeSelector({
-  value,
-  onValueChange,
-}: {
-  value: ApiTransactionType
-  onValueChange: (type: ApiTransactionType) => void
-}) {
-  return (
-    <div className="flex gap-2">
-      <Button
-        type="button"
-        variant={
-          value === ApiTransactionType.EXPENSE ? 'destructive' : 'outline'
-        }
-        className="flex-1 cursor-pointer"
-        onClick={() => onValueChange(ApiTransactionType.EXPENSE)}
-      >
-        <TrendingDown className="mr-2 w-4 h-4" />
-        Ausgabe
-      </Button>
-      <Button
-        type="button"
-        variant={value === ApiTransactionType.INCOME ? 'default' : 'outline'}
-        className="flex-1 cursor-pointer"
-        onClick={() => onValueChange(ApiTransactionType.INCOME)}
-      >
-        <TrendingUp className="mr-2 w-4 h-4" />
-        Einnahme
-      </Button>
-    </div>
-  )
-}
-
-export function AddTransactionDialog({
+export function TransactionDialog({
   children,
+  editData,
 }: {
   children: React.ReactNode
+  editData?: ApiEntryResponseDto
 }) {
   const { categories, getCategoryFromId } = useCategory()
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
-  const form = useForm<z.infer<typeof createEntrySchema>>({
-    resolver: zodResolver(createEntrySchema),
-    defaultValues: {
-      type: ApiTransactionType.EXPENSE,
-      amount: 0,
-      description: '',
-      categoryId: undefined,
-      currency: ApiCurrency.EUR,
-      createdAt: new Date().toISOString().split('T')[0], // Today's date
-    },
+  // Schema and form setup
+  const schema = z.object({
+    id: z.number().optional(),
+    type: z.nativeEnum(ApiTransactionType),
+    amount: z.number().min(0.01, 'Betrag muss größer als 0 sein'),
+    description: z.string().optional(),
+    categoryId: z.number().optional(),
+    currency: z.nativeEnum(ApiCurrency),
+    createdAt: z.string().optional(),
   })
 
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: editData
+      ? {
+          id: editData.id,
+          type: editData.type,
+          amount: editData.amount / 100,
+          description: editData.description || '',
+          categoryId: editData.categoryId,
+          currency: editData.currency,
+          createdAt: editData.createdAt?.split('T')[0],
+        }
+      : {
+          type: ApiTransactionType.EXPENSE,
+          amount: 0,
+          description: '',
+          categoryId: undefined,
+          currency: ApiCurrency.EUR,
+          createdAt: new Date().toISOString().split('T')[0],
+        },
+  })
+
+  useEffect(() => {
+    if (open) {
+      if (editData) {
+        form.reset({
+          id: editData.id,
+          type: editData.type,
+          amount: editData.amount / 100,
+          description: editData.description || '',
+          categoryId: editData.categoryId,
+          currency: editData.currency,
+          createdAt: editData.createdAt?.split('T')[0],
+        })
+      } else {
+        form.reset({
+          type: ApiTransactionType.EXPENSE,
+          amount: 0,
+          description: '',
+          categoryId: undefined,
+          currency: ApiCurrency.EUR,
+          createdAt: new Date().toISOString().split('T')[0],
+        })
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, editData])
+
+  // Mutations
   const { mutate, isPending } = useMutation({
-    mutationKey: ['entries', 'create'],
-    mutationFn: async (values: z.infer<typeof createEntrySchema>) => {
-      // Convert amount to cents for API
+    mutationKey: editData
+      ? ['entries', 'update', editData.id]
+      : ['entries', 'create'],
+    mutationFn: async (values: z.infer<typeof schema>) => {
       const apiValues = {
         ...values,
         amount: Math.round(values.amount * 100),
       }
-      return (await apiClient.entries.entryControllerCreate(apiValues)).data
+      if (editData) {
+        return (
+          await apiClient.entries.entryControllerUpdate(editData.id, apiValues)
+        ).data
+      } else {
+        return (await apiClient.entries.entryControllerCreate(apiValues)).data
+      }
     },
     onSuccess: () => {
-      toast.success('Transaktion erfolgreich erstellt')
+      toast.success(
+        editData
+          ? 'Transaktion erfolgreich aktualisiert'
+          : 'Transaktion erfolgreich erstellt'
+      )
       queryClient.invalidateQueries({ queryKey: ['entries'] })
       form.reset()
       setOpen(false)
     },
     onError: () => {
-      toast.error('Fehler beim Erstellen der Transaktion')
+      toast.error(
+        editData
+          ? 'Fehler beim Aktualisieren der Transaktion'
+          : 'Fehler beim Erstellen der Transaktion'
+      )
     },
   })
 
-  function onSubmit(values: z.infer<typeof createEntrySchema>) {
+  function onSubmit(values: z.infer<typeof schema>) {
     mutate(values)
   }
 
@@ -136,12 +158,18 @@ export function AddTransactionDialog({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 cursor-pointer">
-            <Plus className="w-5 h-5 text-primary" />
-            Transaktion hinzufügen
-          </DialogTitle>
+          {editData ? (
+            <DialogTitle className="flex items-center gap-2">
+              <Pencil className="w-5 h-5 text-primary" />
+              Transaktion bearbeiten
+            </DialogTitle>
+          ) : (
+            <DialogTitle className="flex items-center gap-2">
+              <Plus className="w-5 h-5 text-primary" />
+              Transaktion hinzufügen
+            </DialogTitle>
+          )}
         </DialogHeader>
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Transaction Type */}
@@ -152,16 +180,43 @@ export function AddTransactionDialog({
                 <FormItem>
                   <FormLabel>Typ</FormLabel>
                   <FormControl>
-                    <TransactionTypeSelector
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    />
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant={
+                          field.value === ApiTransactionType.EXPENSE
+                            ? 'destructive'
+                            : 'outline'
+                        }
+                        className="flex-1 cursor-pointer"
+                        onClick={() =>
+                          field.onChange(ApiTransactionType.EXPENSE)
+                        }
+                      >
+                        <TrendingDown className="mr-2 w-4 h-4" />
+                        Ausgabe
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={
+                          field.value === ApiTransactionType.INCOME
+                            ? 'default'
+                            : 'outline'
+                        }
+                        className="flex-1 cursor-pointer"
+                        onClick={() =>
+                          field.onChange(ApiTransactionType.INCOME)
+                        }
+                      >
+                        <TrendingUp className="mr-2 w-4 h-4" />
+                        Einnahme
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             {/* Description */}
             <FormField
               control={form.control}
@@ -185,7 +240,6 @@ export function AddTransactionDialog({
                 </FormItem>
               )}
             />
-
             {/* Amount */}
             <FormField
               control={form.control}
@@ -218,7 +272,6 @@ export function AddTransactionDialog({
                 </FormItem>
               )}
             />
-
             {/* Category and Date Row */}
             <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
               {/* Category */}
@@ -246,7 +299,6 @@ export function AddTransactionDialog({
                   </FormItem>
                 )}
               />
-
               {/* Date */}
               <FormField
                 control={form.control}
@@ -265,7 +317,6 @@ export function AddTransactionDialog({
                 )}
               />
             </div>
-
             <DialogFooter>
               <Button
                 type="button"
@@ -281,9 +332,18 @@ export function AddTransactionDialog({
                 disabled={isPending}
                 className="cursor-pointer"
               >
-                {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
-                <Plus className="mr-2 w-4 h-4" />
-                Hinzufügen
+                {isPending &&
+                  (editData ? (
+                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                  ) : (
+                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                  ))}
+                {editData ? (
+                  <Pencil className="mr-2 w-4 h-4" />
+                ) : (
+                  <Plus className="mr-2 w-4 h-4" />
+                )}
+                {editData ? 'Speichern' : 'Hinzufügen'}
               </Button>
             </DialogFooter>
           </form>
@@ -292,3 +352,10 @@ export function AddTransactionDialog({
     </Dialog>
   )
 }
+
+// Example usage (to be placed in your transaction list/table):
+// <TransactionDialog editData={transaction}>
+//   <Button variant="ghost" size="icon" className="cursor-pointer">
+//     <Pencil className="w-4 h-4" />
+//   </Button>
+// </TransactionDialog>

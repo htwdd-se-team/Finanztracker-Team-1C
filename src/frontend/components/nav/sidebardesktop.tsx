@@ -14,7 +14,7 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { NavUser } from './nav-user'
-import { AddTransactionDialog } from '../add-transaction-dialog'
+import { TransactionDialog } from '@/components/TransactionDialog'
 import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { navItems } from '@/navigation-config'
@@ -51,12 +51,12 @@ export function SidebarDesktop() {
               <SidebarSeparator />
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <AddTransactionDialog>
+                  <TransactionDialog>
                     <Button className="justify-start w-full">
                       <Plus className="mr-2 w-4 h-4" />
                       Neue Transaktion
                     </Button>
-                  </AddTransactionDialog>
+                  </TransactionDialog>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

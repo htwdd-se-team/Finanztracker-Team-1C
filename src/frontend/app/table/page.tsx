@@ -1,4 +1,4 @@
-import EditTransactionButtonDemo from '@/components/edit-transaction-button-demo'
+import EditTransactionDemo from '@/components/edit-transaction-dialog'
 
 export default function tablePage() {
   return (
@@ -6,7 +6,7 @@ export default function tablePage() {
       <h1 className="text-xl font-bold">📋 Tabellen</h1>
       <p>Hier kommt die Tabelle hin</p>
       <div className="mt-4">
-        <EditTransactionButtonDemo />
+        <EditTransactionDemo />
       </div>
     </>
   )
