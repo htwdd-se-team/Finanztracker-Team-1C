@@ -11,7 +11,7 @@ const FinAppLogo = ({ className }: { className?: string }) => {
     >
       <div className="relative flex items-center space-x-2">
         <Image
-          src="/images/logo-high-res.png"
+          src="/images/android-chrome-72x72.png"
           alt="FinApp Logo"
           width={48}
           height={48}
