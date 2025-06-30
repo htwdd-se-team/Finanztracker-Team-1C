@@ -15,7 +15,7 @@ const FinAppLogo = ({ className }: { className?: string }) => {
           alt="FinApp Logo"
           width={48}
           height={48}
-          className="relative flex justify-center items-center shadow-lg rounded-lg object-contain"
+          className="relative flex justify-center items-center rounded-lg object-contain"
         />
 
         <div className="flex flex-col">

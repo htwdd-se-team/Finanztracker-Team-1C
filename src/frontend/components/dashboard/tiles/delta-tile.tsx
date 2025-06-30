@@ -1,17 +1,25 @@
 import { ApiGranularity, ApiTransactionType } from '@/__generated__/api'
 import { apiClient } from '@/api/api-client'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import { Triangle } from 'lucide-react'
+import { Triangle, Loader2 } from 'lucide-react'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 
-function DeltaTile() {
+function DeltaTile({
+  timeRange,
+  className,
+}: {
+  timeRange: string
+  className?: string
+}) {
+  const days = timeRange === 'all' ? 365 : Number(timeRange.split('d')[0])
   const today = DateTime.now()
-  const startDate = today.minus({ days: 31 })
+  const startDate = today.minus({ days })
 
   const { data } = useQuery({
-    queryKey: ['transactions', 'delta-tile'],
+    queryKey: ['transactions', 'delta-tile', timeRange],
     queryFn: () =>
       apiClient.analytics.analyticsControllerGetTransactionBreakdown({
         startDate: startDate.toISO(),
@@ -59,8 +67,18 @@ function DeltaTile() {
 
   const isPositive = delta > 0
 
+  if (!income || !expense || !delta) {
+    return (
+      <Card className={cn(className)}>
+        <CardContent className="flex justify-center items-center h-full">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
-    <Card className="grid grid-rows-[auto_1fr] p-1.5 h-48">
+    <Card className={cn(className)}>
       <CardTitle className="flex items-center gap-1 mb-0 pb-0 font-medium leading-tight">
         <Triangle className="w-4 h-4 shrink-0" /> Delta
       </CardTitle>
@@ -69,8 +87,13 @@ function DeltaTile() {
           {/* Linker Bereich: Werte (3 Spalten) */}
           <div className="flex flex-col space-y-1 col-span-3">
             <div>
-              <div className="font-semibold text-sm">Einnahmen:</div>
-              <div className="font-bold text-green-600 text-base">
+              <div className="font-semibold text-muted-foreground text-sm">
+                Einnahmen:
+              </div>
+              <div
+                className="font-bold text-base"
+                style={{ color: 'var(--chart-1)' }}
+              >
                 {income.toLocaleString('de-DE', {
                   style: 'currency',
                   currency: 'EUR',
@@ -78,22 +101,29 @@ function DeltaTile() {
               </div>
             </div>
             <div>
-              <div className="font-semibold text-sm">Ausgaben:</div>
-              <div className="font-bold text-red-600 text-base">
+              <div className="font-semibold text-muted-foreground text-sm">
+                Ausgaben:
+              </div>
+              <div
+                className="font-bold text-base"
+                style={{ color: 'var(--destructive)' }}
+              >
                 {expense.toLocaleString('de-DE', {
                   style: 'currency',
                   currency: 'EUR',
                 })}
               </div>
             </div>
-            <div className="my-1 border-t border-black border-dashed w-9/12"></div>
+            <div className="my-1 border-t border-border border-dashed w-9/12"></div>
             <div>
-              <div className="flex items-center gap-1 font-semibold text-sm">
-                {' '}
+              <div className="flex items-center gap-1 font-semibold text-muted-foreground text-sm">
                 Delta:
               </div>
               <div
-                className={`text-base font-bold ${isPositive ? 'text-green-600' : 'text-red-600'}`}
+                className={`text-base font-bold`}
+                style={{
+                  color: isPositive ? 'var(--chart-1)' : 'var(--destructive)',
+                }}
               >
                 {delta.toLocaleString('de-DE', {
                   style: 'currency',
@@ -104,16 +134,24 @@ function DeltaTile() {
           </div>
           {/* Rechter Bereich: Vertikale Progressbar (1 Spalte) */}
           <div className="flex justify-center items-center col-span-1">
-            <div className="relative flex-shrink-0 bg-gray-200 shadow-md border border-gray-400 rounded-full w-2 h-32">
-              {/* Roter (Ausgaben) Teil oben */}
+            <div className="relative flex-shrink-0 bg-muted shadow-sm border border-border rounded-full w-2 h-32">
+              {/* Expense (Ausgaben) Teil oben */}
               <div
-                className="top-0 left-0 absolute bg-red-500/70 rounded-t-full w-full"
-                style={{ height: `${expensePercent * 100}%` }}
+                className="top-0 left-0 absolute rounded-t-full w-full transition-all duration-300"
+                style={{
+                  height: `${expensePercent * 100}%`,
+                  backgroundColor: 'var(--destructive)',
+                  opacity: 0.7,
+                }}
               />
-              {/* Grüner (Einnahmen) Teil unten */}
+              {/* Income (Einnahmen) Teil unten */}
               <div
-                className="bottom-0 left-0 absolute bg-green-500/70 rounded-b-full w-full"
-                style={{ height: `${incomePercent * 100}%` }}
+                className="bottom-0 left-0 absolute rounded-b-full w-full transition-all duration-300"
+                style={{
+                  height: `${incomePercent * 100}%`,
+                  backgroundColor: 'var(--chart-1)',
+                  opacity: 0.7,
+                }}
               />
             </div>
           </div>

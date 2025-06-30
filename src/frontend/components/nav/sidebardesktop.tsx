@@ -6,7 +6,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -19,6 +18,7 @@ import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { navItems } from '@/navigation-config'
 import Link from 'next/link'
+import FinAppLogo from '@/components/nav/finapp-logo'
 
 export function SidebarDesktop() {
   const pathname = usePathname()
@@ -32,7 +32,7 @@ export function SidebarDesktop() {
     >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Platzhalter??</SidebarGroupLabel>
+          <FinAppLogo className="text-2xl" />
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map(item => (
