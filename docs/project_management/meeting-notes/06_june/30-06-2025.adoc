@@ -71,11 +71,46 @@ Wie ist der Stand? Wollt ihr den Fortschritt besprechen? +
  +
  +
  
+=== 4. Github Project-Tabs anpassen
+Product Backlog = geordnete Liste von allen Sachen die im Produkt enthalten sein sollen, dient als Anforderungsquelle für alle Änderungen am Produkt +
+Entstehung des Sprint Backlogs aus PBI und Tasks als Plan +
 
-=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+Mapping:
+Overview = Product Backlog
+
+Current Iteration - All = Sprint Backlog - All
+
+Current Iteration - Tasks = Sprint Backlog - Tasks
+
+Current Iteration - Docu = Sprint Backlog - Docu
+
+User Stories = PB - User Stories
+
+Risks = bleibt
+
+My items = bleibt
+
+Tasks = delete
+
+Roadmap = bleibt
+
+Team capacity = bleibt
+
+Die Frage bleibt: Macht es Sinn die Doku überhaupt zum SB mit dazu zu zählen, da es keine konkreten Produkt-Aufgaben sind, sondern teilweise Aufgaben die für die Bewertung von SE1 benötigt werden oder welche die einfach nur portokolliert sind und den Prozess unterstützen
 
 *Notizen:* +
 - ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- Änderung des Wireframes dokumentieren → @Christoph kannst du bitte kurz aufschreiben, was wir geändert haben im Gegensatz zum Original, also zwei Zwischenüberschriften und dann ganz unten die Änderugen hinschreiben → docs/requirements/ux-concept.adoc +
+- Konsulationsfragen zeigen und besprechen
 
 
 == Nächstes Meeting
