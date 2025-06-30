@@ -1,18 +1,20 @@
 import { apiClient } from '@/api/api-client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Loader2, Wallet } from 'lucide-react'
 
-function BalanceTile() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['balance'],
+function BalanceTile({ className }: { className?: string }) {
+  const { data } = useQuery({
+    queryKey: ['transactions', 'balance'],
     queryFn: apiClient.user.userControllerGetBalance,
     select: data => data.data,
+    placeholderData: previousData => previousData,
   })
 
-  if (isLoading || !data) {
+  if (!data) {
     return (
-      <Card className="h-24 lg:h-32">
+      <Card className={cn('h-18', className)}>
         <CardContent className="flex justify-center items-center h-full">
           <Loader2 className="w-6 h-6 animate-spin" />
         </CardContent>
@@ -21,14 +23,13 @@ function BalanceTile() {
   }
 
   return (
-    <Card className="p-1.5 h-18">
-      <CardHeader className="flex p-0">
-        <CardTitle className="flex items-center gap-1 font-medium">
-          <Wallet className="w-4 h-4 shrink-0" /> Kontostand
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="-mt-3 px-2">
-        <div className="font-bold text-2xl">
+    <Card className={cn('h-18', className)}>
+      <CardContent className="flex flex-col justify-center p-3 h-full">
+        <div className="flex items-center gap-1 mb-1">
+          <Wallet className="w-4 h-4 shrink-0" />
+          <span className="font-medium text-sm">Kontostand</span>
+        </div>
+        <div className="font-bold text-xl leading-tight">
           {(data?.balance / 100).toLocaleString('de-DE', {
             style: 'currency',
             currency: 'EUR',

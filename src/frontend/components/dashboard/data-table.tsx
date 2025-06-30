@@ -17,10 +17,13 @@ import { IconMap } from '@/lib/icon-map'
 import { useCategory } from '@/components/provider/category-provider'
 
 function DataTable() {
-  
   const { getCategoryFromId } = useCategory()
 
-  const { data: entries, isLoading, error,} = useQuery({
+  const {
+    data: entries,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['entries'],
     queryFn: async () => {
       const response = await apiClient.entries.entryControllerList({
@@ -86,9 +89,18 @@ function DataTable() {
           </TableHeader>
           <TableBody>
             {entries?.map((entry: ApiEntryResponseDto) => {
-              const category = entry.category ? getCategoryFromId(entry.category) : undefined;
-              const IconComponent = category?.icon ? IconMap[category.icon as keyof typeof IconMap] : undefined;
-              console.log({ entry, category, icon: category?.icon, IconComponent });
+              const category = entry.category
+                ? getCategoryFromId(entry.category)
+                : undefined
+              const IconComponent = category?.icon
+                ? IconMap[category.icon as keyof typeof IconMap]
+                : undefined
+              console.log({
+                entry,
+                category,
+                icon: category?.icon,
+                IconComponent,
+              })
               return (
                 <TableRow key={entry.id}>
                   <TableCell className="font-medium" style={cellStyle}>
@@ -102,11 +114,15 @@ function DataTable() {
                           : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
                       }`}
                     >
-                      {entry.type === ApiTransactionType.INCOME ? 'Einnahme' : 'Ausgabe'}
+                      {entry.type === ApiTransactionType.INCOME
+                        ? 'Einnahme'
+                        : 'Ausgabe'}
                     </span>
                   </TableCell>
                   <TableCell style={cellStyle}>
-                    {IconComponent && <IconComponent className="w-5 h-5 mr-2" />}
+                    {IconComponent && (
+                      <IconComponent className="mr-2 w-5 h-5" />
+                    )}
                   </TableCell>
                   <TableCell className="font-mono text-right" style={cellStyle}>
                     <span
@@ -128,7 +144,10 @@ function DataTable() {
             })}
             {(!entries || entries.length === 0) && (
               <TableRow>
-                <TableCell colSpan={4} className="text-muted-foreground text-center">
+                <TableCell
+                  colSpan={4}
+                  className="text-muted-foreground text-center"
+                >
                   Keine Transaktionen vorhanden
                 </TableCell>
               </TableRow>

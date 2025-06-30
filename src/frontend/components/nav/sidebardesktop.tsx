@@ -6,7 +6,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -33,7 +32,7 @@ export function SidebarDesktop() {
     >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel><FinAppLogo className="text-2xl" /></SidebarGroupLabel>
+          <FinAppLogo className="text-2xl" />
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map(item => (
