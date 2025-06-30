@@ -13,17 +13,18 @@ import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { Loader2, ArrowRightLeft } from 'lucide-react'
 import { ApiEntryResponseDto, ApiTransactionType } from '@/__generated__/api'
+import { IconMap } from '@/lib/icon-map'
+import { useCategory } from '@/components/provider/category-provider'
 
 function DataTable() {
-  const {
-    data: entries,
-    isLoading,
-    error,
-  } = useQuery({
+  
+  const { getCategoryFromId } = useCategory()
+
+  const { data: entries, isLoading, error,} = useQuery({
     queryKey: ['entries'],
     queryFn: async () => {
       const response = await apiClient.entries.entryControllerList({
-        take: 30,
+        take: 6,
       })
       return response.data
     },
@@ -75,53 +76,59 @@ function DataTable() {
               <TableHead className="font-semibold" style={{ paddingLeft: 22 }}>
                 Typ
               </TableHead>
+              <TableHead className="font-semibold" style={cellStyle}>
+                Kategorie
+              </TableHead>
               <TableHead className="font-semibold text-right" style={cellStyle}>
                 Betrag
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {entries?.map((entry: ApiEntryResponseDto) => (
-              <TableRow key={entry.id}>
-                <TableCell className="font-medium" style={cellStyle}>
-                  {entry.description || '---'}
-                </TableCell>
-                <TableCell style={cellStyle}>
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      entry.type === ApiTransactionType.INCOME
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200'
-                        : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
-                    }`}
-                  >
-                    {entry.type === ApiTransactionType.INCOME
-                      ? 'Einnahme'
-                      : 'Ausgabe'}
-                  </span>
-                </TableCell>
-                <TableCell className="font-mono text-right" style={cellStyle}>
-                  <span
-                    className={
-                      entry.type === ApiTransactionType.INCOME
-                        ? 'text-green-400'
-                        : 'text-red-400'
-                    }
-                  >
-                    {entry.type === ApiTransactionType.INCOME ? '+' : '-'}
-                    {(entry.amount / 100).toLocaleString('de-DE', {
-                      style: 'currency',
-                      currency: 'EUR',
-                    })}
-                  </span>
-                </TableCell>
-              </TableRow>
-            ))}
+            {entries?.map((entry: ApiEntryResponseDto) => {
+              const category = entry.category ? getCategoryFromId(entry.category) : undefined;
+              const IconComponent = category?.icon ? IconMap[category.icon as keyof typeof IconMap] : undefined;
+              console.log({ entry, category, icon: category?.icon, IconComponent });
+              return (
+                <TableRow key={entry.id}>
+                  <TableCell className="font-medium" style={cellStyle}>
+                    {entry.description || '---'}
+                  </TableCell>
+                  <TableCell style={cellStyle}>
+                    <span
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        entry.type === ApiTransactionType.INCOME
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
+                      }`}
+                    >
+                      {entry.type === ApiTransactionType.INCOME ? 'Einnahme' : 'Ausgabe'}
+                    </span>
+                  </TableCell>
+                  <TableCell style={cellStyle}>
+                    {IconComponent && <IconComponent className="w-5 h-5 mr-2" />}
+                  </TableCell>
+                  <TableCell className="font-mono text-right" style={cellStyle}>
+                    <span
+                      className={
+                        entry.type === ApiTransactionType.INCOME
+                          ? 'text-green-400'
+                          : 'text-red-400'
+                      }
+                    >
+                      {entry.type === ApiTransactionType.INCOME ? '+' : '-'}
+                      {(entry.amount / 100).toLocaleString('de-DE', {
+                        style: 'currency',
+                        currency: 'EUR',
+                      })}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
             {(!entries || entries.length === 0) && (
               <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-muted-foreground text-center"
-                >
+                <TableCell colSpan={4} className="text-muted-foreground text-center">
                   Keine Transaktionen vorhanden
                 </TableCell>
               </TableRow>

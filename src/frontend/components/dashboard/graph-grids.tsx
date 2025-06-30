@@ -39,12 +39,12 @@ function GraphGrids() {
 
         {/* PieChart - 1 col on mobile, 1 col on desktop */}
         <div className="col-span-1 lg:col-span-1">
-          <PieChartTile />
+          <PieChartTile timeRange={timeRange}/>
         </div>
 
         {/* Delta - 1 col on mobile, moves to row 2 col 1 on desktop */}
         <div className="lg:order-first col-span-1 lg:col-span-1 lg:row-start-2">
-          <DeltaTile />
+          <DeltaTile timeRange={timeRange}/>
         </div>
       </div>
     </div>

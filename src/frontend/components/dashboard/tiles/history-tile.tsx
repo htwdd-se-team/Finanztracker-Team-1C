@@ -1,7 +1,7 @@
 'use client'
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { TrendingUp } from 'lucide-react'
+import { TrendingUp, Loader2 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -31,7 +31,7 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
   const today = DateTime.now()
   const startDate = today.minus({ days: days })
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['transactions', 'history-tile', timeRange],
     queryFn: () =>
       apiClient.analytics.analyticsControllerGetTransactionBalanceHistory({
@@ -41,7 +41,15 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
       }),
   })
 
-  if (!data) return null
+   if (isLoading || !data) {
+    return (
+      <Card className="h-24 lg:h-32">
+        <CardContent className="flex justify-center items-center h-full">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </CardContent>
+      </Card>
+    )
+  }
 
   const graphData = data.data.map(item => ({
     date: new Date(item.date).toISOString(),
@@ -104,10 +112,9 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
               minTickGap={32}
               tickFormatter={value => {
                 const date = new Date(value)
-                return date.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                })
+                const day = date.toLocaleDateString('de-DE', { day: '2-digit' })
+                const month = date.toLocaleDateString('de-DE', { month: 'short' })
+                return `${day}. ${month}`
               }}
             />
             <ChartTooltip
@@ -115,11 +122,13 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
               content={
                 <ChartTooltipContent
                   labelFormatter={value => {
-                    return new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
+                    return new Date(value).toLocaleDateString('de-DE', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
                     })
                   }}
+                  formatter={value => `${value} €`}
                   indicator="dot"
                 />
               }
