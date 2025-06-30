@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, Transaction, User } from "@prisma/client";
 
 import {
@@ -6,6 +6,7 @@ import {
   EntryPageDto,
   EntryPaginationParamsDto,
   EntrySortBy,
+  UpdateEntryDto,
   type CreateEntryDto,
   type EntryResponseDto,
 } from "../dto";
@@ -16,11 +17,6 @@ import { PrismaService } from "./prisma.service";
 export class EntryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /**
-   * Creates a new transaction entry in the database.
-   * @param data - The data for the new entry (from DTO)
-   * @returns The created entry mapped to EntryResponseDto
-   */
   async createEntry(
     user: User,
     data: CreateEntryDto,
@@ -35,8 +31,8 @@ export class EntryService {
         isRecurring: data.isRecurring ?? false,
         recurringInterval: data.recurringInterval,
         categoryId: data.categoryId,
-        startDate: data.startDate && data.startDate,
-        endDate: data.endDate && data.endDate,
+        startDate: data.startDate,
+        endDate: data.endDate,
         transactionId: data.transactionId,
         recurringType: data.recurringType,
       },
@@ -76,12 +72,9 @@ export class EntryService {
       ...(transactionType && {
         type: transactionType,
       }),
-      ...(categoryIds &&
-        categoryIds.length > 0 && {
-          categoryId: {
-            in: categoryIds,
-          },
-        }),
+      ...(categoryIds?.length && {
+        categoryId: { in: categoryIds },
+      }),
       ...((amountMin !== undefined || amountMax !== undefined) && {
         amount: {
           ...(amountMin !== undefined && { gte: amountMin }),
@@ -114,6 +107,51 @@ export class EntryService {
         entries.length === take ? entries[entries.length - 1]?.id : null,
       count: entries.length,
     };
+  }
+
+  async deleteEntry(user: User, entryId: number): Promise<void> {
+    const deleted = await this.prisma.transaction.deleteMany({
+      where: {
+        id: entryId,
+        userId: user.id,
+      },
+    });
+
+    if (!deleted.count) {
+      throw new NotFoundException(
+        "Entry not found or not authorized to delete",
+      );
+    }
+  }
+
+  async updateEntry(
+    user: User,
+    entryId: number,
+    data: UpdateEntryDto,
+  ): Promise<EntryResponseDto> {
+    const updated = await this.prisma.transaction.updateMany({
+      where: {
+        id: entryId,
+        userId: user.id,
+      },
+      data,
+    });
+
+    if (!updated.count) {
+      throw new NotFoundException(
+        "Entry not found or not authorized to update",
+      );
+    }
+
+    const entry = await this.prisma.transaction.findUnique({
+      where: { id: entryId },
+    });
+
+    if (!entry) {
+      throw new NotFoundException("Entry not found after update");
+    }
+
+    return EntryService.mapEntryToResponseDto(entry);
   }
 
   static mapEntryToResponseDto(entry: Transaction): EntryResponseDto {
