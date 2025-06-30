@@ -85,6 +85,7 @@ React-Frontend mit Next.js Framework, ShadCN UI-Komponenten, zustandsbasiertes R
 **Logikschicht:**
 
 NestJS Backend mit modularer Controller-Service-Architektur:
+
 * AuthController: Benutzerregistrierung und -anmeldung
 * UserController: Benutzerprofilverwaltung
 * CategoryController: Kategorienverwaltung
@@ -145,7 +146,8 @@ PostgreSQL mit Prisma ORM für typsichere Datenbankzugriffe. Kysely als zusätzl
 ** ACID-Eigenschaften für Datenkonsistenz
 
 .Container-Diagramm der FinanzTracker-Architektur
-image:images/architecture-diagram-drawio.png[Container-Diagramm,width=100%,align=center]
+image:architecture-diagram-drawio.png[]
+[Container-Diagramm,width=100%,align=center]
 
 
 === Components (C4 Level 3)
