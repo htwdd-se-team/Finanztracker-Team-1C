@@ -3,24 +3,27 @@
 *Datum:* 30.06.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Cedrick +
 *Meetingbeginn:* 16:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 17:18 +
+*Dauer:* 78 min 
 
 ==== Anwesenheit: 
 - Elias
 - Ben
 - Paula
-- Ali
+- Ali (Angekündigt, kommt später)
 - Khang
 - Christoph
 - Cedrick
 
 == Tagesordnung
 
-Generalprobe
-Abgabedokument
+Generalprobe +
+Abgabedokument +
+Fortschritt der Devs +
+Github Project-Tabs anpassen +
+Weitere organisatorische Aufgaben und/oder offene Punkte +
 
 
 ==  Weekly Stand-up/Backlog Refinement
@@ -28,14 +31,20 @@ Abgabedokument
 Vorführung der Präsentation. Verbesserungsvorschläge +
 
 *Notizen:* +
-- ... +
+- genereller Zeitmangel
+
+- Abmelden am Mobilgerät noch nicht möglich -> Dev Task?
+- @Elias: Fertigstellen der Präsentation (Update der Screenshots nach Änderungen in der App)
+ +
+- Folie 1 -> weniger Entscheidungen?, bessere Finanzen sehr vague, "Erwähnenswertes" nicht als erstes nennen
+- Folie 2 -> Noch zu wenig input von Elias, Technologie-Entscheidungen erklären
+- Beides zusammen ca 5 min
+- Appvorstellung -> 2 min, Wöchentlicher Kontoverlauf wird nicht ordentlich dargestellt, Maushover modus vllt noch anpassen?
 
 
 *Entscheidung:* +
-- ... +
+- Vorstellung im Mobile-Modus +
 
- +
- +
 
 === 2. Abgabedokument
 - requirements/glossary.adoc +
@@ -47,30 +56,35 @@ Vorführung der Präsentation. Verbesserungsvorschläge +
 - project_management/project_plan.adoc +
     -> 3.2 Entwicklungspraktiken sind noch nicht formuliert
     
- +
- +
-
 *Notizen:* +
 - ... +
 
 
 *Entscheidung:* +
-- ... +
- +
- +
-
+- Auskommentiere Zeilen im Glossary werden entfernt +
+- User Stories werden vorerst drinnen gelassen +
+- C4 Level 1 noch updaten?, Wo genau ist die Abgabe   in Opal? Morgen(Dienstag 1.7) fragen +
+- Entwicklungspraktiken -> Verweis auf Coding Guidelines
 
 === 3. Fortschritt der Devs
 Wie ist der Stand? Wollt ihr den Fortschritt besprechen? +
 
 *Notizen:* +
-- ... +
+- Einige Fixes noch nötig, Features heute am besten noch pushen, damit sie in der Präsentation gezeigt werden können
 
 *Entscheidung:* +
-- ... +
- +
- +
- 
+- Pushen von Features bis 20 Uhr, Rest übernimmt Elias (weitesgehend)
+- "Platzhalter???"  in Desktop NavLeiste ändern - Christoph +
+- "Verwendungen" in Profil Tab ändern zu "Einträge" - Elias +
+- Logo ändern beim Login Screen - Elias +
+- Graphen Platzhalter etwas verschönern - Elias +
+- Kategorien Piechart anpassen, damit die Kategorien auch wirklich erkenntlich sind - Christoph +
+- Testaccount verändern, letzte Einträge löschen, damit die Wochendarstellung "clean" bleibt - Ben +
+- Tabelle fertigstellen - Cedrick +
+- Default Theme auf modern minimal ändern - Elias +
+- Beim Delta Farben anpassen, loading animation adden, responsive design verändern - Christoph +
+- Delete / Update Dialog von Entries hinzufügen - Ali + 
+
 === 4. Github Project-Tabs anpassen
 Product Backlog = geordnete Liste von allen Sachen die im Produkt enthalten sein sollen, dient als Anforderungsquelle für alle Änderungen am Produkt +
 Entstehung des Sprint Backlogs aus PBI und Tasks als Plan +
@@ -102,7 +116,7 @@ Die Frage bleibt: Macht es Sinn die Doku überhaupt zum SB mit dazu zu zählen, 
 - ... +
 
 *Entscheidung:* +
-- ... +
+- generelle Zustimmung +
  +
  +
 
@@ -112,13 +126,29 @@ Die Frage bleibt: Macht es Sinn die Doku überhaupt zum SB mit dazu zu zählen, 
 - Änderung des Wireframes dokumentieren → @Christoph kannst du bitte kurz aufschreiben, was wir geändert haben im Gegensatz zum Original, also zwei Zwischenüberschriften und dann ganz unten die Änderugen hinschreiben → docs/requirements/ux-concept.adoc +
 - Konsulationsfragen zeigen und besprechen
 
+*Entscheidung:* +
+- Abweichungen von Wireframes noch minimal, Christoph dokumentiert diese in der UX Concept Datei +
+- @Ali: Informierung von Herrn Anke über Abwesenheit im nächsten Semester +
+
+
+**Fragen an Herrn Anke:** +
+- Abgabe in Opal, wo genau? +
+- C4 Level 1 noch updaten? +
+- Offline Feature wird dieses Semester nicht mehr umgesetzt, ist das okay?
+
+**Dev Tasks:** +
+- Pushen von Features bis 20 Uhr, Rest übernimmt Elias (weitesgehend) +
+- "Platzhalter???"  in Desktop NavLeiste ändern - Christoph +
+- "Verwendungen" in Profil Tab ändern zu "Einträge" - Elias +
+- Logo ändern beim Login Screen - Elias +
+- Graphen Platzhalter etwas verschönern - Elias +
+- Kategorien Piechart anpassen, damit die Kategorien auch wirklich erkenntlich sind - Christoph +
+- Testaccount verändern, letzte Einträge löschen, damit die Wochendarstellung "clean" bleibt - Ben +
+- Tabelle fertigstellen - Cedrick +
+- Default Theme auf modern minimal ändern - Elias +
+- Beim Delta Farben anpassen, loading animation adden, responsive design verändern - Christoph +
+- Delete / Update Dialog von Entries hinzufügen - Ali +
 
 == Nächstes Meeting
 
-- Datum: xx.xx.2025
-- Zeit: *xx:xx* Uhr
-- Ort: Online (Teams)
-
-==== Themen nächstes Meeting
-
-- ... +
+- nächstes Semester ;)

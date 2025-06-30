@@ -3,7 +3,7 @@ import { useTheme as useNextTheme } from 'next-themes'
 import { useLocalStorage } from '@mantine/hooks'
 
 export enum ColorTheme {
-  DEFAULT = 'default', // Ozean Breeze
+  OCEAN_BREEZE = 'ocean-breeze',
   AMBER_MINIMAL = 'amber-minimal',
   CLEAN_SLATE = 'clean-slate',
   MODERN_MINIMAL = 'modern-minimal',
@@ -18,7 +18,7 @@ export enum Theme {
 
 export const ThemeConfig = [
   {
-    key: ColorTheme.DEFAULT,
+    key: ColorTheme.OCEAN_BREEZE,
     label: 'Ozean Breeze',
     description: 'Ruhiges Grün',
     colors: ['oklch(0.7227 0.192 149.5793)', 'oklch(0.9514 0.025 236.8242)'],
@@ -73,7 +73,7 @@ export function ColorThemeProvider({
 
   const [colorTheme, setColorTheme] = useLocalStorage<ColorTheme>({
     key: 'color-theme',
-    defaultValue: ColorTheme.DEFAULT,
+    defaultValue: ColorTheme.MODERN_MINIMAL,
   })
 
   const [themeVariant, setThemeVariant] = useLocalStorage<Theme>({

@@ -1,6 +1,6 @@
 @layer base {
   /* Ozean Breeze */
-  :root {
+  .theme-ocean-breeze {
     --background: oklch(0.9751 0.0127 244.2507);
     --foreground: oklch(0.3729 0.0306 259.7328);
     --card: oklch(1 0 0);
@@ -49,7 +49,7 @@
     --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
   }
 
-  .dark {
+  .theme-ocean-breeze.dark {
     --background: oklch(0.2077 0.0398 265.7549);
     --foreground: oklch(0.8717 0.0093 258.3382);
     --card: oklch(0.2795 0.0368 260.031);
@@ -456,7 +456,7 @@
     --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
   }
 
-  .theme-modern-minimal.dark {
+  .dark {
     --background: oklch(0.2046 0 0);
     --foreground: oklch(0.9219 0 0);
     --card: oklch(0.2686 0 0);
