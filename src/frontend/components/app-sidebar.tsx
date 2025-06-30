@@ -14,9 +14,8 @@ import {
 } from '@/components/ui/sidebar'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
-
 import { NavUser } from '@/components/nav/nav-user'
-import { AddTransactionDialog } from '@/components/add-transaction-dialog'
+import { TransactionDialog } from '@/components/TransactionDialog'
 
 export function AppSidebar() {
   return (
@@ -28,7 +27,7 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <AddTransactionDialog>
+                  <TransactionDialog>
                     <Button
                       className="justify-start w-full"
                       variant="ghost"
@@ -37,7 +36,7 @@ export function AppSidebar() {
                       <Plus className="mr-2 w-4 h-4" />
                       Neue Transaktion
                     </Button>
-                  </AddTransactionDialog>
+                  </TransactionDialog>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

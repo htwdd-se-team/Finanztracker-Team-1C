@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { SquarePlus } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { AddTransactionDialog } from '@/components/add-transaction-dialog'
+import { TransactionDialog } from '@/components/TransactionDialog'
 import { navItems, TabValues } from '@/navigation-config'
 import { motion } from 'framer-motion'
 
@@ -89,11 +89,11 @@ export default function NavbarMobile() {
         </Tabs>
 
         {/* Floating Button */}
-        <AddTransactionDialog>
+        <TransactionDialog>
           <Button className="-top-6 left-1/2 z-10 absolute flex justify-center items-center bg-primary hover:bg-primary/90 shadow-lg rounded-full w-16 h-16 text-primary-foreground transition -translate-x-1/2">
             <SquarePlus className="size-8" />
           </Button>
-        </AddTransactionDialog>
+        </TransactionDialog>
       </div>
     </div>
   )
