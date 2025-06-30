@@ -40,15 +40,14 @@ Vorführung der Präsentation. Verbesserungsvorschläge +
 === 2. Abgabedokument
 - requirements/glossary.adoc +
     -> Abkürzungen und Akronyme hat noch einige auskommentierte Begriffe. Brauchen wir die oder können die weg?
-- requirments/user-stories-textfom.adoc
+- requirments/user-stories-textfom.adoc +
     -> brauchen wir die wenn sie im GitHub stehen?
-- arcitecture/architecture_notebook.adoc
+- arcitecture/architecture_notebook.adoc +
     -> sind alle Daten noch aktuell/ steht dort das wofür wir uns letzten Endes entschieden haben?
-- project_management/project_plan.adoc
+- project_management/project_plan.adoc +
     -> 3.2 Entwicklungspraktiken sind noch nicht formuliert
-
-
-
+    
+ +
  +
 
 *Notizen:* +
