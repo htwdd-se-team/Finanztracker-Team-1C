@@ -137,7 +137,7 @@ Die Frage bleibt: Macht es Sinn die Doku überhaupt zum SB mit dazu zu zählen, 
 - Offline Feature wird dieses Semester nicht mehr umgesetzt, ist das okay?
 
 **Dev Tasks:** +
-- Pushen von Features bis 20 Uhr, Rest übernimmt Elias (weitesgehend)
+- Pushen von Features bis 20 Uhr, Rest übernimmt Elias (weitesgehend) +
 - "Platzhalter???"  in Desktop NavLeiste ändern - Christoph +
 - "Verwendungen" in Profil Tab ändern zu "Einträge" - Elias +
 - Logo ändern beim Login Screen - Elias +
@@ -147,7 +147,7 @@ Die Frage bleibt: Macht es Sinn die Doku überhaupt zum SB mit dazu zu zählen, 
 - Tabelle fertigstellen - Cedrick +
 - Default Theme auf modern minimal ändern - Elias +
 - Beim Delta Farben anpassen, loading animation adden, responsive design verändern - Christoph +
-- Delete / Update Dialog von Entries hinzufügen - Ali + 
+- Delete / Update Dialog von Entries hinzufügen - Ali +
 
 == Nächstes Meeting
 
