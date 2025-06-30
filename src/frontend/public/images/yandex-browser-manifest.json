@@ -3,7 +3,7 @@
   "api_version": 1,
   "layout": {
     "logo": "/images/yandex-browser-50x50.png",
-    "color": "#D6EBFE",
+    "color": "transparent",
     "show_title": true
   }
 }
