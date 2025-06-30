@@ -96,7 +96,7 @@ function CategoryCard({
                   }}
                 >
                   {category.usageCount}{' '}
-                  {category.usageCount === 1 ? 'Verwendung' : 'Verwendungen'}
+                  {category.usageCount === 1 ? 'Eintrag' : 'Einträge'}
                 </Badge>
               )}
             </div>
