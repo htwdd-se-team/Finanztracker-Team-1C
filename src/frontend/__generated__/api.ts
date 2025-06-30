@@ -149,7 +149,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-06-28T13:31:04.647Z"
+   * @example "2025-06-30T16:27:51.812Z"
    */
   createdAt: string;
   /**
@@ -805,6 +805,39 @@ export class Api<
         path: `/entries/list`,
         method: "GET",
         query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerDelete
+     * @request DELETE:/entries/{id}
+     * @secure
+     */
+    entryControllerDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void>({
+        path: `/entries/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerUpdate
+     * @request PATCH:/entries/{id}
+     * @secure
+     */
+    entryControllerUpdate: (id: number, params: RequestParams = {}) =>
+      this.request<ApiEntryResponseDto, void>({
+        path: `/entries/${id}`,
+        method: "PATCH",
         secure: true,
         format: "json",
         ...params,

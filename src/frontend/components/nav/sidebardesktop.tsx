@@ -52,7 +52,7 @@ export function SidebarDesktop() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <AddTransactionDialog>
-                    <Button className="justify-start w-full">
+                    <Button className="justify-start w-full cursor-pointer">
                       <Plus className="mr-2 w-4 h-4" />
                       Neue Transaktion
                     </Button>

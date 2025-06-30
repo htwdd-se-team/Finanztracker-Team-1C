@@ -1,9 +1,23 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { useCategory } from '@/components/provider/category-provider'
+import { Edit, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { toast } from 'sonner'
 
 type Entry = {
   id: number
@@ -20,10 +34,10 @@ type SortDirection = 'asc' | 'desc'
 
 export default function TablePage() {
   const { getCategoryFromId } = useCategory()
-
-  // Sorting state
+  const [deletingEntryId, setDeletingEntryId] = useState<number | undefined>()
   const [sortKey, setSortKey] = useState<SortKey>('id')
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
+  const queryClient = useQueryClient()
 
   // Use infinite query for cursor-based pagination
   const {
@@ -99,6 +113,54 @@ export default function TablePage() {
     return sortDirection === 'asc' ? ' ▲' : ' ▼'
   }
 
+  // Delete entry mutation
+  const [isDeleting, setIsDeleting] = useState(false)
+  async function handleDelete(entryId: number) {
+    setIsDeleting(true)
+    try {
+      await apiClient.entries.entryControllerDelete(entryId)
+      toast.success('Eintrag erfolgreich gelöscht')
+
+      // Remove the deleted entry from the cache
+      queryClient.setQueryData(['entries', 'all'], (oldData: unknown) => {
+        if (
+          !oldData ||
+          typeof oldData !== 'object' ||
+          oldData === null ||
+          !('pages' in oldData) ||
+          !Array.isArray((oldData as { pages: EntriesPage[] }).pages)
+        ) {
+          return oldData
+        }
+        const oldDataTyped = oldData as { pages: EntriesPage[] }
+        // Remove the entry from all pages
+        const newPages = oldDataTyped.pages.map((page: EntriesPage) => ({
+          ...page,
+          entries: page.entries.filter((e: Entry) => e.id !== entryId),
+        }))
+        // If after deletion, the total entries are less than loaded, fetch more pages if available
+        const totalLoaded = newPages.reduce(
+          (acc: number, page: EntriesPage) => acc + page.entries.length,
+          0
+        )
+        if (
+          oldDataTyped.pages.length > 0 &&
+          oldDataTyped.pages[oldDataTyped.pages.length - 1].cursorId !==
+            undefined &&
+          totalLoaded % 30 === 0 // If we had a full last page before deletion
+        ) {
+          // Fetch next page to fill the gap
+          fetchNextPage()
+        }
+        return { ...oldDataTyped, pages: newPages }
+      })
+    } catch {
+      toast.error('Fehler beim Löschen des Eintrags')
+    }
+    setIsDeleting(false)
+    setDeletingEntryId(undefined)
+  }
+
   return (
     <>
       <h1 className="text-xl font-bold mb-4">📋 Tabellen</h1>
@@ -150,6 +212,7 @@ export default function TablePage() {
               >
                 Erstellt am{sortArrow('createdAt')}
               </th>
+              <th className="px-4 py-2 text-left">Aktionen</th>
             </tr>
           </thead>
           <tbody>
@@ -179,6 +242,56 @@ export default function TablePage() {
                   <td className="px-4 py-2">
                     {new Date(entry.createdAt).toLocaleDateString()}
                   </td>
+                  <td className="px-4 py-2">
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="hover:bg-white/80 dark:hover:bg-black/20 p-0 w-7 h-7 cursor-pointer"
+                      >
+                        <Edit className="w-3.5 h-3.5" />
+                        <span className="sr-only">Eintrag bearbeiten</span>
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="hover:bg-destructive/10 p-0 w-7 h-7 text-destructive hover:text-destructive cursor-pointer"
+                            disabled={
+                              isDeleting && deletingEntryId === entry.id
+                            }
+                            onClick={() => setDeletingEntryId(entry.id)}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span className="sr-only">Eintrag löschen</span>
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Eintrag löschen?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Möchten Sie den Eintrag wirklich löschen? Diese
+                              Aktion kann nicht rückgängig gemacht werden.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="cursor-pointer">
+                              Abbrechen
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(entry.id)}
+                              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground cursor-pointer"
+                            >
+                              Löschen
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </td>
                 </tr>
               )
             })}
@@ -187,7 +300,7 @@ export default function TablePage() {
         {hasNextPage && (
           <div className="flex justify-center my-4">
             <button
-              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/80"
+              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/80 cursor-pointer"
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
             >

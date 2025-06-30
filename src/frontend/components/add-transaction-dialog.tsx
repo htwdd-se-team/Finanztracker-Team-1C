@@ -59,7 +59,7 @@ function TransactionTypeSelector({
         variant={
           value === ApiTransactionType.EXPENSE ? 'destructive' : 'outline'
         }
-        className="flex-1"
+        className="flex-1 cursor-pointer"
         onClick={() => onValueChange(ApiTransactionType.EXPENSE)}
       >
         <TrendingDown className="mr-2 w-4 h-4" />
@@ -68,7 +68,7 @@ function TransactionTypeSelector({
       <Button
         type="button"
         variant={value === ApiTransactionType.INCOME ? 'default' : 'outline'}
-        className="flex-1"
+        className="flex-1 cursor-pointer"
         onClick={() => onValueChange(ApiTransactionType.INCOME)}
       >
         <TrendingUp className="mr-2 w-4 h-4" />
@@ -137,7 +137,7 @@ export function AddTransactionDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Plus className="w-5 h-5 text-primary" />
+            <Plus className="w-5 h-5 text-primary " />
             Transaktion hinzufügen
           </DialogTitle>
         </DialogHeader>
@@ -268,6 +268,7 @@ export function AddTransactionDialog({
 
             <DialogFooter>
               <Button
+                className="cursor-pointer"
                 type="button"
                 variant="outline"
                 onClick={() => handleOpenChange(false)}
@@ -275,9 +276,13 @@ export function AddTransactionDialog({
               >
                 Abbrechen
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button
+                className="cursor-pointer"
+                type="submit"
+                disabled={isPending}
+              >
                 {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
-                <Plus className="mr-2 w-4 h-4" />
+                <Plus className="mr-2 w-4 h-4 " />
                 Hinzufügen
               </Button>
             </DialogFooter>
