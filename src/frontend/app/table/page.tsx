@@ -4,24 +4,10 @@ import React, { useState } from 'react'
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { useCategory } from '@/components/provider/category-provider'
-import { Edit, Trash2, TrendingUp, TrendingDown, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
 import Background from '@/components/background'
-import * as LucideIcons from 'lucide-react'
-import { getCategoryColorClasses } from '@/lib/color-map'
-import { cn } from '@/lib/utils'
+import { EntryList } from '@/components/entry-list'
 
 type Entry = {
   id: number
@@ -40,7 +26,6 @@ export default function TablePage() {
   const [deletingEntryId, setDeletingEntryId] = useState<number | undefined>()
   const queryClient = useQueryClient()
 
-  // Use infinite query for cursor-based pagination
   const {
     data,
     fetchNextPage,
@@ -68,13 +53,11 @@ export default function TablePage() {
     initialPageParam: undefined,
   })
 
-  // Flatten all loaded entries
   const entries: Entry[] = React.useMemo(() => {
     if (!data?.pages) return []
     return data.pages.flatMap(page => page?.entries || [])
   }, [data])
 
-  // Delete entry mutation
   const [isDeleting, setIsDeleting] = useState(false)
   async function handleDelete(entryId: number) {
     setIsDeleting(true)
@@ -89,7 +72,6 @@ export default function TablePage() {
     setDeletingEntryId(undefined)
   }
 
-  // Handle load more
   const handleLoadMore = async () => {
     try {
       await fetchNextPage()
@@ -132,164 +114,15 @@ export default function TablePage() {
       <Background />
       <div className="flex-1 overflow-auto p-2 sm:p-4 relative z-10">
         <ul className="space-y-2 max-w-3xl mx-auto">
-          {entries.length === 0 ? (
-            <li className="text-center text-muted-foreground py-8">
-              Keine Einträge gefunden
-            </li>
-          ) : (
-            entries.map(entry => {
-              if (entry.categoryId && getCategoryFromId) {
-                getCategoryFromId(Number(entry.categoryId))
-              }
-              const isIncome = entry.type === 'INCOME'
-              return (
-                <li
-                  key={entry.id}
-                  className="flex items-center justify-between rounded-xl border px-4 py-3 bg-card/50 backdrop-blur-2xl dark:bg-card/50 shadow-sm relative"
-                >
-                  {/* Farbbalken links */}
-                  <span
-                    className={cn(
-                      'absolute left-0 top-2 bottom-2 w-1.5 rounded-full',
-                      entry.categoryId &&
-                        getCategoryColorClasses(
-                          getCategoryFromId(Number(entry.categoryId)).color
-                        )
-                    )}
-                    style={{ opacity: 1 }}
-                    aria-hidden="true"
-                  />
-                  {/* Restlicher Eintrag */}
-                  <div className="flex-1 min-w-0 flex flex-col justify-center ml-3">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`inline-flex items-center justify-center rounded-full h-8 w-8 text-base sm:h-10 sm:w-10 sm:text-lg ${
-                          isIncome
-                            ? 'bg-green-100 text-green-600'
-                            : 'bg-red-100 text-red-600'
-                        }`}
-                      >
-                        {isIncome ? (
-                          <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
-                        ) : (
-                          <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6" />
-                        )}
-                      </span>
-                      <span className="font-semibold text-base sm:text-lg truncate">
-                        {entry.description || '-'}
-                      </span>
-                    </div>
-                    <div className="text-xs sm:text-sm mt-2 flex items-center gap-2 flex-wrap">
-                      {/* Date badge */}
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-medium">
-                        <Calendar className="w-3.5 h-3.5" />
-                        {new Date(entry.createdAt).toLocaleDateString('de-DE')}
-                      </span>
-                      {/* Category badge */}
-                      {entry.categoryId &&
-                        getCategoryFromId &&
-                        (() => {
-                          const cat = getCategoryFromId(
-                            Number(entry.categoryId)
-                          )
-                          if (!cat) return null
-
-                          const iconName =
-                            typeof cat.icon === 'string'
-                              ? cat.icon.charAt(0).toUpperCase() +
-                                cat.icon.slice(1)
-                              : 'ShoppingCart'
-                          const IconComponent =
-                            (
-                              LucideIcons as unknown as Record<
-                                string,
-                                React.ComponentType<{ className?: string }>
-                              >
-                            )[iconName] || LucideIcons.ShoppingCart
-
-                          return (
-                            <span
-                              className={cn(
-                                'inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-medium',
-                                getCategoryColorClasses(cat.color)
-                              )}
-                              style={{ opacity: 1 }}
-                            >
-                              <span className="w-4 h-4 flex items-center justify-center">
-                                <IconComponent className="w-4 h-4" />
-                              </span>
-                              {cat.name}
-                            </span>
-                          )
-                        })()}
-                    </div>
-                  </div>
-                  {/* Middle: Amount */}
-                  <div className="flex flex-col items-center justify-center mx-4 min-w-[90px] sm:min-w-[120px]">
-                    <span
-                      className={`font-mono font-bold text-base sm:text-lg `}
-                    >
-                      {isIncome ? '+' : '-'}
-                      {(entry.amount / 100).toFixed(2)} {entry.currency}
-                    </span>
-                  </div>
-                  {/* Right: Edit/Delete */}
-                  <div className="flex flex-col items-end justify-center">
-                    <div className="flex gap-1 sm:gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="p-0 w-7 h-7 sm:w-8 sm:h-8 cursor-pointer"
-                      >
-                        <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span className="sr-only">Eintrag bearbeiten</span>
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="p-0 w-7 h-7 sm:w-8 sm:h-8 text-destructive cursor-pointer"
-                            disabled={
-                              isDeleting && deletingEntryId === entry.id
-                            }
-                            onClick={() => setDeletingEntryId(entry.id)}
-                          >
-                            <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                            <span className="sr-only">Eintrag löschen</span>
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent className="sm:max-w-md">
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Eintrag löschen?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Möchten Sie den Eintrag wirklich löschen? Diese
-                              Aktion kann nicht rückgängig gemacht werden.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="cursor-pointer">
-                              Abbrechen
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(entry.id)}
-                              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground cursor-pointer"
-                            >
-                              Löschen
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </div>
-                </li>
-              )
-            })
-          )}
+          <EntryList
+            entries={entries}
+            getCategoryFromId={getCategoryFromId}
+            isDeleting={isDeleting}
+            deletingEntryId={deletingEntryId}
+            setDeletingEntryId={setDeletingEntryId}
+            handleDelete={handleDelete}
+          />
         </ul>
-        {/* Load more section */}
         {hasNextPage && (
           <div className="border-t bg-background p-4">
             <div className="flex justify-center">
