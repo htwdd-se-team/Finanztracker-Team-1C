@@ -66,6 +66,8 @@ Jeder liest das Iteration-dokument vor dem nächsten Meeting durch, macht sich G
 //- Manuelles Testing durch das Entwicklungsteam (automatisierte Tests optional)
 //- Verwendung von Markdown-Dokumentation und AsciiDoc für strukturierte Texte
 
+Die link:../development/development-guidelines.adoc[Coding Guidelines] müssen eingehalten werden
+
 === Fortschrittsverfolgung und Bewertung
 
 - Aufgaben werden im GitHub-Board verschoben (To Do → In Progress → In Review → Done)
