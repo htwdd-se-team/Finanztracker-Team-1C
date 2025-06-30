@@ -1,9 +1,9 @@
 // --- 1. Projektthema -------------------------
 = SE I - Belegabgabe: {project-name}
 // --- 2. Teammitglieder -----------------------
-Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>; Vorname Nachname <s00000@htw-dresden.de>
+Elias Blume <s87142@htw-dresden.de>; Ben Eisold <s87191@htw-dresden.de>; Paula Grahlow <s86261@htw-dresden.de>; Ahmad Ali Nabizada <s87068@htw-dresden.de>; Tuan Khang Pham <s87088@htw-dresden.de>; Christoph Prasser <s87530@htw-dresden.de>; Cedrick Richter <s87073@htw-dresden.de>
 // --- 3. Abgabedatum --------------------------
-01. Januar 2025
+04. Juni 2025
 // ---------------------------------------------
 :docs: ../docs
 include::{docs}/_includes/default-attributes.inc.adoc[]
