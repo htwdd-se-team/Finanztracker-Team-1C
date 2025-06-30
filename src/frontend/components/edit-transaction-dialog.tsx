@@ -19,12 +19,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { CategorySelect } from '@/components/category-select'
-import { Plus, TrendingDown, TrendingUp, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { Plus, TrendingDown, TrendingUp, Loader2, Pencil } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { FormattedCurrencyInput } from './ui/formatted-currency-input'
 import { useCategory } from '@/components/provider/category-provider'
 import {
-  ApiCreateEntryDto,
+  ApiEntryDto,
+  ApiUpdateEntryDto,
   ApiCurrency,
   ApiTransactionType,
 } from '@/__generated__/api'
@@ -35,16 +36,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { toast } from 'sonner'
 
-const createEntrySchema = z.object({
+const updateEntrySchema = z.object({
+  id: z.number(),
   type: z.nativeEnum(ApiTransactionType),
   amount: z.number().min(0.01, 'Betrag muss größer als 0 sein'),
   description: z.string().optional(),
   categoryId: z.number().optional(),
   currency: z.nativeEnum(ApiCurrency),
   createdAt: z.string().optional(),
-}) satisfies z.ZodType<ApiCreateEntryDto>
+}) satisfies z.ZodType<ApiUpdateEntryDto & { id: number }>
 
-// Transaction Type Selector Component
 function TransactionTypeSelector({
   value,
   onValueChange,
@@ -78,49 +79,68 @@ function TransactionTypeSelector({
   )
 }
 
-export function AddTransactionDialog({
+export function EditTransactionDialog({
+  transaction,
   children,
 }: {
+  transaction: ApiEntryDto
   children: React.ReactNode
 }) {
   const { categories, getCategoryFromId } = useCategory()
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
-  const form = useForm<z.infer<typeof createEntrySchema>>({
-    resolver: zodResolver(createEntrySchema),
+  const form = useForm<z.infer<typeof updateEntrySchema>>({
+    resolver: zodResolver(updateEntrySchema),
     defaultValues: {
-      type: ApiTransactionType.EXPENSE,
-      amount: 0,
-      description: '',
-      categoryId: undefined,
-      currency: ApiCurrency.EUR,
-      createdAt: new Date().toISOString().split('T')[0], // Today's date
+      id: transaction.id,
+      type: transaction.type,
+      amount: transaction.amount / 100, // convert cents to euro
+      description: transaction.description || '',
+      categoryId: transaction.categoryId,
+      currency: transaction.currency,
+      createdAt: transaction.createdAt?.split('T')[0],
     },
   })
 
+  // Reset form when dialog opens with new transaction
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        id: transaction.id,
+        type: transaction.type,
+        amount: transaction.amount / 100,
+        description: transaction.description || '',
+        categoryId: transaction.categoryId,
+        currency: transaction.currency,
+        createdAt: transaction.createdAt?.split('T')[0],
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, transaction])
+
   const { mutate, isPending } = useMutation({
-    mutationKey: ['entries', 'create'],
-    mutationFn: async (values: z.infer<typeof createEntrySchema>) => {
-      // Convert amount to cents for API
+    mutationKey: ['entries', 'update', transaction.id],
+    mutationFn: async (values: z.infer<typeof updateEntrySchema>) => {
       const apiValues = {
         ...values,
         amount: Math.round(values.amount * 100),
       }
-      return (await apiClient.entries.entryControllerCreate(apiValues)).data
+      return (
+        await apiClient.entries.entryControllerUpdate(transaction.id, apiValues)
+      ).data
     },
     onSuccess: () => {
-      toast.success('Transaktion erfolgreich erstellt')
+      toast.success('Transaktion erfolgreich aktualisiert')
       queryClient.invalidateQueries({ queryKey: ['entries'] })
-      form.reset()
       setOpen(false)
     },
     onError: () => {
-      toast.error('Fehler beim Erstellen der Transaktion')
+      toast.error('Fehler beim Aktualisieren der Transaktion')
     },
   })
 
-  function onSubmit(values: z.infer<typeof createEntrySchema>) {
+  function onSubmit(values: z.infer<typeof updateEntrySchema>) {
     mutate(values)
   }
 
@@ -137,8 +157,8 @@ export function AddTransactionDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 cursor-pointer">
-            <Plus className="w-5 h-5 text-primary" />
-            Transaktion hinzufügen
+            <Pencil className="w-5 h-5 text-primary" />
+            Transaktion bearbeiten
           </DialogTitle>
         </DialogHeader>
 
@@ -282,8 +302,8 @@ export function AddTransactionDialog({
                 className="cursor-pointer"
               >
                 {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
-                <Plus className="mr-2 w-4 h-4" />
-                Hinzufügen
+                <Pencil className="mr-2 w-4 h-4" />
+                Speichern
               </Button>
             </DialogFooter>
           </form>
@@ -292,3 +312,10 @@ export function AddTransactionDialog({
     </Dialog>
   )
 }
+
+// Example usage (to be placed in your transaction list/table):
+// <EditTransactionDialog transaction={transaction}>
+//   <Button variant="ghost" size="icon" className="cursor-pointer">
+//     <Pencil className="w-4 h-4" />
+//   </Button>
+// </EditTransactionDialog>
