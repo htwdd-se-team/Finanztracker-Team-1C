@@ -104,7 +104,7 @@ Wann gilt eine Aufgabe als fertig?
 
 * Die Umsetzung der Aufgabe/User Story wurde mindestens von einem zweiten Teammitglied geprüft (Status: In Review -> Done)
 
-*User-Story-spezifische Kriterien:*
+*User-Story/Dev-Task-spezifische Kriterien:*
 
 * Der Code ist in die Anwendung integriert und funktionsfähig (merge in main-Branch)
 * Die automatischen Coding-Guidelines werden über ES-Lint eingehalten
