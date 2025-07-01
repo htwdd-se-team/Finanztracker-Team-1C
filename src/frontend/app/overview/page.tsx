@@ -53,7 +53,7 @@ export default function OverviewPage() {
       <GraphGrids />
 
       {/* Entry List Section */}
-      <ul className="space-y-2 px-0 sm:px-2 md:px-4 lg:px-4 xl:px-2 w-full">
+      <ul className="space-y-2 px-3 sm:px-2 md:px-4 lg:px-4 xl:px-2 w-full">
         <h2 className="font-bold text-2xl">Letzte Einträge</h2>
         <EntryList
           entries={data?.pages.flatMap(page => page?.entries || []) || []}
