@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { CategorySelect } from '@/components/category-select'
-import { Pencil, Plus, TrendingDown, TrendingUp, Loader2 } from 'lucide-react'
+import { Plus, TrendingDown, TrendingUp, Loader2, Edit } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { FormattedCurrencyInput } from './ui/formatted-currency-input'
 import { useCategory } from '@/components/provider/category-provider'
@@ -27,6 +27,7 @@ import {
   ApiCurrency,
   ApiTransactionType,
   ApiEntryResponseDto,
+  ApiCreateEntryDto,
 } from '@/__generated__/api'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -34,6 +35,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { toast } from 'sonner'
+
+const createEntrySchema = z.object({
+  type: z.nativeEnum(ApiTransactionType),
+  amount: z.number().min(0.01, 'Betrag muss größer als 0 sein'),
+  description: z.string().optional(),
+  categoryId: z.number().optional(),
+  currency: z.nativeEnum(ApiCurrency),
+  createdAt: z.string().optional(),
+}) satisfies z.ZodType<ApiCreateEntryDto>
 
 export function TransactionDialog({
   children,
@@ -46,22 +56,10 @@ export function TransactionDialog({
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
-  // Schema and form setup
-  const schema = z.object({
-    id: z.number().optional(),
-    type: z.nativeEnum(ApiTransactionType),
-    amount: z.number().min(0.01, 'Betrag muss größer als 0 sein'),
-    description: z.string().optional(),
-    categoryId: z.number().optional(),
-    currency: z.nativeEnum(ApiCurrency),
-    createdAt: z.string().optional(),
-  })
-
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const form = useForm<z.infer<typeof createEntrySchema>>({
+    resolver: zodResolver(createEntrySchema),
     defaultValues: editData
       ? {
-          id: editData.id,
           type: editData.type,
           amount: editData.amount / 100,
           description: editData.description || '',
@@ -83,7 +81,6 @@ export function TransactionDialog({
     if (open) {
       if (editData) {
         form.reset({
-          id: editData.id,
           type: editData.type,
           amount: editData.amount / 100,
           description: editData.description || '',
@@ -108,12 +105,12 @@ export function TransactionDialog({
   // Mutations
   const { mutate, isPending } = useMutation({
     mutationKey: editData
-      ? ['entries', 'update', editData.id]
-      : ['entries', 'create'],
-    mutationFn: async (values: z.infer<typeof schema>) => {
+      ? ['transactions', 'update', editData.id]
+      : ['transactions', 'create'],
+    mutationFn: async (values: z.infer<typeof createEntrySchema>) => {
       const apiValues = {
         ...values,
-        amount: Math.round(values.amount * 100),
+        amount: Math.floor(values.amount * 100),
       }
       if (editData) {
         return (
@@ -129,7 +126,7 @@ export function TransactionDialog({
           ? 'Transaktion erfolgreich aktualisiert'
           : 'Transaktion erfolgreich erstellt'
       )
-      queryClient.invalidateQueries({ queryKey: ['entries'] })
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
       form.reset()
       setOpen(false)
     },
@@ -142,7 +139,7 @@ export function TransactionDialog({
     },
   })
 
-  function onSubmit(values: z.infer<typeof schema>) {
+  function onSubmit(values: z.infer<typeof createEntrySchema>) {
     mutate(values)
   }
 
@@ -158,17 +155,14 @@ export function TransactionDialog({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          {editData ? (
-            <DialogTitle className="flex items-center gap-2">
-              <Pencil className="w-5 h-5 text-primary" />
-              Transaktion bearbeiten
-            </DialogTitle>
-          ) : (
-            <DialogTitle className="flex items-center gap-2">
+          <DialogTitle className="flex items-center gap-2">
+            {editData ? (
+              <Edit className="w-5 h-5 text-primary" />
+            ) : (
               <Plus className="w-5 h-5 text-primary" />
-              Transaktion hinzufügen
-            </DialogTitle>
-          )}
+            )}
+            {editData ? 'Transaktion bearbeiten' : 'Transaktion hinzufügen'}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -319,31 +313,26 @@ export function TransactionDialog({
             </div>
             <DialogFooter>
               <Button
+                className="cursor-pointer"
                 type="button"
                 variant="outline"
                 onClick={() => handleOpenChange(false)}
                 disabled={isPending}
-                className="cursor-pointer"
               >
                 Abbrechen
               </Button>
               <Button
+                className="cursor-pointer"
                 type="submit"
                 disabled={isPending}
-                className="cursor-pointer"
               >
-                {isPending &&
-                  (editData ? (
-                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                  ) : (
-                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                  ))}
+                {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
                 {editData ? (
-                  <Pencil className="mr-2 w-4 h-4" />
+                  <Edit className="mr-2 w-4 h-4" />
                 ) : (
                   <Plus className="mr-2 w-4 h-4" />
                 )}
-                {editData ? 'Speichern' : 'Hinzufügen'}
+                {editData ? 'Aktualisieren' : 'Hinzufügen'}
               </Button>
             </DialogFooter>
           </form>
@@ -352,10 +341,3 @@ export function TransactionDialog({
     </Dialog>
   )
 }
-
-// Example usage (to be placed in your transaction list/table):
-// <TransactionDialog editData={transaction}>
-//   <Button variant="ghost" size="icon" className="cursor-pointer">
-//     <Pencil className="w-4 h-4" />
-//   </Button>
-// </TransactionDialog>

@@ -13,12 +13,12 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { NavUser } from './nav-user'
-import { TransactionDialog } from '@/components/TransactionDialog'
 import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { navItems } from '@/navigation-config'
 import Link from 'next/link'
 import FinAppLogo from '@/components/nav/finapp-logo'
+import { TransactionDialog } from '../TransactionDialog'
 
 export function SidebarDesktop() {
   const pathname = usePathname()
@@ -52,7 +52,7 @@ export function SidebarDesktop() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <TransactionDialog>
-                    <Button className="justify-start w-full">
+                    <Button className="justify-start w-full cursor-pointer">
                       <Plus className="mr-2 w-4 h-4" />
                       Neue Transaktion
                     </Button>

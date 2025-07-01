@@ -25,6 +25,7 @@ import {
   EntryPageDto,
   EntryPaginationParamsDto,
   EntryResponseDto,
+  UpdateEntryDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
 import { EntryService } from "../services";
@@ -87,7 +88,7 @@ export class EntryController {
   async update(
     @UserDecorator() user: User,
     @Param("id", ParseIntPipe) entryId: number,
-    @Body() data: Partial<CreateEntryDto>,
+    @Body() data: UpdateEntryDto,
   ): Promise<EntryResponseDto> {
     return this.entryService.updateEntry(user, entryId, data);
   }

@@ -14,6 +14,9 @@ export const apiClient = new Api({
             return {}
         }
     },
+    paramsSerializer: {
+        indexes: null, // This removes the brackets from array parameters
+    },
 })
 
 apiClient.instance.interceptors.response.use(
