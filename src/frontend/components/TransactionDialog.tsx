@@ -19,7 +19,21 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { CategorySelect } from '@/components/category-select'
-import { Plus, TrendingDown, TrendingUp, Loader2, Edit } from 'lucide-react'
+import {
+  Plus,
+  TrendingDown,
+  TrendingUp,
+  Loader2,
+  Edit,
+  CalendarIcon,
+} from 'lucide-react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Calendar } from '@/components/ui/calendar-rac'
+import { parseDate } from '@internationalized/date'
 import { useState, useEffect } from 'react'
 import { FormattedCurrencyInput } from './ui/formatted-currency-input'
 import { useCategory } from '@/components/provider/category-provider'
@@ -304,7 +318,35 @@ export function TransactionDialog({
                       <span className="text-muted-foreground">(optional)</span>
                     </FormLabel>
                     <FormControl>
-                      <Input type="date" disabled={isPending} {...field} />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={`w-full justify-start text-left font-normal ${
+                              !field.value && 'text-muted-foreground'
+                            }`}
+                            disabled={isPending}
+                            type="button"
+                          >
+                            <CalendarIcon className="mr-2 w-4 h-4" />
+                            {field.value ? (
+                              new Date(field.value).toLocaleDateString('de-DE')
+                            ) : (
+                              <span>Datum auswählen</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 w-auto" align="start">
+                          <Calendar
+                            value={
+                              field.value ? parseDate(field.value) : undefined
+                            }
+                            onChange={date => {
+                              field.onChange(date ? date.toString() : '')
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
