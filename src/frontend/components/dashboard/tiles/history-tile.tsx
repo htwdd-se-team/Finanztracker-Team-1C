@@ -69,7 +69,7 @@ export default function HistoryTile({
     Math.ceil(Math.max(...graphData.map(item => item.kontostand)) / 1000) * 1000
 
   return (
-    <Card className={cn(className)}>
+    <Card className={cn('px-2 p-1.5',className)}>
       <CardHeader className="flex flex-row justify-between p-0">
         <CardTitle className="flex items-center gap-1 font-medium">
           <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf

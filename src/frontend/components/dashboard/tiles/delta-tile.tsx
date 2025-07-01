@@ -78,7 +78,7 @@ function DeltaTile({
   }
 
   return (
-    <Card className={cn(className)}>
+    <Card className={cn('p-1.5',className)}>
       <CardTitle className="flex items-center gap-1 mb-0 pb-0 font-medium leading-tight">
         <Triangle className="w-4 h-4 shrink-0" /> Delta
       </CardTitle>

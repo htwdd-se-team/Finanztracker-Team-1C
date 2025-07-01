@@ -141,12 +141,12 @@ export default function PieChartTileIcons({
   }
 
   return (
-    <Card className={cn(className)}>
-      <CardTitle className="flex items-center gap-1 mx-2 mt-2 -mb-5 font-medium">
+    <Card className={cn('p-1.5',className)}>
+      <CardTitle className="flex items-center gap-1 -mb-5 font-medium">
         <PieChartIcon className="w-4 h-4 shrink-0" />
         Kategorien
       </CardTitle>
-      <CardContent className="flex flex-1 justify-center items-center w-full h-full overflow-hidden">
+      <CardContent className="flex flex-1 justify-center items-center w-full h-full overflow-hidden p-0 m-0">
         <ChartContainer
           config={chartConfig}
           className="flex justify-center items-center w-full md:max-h-[200px] aspect-square"
@@ -198,7 +198,7 @@ export default function PieChartTileIcons({
                           y={viewBox.cy}
                           textAnchor="middle"
                           dominantBaseline="middle"
-                          className="fill-foreground font-bold text-sm lg:text-xl"
+                          className="fill-foreground font-bold text-lg lg:text-xl"
                         >
                           {data
                             .reduce((acc, item) => acc + item.value, 0)
