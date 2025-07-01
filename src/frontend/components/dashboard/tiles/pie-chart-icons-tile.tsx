@@ -198,7 +198,7 @@ export default function PieChartTileIcons({
                           y={viewBox.cy}
                           textAnchor="middle"
                           dominantBaseline="middle"
-                          className="fill-foreground font-bold text-xl"
+                          className="fill-foreground font-bold text-sm lg:text-xl"
                         >
                           {data
                             .reduce((acc, item) => acc + item.value, 0)

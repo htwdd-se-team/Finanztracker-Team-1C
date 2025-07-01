@@ -67,7 +67,7 @@ function DeltaTile({
 
   const isPositive = delta > 0
 
-  if (!income || !expense || !delta) {
+  if (!income && income !== 0) {
     return (
       <Card className={cn(className)}>
         <CardContent className="flex justify-center items-center h-full">
