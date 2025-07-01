@@ -23,19 +23,21 @@ function BalanceTile({ className }: { className?: string }) {
   }
 
   return (
-    <Card className={cn('h-18', className)}>
-      <CardContent className="flex flex-col justify-center p-3 h-full">
-        <div className="flex items-center gap-1 mb-1">
-          <Wallet className="w-4 h-4 shrink-0" />
-          <span className="font-medium text-sm">Kontostand</span>
+    <Card className={cn('h-18 p-1.5', className)}>
+      <div className="flex flex-col h-full w-full">
+          <div className="flex items-center gap-1 font-medium">
+            <Wallet className="w-4 h-4 shrink-0" />
+            Kontostand
+          </div>
+          <div className="flex flex-col justify-center h-full">
+            <div className="font-bold text-xl leading-tight">
+              {(data?.balance / 100).toLocaleString('de-DE', {
+                style: 'currency',
+                currency: 'EUR',
+              })}
+            </div>
+          </div>
         </div>
-        <div className="font-bold text-xl leading-tight">
-          {(data?.balance / 100).toLocaleString('de-DE', {
-            style: 'currency',
-            currency: 'EUR',
-          })}
-        </div>
-      </CardContent>
     </Card>
   )
 }

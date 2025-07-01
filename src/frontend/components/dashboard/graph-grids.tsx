@@ -26,21 +26,21 @@ function GraphGrids() {
       {/* Row 1: Historie (Mobile: next row, Desktop: same row) */}
       <HistoryTile
         timeRange={timeRange}
-        className="col-span-2 lg:col-span-3 px-2"
+        className="col-span-2 lg:col-span-3"
       />
 
       {/* Row 2: Savings Goal - Always full width on second line */}
-      <SavingsGoal className="col-span-2 lg:col-span-3 p-2" />
+      <SavingsGoal className="col-span-2 lg:col-span-3 p-1.5" />
 
       {/* Row 3: Delta and PieChart */}
 
       <PieChartTileIcons
         timeRange={timeRange}
-        className="col-span-1 lg:col-span-1 px-2"
+        className="col-span-1 lg:col-span-1"
       />
       <DeltaTile
         timeRange={timeRange}
-        className="col-span-1 lg:col-span-1 px-2"
+        className="col-span-1 lg:col-span-1"
       />
     </div>
   )
