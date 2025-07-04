@@ -1,52 +1,47 @@
 'use client'
 
-import { useState } from "react"
+import { useState } from 'react'
 import SelectorTile from './tiles/selector-tile'
 import BalanceTile from './tiles/balance-tile'
 import DeltaTile from './tiles/delta-tile'
 import HistoryTile from './tiles/history-tile'
-import PieChartTile from './tiles/pie-chart-tile'
-import SavingsGoal from "./tiles/savings-goal-tile"
+import SavingsGoal from './tiles/savings-goal-tile'
+import PieChartTileIcons from './tiles/pie-chart-icons-tile'
 
 function GraphGrids() {
+  const [timeRange, setTimeRange] = useState('90d')
 
-  const [timeRange, setTimeRange] = useState("90d")
-  
   return (
-    <div>
-      {/* Grid 1st Row */ }
-      <div className="gap-2 pt-2 grid grid-cols-3 mx-2">
-        {/* Kontostand - Full width on mobile, 1 col on desktop */}
-        <div className="col-span-2 w-full h-full justify-center">
-          <BalanceTile/>
-        </div>
-        {/* Time-Range Selector */}
-        <div className="col-span-1">
-          <SelectorTile value={timeRange} onValueChange={setTimeRange}/>
-        </div>
+    <div className="gap-2 grid grid-cols-2 lg:grid-cols-3 mx-2 pt-2">
+      {/* Row 1: Kontostand (Balance + Selector) */}
+      <div className="gap-2 grid grid-cols-3 col-span-2 lg:col-span-3">
+        <BalanceTile className="col-span-2" />
+        <SelectorTile
+          value={timeRange}
+          onValueChange={setTimeRange}
+          className="col-span-1"
+        />
       </div>
-      {/* Grid Remaining Rows */ }
-      <div className="gap-2 grid grid-cols-2 mt-2 mx-2">
-        {/* SparZiel */}
-        <div className="col-span-2 lg:col-span:2">
-          <SavingsGoal />
-        </div>
 
-        {/* Historie - Full width on mobile, 2 cols on desktop */}
-        <div className="col-span-2 lg:col-span-2">
-          <HistoryTile timeRange={timeRange}/>
-        </div>
+      {/* Row 1: Historie (Mobile: next row, Desktop: same row) */}
+      <HistoryTile
+        timeRange={timeRange}
+        className="col-span-2 lg:col-span-3"
+      />
 
-        {/* PieChart - 1 col on mobile, 1 col on desktop */}
-        <div className="col-span-1 lg:col-span-1">
-          <PieChartTile />
-        </div>
+      {/* Row 2: Savings Goal - Always full width on second line */}
+      <SavingsGoal className="col-span-2 lg:col-span-3 p-1.5" />
 
-        {/* Delta - 1 col on mobile, moves to row 2 col 1 on desktop */}
-        <div className="lg:order-first col-span-1 lg:col-span-1 lg:row-start-2">
-          <DeltaTile />
-        </div>
-      </div>
+      {/* Row 3: Delta and PieChart */}
+
+      <PieChartTileIcons
+        timeRange={timeRange}
+        className="col-span-1 lg:col-span-1"
+      />
+      <DeltaTile
+        timeRange={timeRange}
+        className="col-span-1 lg:col-span-1"
+      />
     </div>
   )
 }

@@ -6,7 +6,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,11 +13,12 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { NavUser } from './nav-user'
-import { AddTransactionDialog } from '../add-transaction-dialog'
 import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { navItems } from '@/navigation-config'
 import Link from 'next/link'
+import FinAppLogo from '@/components/nav/finapp-logo'
+import { TransactionDialog } from '../TransactionDialog'
 
 export function SidebarDesktop() {
   const pathname = usePathname()
@@ -32,7 +32,7 @@ export function SidebarDesktop() {
     >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Platzhalter??</SidebarGroupLabel>
+          <FinAppLogo className="text-2xl" />
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map(item => (
@@ -51,12 +51,12 @@ export function SidebarDesktop() {
               <SidebarSeparator />
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <AddTransactionDialog>
-                    <Button className="justify-start w-full">
+                  <TransactionDialog>
+                    <Button className="justify-start w-full cursor-pointer">
                       <Plus className="mr-2 w-4 h-4" />
                       Neue Transaktion
                     </Button>
-                  </AddTransactionDialog>
+                  </TransactionDialog>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

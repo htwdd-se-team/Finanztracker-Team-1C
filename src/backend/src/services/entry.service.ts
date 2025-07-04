@@ -31,6 +31,7 @@ export class EntryService {
         isRecurring: data.isRecurring ?? false,
         recurringInterval: data.recurringInterval,
         categoryId: data.categoryId,
+        createdAt: data.createdAt,
         startDate: data.startDate,
         endDate: data.endDate,
         transactionId: data.transactionId,

@@ -19,14 +19,29 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { CategorySelect } from '@/components/category-select'
-import { Plus, TrendingDown, TrendingUp, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import {
+  Plus,
+  TrendingDown,
+  TrendingUp,
+  Loader2,
+  Edit,
+  CalendarIcon,
+} from 'lucide-react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Calendar } from '@/components/ui/calendar-rac'
+import { parseDate } from '@internationalized/date'
+import { useState, useEffect } from 'react'
 import { FormattedCurrencyInput } from './ui/formatted-currency-input'
 import { useCategory } from '@/components/provider/category-provider'
 import {
-  ApiCreateEntryDto,
   ApiCurrency,
   ApiTransactionType,
+  ApiEntryResponseDto,
+  ApiCreateEntryDto,
 } from '@/__generated__/api'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -44,44 +59,12 @@ const createEntrySchema = z.object({
   createdAt: z.string().optional(),
 }) satisfies z.ZodType<ApiCreateEntryDto>
 
-// Transaction Type Selector Component
-function TransactionTypeSelector({
-  value,
-  onValueChange,
-}: {
-  value: ApiTransactionType
-  onValueChange: (type: ApiTransactionType) => void
-}) {
-  return (
-    <div className="flex gap-2">
-      <Button
-        type="button"
-        variant={
-          value === ApiTransactionType.EXPENSE ? 'destructive' : 'outline'
-        }
-        className="flex-1"
-        onClick={() => onValueChange(ApiTransactionType.EXPENSE)}
-      >
-        <TrendingDown className="mr-2 w-4 h-4" />
-        Ausgabe
-      </Button>
-      <Button
-        type="button"
-        variant={value === ApiTransactionType.INCOME ? 'default' : 'outline'}
-        className="flex-1"
-        onClick={() => onValueChange(ApiTransactionType.INCOME)}
-      >
-        <TrendingUp className="mr-2 w-4 h-4" />
-        Einnahme
-      </Button>
-    </div>
-  )
-}
-
-export function AddTransactionDialog({
+export function TransactionDialog({
   children,
+  editData,
 }: {
   children: React.ReactNode
+  editData?: ApiEntryResponseDto
 }) {
   const { categories, getCategoryFromId } = useCategory()
   const [open, setOpen] = useState(false)
@@ -89,34 +72,84 @@ export function AddTransactionDialog({
 
   const form = useForm<z.infer<typeof createEntrySchema>>({
     resolver: zodResolver(createEntrySchema),
-    defaultValues: {
-      type: ApiTransactionType.EXPENSE,
-      amount: 0,
-      description: '',
-      categoryId: undefined,
-      currency: ApiCurrency.EUR,
-      createdAt: new Date().toISOString().split('T')[0], // Today's date
-    },
+    defaultValues: editData
+      ? {
+          type: editData.type,
+          amount: editData.amount / 100,
+          description: editData.description || '',
+          categoryId: editData.categoryId,
+          currency: editData.currency,
+          createdAt: editData.createdAt?.split('T')[0],
+        }
+      : {
+          type: ApiTransactionType.EXPENSE,
+          amount: 0,
+          description: '',
+          categoryId: undefined,
+          currency: ApiCurrency.EUR,
+          createdAt: new Date().toISOString().split('T')[0],
+        },
   })
 
+  useEffect(() => {
+    if (open) {
+      if (editData) {
+        form.reset({
+          type: editData.type,
+          amount: editData.amount / 100,
+          description: editData.description || '',
+          categoryId: editData.categoryId,
+          currency: editData.currency,
+          createdAt: editData.createdAt?.split('T')[0],
+        })
+      } else {
+        form.reset({
+          type: ApiTransactionType.EXPENSE,
+          amount: 0,
+          description: '',
+          categoryId: undefined,
+          currency: ApiCurrency.EUR,
+          createdAt: new Date().toISOString().split('T')[0],
+        })
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, editData])
+
+  // Mutations
   const { mutate, isPending } = useMutation({
-    mutationKey: ['entries', 'create'],
+    mutationKey: editData
+      ? ['transactions', 'update', editData.id]
+      : ['transactions', 'create'],
     mutationFn: async (values: z.infer<typeof createEntrySchema>) => {
-      // Convert amount to cents for API
       const apiValues = {
         ...values,
-        amount: Math.round(values.amount * 100),
+        amount: Math.floor(values.amount * 100),
       }
-      return (await apiClient.entries.entryControllerCreate(apiValues)).data
+      if (editData) {
+        return (
+          await apiClient.entries.entryControllerUpdate(editData.id, apiValues)
+        ).data
+      } else {
+        return (await apiClient.entries.entryControllerCreate(apiValues)).data
+      }
     },
     onSuccess: () => {
-      toast.success('Transaktion erfolgreich erstellt')
-      queryClient.invalidateQueries({ queryKey: ['entries'] })
+      toast.success(
+        editData
+          ? 'Transaktion erfolgreich aktualisiert'
+          : 'Transaktion erfolgreich erstellt'
+      )
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
       form.reset()
       setOpen(false)
     },
     onError: () => {
-      toast.error('Fehler beim Erstellen der Transaktion')
+      toast.error(
+        editData
+          ? 'Fehler beim Aktualisieren der Transaktion'
+          : 'Fehler beim Erstellen der Transaktion'
+      )
     },
   })
 
@@ -137,11 +170,14 @@ export function AddTransactionDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Plus className="w-5 h-5 text-primary" />
-            Transaktion hinzufügen
+            {editData ? (
+              <Edit className="w-5 h-5 text-primary" />
+            ) : (
+              <Plus className="w-5 h-5 text-primary" />
+            )}
+            {editData ? 'Transaktion bearbeiten' : 'Transaktion hinzufügen'}
           </DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Transaction Type */}
@@ -152,16 +188,43 @@ export function AddTransactionDialog({
                 <FormItem>
                   <FormLabel>Typ</FormLabel>
                   <FormControl>
-                    <TransactionTypeSelector
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    />
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant={
+                          field.value === ApiTransactionType.EXPENSE
+                            ? 'destructive'
+                            : 'outline'
+                        }
+                        className="flex-1 cursor-pointer"
+                        onClick={() =>
+                          field.onChange(ApiTransactionType.EXPENSE)
+                        }
+                      >
+                        <TrendingDown className="mr-2 w-4 h-4" />
+                        Ausgabe
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={
+                          field.value === ApiTransactionType.INCOME
+                            ? 'default'
+                            : 'outline'
+                        }
+                        className="flex-1 cursor-pointer"
+                        onClick={() =>
+                          field.onChange(ApiTransactionType.INCOME)
+                        }
+                      >
+                        <TrendingUp className="mr-2 w-4 h-4" />
+                        Einnahme
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             {/* Description */}
             <FormField
               control={form.control}
@@ -185,7 +248,6 @@ export function AddTransactionDialog({
                 </FormItem>
               )}
             />
-
             {/* Amount */}
             <FormField
               control={form.control}
@@ -218,7 +280,6 @@ export function AddTransactionDialog({
                 </FormItem>
               )}
             />
-
             {/* Category and Date Row */}
             <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
               {/* Category */}
@@ -246,7 +307,6 @@ export function AddTransactionDialog({
                   </FormItem>
                 )}
               />
-
               {/* Date */}
               <FormField
                 control={form.control}
@@ -258,16 +318,44 @@ export function AddTransactionDialog({
                       <span className="text-muted-foreground">(optional)</span>
                     </FormLabel>
                     <FormControl>
-                      <Input type="date" disabled={isPending} {...field} />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={`w-full justify-start text-left font-normal ${
+                              !field.value && 'text-muted-foreground'
+                            }`}
+                            disabled={isPending}
+                            type="button"
+                          >
+                            <CalendarIcon className="mr-2 w-4 h-4" />
+                            {field.value ? (
+                              new Date(field.value).toLocaleDateString('de-DE')
+                            ) : (
+                              <span>Datum auswählen</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 w-auto" align="start">
+                          <Calendar
+                            value={
+                              field.value ? parseDate(field.value) : undefined
+                            }
+                            onChange={date => {
+                              field.onChange(date ? date.toString() : '')
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-
             <DialogFooter>
               <Button
+                className="cursor-pointer"
                 type="button"
                 variant="outline"
                 onClick={() => handleOpenChange(false)}
@@ -275,10 +363,18 @@ export function AddTransactionDialog({
               >
                 Abbrechen
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button
+                className="cursor-pointer"
+                type="submit"
+                disabled={isPending}
+              >
                 {isPending && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
-                <Plus className="mr-2 w-4 h-4" />
-                Hinzufügen
+                {editData ? (
+                  <Edit className="mr-2 w-4 h-4" />
+                ) : (
+                  <Plus className="mr-2 w-4 h-4" />
+                )}
+                {editData ? 'Aktualisieren' : 'Hinzufügen'}
               </Button>
             </DialogFooter>
           </form>

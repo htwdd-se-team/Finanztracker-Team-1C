@@ -103,13 +103,15 @@ PostgreSQL mit Prisma ORM für typsichere Datenbankzugriffe. Kysely als zusätzl
 
 === Kontextabgrenzung (C4 Level 1)
 
-**System:** FinanzTracker
+Das System Context Diagramm zeigt das FinanzTracker-System und seinen Benutzer.
 
-**Akteure:**
+**Benutzer**: Privatperson, die ihre persönlichen Finanzen verwalten möchte
 
-* Developer (Entwickler)
-* Nutzer (Privatpersonen)
+**FinanzTracker**: Webanwendung zur Verwaltung von Einnahmen und Ausgaben
 
+.System Context Diagramm - FinanzTracker
+image:images/c4-l1-drawio.png[]
+[Container-Diagramm,width=100%,align=center]
 
 === Container (C4 Level 2)
 
@@ -146,7 +148,7 @@ PostgreSQL mit Prisma ORM für typsichere Datenbankzugriffe. Kysely als zusätzl
 ** ACID-Eigenschaften für Datenkonsistenz
 
 .Container-Diagramm der FinanzTracker-Architektur
-image:architecture-diagram-drawio.png[]
+image:images/architecture-diagram-drawio.png[]
 [Container-Diagramm,width=100%,align=center]
 
 

@@ -149,7 +149,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-06-28T13:31:04.647Z"
+   * @example "2025-06-30T23:11:18.952Z"
    */
   createdAt: string;
   /**
@@ -306,6 +306,61 @@ export interface ApiEntryPageDto {
    * @example 100
    */
   count?: number;
+}
+
+export interface ApiUpdateEntryDto {
+  /** @example "EXPENSE" */
+  type?: ApiTransactionType;
+  /**
+   * Amount in cents
+   * @min 1
+   * @example 1999
+   */
+  amount?: number;
+  /**
+   * Transaction description
+   * @example "Grocery shopping"
+   */
+  description?: string;
+  /**
+   * ISO 4217 currency code
+   * @example "EUR"
+   */
+  currency?: ApiCurrency;
+  /**
+   * Category ID
+   * @example 3
+   */
+  categoryId?: number;
+  /** @example false */
+  isRecurring?: boolean;
+  /**
+   * Start date for recurring transactions
+   * @format date-time
+   */
+  startDate?: string;
+  /**
+   * End date for recurring transactions
+   * @format date-time
+   */
+  endDate?: string;
+  /** @example "MONTHLY" */
+  recurringType?: ApiRecurringTransactionType;
+  /**
+   * Recurring interval
+   * @example 1
+   */
+  recurringInterval?: number;
+  /**
+   * Parent transaction ID
+   * @example null
+   */
+  transactionId?: number;
+  /**
+   * Creation timestamp. If not provided, defaults to the current date and time.
+   * @format date-time
+   */
+  createdAt?: string;
 }
 
 export interface ApiUserResponseDto {
@@ -806,6 +861,45 @@ export class Api<
         method: "GET",
         query: query,
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerDelete
+     * @request DELETE:/entries/{id}
+     * @secure
+     */
+    entryControllerDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void>({
+        path: `/entries/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerUpdate
+     * @request PATCH:/entries/{id}
+     * @secure
+     */
+    entryControllerUpdate: (
+      id: number,
+      data: ApiUpdateEntryDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiEntryResponseDto, void>({
+        path: `/entries/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

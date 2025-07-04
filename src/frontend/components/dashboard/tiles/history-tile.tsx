@@ -1,7 +1,7 @@
 'use client'
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { TrendingUp } from 'lucide-react'
+import { TrendingUp, Loader2 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -14,9 +14,11 @@ import { apiClient } from '@/api/api-client'
 import { useQuery } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import { ApiGranularity } from '@/__generated__/api'
+import { cn } from '@/lib/utils'
 
 type HistoryTileProps = {
   timeRange: string // 1d, 7d, 30d, 90d, 180d, all
+  className?: string
 }
 
 const chartConfig = {
@@ -26,12 +28,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function HistoryTile({ timeRange }: HistoryTileProps) {
+export default function HistoryTile({
+  timeRange,
+  className,
+}: HistoryTileProps) {
   const days = timeRange === 'all' ? 365 : Number(timeRange.split('d')[0])
   const today = DateTime.now()
   const startDate = today.minus({ days: days })
 
-  const { data } = useQuery({
+  const { data: graphData } = useQuery({
     queryKey: ['transactions', 'history-tile', timeRange],
     queryFn: () =>
       apiClient.analytics.analyticsControllerGetTransactionBalanceHistory({
@@ -39,14 +44,23 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
         endDate: today.toISO(),
         granularity: ApiGranularity.DAY,
       }),
+    select: data =>
+      data.data.map(item => ({
+        date: new Date(item.date).toISOString(),
+        kontostand: Math.round(Number(item.value) / 100),
+      })),
+    placeholderData: previousData => previousData,
   })
 
-  if (!data) return null
-
-  const graphData = data.data.map(item => ({
-    date: new Date(item.date).toISOString(),
-    kontostand: Math.round(Number(item.value) / 100),
-  }))
+  if (!graphData) {
+    return (
+      <Card className={cn(className)}>
+        <CardContent className="flex justify-center items-center h-full">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </CardContent>
+      </Card>
+    )
+  }
 
   const roundedMinY =
     Math.floor(Math.min(...graphData.map(item => item.kontostand)) / 1000) *
@@ -55,7 +69,7 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
     Math.ceil(Math.max(...graphData.map(item => item.kontostand)) / 1000) * 1000
 
   return (
-    <Card className="p-1.5 h-48">
+    <Card className={cn('px-2 p-1.5',className)}>
       <CardHeader className="flex flex-row justify-between p-0">
         <CardTitle className="flex items-center gap-1 font-medium">
           <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf
@@ -64,7 +78,7 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
       <CardContent className="p-0">
         <ChartContainer
           config={chartConfig}
-          className="-mt-2 mb-0 w-full h-[150px] aspect-auto"
+          className="-mt-2 mb-0 w-full max-h-[150px] md:max-h-[200px]"
         >
           <AreaChart
             data={graphData}
@@ -104,10 +118,11 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
               minTickGap={32}
               tickFormatter={value => {
                 const date = new Date(value)
-                return date.toLocaleDateString('en-US', {
+                const day = date.toLocaleDateString('de-DE', { day: '2-digit' })
+                const month = date.toLocaleDateString('de-DE', {
                   month: 'short',
-                  day: 'numeric',
                 })
+                return `${day}. ${month}`
               }}
             />
             <ChartTooltip
@@ -115,11 +130,13 @@ export default function HistoryTile({ timeRange }: HistoryTileProps) {
               content={
                 <ChartTooltipContent
                   labelFormatter={value => {
-                    return new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
+                    return new Date(value).toLocaleDateString('de-DE', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
                     })
                   }}
+                  formatter={value => `${value} €`}
                   indicator="dot"
                 />
               }

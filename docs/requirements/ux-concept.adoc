@@ -252,6 +252,10 @@ a| * Fehlende soziale Interaktion oder Vergleichsmöglichkeiten in der App
 // Fügen Sie Wireframes als Bilder oder als Link (z.B. zu einem Miroboard) ein
 // Beziehen Sie ihre Wireframes auf konkrete User Stories oder Epics.
 
+* Zu den Wireframes zugehörig sind die Epic User Stories E01 und E02
+* In der Mobile-Ansicht ist das tatsächliche User Interface recht nahe am Wireframe Layout umgesetzt. Kleine Änderungen wie z.B. der Verzicht auf die Titelleiste haben sich daraus ergeben, dass man während der Implementierung festgestellt hat, dass in der tatsächlichen App gewisse Elemente weitaus weniger schön aussehen als im vereinfachten Wireframe. Im Sinne der Agilität wurde sich dann darauf geeinigt, eine minimal unterschiedliche Variante umzusetzen, anstatt sich kompromisslos an den Ursprungsentwurf zu halten.
+* Die Desktop Ansicht unterscheidet sich schon deutlicher vom Desktop Wireframe, was schlichtweg an Zeitmangel lag. Insofern hatte man sich für den Prototyp entschieden, gemäß Responsive Design die mobile Ansicht schlichtweg anders und größer anzuordnen auf dem Desktop, anstelle von völlig verschiedenen Komponenten. Gut möglich, dass das im kommenden Semester dann noch besser umgesetzt wird
+
 image:wireframe_login.png[]
 
 image:wireframe_start.png[]
