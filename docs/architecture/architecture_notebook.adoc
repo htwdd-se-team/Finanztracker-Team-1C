@@ -110,7 +110,7 @@ Das System Context Diagramm zeigt das FinanzTracker-System und seinen Benutzer.
 **FinanzTracker**: Webanwendung zur Verwaltung von Einnahmen und Ausgaben
 
 .System Context Diagramm - FinanzTracker
-image:images/c4-l1-drawio.png[]
+image:c4-l1-drawio.png[]
 [Container-Diagramm,width=100%,align=center]
 
 === Container (C4 Level 2)
@@ -148,7 +148,7 @@ image:images/c4-l1-drawio.png[]
 ** ACID-Eigenschaften für Datenkonsistenz
 
 .Container-Diagramm der FinanzTracker-Architektur
-image:images/architecture-diagram-drawio.png[]
+image:architecture-diagram-drawio.png[]
 [Container-Diagramm,width=100%,align=center]
 
 
