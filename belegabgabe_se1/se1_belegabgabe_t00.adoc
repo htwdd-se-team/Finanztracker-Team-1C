@@ -84,3 +84,19 @@ include::{docs-test}/test_cases.adoc[lines=1..1;4..-1,leveloffset=+1]
 // ---------------------------------------------
 
 :imagesdir: {imagesdir-reset}/images
+
+= Verlinkte Inhalte
+
+* Product Backlog mit User Stories
+
+https://github.com/orgs/htwdd-se-team/projects/1/views/1
+
+
+* Sprint Backlog
+
+https://github.com/orgs/htwdd-se-team/projects/1/views/3
+
+
+* Risk Board
+
+https://github.com/orgs/htwdd-se-team/projects/1/views/8
