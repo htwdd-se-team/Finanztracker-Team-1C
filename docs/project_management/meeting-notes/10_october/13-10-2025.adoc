@@ -20,8 +20,11 @@
 == Tagesordnung
 
 ==  Weekly Stand-up/Backlog Refinement
-=== 1. ...
-- ... +
+=== 1. Ablauf des Semesters besprechen/ Sprintplanung
+- Wie wollen wir die Iterationen einteilen? +
+- Was müssen wir dieses Semester schaffen? (-> Produkt weiter ausbauen sh. User Stories, Tests, ...) +
+- Was passiert in der ersten Iteration? +
+- Wann Sprintplanung & Review/Retro? +
 
 *Notizen:* +
  - ... +
