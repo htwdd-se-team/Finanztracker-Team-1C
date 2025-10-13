@@ -1,0 +1,38 @@
+= Meeting-Protokoll 30.06.2025
+
+*Datum:* 13.10.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ELias +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* 17:18 +
+*Dauer:*
+
+==== Anwesenheit:
+- Elias
+- Ben
+- Paula
+- Ali (in China)
+- Khang
+- Christoph
+- Cedrick
+
+
+
+
+==  Beleg Review
+Ben schreibt mail an coach, überpruft ob meeting nötig ist
+
+
+== Epics und User Stories
+Detalierung der Epics und User Stories die noch nicht ausformuliert sind.
+(Gruppe 1) Elias + Christoph + Ben
+Samstag 18.10.2025 10:00 Uhr in Teams
+
+
+
+== Inhalt der Iteration
+Grobe Planung und wichtigen Meilensteinen im nächsten halben Jahr.
+(Gruppe 2) Paula + Khang + Cedrick
+Mittwoch 15.10.2025 15:00 Uhr in Teams
+
