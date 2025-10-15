@@ -1,0 +1,49 @@
+= Meeting-Protokoll Arbeitstreffen 15.10.2025
+
+*Datum:* 15.10.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 15:00 +
+*Meetingende:* ... +
+*Dauer:* ... min 
+
+==== Anwesenheit: 
+- Paula
+- Khang
+- Cedrick
+
+
+== Tagesordnung
+
+== grobe Planung für dieses Semester
+
+=== Termine: +
+
+- *20.01.2025* Präsentation +
+- *30.01.26* Belegabgabe +
+
+
+
+=== Aufbau Sprints: +
+
+KW 42 +
+
+KW 43 Sprintplanung +
+KW 44 +
+KW 45 +
+KW 46 Review/Retro +
+
+KW 47 Sprintplanung +
+KW 48 +
+KW 49 +
+KW 50 Review/Retro +
+
+KW 51 Sprintplanung +
+KW 52                   Weihnachten +
+KW 01                   Weihnachten +
+KW 02 Review/Retro +
+
+KW 03 +
+KW 04 *PRÄSI* +
+KW 05 *Abgabe Beleg* +
