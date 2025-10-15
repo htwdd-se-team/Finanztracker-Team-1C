@@ -47,3 +47,13 @@ KW 02 Review/Retro +
 KW 03 +
 KW 04 *PRÄSI* +
 KW 05 *Abgabe Beleg* +
+
+
+=== Reihenfolge der Epics: +
+
+1. E01/E02/E03 fertig machen (alles was aus SE I nicht fertig geworden ist)
+2. E05 und E04 (wenn möglich noch in Sprint 1 fertig werden, ansonsten Übernahme in Sprint 2)
+3. U04 (am Besten in Sprint 2)
+4. E06 (Eingrenzung auf bestimmte Banken)
+5. E07
+6. Tests in Sprint 3
