@@ -1,0 +1,40 @@
+= Meeting-Protokoll Arbeitstreffen 15.10.2025
+
+*Datum:* 16.10.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 09:30 +
+*Meetingende:* ... +
+*Dauer:* ... min 
+
+==== Anwesenheit: 
+- Elias
+- Christoph
+- Ben
+
+=== Notizen: +
+- E01 vorerst nicht vervollständigen -> U04 - ohne Internet hat keine Prio, da kein großes Value für den Kunden besteht
+- E02 abschließen, da keine offenen Tasks -> später eine neue Epic machen, falls alle anderen abgeschlossen sind oder bei einer passenden Epic das Ziel mit reinformulieren
+- E03 - Akzeptanzkriterien -> 2FA ist easy umzusetzen + Verbindungsabbruch (Eintrag hinzufügen = Fehlermeldung, dementsprechend gehen keiner Daten verloren)
+- Aufgabe @Ben Kommentare von nicht erfüllten Akzeptanzkriterien sammeln und auswerten
+
+- E04
+** CSV-Excel Export -> UseCase ist minimal + Import schwierig umzusetzen, aufgrund von unterschiedlichen CSV-Bankdaten + UseCase vom Import schon relevant, daher Finanzdatenimport nicht automatisch möglich -> Userstory für Import/Export erstellen
+* @Elias bringt Sparkasse-Format mit + @Ben Volksbanks-Format (Tabellenkopf)
+** Filterfunktion verbessern -> Idee: Default Textfilter auf Titel, Betrag, Kategorie und Datum (Priorisierung auf Titel) + die anderen fragen, was beim Filtern in den Vordergrund gestellt werden sollte + was man noch ausbauen sollte an Funktionen der Filterung -> Fokus Handy + ggf. PC
+*** Betragsspanne auf Höhste Ausgabe auf tausender/hunderter aufrunden
+
+- E05
+** Translation -> Akzeptanzkriterium: Buttonlängen funktionieren mit anderen Sprachen - Designtest in verschiedenen Sprachen
+** Währungenumstellung -> Initiale Abfrage, in welcher Währung er rechnen möchte + Hinzufügung in anderen Währungen möglich, mit Umrechnung in Basiswährung
+
+-E06
+** mit ChatGPT die Kategorie guessen
+
+- E07
+** @Ben Gedanken machen -> vllt Budget-Zug mit Motivation adden (Sparziele) - Balken beim Sparziel wird immer grün umso näher man kommt
+*** kleine Wins, keine großen Funktionalitäten
+
+- @Ben -> Bis nächste Woche Montag oder übernächste Woche Montag ausformulieren und vllt weiterer Arbeitstermin
+
