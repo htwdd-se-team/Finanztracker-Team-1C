@@ -3,10 +3,10 @@
 *Datum:* 15.10.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Paula +
 *Meetingbeginn:* 15:00 +
-*Meetingende:* ... +
-*Dauer:* ... min 
+*Meetingende:* 15:30 +
+*Dauer:* 30 min 
 
 ==== Anwesenheit: 
 - Paula
