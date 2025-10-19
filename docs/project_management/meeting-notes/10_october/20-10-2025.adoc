@@ -1,0 +1,97 @@
+= Meeting-Protokoll 20.10.2025
+
+*Datum:* 20.10.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:30 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Khang
+- Christoph
+- Cedrick
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Arbeitstreffen besprechen
+- Was wurde besprochen? +
+- Was für Entscheidungen wurden getroffen? +
+- Sind weitere ATs nötig? +
+
+*Notizen für Planungs-AT:* +
+ - ... +
+  +
+
+*Notizen für Epics/User-Stories-AT:* +
+ - ... +
+  +
+
+
+*Entscheidung:* +
+ - ... +
+ +
+ +
+ +
+
+
+
+=== 2. Was wollen wir mit dem Coach besprechen? +
+
+*Notizen:* +
+- ... +
+
+*Entscheidung:* +
+- ... +
+ +
+ +
+ +
+
+
+
+=== 3. Weitere organisatorische Aufgaben und/oder offene Punkte +
+
+- ... +
+
+*Notizen:* +
+- ... +
+ +
+ +
+ +
+
+
+
+
+
+==  Meeting mit Coach (15:00 Uhr)
+
+=== 1. ... +
+
+*Notizen:* +
+- ... +
+
+=== 2. ... +
+
+*Notizen:* +
+- ... +
+
+
+
+
+
+
+
+== Nächstes Meeting
+
+- Datum: 27.10.2025
+- Zeit: *14:00* Uhr
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- ... +
