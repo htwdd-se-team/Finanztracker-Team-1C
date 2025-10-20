@@ -3,7 +3,7 @@
 *Datum:* 20.10.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Cedrick +
 *Meetingbeginn:* 14:30 +
 *Meetingende:* xx:xx +
 *Dauer:* xx min 
@@ -15,73 +15,71 @@
 - Khang
 - Christoph
 - Cedrick
+- Ruben
 
 == Tagesordnung
 
-==  Weekly Stand-up/Backlog Refinement
-=== 1. Arbeitstreffen besprechen
+==  1. Weekly Stand-up/Backlog Refinement
+
+=== Arbeitstreffen besprechen
 - Was wurde besprochen? +
 - Was für Entscheidungen wurden getroffen? +
 - Sind weitere ATs nötig? +
 
 *Notizen für Planungs-AT:* +
- - ... +
-  +
+ - grobe Bearbeitungsreihenfolge siehe Planungs-AT Meeting +
+ - Start Sprintplanung heute (20.10) wenn möglich +
+ - KW 3: Als Pufferwoche für Feinschliff / andere Module +
+ - Unittests gegen Ende des Jahres (weniger Relevant) +
 
 *Notizen für Epics/User-Stories-AT:* +
- - ... +
-  +
+ - Vorerst grobe Notizen +
+ - Einige User Stories schon von Ben angelegt +
+ - Weitere User Stories im Laufe der Zeit ergänzen + 
+ - Priorisierung der User Stories gegenüber den Epics +
+ - grobes Ziel von 3 - 4 User Stories pro Sprint +
+ - Umsetzung von nicht vollständigen User Stories / Epics gegen Ende +
+ - UO2 - Fenster für die Eintragung: Erstellung einer neuen Story für den Teil + 
+  `Auf Anfrage können weitere Optionen konfiguriert werden, diese sind aber ausgeblendet (by default) ((Funktionalität zum Ein-/Ausblenden wird erst hinzugefügt, wenn mehr als nur Datum in den erweiterten Optionen konfigurierbar ist))`
+  -> Nur Titel / Beschreibung und Betrag sichtbar, alles andere eingeklappt +
+ - Von U02 fehlendes Akzeptanzkriterium in U17 umsetzen +
+ - U10: "Konto erstellen und wiederverwenden" erstmal rausnehmen (Dokumentieren) +
 
 
-*Entscheidung:* +
- - ... +
- +
- +
- +
-
-
-
-=== 2. Was wollen wir mit dem Coach besprechen? +
-
-*Notizen:* +
-- ... +
-
-*Entscheidung:* +
-- ... +
- +
- +
- +
+*potenzielle Reihenfolge:* +
+ - U13: Speichern von Filtern +
+ - U14: Intelligente Filter +
+ - U12 / E02: Analysen +
+ - U16: Sprachumstellung +
+ - U17: Währungswechsel +
 
 
 
-=== 3. Weitere organisatorische Aufgaben und/oder offene Punkte +
-
-- ... +
+== 2. Was wollen wir mit dem Coach besprechen? +
 
 *Notizen:* +
-- ... +
- +
- +
- +
+- Meinung zur App und Vorstellung +
+- In welche Richtung mit unseren Features +
+- Wie schreibt man User Stories die zur Verbesserung dienen? +
+- User Stories weglassen okay? (Gefragt, siehe unten) +
 
 
 
 
 
-==  Meeting mit Coach (15:00 Uhr)
+==  3. Meeting mit Coach (15:00 Uhr)
 
-=== 1. ... +
-
-*Notizen:* +
-- ... +
-
-=== 2. ... +
+=== Tipps / Hinweise +
 
 *Notizen:* +
-- ... +
-
-
-
+- Feedback umsetzen, bezüglich C4 Diagramm (Cloudflare und Hetzner raushauen und ins Deploymentdiagramm rein (siehe VL gegen Dezember)) +
+- Mit Aufgabenumfang wie in Semester 1 weiterarbeiten +
+- Gegen Ende des Semesters mit Feinschliff beginnen, heißt: Refactoring, Feature improvement / removal / moving +
+- User Stories können auch weggelassen werden, Einigung im Team +
+- Tickets für Improvements/Refactors nicht als User Story anlegen sondern als Workitem + 
+  (Was muss gemacht werden und warum, akzeptanzkriterien, Aufwandsschätzung) +
+- Testautomatiserung, Codequalität und Design kommen später im Semester (Richtung Dezember ), haben aber schon vorgearbeitet +
+- Bei Fragen oder zusätzlichen Feedback Coach kontaktieren +
 
 
 
@@ -89,9 +87,9 @@
 == Nächstes Meeting
 
 - Datum: 27.10.2025
-- Zeit: *14:00* Uhr
+- Zeit: *siehe Whatsapp Gruppe*
 - Ort: Online (Teams)
 
 ==== Themen nächstes Meeting
 
-- ... +
+- Ticketfortschritte, Arbeitsziele +
