@@ -7,6 +7,7 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  IsInt,
   IsNumber,
   ValidateNested,
   IsArray,
@@ -114,5 +115,7 @@ export class MaxValueDto {
     example: 1200,
     description: "Highest transaction value of user",
   })
-  maxPrice!: number;
+  @Type(() => Number)
+  @IsInt()
+  maxPrice = 0;
 }
