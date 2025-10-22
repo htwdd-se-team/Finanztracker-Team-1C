@@ -188,4 +188,15 @@ export class EntryService {
         return { createdAt: "desc" };
     }
   }
+
+  async getFilterDetails(user: User): Promise<{ maxPrice: string }> {
+    const agg = await this.prisma.transaction.aggregate({
+      where: { userId: user.id },
+      _max: { amount: true },
+    });
+
+    const maxAmount = agg._max?.amount ?? 0;
+    const rounded = Math.ceil(maxAmount / 100) * 100;
+    return { maxPrice: String(rounded) };
+  }
 }

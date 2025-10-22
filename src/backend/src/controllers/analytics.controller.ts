@@ -9,6 +9,7 @@ import {
   TransactionBreakdownResponseDto,
   TransactionItemDto,
 } from "../dto";
+import { MaxValueDto } from "../dto/maxvalue.dto";
 import { JwtAuthGuard } from "../guards";
 import { AnalyticsService } from "../services";
 
@@ -18,6 +19,17 @@ import { AnalyticsService } from "../services";
 @UseGuards(JwtAuthGuard)
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
+
+  @Get("filter-details")
+  @ApiOkResponse({
+    type: MaxValueDto,
+    description: "Maximaler Betrag des Nutzers",
+  })
+  async filterDetails(@UserDecorator() user: User): Promise<MaxValueDto> {
+    const maxPrice =
+      await this.analyticsService.getMaxTransactionAmountForUser(user);
+    return { maxPrice };
+  }
 
   @Get("transaction-breakdown")
   @ApiOkResponse({
