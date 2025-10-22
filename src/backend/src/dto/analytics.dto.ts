@@ -108,3 +108,11 @@ export class TransactionBreakdownResponseDto {
   @IsArray()
   data: TransactionBreakdownItemDto[];
 }
+
+export class MaxValueDto {
+  @ApiProperty({
+    example: 1200,
+    description: "Highest transaction value of user",
+  })
+  maxPrice!: number;
+}

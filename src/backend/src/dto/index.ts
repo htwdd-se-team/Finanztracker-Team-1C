@@ -11,4 +11,3 @@ export * from "./update-category.dto";
 export * from "./category-response.dto";
 export * from "./user.dto";
 export * from "./analytics.dto";
-export * from "./maxvalue.dto";
