@@ -209,4 +209,15 @@ export class AnalyticsService {
         return "day";
     }
   }
+
+  async getMaxTransactionAmountForUser(user: User): Promise<number> {
+    const agg = await this.prisma.transaction.aggregate({
+      where: { userId: user.id },
+      _max: { amount: true },
+    });
+
+    const max = agg._max?.amount ?? 0;
+    const rounded = max > 0 ? Math.ceil(max / 100) * 100 : 0;
+    return rounded;
+  }
 }

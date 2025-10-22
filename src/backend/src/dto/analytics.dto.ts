@@ -7,6 +7,7 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  IsInt,
   IsNumber,
   ValidateNested,
   IsArray,
@@ -107,4 +108,14 @@ export class TransactionBreakdownResponseDto {
   @Type(() => TransactionBreakdownItemDto)
   @IsArray()
   data: TransactionBreakdownItemDto[];
+}
+
+export class MaxValueDto {
+  @ApiProperty({
+    example: 1200,
+    description: "Highest transaction value of user",
+  })
+  @Type(() => Number)
+  @IsInt()
+  maxPrice = 0;
 }
