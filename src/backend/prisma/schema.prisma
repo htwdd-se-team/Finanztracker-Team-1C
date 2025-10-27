@@ -114,18 +114,26 @@ model Filter {
   id          Int       @id @default(autoincrement())
   title       String
   icon        String?
-  minPrice    Decimal
-  maxPrice    Decimal
-  dtoType     String
-  description String?
-  parameters  Json?
+  minPrice    Decimal?
+  maxPrice    Decimal?
+  dateFrom    DateTime?
+  dateTo      DateTime?
+  searchDescription  String?
+  transactionType TransactionType? 
+  sortOption FilterSortOption? @default(NEWEST_FIRST)    
   userId      Int
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
- 
-   filterCategories FilterCategory[]
+  filterCategories FilterCategory[]
+}
+
+enum FilterSortOption {
+  HIGHEST_AMOUNT
+  LOWEST_AMOUNT
+  NEWEST_FIRST
+  OLDEST_FIRST
 }
 model FilterCategory {
   filterId   Int
@@ -135,4 +143,3 @@ model FilterCategory {
 
   @@id([filterId, categoryId])
 }
-
