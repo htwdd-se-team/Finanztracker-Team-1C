@@ -5,17 +5,16 @@
 *Leitung:* Paula +
 *Protokoll:* ... +
 *Meetingbeginn:* 14:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 14:28 +
+*Dauer:* 28 min 
 
 ==== Anwesenheit: 
 - Elias
-- Ben
 - Paula
 - Khang
 - Christoph
 - Cedrick
-
+- Ben (Abgemeldet)
 
 == Tagesordnung
 
@@ -24,12 +23,15 @@
 Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
 
 *Notizen:* +
-- ... +
+- Durch Krankheit bis jetzt noch wenig Fortschritt +
+- Khang: Ticket 61 braucht Frontend input +
+- Verzug auch durch Backend-Abhängigkeiten +
   +
 
 
 *Entscheidungen:* +
-- ... +
+- "Fertigstellung" der Tickets bis zum nächsten oder übernächsten Meeting +
+- Falls Christoff Zeitmangel hat, dann Ticket an Cedrick übergeben +
   +
   +
 
@@ -37,24 +39,28 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 === 2. Aufgaben für Scrum Master & PO in diesem Sprint +
 
 *Notizen:* +
-- ... +
+- Paula und Ben aktuell wenig Arbeit +
+- Weitere Mitglieder für Praktikum gesucht +
   +
 
 *Entscheidungen:* +
-- ... +
+- Um User Stories kümmern, braucht aber noch wahrscheinlich noch einen Entwickler (siehe 3.) +
+- Vielleicht das Glossar überarbeiten / updaten  +
+- Ausstausch mit anderen Teams für weitere Verbesserungsvorschläge (Ähnlich wie Fachaustausch KW46)  +
+- Architecture Notebook (C4 Diagramm) nach Herr Anke's wünschen überarbeiten +
   +
-  +
-
 
 === 3. Arbeitstermin für User-Stories für nächsten Sprint +
 evtl. diesen Freitag (31.10.25)?
 
 *Notizen:* +
-- ... +
+- Muss bis zum 17.11 fertig sein +
+- Weitere Tickes für diesen Sprint notwendig +
   +
 
 *Entscheidungen:* +
-- ... +
+- Terminfindung in Whatsappgruppe um Ben einzuschließen +
+- restliche User Stories für den Sprint in ausgemachten Termin erstellen +
   +
   +
 
