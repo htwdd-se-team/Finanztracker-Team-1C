@@ -28,6 +28,8 @@ model User {
   Transaction Transaction[]
   Category    Category[]
   // SavingsGoal SavingsGoal[]
+
+  Filter Filter[]
 }
 
 model Category {
@@ -106,3 +108,17 @@ model Transaction {
 //   userId Int
 //   user   User @relation(fields: [userId], references: [id])
 // }
+
+model Filter {
+  id          Int      @id @default(autoincrement())
+  title       String
+  icon        String?
+  dtoType     String
+  description String?
+  parameters  Json?
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
