@@ -48,6 +48,7 @@ model Category {
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  filterCategories FilterCategory[]
 }
 
 enum TransactionType {
@@ -110,15 +111,28 @@ model Transaction {
 // }
 
 model Filter {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   icon        String?
+  minPrice    Decimal
+  maxPrice    Decimal
   dtoType     String
   description String?
   parameters  Json?
   userId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+ 
+   filterCategories FilterCategory[]
+}
+model FilterCategory {
+  filterId   Int
+  categoryId Int
+  filter     Filter   @relation(fields: [filterId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([filterId, categoryId])
 }
 
