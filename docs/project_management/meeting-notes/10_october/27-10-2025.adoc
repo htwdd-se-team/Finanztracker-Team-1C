@@ -1,0 +1,72 @@
+= Meeting-Protokoll 27.10.2025
+
+*Datum:* 27.10.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min 
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Paula
+- Khang
+- Christoph
+- Cedrick
+
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- ... +
+  +
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Aufgaben für Scrum Master & PO in diesem Sprint +
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 3. Arbeitstermin für User-Stories für nächsten Sprint +
+evtl. diesen Freitag (31.10.25)?
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+
+
+== Nächstes Meeting
+
+- Datum: 03.11.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt +
