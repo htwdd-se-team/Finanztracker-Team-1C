@@ -28,6 +28,8 @@ model User {
   Transaction Transaction[]
   Category    Category[]
   // SavingsGoal SavingsGoal[]
+
+  Filter Filter[]
 }
 
 model Category {
@@ -46,6 +48,7 @@ model Category {
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  filterCategories FilterCategory[]
 }
 
 enum TransactionType {
@@ -106,3 +109,37 @@ model Transaction {
 //   userId Int
 //   user   User @relation(fields: [userId], references: [id])
 // }
+
+model Filter {
+  id          Int       @id @default(autoincrement())
+  title       String
+  icon        String?
+  minPrice    Decimal?
+  maxPrice    Decimal?
+  dateFrom    DateTime?
+  dateTo      DateTime?
+  searchDescription  String?
+  transactionType TransactionType? 
+  sortOption FilterSortOption? @default(NEWEST_FIRST)    
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  filterCategories FilterCategory[]
+}
+
+enum FilterSortOption {
+  HIGHEST_AMOUNT
+  LOWEST_AMOUNT
+  NEWEST_FIRST
+  OLDEST_FIRST
+}
+model FilterCategory {
+  filterId   Int
+  categoryId Int
+  filter     Filter   @relation(fields: [filterId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([filterId, categoryId])
+}
