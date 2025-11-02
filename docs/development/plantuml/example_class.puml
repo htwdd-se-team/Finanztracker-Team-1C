@@ -1,0 +1,57 @@
+@startuml
+' Versteckt die kleinen Icons vor Attributen und Methoden, um dem Bild zu entsprechen
+' skinparam classAttributeIconSize 0
+
+package "Presentation" {
+  class GroupController {
+    + create()
+    + add_member()
+  }
+}
+
+package "Application" {
+  class GroupService {
+    - repo: GroupRepository
+    + create_group(name: str, description: str): Group
+    + add_student(group_id: int, student_id: str): Group
+  }
+}
+
+package "Domain" {
+  class Group {
+    - id: int
+    - name: str
+    - description: str
+    - members: Set<StudentRef>
+    + add_student(student_id: str)
+    + remove_student(student_id: str)
+    + is_full(): bool
+  }
+
+  class StudentRef {
+    + id: str
+  }
+
+  ' Komposition: Eine Gruppe besteht aus vielen (*) StudentRefs
+  Group *-- "*" StudentRef
+}
+
+package "Infrastructure" {
+  interface GroupRepository {
+    + save(g: Group): Group
+    + get(id: int): Group
+  }
+
+  class SqliteGroupRepository {
+  }
+
+  ' Implementierung: SqliteGroupRepository implementiert GroupRepository
+  GroupRepository <|.. SqliteGroupRepository
+}
+
+' Beziehungen zwischen den Paketen/Klassen
+GroupController --> GroupService
+GroupService --> Group
+GroupService --> GroupRepository
+
+@enduml

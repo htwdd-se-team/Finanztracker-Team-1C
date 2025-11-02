@@ -11,6 +11,18 @@ Dieses Dokument beschreibt wesentliche Entwurfsentscheidungen auf Ebene der Komp
 == Ausgewählte Sichten
 //Entwurfsklassendiagramme, Sequenzdiagramme
 
+.Beispiel, Sequenzdiagramm
+[plantuml, "{diagramsdir}/example_seq", svg]
+....
+include::{plantumlsdir}/example_seq.puml[]
+....
+
+.Beispiel, Klassendiagramm (C4-Level-4)
+[plantuml, "{diagramsdir}/example_class", svg]
+....
+include::{plantumlsdir}/example_class.puml[]
+....
+
 == Schnittstellen
 //Dokumentation oder Verweise auf Schnittstellen, z.B. REST-APIs
 

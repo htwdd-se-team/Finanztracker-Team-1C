@@ -1,0 +1,26 @@
+@startuml
+!theme plain
+
+actor Dozent
+participant Controller
+participant Service
+participant Repository
+participant Group
+
+Dozent -> Controller: POST /groups/{id}/members/{student_id}
+
+Controller -> Service: add_student(id, student_id)
+
+Service -> Repository: get(id)
+Repository --> Service: Group
+
+Service -> Group: add_student(student_id)
+
+Service -> Repository: save(Group)
+Repository --> Service: Group
+
+Service --> Controller: GroupResponse
+
+Controller --> Dozent: 200 OK
+
+@enduml
