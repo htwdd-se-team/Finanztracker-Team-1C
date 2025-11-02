@@ -1,0 +1,82 @@
+= Meeting-Protokoll 03.11.2025
+
+*Datum:* 03.11.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min 
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- ... +
+  +
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Ausgearbeitete User Stories besprechen +
+Anmerkungen? Verbesserungsvorschläge? Etwaige Aufteilung der User Stories
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+
+
+
+
+=== 3. Sequenzdiagramme +
+Wie können wir die in unseren nächsten User Stories einbauen?
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+
+- Wer will zu den Fachaustausch-Praktika mitkommen? +
+
+- Nächste Woche ist die letzte Woche dieses Sprints, wir müssen also Review und Retrospektive machen +
+ -> in Präsenz oder Online? +
+ 
+
+
+== Nächstes Meeting
+
+- Datum: 10.11.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt +
+- Review/Retro +
