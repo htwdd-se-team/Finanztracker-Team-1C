@@ -11,3 +11,6 @@ export * from "./update-category.dto";
 export * from "./category-response.dto";
 export * from "./user.dto";
 export * from "./analytics.dto";
+export * from "./create-filter.dto";
+export * from "./update-filter.dto";
+export * from "./filter-response.dto";

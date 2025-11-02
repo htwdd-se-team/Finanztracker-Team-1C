@@ -69,7 +69,7 @@ model Transaction {
 
   type TransactionType @default(EXPENSE)
 
-  amount      Int // in cents
+  amount      Int
   description String?
   currency    String  @default("EUR")
 
@@ -114,11 +114,11 @@ model Filter {
   id          Int       @id @default(autoincrement())
   title       String
   icon        String?
-  minPrice    Decimal?
-  maxPrice    Decimal?
+  minPrice    Int?
+  maxPrice    Int?
   dateFrom    DateTime?
   dateTo      DateTime?
-  searchDescription  String?
+  searchText  String?
   transactionType TransactionType? 
   sortOption FilterSortOption? @default(NEWEST_FIRST)    
   userId      Int
