@@ -5,8 +5,8 @@
 *Leitung:* Paula +
 *Protokoll:* ... +
 *Meetingbeginn:* 10:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 11:20 +
+*Dauer:* 80 min 
 
 ==== Anwesenheit: 
 - Paula
@@ -16,34 +16,50 @@
 
 == Tagesordnung
 
-== User-Stories weiter ausarbeiten
+== User-Stories weiter ausarbeiten:
 
 == E04
 ==== U12
-...
+- Export der eigenen Daten soll möglich sein (vermutlich csv)
 
 ==== U13
-... 
+läuft gerade
 
 ==== U14
-... 
+- wahrscheinlich nicht mit KI 
+- Filterung nach von und angelegten Mustern (z.B. Betragshöhe, Zeitraum, Key-words in der Beschreibung)
+- Analyse: Orientierung an den Platzhaltern im "Graphen"-Reiter (Ausgaben nach Kategorien, Einnahmen vs.Ausgaben, usw.)
 
 
 
 == E05
-==== U16
-...
-
-==== U17
-...
+==== U16/U17
+- beides eher erst am Schluss wenn wir noch Zeit haben
+- ist weniger der Fokus (eher der Fokus auf Analyse)
 
 
+== E06
+==== U18
+- User hat die Möglichkeit von mehreren Banken (ca. 3) eine csv-Datei einlesen zu lassen +
+    -> wir suchen uns mind 3 Banken bei denen wir eine csv-Datei exportieren können, nehmen das als Grundgerüst/Vorgabe und bauen dann jede der Auswahlmöglichkeiten einzeln
 
 == Sonstiges
 *Notizen:* +
-... +
+- Beleganalyse mit KI ja/nein? +
+- Refinement bei Desktopansicht: Übersicht soll Puffer an den Seiten haben + Seitenränder vereinheitlichen bei allen Reitern +
+-> Christoph (als Refinement-Ticket im nächsten Sprint) +
+- nächste Iteration: analyse und import +
+- dritte Iteration: Sprache, Währung + beleg einscannen + finales refinement +
+- *Sequenzdiagramme für die nächsten Userstories* +
+ 
+
+
+meeting morgen: +
+Userstory Vorstellung von Ben, Sequenzdiagramm
+ +
+ +
  +
 
 *Entscheidungen:* +
-... +
+- Ben kümmert sich um die weiteren User-Stories  : ) +
  +
