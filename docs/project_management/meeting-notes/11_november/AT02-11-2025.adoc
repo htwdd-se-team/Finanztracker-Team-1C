@@ -1,0 +1,49 @@
+= Meeting-Protokoll Arbeitstreffen 02.11.2025
+
+*Datum:* 02.11.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 10:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min 
+
+==== Anwesenheit: 
+- Paula
+- Ben
+- Christoph
+
+
+== Tagesordnung
+
+== User-Stories weiter ausarbeiten
+
+== E04
+==== U12
+...
+
+==== U13
+... 
+
+==== U14
+... 
+
+
+
+== E05
+==== U16
+...
+
+==== U17
+...
+
+
+
+== Sonstiges
+*Notizen:* +
+... +
+ +
+
+*Entscheidungen:* +
+... +
+ +
