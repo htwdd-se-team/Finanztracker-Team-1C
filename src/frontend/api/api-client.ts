@@ -24,7 +24,7 @@ apiClient.instance.interceptors.response.use(
     (error) => {
         // Check if the request had the no-error-display header
         const noErrorDisplay = error.config?.headers?.['no-error-display']
-        
+
         if (!noErrorDisplay && error.response?.data && error.response?.data?.message) {
             if (typeof error.response?.data?.message === 'object') {
                 for (const key in error.response?.data?.message) {
