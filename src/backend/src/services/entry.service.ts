@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma, Transaction, User } from "@prisma/client";
+import { FilterSortOption, Prisma, Transaction, User } from "@prisma/client";
 
 import {
   Currency,
@@ -42,6 +42,23 @@ export class EntryService {
     return EntryService.mapEntryToResponseDto(entry);
   }
 
+  private mapFilterSortOptionToEntrySortBy(
+    sortOption: FilterSortOption,
+  ): EntrySortBy {
+    switch (sortOption) {
+      case FilterSortOption.HIGHEST_AMOUNT:
+        return EntrySortBy.AMOUNT_DESC;
+      case FilterSortOption.LOWEST_AMOUNT:
+        return EntrySortBy.AMOUNT_ASC;
+      case FilterSortOption.NEWEST_FIRST:
+        return EntrySortBy.CREATED_AT_DESC;
+      case FilterSortOption.OLDEST_FIRST:
+        return EntrySortBy.CREATED_AT_ASC;
+      default:
+        return EntrySortBy.CREATED_AT_DESC;
+    }
+  }
+
   async getEntries(
     user: User,
     {
@@ -55,8 +72,52 @@ export class EntryService {
       amountMin,
       amountMax,
       title,
+      filterId,
     }: EntryPaginationParamsDto,
   ): Promise<EntryPageDto> {
+    if (filterId) {
+      const filter = await this.prisma.filter.findUnique({
+        where: { id: filterId, userId: user.id },
+        include: { filterCategories: true },
+      });
+
+      if (!filter) {
+        throw new NotFoundException("Filter not found");
+      }
+
+      if (filter.sortOption) {
+        sortBy = this.mapFilterSortOptionToEntrySortBy(filter.sortOption);
+      }
+
+      if (filter.dateFrom) {
+        dateFrom = filter.dateFrom;
+      }
+
+      if (filter.dateTo) {
+        dateTo = filter.dateTo;
+      }
+
+      if (filter.transactionType) {
+        transactionType = filter.transactionType;
+      }
+
+      if (filter.minPrice) {
+        amountMin = filter.minPrice;
+      }
+
+      if (filter.maxPrice) {
+        amountMax = filter.maxPrice;
+      }
+
+      if (filter.searchText) {
+        title = filter.searchText;
+      }
+
+      if (filter.filterCategories.length) {
+        categoryIds = filter.filterCategories.map((fc) => fc.categoryId);
+      }
+    }
+
     const whereClause: Prisma.TransactionWhereInput = {
       userId: user.id,
       ...(dateFrom && {

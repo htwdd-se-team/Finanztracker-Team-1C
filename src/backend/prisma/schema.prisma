@@ -69,7 +69,7 @@ model Transaction {
 
   type TransactionType @default(EXPENSE)
 
-  amount      Int // in cents
+  amount      Int
   description String?
   currency    String  @default("EUR")
 
@@ -114,13 +114,13 @@ model Filter {
   id          Int       @id @default(autoincrement())
   title       String
   icon        String?
-  minPrice    Decimal?
-  maxPrice    Decimal?
+  minPrice    Int?
+  maxPrice    Int?
   dateFrom    DateTime?
   dateTo      DateTime?
-  searchDescription  String?
-  transactionType TransactionType? 
-  sortOption FilterSortOption? @default(NEWEST_FIRST)    
+  searchText  String?
+  transactionType TransactionType?
+  sortOption FilterSortOption? @default(NEWEST_FIRST)
   userId      Int
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
@@ -135,6 +135,7 @@ enum FilterSortOption {
   NEWEST_FIRST
   OLDEST_FIRST
 }
+
 model FilterCategory {
   filterId   Int
   categoryId Int
