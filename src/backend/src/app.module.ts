@@ -59,9 +59,9 @@ import { JwtStrategy } from "./strategies";
     EntryService,
     CategoryService,
     UserService,
+    FilterService,
 
     KyselyService,
-    FilterService,
     PrismaService,
     // guards
     JwtAuthGuard,
