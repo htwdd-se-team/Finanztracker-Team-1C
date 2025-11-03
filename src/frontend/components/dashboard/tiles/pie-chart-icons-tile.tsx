@@ -13,12 +13,17 @@ import { DateTime } from 'luxon'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { ApiGranularity, ApiTransactionType } from '@/__generated__/api'
-import { Category, useCategory } from '@/components/provider/category-provider'
-import { IconMap } from '@/lib/icon-map'
+import { useCategory } from '@/components/provider/category-provider'
+import { IconMap, IconNames } from '@/lib/icon-map'
+import { CategoryColors } from '@/lib/color-map'
 import { cn } from '@/lib/utils'
 
-interface TransformedChartData extends Category {
+interface TransformedChartData {
+  id: number
+  name: string
   value: number // in €
+  icon: IconNames
+  color: CategoryColors | string
 }
 
 const chartConfig = {
@@ -44,6 +49,10 @@ const colorPalette = [
   'var(--color-chart-4)',
   'var(--color-chart-5)',
 ]
+
+// Threshold in percent - adjust to test different values
+// Try 5, 10, or 15 to find the appropriate size
+const SMALL_CATEGORY_THRESHOLD_PERCENT = 10
 
 export default function PieChartTileIcons({
   timeRange,
@@ -82,19 +91,60 @@ export default function PieChartTileIcons({
           {} as Record<number, number>
         )
 
-      return Object.entries(categoryTotals)
+      const transformedData: TransformedChartData[] = Object.entries(
+        categoryTotals
+      )
         .map(([categoryId, totalValue], idx) => {
           const category = getCategoryFromId(parseInt(categoryId))
           if (category) {
             return {
-              ...category,
+              id: category.id,
+              name: category.name,
               value: totalValue,
+              icon: category.icon,
               color: colorPalette[idx % colorPalette.length],
             }
           }
           return null
         })
         .filter((item): item is TransformedChartData => item !== null)
+
+      // Calculate total to determine percentages
+      const totalValue = transformedData.reduce(
+        (sum, item) => sum + item.value,
+        0
+      )
+
+      // Separate small and large categories
+      const largeCategoriesWithThreshold = transformedData.filter(
+        item =>
+          (item.value / totalValue) * 100 >= SMALL_CATEGORY_THRESHOLD_PERCENT
+      )
+
+      const smallCategories = transformedData.filter(
+        item =>
+          (item.value / totalValue) * 100 < SMALL_CATEGORY_THRESHOLD_PERCENT
+      )
+
+      // Add small categories to "Other" if they exist
+      if (smallCategories.length > 0) {
+        const otherValue = smallCategories.reduce(
+          (sum, item) => sum + item.value,
+          0
+        )
+        largeCategoriesWithThreshold.push({
+          id: -1,
+          name: 'Sonstiges',
+          value: otherValue,
+          icon: IconNames.RECEIPT,
+          color:
+            colorPalette[
+              largeCategoriesWithThreshold.length % colorPalette.length
+            ],
+        })
+      }
+
+      return largeCategoriesWithThreshold
     },
   })
 
@@ -121,7 +171,11 @@ export default function PieChartTileIcons({
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5
     const x = cx + radius * Math.cos(-midAngle * RADIAN)
     const y = cy + radius * Math.sin(-midAngle * RADIAN)
-    const IconComponent = IconMap[data[index].icon as keyof typeof IconMap]
+    const IconComponent = IconMap[data[index]?.icon as keyof typeof IconMap]
+
+    if (!IconComponent) {
+      return null
+    }
 
     return (
       <g>
@@ -141,12 +195,12 @@ export default function PieChartTileIcons({
   }
 
   return (
-    <Card className={cn('p-1.5',className)}>
+    <Card className={cn('p-1.5', className)}>
       <CardTitle className="flex items-center gap-1 -mb-5 font-medium">
         <PieChartIcon className="w-4 h-4 shrink-0" />
         Kategorien
       </CardTitle>
-      <CardContent className="flex flex-1 justify-center items-center w-full h-full overflow-hidden p-0 m-0">
+      <CardContent className="flex flex-1 justify-center items-center m-0 p-0 w-full h-full overflow-hidden">
         <ChartContainer
           config={chartConfig}
           className="flex justify-center items-center w-full md:max-h-[200px] aspect-square"
@@ -156,7 +210,7 @@ export default function PieChartTileIcons({
               <ChartTooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
-                    const item = payload[0].payload
+                    const item = payload[0].payload as TransformedChartData
                     return (
                       <div className="bg-background shadow p-2 rounded text-xs">
                         <div className="font-semibold">{item.name}</div>
@@ -186,7 +240,7 @@ export default function PieChartTileIcons({
                 strokeWidth={1}
               >
                 {data?.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={entry.color as string} />
                 ))}
                 <Label
                   position="center"
