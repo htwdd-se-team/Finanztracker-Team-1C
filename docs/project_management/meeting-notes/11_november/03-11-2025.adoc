@@ -3,10 +3,10 @@
 *Datum:* 03.11.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Ben +
 *Meetingbeginn:* 14:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min 
+*Meetingende:* 15:15 +
+*Dauer:* 70 min +
 
 ==== Anwesenheit: 
 - Elias
@@ -23,8 +23,14 @@
 Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
 
 *Notizen:* +
-- ... +
-  +
+
+- Backend-Tickets sind fertig: Endpunkt für Filterung implementiert +
+- PieChart Implementierung auch fertig  +
+- Refinement-Tickets: Individuelle Zeitspannen auf Startseite komplexer als gedacht, schwierigsten Ticket geschafft, bei anderen Refinement-Tickets sollten kein Problem sein
+
+Aufgefallen bei Christoph seiner Implementierung von Zeitspanne:
+
+- Wenn am ersten September kein Data-Point ist (keine Belege) könnten die Daten nicht abgerufen werden, obwohl es ja trotzdem einen Kontostand gibt, z.B. erst ab 08.September angezeigt -> künstlichen Data-Point erzeugen im Frontend bzw. Diagramm-Option, vielleicht Edge-Case Prio 3
 
 
 *Entscheidungen:* +
@@ -37,8 +43,9 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 Anmerkungen? Verbesserungsvorschläge? Etwaige Aufteilung der User Stories
 
 *Notizen:* +
-- ... +
-  +
+
+- Aufteilung der User-Stories passt erstmal -> im Sprint-Planning die Taks ausformulieren  +
+- Aufnahme von regulären Einnahmen und Ausgaben (Alle x Monate an Tag x, um Monat und Jahr umzusetzen) +
 
 *Entscheidungen:* +
 - ... +
@@ -51,11 +58,11 @@ Anmerkungen? Verbesserungsvorschläge? Etwaige Aufteilung der User Stories
 Wie können wir die in unseren nächsten User Stories einbauen?
 
 *Notizen:* +
-- ... +
+- Elias bereitet die Sequenz & Klassendiagramm für das Sprint Planing vor, im Sprint Planning werden die Tasks für die User Stories einschließlich der Sequenz und Klassendiagramme fertig gestellt  +
   +
 
 *Entscheidungen:* +
-- ... +
+- Am 17.01.2025 fangen wir um 13:30 an +
   +
   +
 
@@ -65,10 +72,16 @@ Wie können wir die in unseren nächsten User Stories einbauen?
 
 - Wer will zu den Fachaustausch-Praktika mitkommen? +
 
+- KW46: Projektmanagement: Paula und Ben
+- KW48: Software-Entwurf: Christoph und Khang
+- KW50: Test: Cedrick und Elias
+
 - Nächste Woche ist die letzte Woche dieses Sprints, wir müssen also Review und Retrospektive machen +
  -> in Präsenz oder Online? +
- 
+ Online - Webcam erwünscht :)
 
+=== 5. Backlog Refinement
+- Story für regelmäßige Ausgaben/Einnahmen wird unbedingt benötigt -> Tasks definieren morgen 17:00uhr (Elias, Ben und Christoph)
 
 == Nächstes Meeting
 
@@ -80,3 +93,4 @@ Wie können wir die in unseren nächsten User Stories einbauen?
 
 - Ticketfortschritt +
 - Review/Retro +
+- Übernächste Woche 13:30
