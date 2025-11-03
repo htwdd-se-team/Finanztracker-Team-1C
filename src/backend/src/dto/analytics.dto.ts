@@ -113,9 +113,9 @@ export class TransactionBreakdownResponseDto {
 export class MaxValueDto {
   @ApiProperty({
     example: 1200,
-    description: "Highest transaction value of user",
+    description: "Highest transaction value of user in cents",
   })
   @Type(() => Number)
   @IsInt()
-  maxPrice = 0;
+  maxPrice: number;
 }
