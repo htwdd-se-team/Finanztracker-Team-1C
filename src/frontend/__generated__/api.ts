@@ -17,6 +17,13 @@ export enum ApiGranularity {
   YEAR = "YEAR",
 }
 
+export enum ApiFilterSortOption {
+  HIGHEST_AMOUNT = "HIGHEST_AMOUNT",
+  LOWEST_AMOUNT = "LOWEST_AMOUNT",
+  NEWEST_FIRST = "NEWEST_FIRST",
+  OLDEST_FIRST = "OLDEST_FIRST",
+}
+
 export enum ApiEntrySortBy {
   CreatedAtAsc = "createdAt_asc",
   CreatedAtDesc = "createdAt_desc",
@@ -149,7 +156,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-06-30T23:11:18.952Z"
+   * @example "2025-11-03T13:41:32.138Z"
    */
   createdAt: string;
   /**
@@ -363,6 +370,114 @@ export interface ApiUpdateEntryDto {
   createdAt?: string;
 }
 
+export interface ApiCreateFilterDto {
+  /** @example "Monthly groceries" */
+  title: string;
+  /** Optional icon name */
+  icon?: string;
+  /**
+   * Minimum amount in cents
+   * @min 0
+   */
+  minPrice?: number;
+  /**
+   * Maximum amount in cents
+   * @min 0
+   */
+  maxPrice?: number;
+  /**
+   * Filter start date
+   * @format date-time
+   */
+  dateFrom?: string;
+  /**
+   * Filter end date
+   * @format date-time
+   */
+  dateTo?: string;
+  /** Search text */
+  searchText?: string;
+  transactionType?: ApiTransactionType;
+  /** @default "NEWEST_FIRST" */
+  sortOption?: ApiFilterSortOption;
+  /** Category IDs to include */
+  categoryIds?: number[];
+}
+
+export interface ApiFilterResponseDto {
+  /** @example "Monthly groceries" */
+  title: string;
+  /** Optional icon name */
+  icon?: string;
+  /**
+   * Minimum amount in cents
+   * @min 0
+   */
+  minPrice?: number;
+  /**
+   * Maximum amount in cents
+   * @min 0
+   */
+  maxPrice?: number;
+  /**
+   * Filter start date
+   * @format date-time
+   */
+  dateFrom?: string;
+  /**
+   * Filter end date
+   * @format date-time
+   */
+  dateTo?: string;
+  /** Search text */
+  searchText?: string;
+  transactionType?: ApiTransactionType;
+  /** @default "NEWEST_FIRST" */
+  sortOption?: ApiFilterSortOption;
+  /** Category IDs to include */
+  categoryIds?: number[];
+  /** @example 1 */
+  id: number;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+}
+
+export interface ApiUpdateFilterDto {
+  /** @example "Monthly groceries" */
+  title?: string;
+  /** Optional icon name */
+  icon?: string;
+  /**
+   * Minimum amount in cents
+   * @min 0
+   */
+  minPrice?: number;
+  /**
+   * Maximum amount in cents
+   * @min 0
+   */
+  maxPrice?: number;
+  /**
+   * Filter start date
+   * @format date-time
+   */
+  dateFrom?: string;
+  /**
+   * Filter end date
+   * @format date-time
+   */
+  dateTo?: string;
+  /** Search text */
+  searchText?: string;
+  transactionType?: ApiTransactionType;
+  /** @default "NEWEST_FIRST" */
+  sortOption?: ApiFilterSortOption;
+  /** Category IDs to include */
+  categoryIds?: number[];
+}
+
 export interface ApiUserResponseDto {
   /**
    * The given name of the user
@@ -398,6 +513,14 @@ export interface ApiUserBalanceResponseDto {
    * @example 10
    */
   transactionCount: number;
+}
+
+export interface ApiMaxValueDto {
+  /**
+   * Highest transaction value of user in cents
+   * @example 1200
+   */
+  maxPrice: number;
 }
 
 export interface ApiTransactionBreakdownItemDto {
@@ -853,6 +976,11 @@ export class Api<
          * @example "grocery"
          */
         title?: string;
+        /**
+         * Filter ID
+         * @example 1
+         */
+        filterId?: number;
       },
       params: RequestParams = {},
     ) =>
@@ -904,6 +1032,85 @@ export class Api<
         ...params,
       }),
   };
+  filters = {
+    /**
+     * No description
+     *
+     * @tags Filter
+     * @name FilterControllerCreate
+     * @request POST:/filters/create
+     * @secure
+     */
+    filterControllerCreate: (
+      data: ApiCreateFilterDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiFilterResponseDto, void>({
+        path: `/filters/create`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Filter
+     * @name FilterControllerList
+     * @request GET:/filters/list
+     * @secure
+     */
+    filterControllerList: (params: RequestParams = {}) =>
+      this.request<ApiFilterResponseDto[], any>({
+        path: `/filters/list`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Filter
+     * @name FilterControllerDelete
+     * @request DELETE:/filters/{id}
+     * @secure
+     */
+    filterControllerDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void>({
+        path: `/filters/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Filter
+     * @name FilterControllerUpdate
+     * @request PUT:/filters/{id}
+     * @secure
+     */
+    filterControllerUpdate: (
+      id: number,
+      data: ApiUpdateFilterDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiFilterResponseDto, void>({
+        path: `/filters/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
   user = {
     /**
      * No description
@@ -940,6 +1147,23 @@ export class Api<
       }),
   };
   analytics = {
+    /**
+     * No description
+     *
+     * @tags analytics
+     * @name AnalyticsControllerFilterDetails
+     * @request GET:/analytics/filter-details
+     * @secure
+     */
+    analyticsControllerFilterDetails: (params: RequestParams = {}) =>
+      this.request<ApiMaxValueDto, any>({
+        path: `/analytics/filter-details`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
     /**
      * No description
      *

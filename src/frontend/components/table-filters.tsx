@@ -1,7 +1,7 @@
 'use client'
 
-import { useId } from 'react'
-import { CalendarIcon, RotateCcw } from 'lucide-react'
+import { useState } from 'react'
+import { CalendarIcon, ChevronDown, RotateCcw } from 'lucide-react'
 import {
   Button as AriaButton,
   DateRangePicker,
@@ -19,7 +19,6 @@ import { Label as LabelUI } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
 import {
   Select,
   SelectContent,
@@ -28,14 +27,18 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import MultipleSelector, { Option } from '@/components/ui/multiselect'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionContent,
+} from '@/components/ui/accordion'
 import { useCategory } from '@/components/provider/category-provider'
 import { ApiEntrySortBy, ApiTransactionType } from '@/__generated__/api'
 
 interface TableFiltersProps {
   amountRange: [number, number]
+  maxPrice: number
   onAmountRangeChange: (range: [number, number]) => void
-  amountFilterEnabled: boolean
-  onAmountFilterEnabledChange: (enabled: boolean) => void
   selectedCategories: number[]
   onCategoriesChange: (categories: number[]) => void
   dateRange: { start?: DateValue; end?: DateValue }
@@ -52,8 +55,6 @@ interface TableFiltersProps {
 export function TableFilters({
   amountRange,
   onAmountRangeChange,
-  amountFilterEnabled,
-  onAmountFilterEnabledChange,
   selectedCategories,
   onCategoriesChange,
   dateRange,
@@ -65,9 +66,11 @@ export function TableFilters({
   sortBy,
   onSortByChange,
   onReset,
+  maxPrice,
 }: TableFiltersProps) {
   const { categories } = useCategory()
-  const id = useId()
+
+  // Fetch max price from backend
 
   // Convert categories to multiselect options
   const categoryOptions: Option[] = categories.map(category => ({
@@ -85,6 +88,10 @@ export function TableFilters({
     onCategoriesChange(categoryIds)
   }
 
+  const handleAmountRangeChange = (range: [number, number]) => {
+    onAmountRangeChange(range)
+  }
+
   const sortOptions = [
     { value: ApiEntrySortBy.CreatedAtDesc, label: 'Neueste zuerst' },
     { value: ApiEntrySortBy.CreatedAtAsc, label: 'Älteste zuerst' },
@@ -97,174 +104,210 @@ export function TableFilters({
     { value: ApiTransactionType.INCOME, label: 'Einnahmen' },
   ]
 
+  // Check if any filters are active (excluding description and sort)
+  const hasActiveFilters =
+    amountRange[0] != 0 ||
+    amountRange[1] != maxPrice ||
+    selectedCategories.length > 0 ||
+    dateRange.start !== undefined ||
+    dateRange.end !== undefined ||
+    transactionType !== undefined
+
+  const [accordionOpen, setAccordionOpen] = useState(false)
+
   return (
-    <div className="space-y-4 bg-background mb-4 p-4 border rounded-lg">
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-lg">Filter</h3>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onReset}
-          className="flex items-center gap-2"
-        >
-          <RotateCcw className="w-4 h-4" />
-          Zurücksetzen
-        </Button>
-      </div>
-
-      <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {/* Amount Range Slider */}
-        <div className="space-y-2">
-          <div className="flex justify-between items-center gap-2">
-            <div className="flex items-center gap-2">
-              <Switch
-                checked={amountFilterEnabled}
-                onCheckedChange={onAmountFilterEnabledChange}
-                id="amount-filter-toggle"
-              />
-              <LabelUI htmlFor="amount-filter-toggle" className="leading-6">
-                Betragsspanne (€)
-              </LabelUI>
-            </div>
-            {amountFilterEnabled && (
-              <output className="font-medium tabular-nums text-sm">
-                {(amountRange[0] / 100).toFixed(2)} -{' '}
-                {(amountRange[1] / 100).toFixed(2)}
-              </output>
-            )}
-          </div>
-          <Slider
-            value={amountRange}
-            onValueChange={onAmountRangeChange}
-            min={0}
-            max={50000}
-            step={100}
-            aria-label="Betragsspanne"
-            disabled={!amountFilterEnabled}
-            className={!amountFilterEnabled ? 'opacity-50' : ''}
-          />
-        </div>
-
-        {/* Category Multiselect */}
-        <div className="space-y-2">
-          <LabelUI>Kategorien</LabelUI>
-          <MultipleSelector
-            commandProps={{
-              label: 'Kategorien auswählen',
-            }}
-            value={selectedCategoryOptions}
-            defaultOptions={categoryOptions}
-            placeholder="Kategorien auswählen"
-            onChange={handleCategoryChange}
-            hideClearAllButton
-            hidePlaceholderWhenSelected
-            emptyIndicator={
-              <p className="text-sm text-center">Keine Kategorien gefunden</p>
-            }
-            badgeClassName="flex items-center gap-1"
-          />
-        </div>
-
-        {/* Date Range Picker */}
-        <div className="space-y-2">
-          <DateRangePicker
-            className="*:not-first:mt-2"
-            value={
-              dateRange.start && dateRange.end
-                ? { start: dateRange.start, end: dateRange.end }
-                : null
-            }
-            onChange={range =>
-              onDateRangeChange({ start: range?.start, end: range?.end })
-            }
-          >
-            <Label className="font-medium text-foreground text-sm">
-              Datumsbereich
-            </Label>
-            <div className="flex">
-              <Group className={cn(dateInputStyle, 'pe-9')}>
-                <DateInput slot="start" unstyled />
-                <span
-                  aria-hidden="true"
-                  className="px-2 text-muted-foreground/70"
-                >
-                  -
-                </span>
-                <DateInput slot="end" unstyled />
-              </Group>
-              <AriaButton className="z-10 flex justify-center items-center -ms-9 -me-px data-focus-visible:border-ring rounded-e-md outline-none data-focus-visible:ring-[3px] data-focus-visible:ring-ring/50 w-9 text-muted-foreground/80 hover:text-foreground transition-[color,box-shadow]">
-                <CalendarIcon size={16} />
-              </AriaButton>
-            </div>
-            <Popover
-              className="data-[placement=left]:slide-in-from-right-2 data-[placement=top]:slide-in-from-bottom-2 z-50 bg-background data-[placement=bottom]:slide-in-from-top-2 data-[placement=right]:slide-in-from-left-2 shadow-lg border rounded-md outline-hidden text-popover-foreground data-entering:animate-in data-exiting:animate-out data-[entering]:fade-in-0 data-[exiting]:fade-out-0 data-[entering]:zoom-in-95 data-[exiting]:zoom-out-95"
-              offset={4}
-            >
-              <Dialog className="p-2 max-h-[inherit] overflow-auto">
-                <RangeCalendar />
-              </Dialog>
-            </Popover>
-          </DateRangePicker>
-        </div>
-
-        {/* Description Input */}
-        <div className="space-y-2">
-          <LabelUI htmlFor={`description-${id}`}>Beschreibung</LabelUI>
+    <div className="bg-background mb-4 border rounded-lg">
+      {/* Always visible row: Description and expand/reset buttons */}
+      <div className="flex justify-between items-center gap-2 p-4">
+        <div className="flex-1">
           <Input
-            id={`description-${id}`}
             placeholder="Nach Beschreibung suchen..."
             value={description}
             onChange={e => onDescriptionChange(e.target.value)}
           />
         </div>
-
-        {/* Transaction Type and Sort By - Mobile: 2 columns, Desktop: separate items */}
-        <div className="gap-4 grid grid-cols-2 col-span-1 md:col-span-2 lg:col-span-2">
-          {/* Transaction Type Select */}
-          <div className="space-y-2">
-            <LabelUI>Transaktionstyp</LabelUI>
-            <Select
-              value={transactionType || 'all'}
-              onValueChange={value =>
-                onTransactionTypeChange(
-                  value === 'all' ? undefined : (value as ApiTransactionType)
-                )
-              }
+        <div className="flex items-center gap-2">
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onReset}
+              className="flex items-center gap-2"
+              title="Filter zurücksetzen"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Alle Transaktionen" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Alle Transaktionen</SelectItem>
-                {transactionTypeOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Sort By Select */}
-          <div className="space-y-2">
-            <LabelUI>Sortierung</LabelUI>
-            <Select
-              value={sortBy}
-              onValueChange={value => onSortByChange(value as ApiEntrySortBy)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {sortOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+              <RotateCcw className="w-4 h-4" />
+            </Button>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setAccordionOpen(!accordionOpen)}
+            className="flex items-center gap-2"
+            title="Filter öffnen"
+          >
+            <ChevronDown
+              className={cn(
+                'w-4 h-4',
+                accordionOpen ? 'rotate-180 transition-all' : ''
+              )}
+            />
+          </Button>
         </div>
+      </div>
+      <div className="relative">
+        <Accordion
+          type="single"
+          value={accordionOpen ? 'filters' : undefined}
+          collapsible
+          className="w-auto"
+        >
+          <AccordionItem value="filters" className="border-0">
+            <AccordionContent className="px-0 pt-0 pb-0">
+              <div className="space-y-4 p-4 border-t">
+                {/* Amount Range Slider */}
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center gap-2">
+                    <LabelUI className="leading-6">Betragsspanne (€)</LabelUI>
+                    {amountRange && (
+                      <output className="font-medium tabular-nums text-sm">
+                        {(amountRange[0] / 100).toFixed(2)} -{' '}
+                        {(amountRange[1] / 100).toFixed(2)}
+                      </output>
+                    )}
+                  </div>
+                  <Slider
+                    value={amountRange}
+                    onValueChange={handleAmountRangeChange}
+                    min={0}
+                    max={maxPrice}
+                    step={100}
+                    aria-label="Betragsspanne"
+                  />
+                </div>
+
+                {/* Category Multiselect */}
+                <div className="space-y-2">
+                  <LabelUI>Kategorien</LabelUI>
+                  <MultipleSelector
+                    commandProps={{
+                      label: 'Kategorien auswählen',
+                    }}
+                    value={selectedCategoryOptions}
+                    defaultOptions={categoryOptions}
+                    placeholder="Kategorien auswählen"
+                    onChange={handleCategoryChange}
+                    hideClearAllButton
+                    hidePlaceholderWhenSelected
+                    emptyIndicator={
+                      <p className="text-sm text-center">
+                        Keine Kategorien gefunden
+                      </p>
+                    }
+                    badgeClassName="flex items-center gap-1"
+                  />
+                </div>
+
+                {/* Date Range Picker */}
+                <div className="space-y-2">
+                  <DateRangePicker
+                    className="*:not-first:mt-2"
+                    value={
+                      dateRange.start && dateRange.end
+                        ? { start: dateRange.start, end: dateRange.end }
+                        : null
+                    }
+                    onChange={range =>
+                      onDateRangeChange({
+                        start: range?.start,
+                        end: range?.end,
+                      })
+                    }
+                  >
+                    <Label className="font-medium text-foreground text-sm">
+                      Datumsbereich
+                    </Label>
+                    <div className="flex">
+                      <Group className={cn(dateInputStyle, 'pe-9')}>
+                        <DateInput slot="start" unstyled />
+                        <span
+                          aria-hidden="true"
+                          className="px-2 text-muted-foreground/70"
+                        >
+                          -
+                        </span>
+                        <DateInput slot="end" unstyled />
+                      </Group>
+                      <AriaButton className="z-10 flex justify-center items-center -ms-9 -me-px data-focus-visible:border-ring rounded-e-md outline-none data-focus-visible:ring-[3px] data-focus-visible:ring-ring/50 w-9 text-muted-foreground/80 hover:text-foreground transition-[color,box-shadow]">
+                        <CalendarIcon size={16} />
+                      </AriaButton>
+                    </div>
+                    <Popover
+                      className="data-[placement=left]:slide-in-from-right-2 data-[placement=top]:slide-in-from-bottom-2 z-50 bg-background data-[placement=bottom]:slide-in-from-top-2 data-[placement=right]:slide-in-from-left-2 shadow-lg border rounded-md outline-hidden text-popover-foreground data-entering:animate-in data-exiting:animate-out data-[entering]:fade-in-0 data-[exiting]:fade-out-0 data-[entering]:zoom-in-95 data-[exiting]:zoom-out-95"
+                      offset={4}
+                    >
+                      <Dialog className="p-2 max-h-[inherit] overflow-auto">
+                        <RangeCalendar />
+                      </Dialog>
+                    </Popover>
+                  </DateRangePicker>
+                </div>
+
+                {/* Transaction Type and Sort By */}
+                <div className="gap-4 grid grid-cols-2">
+                  {/* Transaction Type Select */}
+                  <div className="space-y-2">
+                    <LabelUI>Transaktionstyp</LabelUI>
+                    <Select
+                      value={transactionType || 'all'}
+                      onValueChange={value =>
+                        onTransactionTypeChange(
+                          value === 'all'
+                            ? undefined
+                            : (value as ApiTransactionType)
+                        )
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Alle Transaktionen" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Alle Transaktionen</SelectItem>
+                        {transactionTypeOptions.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Sort By Select */}
+                  <div className="space-y-2">
+                    <LabelUI>Sortierung</LabelUI>
+                    <Select
+                      value={sortBy}
+                      onValueChange={value =>
+                        onSortByChange(value as ApiEntrySortBy)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {sortOptions.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   )
