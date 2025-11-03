@@ -26,6 +26,7 @@ import {
   Loader2,
   Edit,
   CalendarIcon,
+  AlertTriangle,
 } from 'lucide-react'
 import {
   Popover,
@@ -69,6 +70,7 @@ export function TransactionDialog({
   const { categories, getCategoryFromId } = useCategory()
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
+  const [calendarOpen, setCalendarOpen] = useState(false)
 
   const form = useForm<z.infer<typeof createEntrySchema>>({
     resolver: zodResolver(createEntrySchema),
@@ -311,46 +313,57 @@ export function TransactionDialog({
               <FormField
                 control={form.control}
                 name="createdAt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Datum{' '}
-                      <span className="text-muted-foreground">(optional)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={`w-full justify-start text-left font-normal ${
-                              !field.value && 'text-muted-foreground'
-                            }`}
-                            disabled={isPending}
-                            type="button"
-                          >
-                            <CalendarIcon className="mr-2 w-4 h-4" />
-                            {field.value ? (
-                              new Date(field.value).toLocaleDateString('de-DE')
-                            ) : (
-                              <span>Datum auswählen</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="p-0 w-auto" align="start">
-                          <Calendar
-                            value={
-                              field.value ? parseDate(field.value) : undefined
-                            }
-                            onChange={date => {
-                              field.onChange(date ? date.toString() : '')
-                            }}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
+                render={({ field }) => {
+                  const isFutureDate = field.value && new Date(field.value) > new Date()
+
+                  return (
+                    <FormItem className = "mb-0">
+                      <FormLabel>
+                        Datum{' '}
+                        <span className="text-muted-foreground">(optional)</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                          <PopoverTrigger className = "mb-0" asChild>
+                            <Button
+                              variant="outline"
+                              className={`w-full justify-start text-left font-normal ${
+                                !field.value && 'text-muted-foreground'
+                              }`}
+                              disabled={isPending}
+                              type="button"
+                            >
+                              <CalendarIcon className="mr-2 w-4 h-4" />
+                              {field.value ? (
+                                new Date(field.value).toLocaleDateString('de-DE')
+                              ) : (
+                                <span>Datum auswählen</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="p-0 w-auto" align="start">
+                            <Calendar
+                              value={
+                                field.value ? parseDate(field.value) : undefined
+                              }
+                              onChange={date => {
+                                field.onChange(date ? date.toString() : '')
+                                setCalendarOpen(false)
+                              }}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      {isFutureDate && (
+                        <p className="flex items-center text-sm text-gray-600 -mt-1.5 whitespace-nowrap">
+                          <AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5 mr-1 flex-shrink-0" />
+                          Dieses Datum liegt in der Zukunft
+                        </p>
+                      )}
+                      <FormMessage />
                   </FormItem>
-                )}
+                  )
+                }}
               />
             </div>
             <DialogFooter>

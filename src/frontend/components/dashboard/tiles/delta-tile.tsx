@@ -4,26 +4,24 @@ import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Triangle, Loader2 } from 'lucide-react'
-import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 
 function DeltaTile({
-  timeRange,
+  startDate,
+  endDate,
   className,
 }: {
-  timeRange: string
+  startDate: string
+  endDate: string
   className?: string
 }) {
-  const days = timeRange === 'all' ? 365 : Number(timeRange.split('d')[0])
-  const today = DateTime.now()
-  const startDate = today.minus({ days })
-
   const { data } = useQuery({
-    queryKey: ['transactions', 'delta-tile', timeRange],
+    queryKey: ['transactions', 'delta-tile', startDate, endDate],
+    enabled: Boolean(startDate && endDate),
     queryFn: () =>
       apiClient.analytics.analyticsControllerGetTransactionBreakdown({
-        startDate: startDate.toISO(),
-        endDate: today.toISO(),
+        startDate,
+        endDate,
         granularity: ApiGranularity.MONTH,
       }),
     select: data => data.data.data,
@@ -106,7 +104,7 @@ function DeltaTile({
               </div>
               <div
                 className="font-bold text-base"
-                style={{ color: 'var(--destructive)' }}
+                style={{ color: 'color-mix(in srgb, var(--destructive) 80%, white)' }}
               >
                 {expense.toLocaleString('de-DE', {
                   style: 'currency',

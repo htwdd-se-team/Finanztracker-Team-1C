@@ -2,22 +2,16 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { TrendingUp, Loader2 } from 'lucide-react'
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart'
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { apiClient } from '@/api/api-client'
 import { useQuery } from '@tanstack/react-query'
-import { DateTime } from 'luxon'
 import { ApiGranularity } from '@/__generated__/api'
 import { cn } from '@/lib/utils'
 
 type HistoryTileProps = {
-  timeRange: string // 1d, 7d, 30d, 90d, 180d, all
+  startDate: string
+  endDate: string
   className?: string
 }
 
@@ -29,19 +23,17 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function HistoryTile({
-  timeRange,
+  startDate,
+  endDate,
   className,
 }: HistoryTileProps) {
-  const days = timeRange === 'all' ? 365 : Number(timeRange.split('d')[0])
-  const today = DateTime.now()
-  const startDate = today.minus({ days: days })
 
   const { data: graphData } = useQuery({
-    queryKey: ['transactions', 'history-tile', timeRange],
+    queryKey: ['transactions', 'history-tile', startDate, endDate],
     queryFn: () =>
       apiClient.analytics.analyticsControllerGetTransactionBalanceHistory({
-        startDate: startDate.toISO(),
-        endDate: today.toISO(),
+        startDate: startDate,
+        endDate: endDate,
         granularity: ApiGranularity.DAY,
       }),
     select: data =>
