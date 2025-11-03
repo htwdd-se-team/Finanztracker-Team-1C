@@ -14,3 +14,4 @@ export * from "./analytics.dto";
 export * from "./create-filter.dto";
 export * from "./update-filter.dto";
 export * from "./filter-response.dto";
+export * from "./filter-params.dto";

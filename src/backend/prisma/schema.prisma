@@ -119,8 +119,8 @@ model Filter {
   dateFrom    DateTime?
   dateTo      DateTime?
   searchText  String?
-  transactionType TransactionType? 
-  sortOption FilterSortOption? @default(NEWEST_FIRST)    
+  transactionType TransactionType?
+  sortOption FilterSortOption? @default(NEWEST_FIRST)
   userId      Int
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
@@ -135,6 +135,7 @@ enum FilterSortOption {
   NEWEST_FIRST
   OLDEST_FIRST
 }
+
 model FilterCategory {
   filterId   Int
   categoryId Int

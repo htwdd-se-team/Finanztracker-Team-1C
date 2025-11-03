@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { TransactionType, FilterSortOption } from "@prisma/client";
-import { Type, Transform } from "class-transformer";
+import { Type } from "class-transformer";
 import {
   IsArray,
   IsDate,
@@ -21,14 +21,14 @@ export class CreateFilterDto {
   @IsOptional()
   icon?: string;
 
-  @ApiPropertyOptional({ description: "Minimum amount" })
+  @ApiPropertyOptional({ description: "Minimum amount in cents" })
   @IsInt()
   @IsOptional()
   @Min(0)
   @Type(() => Number)
   minPrice?: number;
 
-  @ApiPropertyOptional({ description: "Maximum amount" })
+  @ApiPropertyOptional({ description: "Maximum amount in cents" })
   @IsInt()
   @IsOptional()
   @Min(0)
@@ -64,27 +64,11 @@ export class CreateFilterDto {
 
   @ApiPropertyOptional({
     description: "Category IDs to include",
-    isArray: true,
     type: Number,
+    isArray: true,
   })
   @IsOptional()
   @IsArray()
   @IsInt({ each: true })
-  @Transform(({ value }): number[] | undefined => {
-    // Keep undefined/null as undefined so @IsOptional() still works
-    if (value == null || value === "") return undefined;
-    if (typeof value === "string") {
-      const parsed = value
-        .split(",")
-        .map((s) => parseInt(s.trim(), 10))
-        .filter((n) => Number.isInteger(n) && n > 0);
-      return parsed.length ? Array.from(new Set(parsed)) : undefined;
-    }
-    const arr = Array.isArray(value) ? value : [value];
-    const nums = arr
-      .map((v) => Number(v))
-      .filter((n) => Number.isInteger(n) && n > 0);
-    return nums.length ? Array.from(new Set(nums)) : undefined;
-  })
   categoryIds?: number[];
 }

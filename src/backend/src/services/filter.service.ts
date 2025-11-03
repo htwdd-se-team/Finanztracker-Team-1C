@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Filter, User } from "@prisma/client";
+import { Filter, FilterCategory, User } from "@prisma/client";
 
 import { CreateFilterDto, FilterResponseDto, UpdateFilterDto } from "../dto";
 
@@ -25,15 +25,15 @@ export class FilterService {
         transactionType: data.transactionType,
         sortOption: data.sortOption,
         user: { connect: { id: user.id } },
-        filterCategories: data.categoryIds
-          ? {
-              create: data.categoryIds.map((id) => ({
-                category: { connect: { id } },
-              })),
-            }
-          : undefined,
+        ...(data.categoryIds && {
+          filterCategories: {
+            create: data.categoryIds.map((id) => ({
+              category: { connect: { id } },
+            })),
+          },
+        }),
       },
-      include: { filterCategories: { select: { categoryId: true } } },
+      include: { filterCategories: true },
     });
 
     return FilterService.mapFilterToResponseDto(filter);
@@ -42,7 +42,7 @@ export class FilterService {
   async getFilters(user: User): Promise<FilterResponseDto[]> {
     const filters = await this.prisma.filter.findMany({
       where: { userId: user.id },
-      include: { filterCategories: { select: { categoryId: true } } },
+      include: { filterCategories: true },
       orderBy: { createdAt: "desc" },
     });
 
@@ -66,47 +66,37 @@ export class FilterService {
     filterId: number,
     data: UpdateFilterDto,
   ): Promise<FilterResponseDto> {
-    // Prepare data without categoryIds
     const { categoryIds, ...rest } = data as Partial<CreateFilterDto>;
 
-    const updated = await this.prisma.filter.updateMany({
+    const filter = await this.prisma.filter.update({
       where: { id: filterId, userId: user.id },
-      data: rest,
+      data: {
+        ...rest,
+        ...(categoryIds !== undefined && {
+          filterCategories: {
+            deleteMany: {},
+            ...(categoryIds.length > 0 && {
+              create: categoryIds.map((cid: number) => ({
+                category: { connect: { id: cid } },
+              })),
+            }),
+          },
+        }),
+      },
+      include: { filterCategories: true },
     });
 
-    if (!updated.count) {
+    if (!filter) {
       throw new NotFoundException(
         "Filter not found or not authorized to update",
       );
     }
 
-    // If categoryIds provided replace join rows
-    if (categoryIds !== undefined) {
-      await this.prisma.filterCategory.deleteMany({ where: { filterId } });
-
-      if (Array.isArray(categoryIds) && categoryIds.length) {
-        await this.prisma.filterCategory.createMany({
-          data: categoryIds.map((cid: number) => ({
-            filterId,
-            categoryId: cid,
-          })),
-          skipDuplicates: true,
-        });
-      }
-    }
-
-    const filter = await this.prisma.filter.findUnique({
-      where: { id: filterId },
-      include: { filterCategories: { select: { categoryId: true } } },
-    });
-
-    if (!filter) throw new NotFoundException("Filter not found after update");
-
     return FilterService.mapFilterToResponseDto(filter);
   }
 
   static mapFilterToResponseDto(
-    filter: Filter & { filterCategories?: { categoryId: number }[] },
+    filter: Filter & { filterCategories?: FilterCategory[] },
   ): FilterResponseDto {
     return {
       id: filter.id,
@@ -120,7 +110,6 @@ export class FilterService {
       transactionType: filter.transactionType,
       sortOption: filter.sortOption,
       categoryIds: (filter.filterCategories || []).map((fc) => fc.categoryId),
-      userId: filter.userId,
       createdAt: filter.createdAt,
       updatedAt: filter.updatedAt,
     };

@@ -32,7 +32,7 @@ import { CategoryService } from "../services";
 
 @ApiTags("categories")
 @Controller("categories")
-@ApiSecurity("bearer")
+@ApiSecurity("user-jwt")
 @UseGuards(JwtAuthGuard)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
