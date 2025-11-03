@@ -1,7 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
+import React, { useEffect, useState } from 'react'
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
@@ -21,7 +25,6 @@ export default function TablePage() {
 
   // Filter state
   const [amountRange, setAmountRange] = useState<[number, number]>([0, 50000])
-  const [amountFilterEnabled, setAmountFilterEnabled] = useState<boolean>(false)
   const [selectedCategories, setSelectedCategories] = useState<number[]>([])
   const [dateRange, setDateRange] = useState<{
     start?: DateValue
@@ -34,6 +37,20 @@ export default function TablePage() {
   const [sortBy, setSortBy] = useState<ApiEntrySortBy>(
     ApiEntrySortBy.CreatedAtDesc
   )
+
+  const { data: filterDetails } = useQuery({
+    queryKey: ['filterDetails'],
+    queryFn: async () => {
+      const res = await apiClient.analytics.analyticsControllerFilterDetails()
+      return res.data
+    },
+  })
+
+  useEffect(() => {
+    if (filterDetails) {
+      setAmountRange([0, filterDetails.maxPrice])
+    }
+  }, [filterDetails])
 
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery({
@@ -50,13 +67,10 @@ export default function TablePage() {
         const res = await apiClient.entries.entryControllerList({
           take: 30,
           amountMax:
-            amountFilterEnabled && amountRange[1] > 0
-              ? amountRange[1]
-              : undefined,
-          amountMin:
-            amountFilterEnabled && amountRange[0] > 0
-              ? amountRange[0]
-              : undefined,
+            amountRange[1] == filterDetails?.maxPrice
+              ? undefined
+              : amountRange[1],
+          amountMin: amountRange[0] == 0 ? undefined : amountRange[0],
           categoryIds:
             selectedCategories.length > 0 ? selectedCategories : undefined,
           dateFrom: dateRange.start ? dateRange.start.toString() : undefined,
@@ -94,8 +108,7 @@ export default function TablePage() {
   }
 
   const handleResetFilters = () => {
-    setAmountRange([0, 50000])
-    setAmountFilterEnabled(false)
+    setAmountRange([0, filterDetails?.maxPrice || 50000])
     setSelectedCategories([])
     setDateRange({})
     setDescription('')
@@ -106,25 +119,28 @@ export default function TablePage() {
   return (
     <div className="relative flex flex-col h-screen">
       <Background />
-      <div className="z-10 relative flex-1 p-2 sm:p-4 overflow-auto">
+      <div className="z-10 relative flex-1 p-2 sm:p-4 overflow-y-auto">
         <div className="mx-auto max-w-4xl">
-          <TableFilters
-            amountRange={amountRange}
-            onAmountRangeChange={setAmountRange}
-            amountFilterEnabled={amountFilterEnabled}
-            onAmountFilterEnabledChange={setAmountFilterEnabled}
-            selectedCategories={selectedCategories}
-            onCategoriesChange={setSelectedCategories}
-            dateRange={dateRange}
-            onDateRangeChange={setDateRange}
-            description={description}
-            onDescriptionChange={setDescription}
-            transactionType={transactionType}
-            onTransactionTypeChange={setTransactionType}
-            sortBy={sortBy}
-            onSortByChange={setSortBy}
-            onReset={handleResetFilters}
-          />
+          <div className="z-50 relative">
+            {filterDetails && (
+              <TableFilters
+                maxPrice={filterDetails.maxPrice}
+                amountRange={amountRange}
+                onAmountRangeChange={setAmountRange}
+                selectedCategories={selectedCategories}
+                onCategoriesChange={setSelectedCategories}
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+                description={description}
+                onDescriptionChange={setDescription}
+                transactionType={transactionType}
+                onTransactionTypeChange={setTransactionType}
+                sortBy={sortBy}
+                onSortByChange={setSortBy}
+                onReset={handleResetFilters}
+              />
+            )}
+          </div>
 
           <ul className="space-y-2">
             {isLoading ? (
