@@ -17,11 +17,12 @@ Dieses Dokument beschreibt wesentliche Entwurfsentscheidungen auf Ebene der Komp
 include::{plantumlsdir}/example_seq.puml[]
 ....
 
-.Beispiel, Klassendiagramm (C4-Level-4)
-[plantuml, "{diagramsdir}/example_class", svg]
-....
-include::{plantumlsdir}/example_class.puml[]
-....
+// .Beispiel, Klassendiagramm (C4-Level-4)
+// [plantuml, "{diagramsdir}/example_class", svg]
+// ....
+// include::{plantumlsdir}/example_class.puml[]
+//....
+Siehe Datei new_classdiagram.png
 
 == Schnittstellen
 //Dokumentation oder Verweise auf Schnittstellen, z.B. REST-APIs
