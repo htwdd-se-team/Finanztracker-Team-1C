@@ -2,20 +2,41 @@
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
-import { useState , useRef , useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { useState, useCallback } from 'react'
 import { RangeCalendar } from '@/components/ui/calendar-rac'
-import { DateInput , dateInputStyle } from '@/components/ui/datefield-rac'
-import { today, getLocalTimeZone, startOfMonth, endOfMonth, CalendarDate } from '@internationalized/date'
+import { DateInput, dateInputStyle } from '@/components/ui/datefield-rac'
+import {
+  today,
+  getLocalTimeZone,
+  startOfMonth,
+  CalendarDate,
+} from '@internationalized/date'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button as AriaButton, DateRangePicker, Dialog, Group, Label, Popover } from 'react-aria-components'
+import { DateRangePicker, Group, Label } from 'react-aria-components'
 
-let hasUserSelectedRange = false
+enum RangeType {
+  WEEK = '7d',
+  MONTH = '30d',
+  CUSTOM = 'individuell',
+  ALL = 'all',
+}
+
+const tabTriggerClass =
+  'bg-[var(--card)] data-[state=active]:border-[var(--color-chart-2)] data-[state=active]:bg-[color:var(--color-chart-2)/0.1]'
 
 type SelectorTileProps = {
-  value: string
+  value: RangeType | string
   onRangeChange: (range: {
-    type: string
+    type: RangeType
     startDate: string
     endDate: string
   }) => void
@@ -25,131 +46,121 @@ type SelectorTileProps = {
 export function SelectorTile({
   value,
   onRangeChange,
-  className
+  className,
 }: SelectorTileProps) {
   const [showPicker, setShowPicker] = useState(false)
-  const [dateRange, setDateRange] = useState<{ start: CalendarDate; end: CalendarDate }>({
+  const [dateRange, setDateRange] = useState<{
+    start: CalendarDate
+    end: CalendarDate
+  }>({
     start: startOfMonth(today(getLocalTimeZone())),
-    end: endOfMonth(today(getLocalTimeZone())),
+    end: today(getLocalTimeZone()).subtract({ days: 30 }),
   })
 
-const computeRange = (type: string) => {
-  const now = today(getLocalTimeZone())
-  let start = now
-  let end = now
+  const computeRange = useCallback(
+    (type: RangeType) => {
+      const now = today(getLocalTimeZone())
+      let start = now
+      let end = now
 
-  if (type === '7d') {
-    start = now.subtract({ days: 7 })
-  } else if (type === '30d') {
-    start = now.subtract({ days: 30 })
-  } else if (type === 'all') {
-    start = now.subtract({ days: 365 })
-  } else if (type === 'individuell') {
-    start = dateRange.start
-    end = dateRange.end
-  }
-  onRangeChange({
-    type,
-    startDate: start.toString(),
-    endDate: end.toString(),
-  })
-}
-
-  useEffect(() => {
-  if (!hasUserSelectedRange) {
-    hasUserSelectedRange = true
-    computeRange('all')
-  }
-}, [])
-
-  const tabTriggerClass =
-    'bg-[var(--card)] data-[state=active]:border-[var(--color-chart-2)] data-[state=active]:bg-[color:var(--color-chart-2)/0.1]'
-
-  const pickerRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {
-    if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
-      setShowPicker(false)
-    }
-  }
-  document.addEventListener('mousedown', handleClickOutside)
-  return () => document.removeEventListener('mousedown', handleClickOutside)
-}, [])
+      if (type === RangeType.WEEK) {
+        start = now.subtract({ days: 7 })
+      } else if (type === RangeType.MONTH) {
+        start = now.subtract({ days: 30 })
+      } else if (type === RangeType.ALL) {
+        start = now.subtract({ days: 365 })
+      } else if (type === RangeType.CUSTOM) {
+        start = dateRange.start
+        end = dateRange.end
+      }
+      onRangeChange({
+        type,
+        startDate: start.toString(),
+        endDate: end.toString(),
+      })
+    },
+    [dateRange, onRangeChange]
+  )
 
   return (
-    <Card className={cn('h-18 ', className)}>
-      <CardContent className="flex flex-col justify-center p-0 h-full relative">
-        <Tabs value={value} onValueChange={(v) => {
-          if (v !== 'individuell') computeRange(v) }} className="">
-          <TabsList className="grid grid-cols-2 grid-rows-2 bg-var(--card) rounded-[calc(var(--radius)-2px)] w-full h-full">
-            <TabsTrigger value="7d" className={tabTriggerClass}>Woche</TabsTrigger>
-            <TabsTrigger value="30d" className={tabTriggerClass}>Monat</TabsTrigger>
-            <TabsTrigger
-              value="individuell"
-              className={tabTriggerClass}
-              onClick={() => setShowPicker(!showPicker)}
-            >Auswahl</TabsTrigger>
-            <TabsTrigger value="all" className={tabTriggerClass}>Gesamt</TabsTrigger>
-          </TabsList>
-        </Tabs>
-        {showPicker && (
-        <div
-        className="fixed inset-0 flex items-center justify-center bg-background/10 backdrop-blur-[6px] z-50 pb-[30vh]"
-        >
-          <div
-          ref={pickerRef}
-          className="bg-background p-6 rounded-xl shadow-lg w-80 border-[3px] [border-color:var(--color-chart-2)]">
-            <DateRangePicker
-            className="pb-0"
-            value={dateRange}
-            onChange={(range) => {
-              if (range?.start && range?.end) setDateRange(range)
+    <Card className={cn('h-18', className)}>
+      <CardContent className="relative flex flex-col justify-center p-0 h-full">
+        <Dialog open={showPicker} onOpenChange={setShowPicker}>
+          <Tabs
+            value={value}
+            onValueChange={v => {
+              if (v === RangeType.CUSTOM) {
+                setShowPicker(true)
+              } else {
+                computeRange(v as RangeType)
+              }
             }}
+            className=""
           >
-            <Label
-              className="font-medium text-foreground text-sm p-1 relative"
-              style={{ top: '-4px' }}
-            >
-              Zeitraum wählen
-            </Label>
-            <div className="flex">
-              <Group className={cn(dateInputStyle, 'pe-9')}>
-                <DateInput slot="start" unstyled />
-                <span
-                  aria-hidden="true"
-                  className="px-2 text-muted-foreground/70"
-                >
-                  -
-                </span>
-                <DateInput slot="end" unstyled />
-              </Group>
-              <AriaButton className="z-10 flex justify-center items-center -ms-9 -me-px rounded-e-md outline-none w-9 text-muted-foreground/80 hover:text-foreground">
-                <CalendarIcon size={16} />
-              </AriaButton>
-            </div>
-            <Popover
-            className="z-50 bg-background border rounded-md shadow-lg"
-            offset={4}
-            >
-              <Dialog className="p-2 max-h-[inherit] overflow-auto">
-                <RangeCalendar />
-              </Dialog>
-            </Popover>
-          </DateRangePicker>
-          <div className="flex justify-end mt-3">
-            <button
-              className="px-2 py-1 rounded-md bg-[var(--color-chart-2)] text-white hover:opacity-90"
-              onClick={() => {
-                setShowPicker(false)
-                computeRange('individuell')
+            <TabsList className="grid grid-cols-2 grid-rows-2 bg-var(--card) rounded-[calc(var(--radius)-2px)] w-full h-full">
+              <TabsTrigger value={RangeType.WEEK} className={tabTriggerClass}>
+                Woche
+              </TabsTrigger>
+              <TabsTrigger value={RangeType.MONTH} className={tabTriggerClass}>
+                Monat
+              </TabsTrigger>
+              <TabsTrigger value={RangeType.CUSTOM} className={tabTriggerClass}>
+                Auswahl
+              </TabsTrigger>
+              <TabsTrigger value={RangeType.ALL} className={tabTriggerClass}>
+                Gesamt
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <DialogContent className="p-4 w-auto">
+            <DialogHeader className="pb-2">
+              <DialogTitle>Zeitraum wählen</DialogTitle>
+            </DialogHeader>
+            <DateRangePicker
+              className="pb-0"
+              value={dateRange}
+              onChange={range => {
+                if (range?.start && range?.end) setDateRange(range)
               }}
             >
-              Bestätigen
-            </button>
-          </div>
-          </div>
-        </div>
-      )}
+              <div className="flex flex-col gap-2">
+                <Label className="font-medium text-sm">Datumsbereich</Label>
+                <div className="flex gap-2">
+                  <Group className={cn(dateInputStyle, 'flex-1')}>
+                    <DateInput slot="start" unstyled />
+                    <span
+                      aria-hidden="true"
+                      className="px-2 text-muted-foreground/70"
+                    >
+                      -
+                    </span>
+                    <DateInput slot="end" unstyled />
+                  </Group>
+                  <button className="flex justify-center items-center px-2 rounded-e-md outline-none text-muted-foreground/80 hover:text-foreground">
+                    <CalendarIcon size={16} />
+                  </button>
+                </div>
+                <div className="p-2 border rounded-md w-full overflow-hidden">
+                  <RangeCalendar />
+                </div>
+              </div>
+            </DateRangePicker>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowPicker(false)}>
+                Abbrechen
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowPicker(false)
+                  computeRange(RangeType.CUSTOM)
+                }}
+                style={{ backgroundColor: 'var(--color-chart-2)' }}
+              >
+                Bestätigen
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   )

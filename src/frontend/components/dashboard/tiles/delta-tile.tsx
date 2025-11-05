@@ -17,7 +17,6 @@ function DeltaTile({
 }) {
   const { data } = useQuery({
     queryKey: ['transactions', 'delta-tile', startDate, endDate],
-    enabled: Boolean(startDate && endDate),
     queryFn: () =>
       apiClient.analytics.analyticsControllerGetTransactionBreakdown({
         startDate,
@@ -76,7 +75,7 @@ function DeltaTile({
   }
 
   return (
-    <Card className={cn('p-1.5',className)}>
+    <Card className={cn('p-1.5', className)}>
       <CardTitle className="flex items-center gap-1 mb-0 pb-0 font-medium leading-tight">
         <Triangle className="w-4 h-4 shrink-0" /> Delta
       </CardTitle>
@@ -104,7 +103,9 @@ function DeltaTile({
               </div>
               <div
                 className="font-bold text-base"
-                style={{ color: 'color-mix(in srgb, var(--destructive) 80%, white)' }}
+                style={{
+                  color: 'color-mix(in srgb, var(--destructive) 80%, white)',
+                }}
               >
                 {expense.toLocaleString('de-DE', {
                   style: 'currency',
@@ -112,7 +113,7 @@ function DeltaTile({
                 })}
               </div>
             </div>
-            <div className="my-1 border-t border-border border-dashed w-9/12"></div>
+            <div className="my-1 border-border border-t border-dashed w-9/12"></div>
             <div>
               <div className="flex items-center gap-1 font-semibold text-muted-foreground text-sm">
                 Delta:
