@@ -225,6 +225,14 @@ export class EntryPaginationParamsDto extends PaginationDto {
   @IsOptional()
   @IsString()
   title?: string;
+
+  @ApiPropertyOptional({
+    description: "Filter ID",
+    example: 1,
+  })
+  @IsOptional()
+  @IsInt()
+  filterId?: number;
 }
 
 export class EntryPageDto {

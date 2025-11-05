@@ -11,12 +11,14 @@ import {
   UserController,
   CategoryController,
   AnalyticsController,
+  FilterController,
 } from "./controllers";
 import { JwtAuthGuard } from "./guards";
 import {
   AnalyticsService,
   AuthService,
   EntryService,
+  FilterService,
   KyselyService,
   PrismaService,
   CategoryService,
@@ -45,6 +47,7 @@ import { JwtStrategy } from "./strategies";
     AuthController,
     CategoryController,
     EntryController,
+    FilterController,
     UserController,
     AnalyticsController,
   ],
@@ -56,6 +59,7 @@ import { JwtStrategy } from "./strategies";
     EntryService,
     CategoryService,
     UserService,
+    FilterService,
 
     KyselyService,
     PrismaService,

@@ -5,3 +5,4 @@ export * from "./category.service";
 export * from "./user.service";
 export * from "./analytics.service";
 export * from "./kysely.service";
+export * from "./filter.service";

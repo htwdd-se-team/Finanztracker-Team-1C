@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useEffect } from 'react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { useLocalStorage } from '@mantine/hooks'
