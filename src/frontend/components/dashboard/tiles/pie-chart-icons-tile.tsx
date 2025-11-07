@@ -2,14 +2,8 @@
 
 import { Loader2, PieChartIcon } from 'lucide-react'
 import { Pie, PieChart, ResponsiveContainer, Cell, Label } from 'recharts'
-
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-} from '@/components/ui/chart'
-import { DateTime } from 'luxon'
+import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { ApiGranularity, ApiTransactionType } from '@/__generated__/api'
@@ -55,25 +49,24 @@ const colorPalette = [
 const SMALL_CATEGORY_THRESHOLD_PERCENT = 10
 
 export default function PieChartTileIcons({
-  timeRange,
+  startDate,
+  endDate,
   className,
 }: {
-  timeRange: string
+  startDate: string
+  endDate: string
   className?: string
 }) {
-  const today = DateTime.now()
-  const startDate = today.minus({
-    days: timeRange === 'all' ? 365 : Number(timeRange.split('d')[0]),
-  })
 
   const { getCategoryFromId } = useCategory()
 
   const { data } = useQuery({
-    queryKey: ['transactions', 'pie-chart-icons', timeRange],
+    queryKey: ['transactions', 'pie-chart-icons', startDate, endDate],
+    enabled: Boolean(startDate && endDate),
     queryFn: () =>
       apiClient.analytics.analyticsControllerGetTransactionBreakdown({
-        startDate: startDate.toISO(),
-        endDate: today.toISO(),
+        startDate,
+        endDate,
         granularity: ApiGranularity.MONTH,
         withCategory: true,
       }),

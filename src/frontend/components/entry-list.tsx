@@ -50,118 +50,120 @@ export function EntryList({
         return (
           <li
             key={entry.id}
-            className="relative flex justify-between items-center bg-card/50 dark:bg-card/50 shadow-sm px-4 py-3 border rounded-xl"
+            className="relative flex flex-col bg-card/50 dark:bg-card/50 shadow-sm border rounded-xl h-30 overflow-hidden"
           >
+            {/* Farbiger Streifen links */}
             <span
               className={cn(
-                'absolute left-0 top-2 bottom-2 w-1.5 rounded-full',
+                'top-2 bottom-2 left-0 absolute rounded-full w-1.5',
                 entry.categoryId &&
                   getCategoryColorClasses(
                     getCategoryFromId(Number(entry.categoryId)).color
                   )
               )}
-              style={{ opacity: 1 }}
               aria-hidden="true"
             />
-            <div className="flex flex-col flex-1 justify-center ml-3 min-w-0">
-              <div className="flex items-center gap-2">
-                <span
-                  className={`inline-flex items-center justify-center rounded-full h-8 w-8 text-base sm:h-10 sm:w-10 sm:text-lg ${
-                    isIncome
-                      ? 'bg-green-100 text-green-600'
-                      : 'bg-red-100 text-red-600'
-                  }`}
-                >
-                  {isIncome ? (
-                    <TrendingUp className="w-5 sm:w-6 h-5 sm:h-6" />
-                  ) : (
-                    <TrendingDown className="w-5 sm:w-6 h-5 sm:h-6" />
-                  )}
-                </span>
-                <span className="font-semibold text-base sm:text-lg truncate">
-                  {entry.description || '-'}
-                </span>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm">
-                <span className="inline-flex items-center gap-1 bg-muted px-2 py-0.5 rounded-full font-medium text-muted-foreground">
-                  <Calendar className="w-3.5 h-3.5" />
-                  {new Date(entry.createdAt).toLocaleDateString('de-DE')}
-                </span>
+
+            {/* Top Row: Icon + Description (grows) */}
+            <div className="flex items-center gap-2 px-4 py-0 min-w-0 h-[40%]">
+              <span
+                className={`inline-flex items-center justify-center rounded-full h-8 w-8 text-base flex-shrink-0 ${
+                  isIncome
+                    ? 'bg-green-100 text-green-600'
+                    : 'bg-red-100 text-red-600'
+                }`}
+              >
+                {isIncome ? <TrendingUp /> : <TrendingDown />}
+              </span>
+              <span className="flex-1 font-semibold text-lg truncate">
+                {entry.description || '-'}
+              </span>
+            </div>
+
+            {/* Bottom Row: Details (grow left) + Price & Actions (right, no grow) */}
+            <div className="flex items-center gap-2 m-0 p-0 min-w-0 h-[60%]">
+              {/* Left Details: Date & Category (grows) */}
+              <div className="flex flex-col flex-1 justify-center gap-0 pl-4 min-w-0 text-muted-foreground text-sm">
+                <div className="flex items-center gap-1">
+                  <Calendar className="flex-shrink-0 mr-1 w-4 h-4" />
+                  <span>
+                    {new Date(entry.createdAt).toLocaleDateString('de-DE')}
+                  </span>
+                </div>
                 {entry.categoryId && (
-                  <span
+                  <div
                     className={cn(
-                      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-medium',
+                      'inline-flex items-center gap-0 rounded-full w-fit font-medium',
                       getCategoryColorClasses(
                         getCategoryFromId(Number(entry.categoryId)).color
                       )
                     )}
-                    style={{ opacity: 1 }}
                   >
-                    <span className="flex justify-center items-center w-4 h-4">
-                      <IconRender
-                        iconName={
-                          getCategoryFromId(Number(entry.categoryId)).icon
-                        }
-                        className="w-4 h-4 text-inherit"
-                      />
+                    <IconRender
+                      iconName={
+                        getCategoryFromId(Number(entry.categoryId)).icon
+                      }
+                      className="flex-shrink-0 mr-2 w-4 h-4"
+                    />
+                    <span className="truncate">
+                      {getCategoryFromId(Number(entry.categoryId)).name}
                     </span>
-                    {getCategoryFromId(Number(entry.categoryId)).name}
-                  </span>
+                  </div>
                 )}
               </div>
-            </div>
-            <div className="flex flex-col justify-center items-center mx-4 min-w-[90px] sm:min-w-[120px]">
-              <span className={`font-mono font-bold text-base sm:text-lg `}>
-                {isIncome ? '+' : '-'}
-                {(entry.amount / 100).toFixed(2)} {entry.currency}
-              </span>
-            </div>
-            <div className="flex flex-col justify-center items-end">
-              <div className="flex gap-1 sm:gap-2">
-                <TransactionDialog editData={entry}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-0 w-7 sm:w-8 h-7 sm:h-8 cursor-pointer"
-                  >
-                    <Edit className="w-4 sm:w-5 h-4 sm:h-5" />
-                    <span className="sr-only">Eintrag bearbeiten</span>
-                  </Button>
-                </TransactionDialog>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
+
+              {/* Right Side: Amount + Action Buttons (no grow, align right) */}
+              <div className="flex flex-col flex-shrink-0 justify-center items-end gap-0 pr-2">
+                <span className="font-mono font-bold text-md md:text-xl">
+                  {isIncome ? '+' : '-'}
+                  {(entry.amount / 100).toFixed(2)} {entry.currency}
+                </span>
+                <div className="flex gap-0">
+                  <TransactionDialog editData={entry}>
                     <Button
                       variant="ghost"
-                      size="sm"
-                      className="p-0 w-7 sm:w-8 h-7 sm:h-8 text-destructive cursor-pointer"
-                      disabled={isDeleting && deletingEntryId === entry.id}
-                      onClick={() => setDeletingEntryId(entry.id)}
+                      className="flex-shrink-0 p-0 w-8 h-8 cursor-pointer"
                     >
-                      <Trash2 className="w-4 sm:w-5 h-4 sm:h-5" />
-                      <span className="sr-only">Eintrag löschen</span>
+                      <Edit className="stroke-[2] !w-5 !h-5" />
                     </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="sm:max-w-md">
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Möchten Sie den Eintrag wirklich löschen? Diese Aktion
-                        kann nicht rückgängig gemacht werden.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className="cursor-pointer">
-                        Abbrechen
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => handleDelete(entry.id)}
-                        className="bg-destructive hover:bg-destructive/90 text-destructive-foreground cursor-pointer"
+                  </TransactionDialog>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="flex-shrink-0 p-0 w-8 h-8 text-destructive cursor-pointer"
+                        disabled={isDeleting && deletingEntryId === entry.id}
+                        onClick={() => setDeletingEntryId(entry.id)}
                       >
-                        Löschen
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                        <Trash2
+                          className="stroke-[2] !w-5 !h-5"
+                          style={{
+                            color:
+                              'color-mix(in srgb, var(--destructive) 80%, white)',
+                          }}
+                        />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Diese Aktion kann nicht rückgängig gemacht werden.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(entry.id)}
+                          className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                        >
+                          Löschen
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
             </div>
           </li>
