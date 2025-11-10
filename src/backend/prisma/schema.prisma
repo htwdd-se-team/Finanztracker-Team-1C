@@ -63,6 +63,7 @@ enum TransactionType {
   MONTHLY
 }
 
+
 model Transaction {
   id Int @id @default(autoincrement())
 
@@ -82,8 +83,12 @@ model Transaction {
 
   isRecurring Boolean @default(false)
 
+  recurringType RecurringTransactionType? 
+  recurringBaseInterval Int? // 1x Monthly ; 2x Monthly ; etc.
+  recurringDisabled Boolean? 
+
   childTransaction  Transaction[] @relation("childTransaction")
-  parentTransaction Transaction?  @relation("childTransaction", fields: [transactionId], references: [id], onDelete: Cascade)
+  parentTransaction Transaction?  @relation("childTransaction", fields: [transactionId], references: [id], onDelete: SetNull)
   transactionId     Int?
 
   // TODO: better  recurring interval
