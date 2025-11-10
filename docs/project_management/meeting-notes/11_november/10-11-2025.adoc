@@ -3,10 +3,10 @@
 *Datum:* 10.11.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Khang +
 *Meetingbeginn:* 14:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min +
+*Meetingende:* 14:51 +
+*Dauer:* 51 min +
 
 ==== Anwesenheit: 
 - Elias
@@ -23,15 +23,23 @@
 Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
 
 *Notizen:* +
-- ... +
-  +
+- Frontend Tickets gemerged, Eintragsanzeige noch nicht integriert
+  Branding eingefügt, Sparziel in der Anzeige verschoben +
+- Oben in der Mitte Logo integriert, oben links/rechts accounts/settings button wird getestet in
+  Prototyp Build +
+- Tabellenansicht Anzeige ungünstig +
+- Cursor Pointer Effekt eingebaut +
+- Backend Tickets: Überarbeitung der API eventuell notwendig, Filter werden nur temporär geadded
+Reset Knopf zur Anwendung der Standardsettings, Anpassung im DB Schema integriert
+periodische Transaktionencheck noch nötig, Endpunkte vorraussichtlich morgen fertig +
+ +
   
 
 
 *Entscheidungen:* +
-- ... +
-  +
-  +
+- Frontend Erweiterung wird getestet in Prototyp Build +
+- Elias notiert Änderungswünsche in Pull Request ein +
+- Cedrick übernimmt Ticket 141 +
 
 
 === 2. Feedback aus dem Fachaustasch +
@@ -39,12 +47,13 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 - Feedbacktermin mit anderem Team +
 
 *Notizen:* +
-- ... +
+- Timeboxing = Meetingdauer festsetzen +
+- Feedbacktermin mit anderen Teams geraten(wie SE1) am Ende der Iteration +
   +
 
 *Entscheidungen:* +
-- ... +
-  +
+- Keine Integrierung von Timeboxing nötig +
+- neues Team für Feedbacktermin(mit anderem Thema) wird gesucht +
   +
 
 
@@ -57,7 +66,11 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 - Anpassung des Product Backlogs
 
 *Notizen:* +
-- ... +
+- Verbesserung der Optik/Filter hinzugefügt/QOL Updates +
+- Terminüberweisungen bis nächste Woche fertigestellt +
+- Nichts offen +
+- Stakeholder zufrieden, Einteilung in Prioritäten gut +
+- Produkt Backlog wird fließend angepasst nichts aus Iteration 4 fließt in Interation 5 +
   +
 
 *Entscheidungen:* +
@@ -68,12 +81,15 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 
 === 2. Retrospektive
 - wie gut waren unsere Schätzungen?
-- Welche Hindernisse gab es? -> gegen die wichtigsten Hinernisse werden vom Scrum Master Maßnahmen zur Verbesserung eingeleitet
+- Welche Hindernisse gab es? -> gegen die wichtigsten Hindernisse werden vom Scrum Master Maßnahmen zur Verbesserung eingeleitet
 - Wie können wir besser werden?
 - wie lief die Zusammenarbeit?
 
 *Notizen:* +
-- ... +
+- Workload-Einschätzung unterschätzt weil wir uns Ende des letzten Semesters überschätzt haben +
+- Keep: Gute Situation im Zeitplan -> Pufferzeit vorhanden zur Überarbeitung +
+- Hindernisse: insgesamte Planung des Zeitplans zu optimieren +
+- Zusammenarbeit: gute Eigeninitative, Taskpicken und gute Teamstimmung/Motivation +
   +
 
 *Entscheidungen:* +
@@ -85,8 +101,7 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 == Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- ... +
-  +
+- KW 47 Fachaustausch Software-Entwurf Wunsch: Dienstag 4.DS Backup: 3.DS Donnerstag +
   +
 
 
