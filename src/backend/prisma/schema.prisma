@@ -61,7 +61,6 @@ enum TransactionType {
   DAILY
   WEEKLY
   MONTHLY
-  YEARLY
 }
 
 model Transaction {
@@ -87,11 +86,6 @@ model Transaction {
   parentTransaction Transaction?  @relation("childTransaction", fields: [transactionId], references: [id], onDelete: Cascade)
   transactionId     Int?
 
-  startDate DateTime?
-  endDate   DateTime?
-
-  recurringType RecurringTransactionType?
-  recurringInterval Int?
   // TODO: better  recurring interval
 }
 
