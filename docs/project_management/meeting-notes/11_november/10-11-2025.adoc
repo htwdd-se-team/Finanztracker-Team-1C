@@ -49,10 +49,12 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 
 
 ==  Review/Retrospektive
-=== 1. Review
+=== 1. Review 
 - wie weit sind wir gekommen/was haben wir geschafft?
 - was haben wir nicht geschafft?
 - wie hat sich unser Produkt verbessert?
+- Sind die "Stakeholder" einverstanden mit dem Ergebnis?
+- Anpassung des Product Backlogs
 
 *Notizen:* +
 - ... +
@@ -65,6 +67,9 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 
 
 === 2. Retrospektive
+- wie gut waren unsere Schätzungen?
+- Welche Hindernisse gab es? -> gegen die wichtigsten Hinernisse werden vom Scrum Master Maßnahmen zur Verbesserung eingeleitet
+- Wie können wir besser werden?
 - wie lief die Zusammenarbeit?
 
 *Notizen:* +
