@@ -1,0 +1,97 @@
+= Meeting-Protokoll 10.11.2025
+
+*Datum:* 10.11.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- ... +
+  +
+  
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Feedback aus dem Fachaustasch +
+- Timeboxing für Meetings +
+- Feedbacktermin mit anderem Team +
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+==  Review/Retrospektive
+=== 1. Review
+- wie weit sind wir gekommen/was haben wir geschafft?
+- was haben wir nicht geschafft?
+- wie hat sich unser Produkt verbessert?
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Retrospektive
+- wie lief die Zusammenarbeit?
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+== Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+  +
+  +
+
+
+== Nächstes Meeting
+*Sprintplanung* +
+
+- Datum: 17.11.2025
+- Zeit: 13:30
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Sprintplanung
