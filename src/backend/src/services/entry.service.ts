@@ -217,19 +217,28 @@ export class EntryService {
   }
 
   static mapEntryToResponseDto(entry: Transaction): EntryResponseDto {
+    // Defensive mapping: Transaction.currency is a string in the DB; map to our Currency enum if possible
+    const currencyValues = Object.values(Currency) as string[];
+    let currency: Currency;
+    if (currencyValues.includes(entry.currency)) {
+      currency = entry.currency as Currency;
+    } else {
+      currency = Currency.EUR;
+    }
+
     return {
       id: entry.id,
       type: entry.type,
       amount: entry.amount,
       description: entry.description,
-      currency: entry.currency as Currency,
+      currency,
       categoryId: entry.categoryId,
       endDate: entry.endDate,
       createdAt: entry.createdAt,
       isRecurring: entry.isRecurring,
-      recurringInterval: entry.recurringInterval,
-      recurringType: entry.recurringType,
-      transactionId: entry.transactionId,
+      recurringInterval: entry.recurringInterval ?? undefined,
+      recurringType: entry.recurringType ?? undefined,
+      transactionId: entry.transactionId ?? undefined,
       startDate: entry.startDate,
     };
   }
