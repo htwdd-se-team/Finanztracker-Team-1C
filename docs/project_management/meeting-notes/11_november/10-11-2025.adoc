@@ -101,7 +101,7 @@ periodische Transaktionencheck noch nötig, Endpunkte vorraussichtlich morgen fe
 == Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- KW 47 Fachaustausch Software-Entwurf Wunsch: Dienstag 4.DS Backup: 3.DS Donnerstag +
+- KW 47 Fachaustausch Software-Entwurf Wunsch: Dienstag 1.DS Backup: 3.DS Donnerstag +
   +
 
 
