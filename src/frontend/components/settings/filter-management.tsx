@@ -31,7 +31,7 @@ interface FilterCardProps {
 
 function FilterCard({ filter, onEdit, onDelete, isDeleting }: FilterCardProps) {
   return (
-    <Card className="group relative shadow-sm hover:shadow-md border-0 overflow-hidden transition-all duration-50 bg-secondary/40 hover:bg-secondary/80">
+    <Card className="group relative shadow-sm hover:shadow-md border-0 overflow-hidden transition-all duration-50 bg-primary/10 hover:bg-primary/20">
       <CardContent className="relative m-0 mx-4 p-4">
         <div className="flex justify-between items-center">
           <div className="flex flex-1 items-center gap-2.5 min-w-0">
