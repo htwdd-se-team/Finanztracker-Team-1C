@@ -255,6 +255,38 @@ export default function TablePage() {
           }
         }}
         initialFilter={editingFilter}
+        onSaveSuccess={updatedFilter => {
+          // Update selectedFilter with the new data
+          if (selectedFilter?.id === updatedFilter.id) {
+            setSelectedFilter(updatedFilter)
+            // Apply the updated filter settings
+            setAmountRange([
+              updatedFilter.minPrice || 0,
+              updatedFilter.maxPrice || filterDetails?.maxPrice || 50000,
+            ])
+            setSelectedCategories(updatedFilter.categoryIds || [])
+            setDateRange({
+              start: updatedFilter.dateFrom
+                ? parseDate(updatedFilter.dateFrom.split('T')[0])
+                : undefined,
+              end: updatedFilter.dateTo
+                ? parseDate(updatedFilter.dateTo.split('T')[0])
+                : undefined,
+            })
+            setDescription(updatedFilter.searchText || '')
+            setTransactionType(updatedFilter.transactionType || undefined)
+            setSortBy(
+              updatedFilter.sortOption === ApiFilterSortOption.HIGHEST_AMOUNT
+                ? ApiEntrySortBy.AmountDesc
+                : updatedFilter.sortOption === ApiFilterSortOption.LOWEST_AMOUNT
+                  ? ApiEntrySortBy.AmountAsc
+                  : updatedFilter.sortOption ===
+                      ApiFilterSortOption.OLDEST_FIRST
+                    ? ApiEntrySortBy.CreatedAtAsc
+                    : ApiEntrySortBy.CreatedAtDesc
+            )
+          }
+        }}
       />
     </>
   )

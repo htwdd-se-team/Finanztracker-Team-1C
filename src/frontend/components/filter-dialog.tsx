@@ -53,12 +53,15 @@ interface FilterDialogProps {
   onOpenChange: (open: boolean) => void
   // If provided, dialog is in edit mode and fields are prefilled
   initialFilter?: ApiFilterResponseDto | null
+  // Called after successful save with the saved filter
+  onSaveSuccess?: (filter: ApiFilterResponseDto) => void
 }
 
 export default function FilterDialog({
   open,
   onOpenChange,
   initialFilter,
+  onSaveSuccess,
 }: FilterDialogProps) {
   const queryClient = useQueryClient()
   const { categories } = useCategory()
@@ -199,6 +202,23 @@ export default function FilterDialog({
           updatePayload
         )
         toast.success('Filter aktualisiert')
+
+        // Refetch filters to get updated data
+        const updatedFilters = await queryClient.fetchQuery({
+          queryKey: ['filters'],
+          queryFn: async () => {
+            const res = await apiClient.filters.filterControllerList()
+            return res.data
+          },
+        })
+
+        // Find and call the saved filter callback
+        const updatedFilter = updatedFilters?.find(
+          f => f.id === initialFilter.id
+        )
+        if (updatedFilter && onSaveSuccess) {
+          onSaveSuccess(updatedFilter)
+        }
       } else {
         await apiClient.filters.filterControllerCreate(
           payload as ApiCreateFilterDto
