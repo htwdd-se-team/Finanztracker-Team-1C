@@ -9,6 +9,7 @@ import {
   Query,
   Param,
   ParseIntPipe,
+  Type,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -25,17 +26,22 @@ import {
   EntryPageDto,
   EntryPaginationParamsDto,
   EntryResponseDto,
+  ScheduledEntriesParamsDto,
+  ScheduledEntriesResponseDto,
   UpdateEntryDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
-import { EntryService } from "../services";
+import { EntryService, RecurringEntryService } from "../services";
 
 @ApiTags("Entry")
 @Controller("entries")
 @ApiSecurity("user-jwt")
 @UseGuards(JwtAuthGuard)
 export class EntryController {
-  constructor(private readonly entryService: EntryService) {}
+  constructor(
+    private readonly entryService: EntryService,
+    private readonly recurringEntryService: RecurringEntryService,
+  ) {}
 
   @Post("create")
   @ApiOkResponse({
@@ -91,5 +97,50 @@ export class EntryController {
     @Body() data: UpdateEntryDto,
   ): Promise<EntryResponseDto> {
     return this.entryService.updateEntry(user, entryId, data);
+  }
+
+  @Get("scheduled-entries/list")
+  @ApiOkResponse({
+    type: ScheduledEntriesResponseDto as Type<ScheduledEntriesResponseDto>,
+    description: "Scheduled entries fetched successfully",
+  })
+  @ApiBadRequestResponse({ description: "Invalid input data" })
+  async getScheduledEntries(
+    @UserDecorator() user: User,
+    @Query() params: ScheduledEntriesParamsDto,
+  ): Promise<ScheduledEntriesResponseDto> {
+    return await this.recurringEntryService.getScheduledEntries(
+      user.id,
+      params,
+    );
+  }
+  @Patch("scheduled-entries/:id/disable")
+  @ApiOkResponse({ description: "Scheduled entry disabled successfully" })
+  @ApiNotFoundResponse({
+    description: "Scheduled entry not found or not authorized to disable",
+  })
+  async disableScheduledEntry(
+    @UserDecorator() user: User,
+    @Param("id", ParseIntPipe) entryId: number,
+  ): Promise<EntryResponseDto> {
+    return await this.recurringEntryService.disableRecurringEntry(
+      entryId,
+      user.id,
+    );
+  }
+
+  @Patch("scheduled-entries/:id/enable")
+  @ApiOkResponse({ description: "Scheduled entry enabled successfully" })
+  @ApiNotFoundResponse({
+    description: "Scheduled entry not found or not authorized to enable",
+  })
+  async enableScheduledEntry(
+    @UserDecorator() user: User,
+    @Param("id", ParseIntPipe) entryId: number,
+  ): Promise<EntryResponseDto> {
+    return await this.recurringEntryService.enableRecurringEntry(
+      entryId,
+      user.id,
+    );
   }
 }

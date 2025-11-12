@@ -74,28 +74,16 @@ export class EntryResponseDto {
   @IsOptional()
   categoryId?: number;
 
+  /**
+   * recurring entry properties
+   */
+
   @ApiPropertyOptional({
     example: false,
   })
   @IsBoolean()
   @IsOptional()
   isRecurring?: boolean;
-
-  @ApiPropertyOptional({
-    description: "Start date for recurring transactions",
-  })
-  @IsOptional()
-  @IsDate()
-  @Type(() => Date)
-  startDate?: Date;
-
-  @ApiPropertyOptional({
-    description: "End date for recurring transactions",
-  })
-  @IsOptional()
-  @IsDate()
-  @Type(() => Date)
-  endDate?: Date;
 
   @ApiPropertyOptional({
     enum: RecurringTransactionType,
@@ -107,15 +95,23 @@ export class EntryResponseDto {
   recurringType?: RecurringTransactionType;
 
   @ApiPropertyOptional({
-    description: "Recurring interval",
+    description: "Base recurring interval (1x Monthly, 2x Monthly, etc.)",
     example: 1,
   })
   @IsInt()
   @IsOptional()
-  recurringInterval?: number;
+  recurringBaseInterval?: number;
 
   @ApiPropertyOptional({
-    description: "Parent transaction ID",
+    description: "Whether the recurring entry is disabled",
+    example: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  recurringDisabled?: boolean;
+
+  @ApiPropertyOptional({
+    description: "Parent transaction ID (null if not a child)",
     example: null,
   })
   @IsInt()
@@ -140,7 +136,8 @@ export class EntryPaginationParamsDto extends PaginationDto {
   })
   @IsEnum(EntrySortBy)
   @IsOptional()
-  sortBy?: EntrySortBy = EntrySortBy.CREATED_AT_DESC;
+  @Transform(({ value }): EntrySortBy => value || EntrySortBy.CREATED_AT_DESC)
+  sortBy?: EntrySortBy;
 
   @ApiPropertyOptional({
     description: "Filter by date range - from date (inclusive)",

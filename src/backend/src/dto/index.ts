@@ -15,3 +15,5 @@ export * from "./create-filter.dto";
 export * from "./update-filter.dto";
 export * from "./filter-response.dto";
 export * from "./filter-params.dto";
+export * from "./scheduled-entries-params.dto";
+export * from "./scheduled-entries-response.dto";
