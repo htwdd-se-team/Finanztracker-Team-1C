@@ -25,6 +25,7 @@ import {
 import { ThemeCard } from '@/components/settings/ThemeCard'
 import { useUser } from '@/components/provider/user-provider'
 import { CategoryManagement } from '@/components/settings/category-management'
+import { FilterManagement } from '@/components/settings/filter-management'
 
 export default function ProfilePage() {
   const { user } = useUser()
@@ -172,6 +173,11 @@ export default function ProfilePage() {
         {/* Category Management - spans full width on larger screens */}
         <div className="md:col-span-2 lg:col-span-3">
           <CategoryManagement />
+        </div>
+
+        {/* Filter Management - spans full width on larger screens */}
+        <div className="md:col-span-2 lg:col-span-3">
+          <FilterManagement />
         </div>
       </div>
     </div>

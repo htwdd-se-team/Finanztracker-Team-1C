@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CalendarIcon, ChevronDown, RotateCcw } from 'lucide-react'
+import { CalendarIcon, ChevronDown, RotateCcw, Plus, Edit } from 'lucide-react'
 import {
   Button as AriaButton,
   DateRangePicker,
@@ -25,6 +25,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectSeparator,
 } from '@/components/ui/select'
 import MultipleSelector, { Option } from '@/components/ui/multiselect'
 import {
@@ -33,7 +34,12 @@ import {
   AccordionContent,
 } from '@/components/ui/accordion'
 import { useCategory } from '@/components/provider/category-provider'
-import { ApiEntrySortBy, ApiTransactionType } from '@/__generated__/api'
+import {
+  ApiEntrySortBy,
+  ApiTransactionType,
+  ApiFilterResponseDto,
+} from '@/__generated__/api'
+import { IconRender } from '@/lib/icon-map'
 
 interface TableFiltersProps {
   amountRange: [number, number]
@@ -50,6 +56,11 @@ interface TableFiltersProps {
   sortBy: ApiEntrySortBy
   onSortByChange: (sortBy: ApiEntrySortBy) => void
   onReset: () => void
+  // Filter management props
+  selectedFilter: ApiFilterResponseDto | null
+  filters: ApiFilterResponseDto[] | undefined
+  onFilterChange: (filter: ApiFilterResponseDto | null) => void
+  onFilterDialogOpen: (filter: ApiFilterResponseDto | null) => void
 }
 
 export function TableFilters({
@@ -67,6 +78,10 @@ export function TableFilters({
   onSortByChange,
   onReset,
   maxPrice,
+  selectedFilter,
+  filters,
+  onFilterChange,
+  onFilterDialogOpen,
 }: TableFiltersProps) {
   const { categories } = useCategory()
 
@@ -117,7 +132,7 @@ export function TableFilters({
 
   return (
     <div className="bg-background mb-4 border rounded-lg">
-      {/* Always visible row: Description and expand/reset buttons */}
+      {/* Always visible row: Description, filters, and expand/reset buttons */}
       <div className="flex justify-between items-center gap-2 p-4">
         <div className="flex-1">
           <Input
@@ -126,13 +141,101 @@ export function TableFilters({
             onChange={e => onDescriptionChange(e.target.value)}
           />
         </div>
+
+        {/* Filter Management */}
+        <div className="flex items-center gap-2">
+          <Select
+            value={selectedFilter?.id?.toString() || 'none'}
+            onValueChange={value => {
+              if (value === 'none') {
+                onFilterChange(null)
+                onReset()
+                return
+              }
+              const filter = filters?.find(f => f.id.toString() === value)
+              if (filter) {
+                onFilterChange(filter)
+              }
+            }}
+          >
+            <SelectTrigger className="w-[200px] cursor-pointer hover:bg-accent hover:text-accent-foreground">
+              {selectedFilter ? (
+                <div className="flex items-center gap-2">
+                  {selectedFilter.icon && (
+                    <IconRender
+                      iconName={selectedFilter.icon}
+                      className="w-4 h-4"
+                    />
+                  )}
+                  <span>{selectedFilter.title}</span>
+                </div>
+              ) : (
+                <SelectValue placeholder="Filter auswählen" />
+              )}
+            </SelectTrigger>
+            <SelectContent>
+              {/* Create New Filter Button */}
+              <Button
+                variant="secondary"
+                className="px-2 py-1.5 rounded-sm w-full text-sm cursor-pointer"
+                onClick={e => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onFilterDialogOpen(null)
+                }}
+              >
+                <Plus className="mr-2 w-4 h-4" /> Filter erstellen
+              </Button>
+              <SelectSeparator />
+              <SelectItem
+                value="none"
+                className="cursor-pointer hover:bg-accent hover:text-accent-foreground group"
+              >
+                <span className="text-muted-foreground group-hover:text-accent-foreground">
+                  Kein Filter
+                </span>
+              </SelectItem>
+              <SelectSeparator />
+              {filters?.map(filter => (
+                <SelectItem
+                  key={filter.id}
+                  value={filter.id.toString()}
+                  className="cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    {filter.icon && (
+                      <IconRender iconName={filter.icon} className="w-4 h-4" />
+                    )}
+                    <span>{filter.title}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {selectedFilter && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+              onClick={() => {
+                onFilterDialogOpen(selectedFilter)
+              }}
+              title="Filter bearbeiten"
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+
+        {/* Expand and Reset Buttons */}
         <div className="flex items-center gap-2">
           {hasActiveFilters && (
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={onReset}
-              className="flex items-center gap-2"
+              className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
               title="Filter zurücksetzen"
             >
               <RotateCcw className="w-4 h-4" />
@@ -140,9 +243,9 @@ export function TableFilters({
           )}
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => setAccordionOpen(!accordionOpen)}
-            className="flex items-center gap-2"
+            className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
             title="Filter öffnen"
           >
             <ChevronDown

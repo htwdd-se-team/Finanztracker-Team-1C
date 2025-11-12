@@ -30,7 +30,7 @@ export function IconPicker({
               type="button"
               onClick={() => onValueChange(icon)}
               className={cn(
-                'relative p-2 rounded-md border-2 transition-all hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                'relative p-2 rounded-md border-2 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer',
                 isSelected ? 'border-primary bg-primary/5' : 'border-border'
               )}
               title={icon.replace('-', ' ')}
@@ -84,7 +84,7 @@ export function CompactIconPicker({
             type="button"
             onClick={() => onValueChange(icon)}
             className={cn(
-              'relative p-1.5 rounded border transition-all hover:bg-muted',
+              'relative p-1.5 rounded border transition-all cursor-pointer',
               isSelected ? 'border-primary bg-primary/5' : 'border-border'
             )}
             title={icon.replace('-', ' ')}
