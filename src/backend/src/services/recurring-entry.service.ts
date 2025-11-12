@@ -145,10 +145,10 @@ export class RecurringEntryService {
         recurringDisabled: Boolean(disabled),
       },
       ...(cursorId && {
-        cursor: { id: cursorId as number },
+        cursor: { id: cursorId },
         skip: 1,
       }),
-      take: take as number,
+      take: take,
       orderBy: {
         amount: "desc",
       },
