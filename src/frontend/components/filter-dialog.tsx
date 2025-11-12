@@ -207,6 +207,7 @@ export default function FilterDialog({
       }
 
       queryClient.invalidateQueries({ queryKey: ['filters'] })
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
       onOpenChange(false)
     } catch (err) {
       console.error(err)
@@ -222,6 +223,7 @@ export default function FilterDialog({
       await apiClient.filters.filterControllerDelete(initialFilter.id)
       toast.success('Filter gelöscht')
       queryClient.invalidateQueries({ queryKey: ['filters'] })
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
       onOpenChange(false)
     } catch (err) {
       console.error(err)
