@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { DateValue } from '@internationalized/date'
+import { DateValue, parseDate } from '@internationalized/date'
 import {
   Dialog,
   DialogContent,
@@ -94,9 +94,12 @@ export default function FilterDialog({
         initialFilter.sortOption || ApiFilterSortOption.NEWEST_FIRST
       )
 
+      // Check if amount range is set (either minPrice or maxPrice is defined)
       if (
-        initialFilter.minPrice !== null &&
-        initialFilter.minPrice !== undefined
+        (initialFilter.minPrice !== null &&
+          initialFilter.minPrice !== undefined) ||
+        (initialFilter.maxPrice !== null &&
+          initialFilter.maxPrice !== undefined)
       ) {
         setUseAmountRange(true)
         setAmountRange([
@@ -110,10 +113,10 @@ export default function FilterDialog({
       if (initialFilter.dateFrom || initialFilter.dateTo) {
         setDateRange({
           start: initialFilter.dateFrom
-            ? (new Date(initialFilter.dateFrom) as unknown as DateValue)
+            ? parseDate(initialFilter.dateFrom.split('T')[0])
             : undefined,
           end: initialFilter.dateTo
-            ? (new Date(initialFilter.dateTo) as unknown as DateValue)
+            ? parseDate(initialFilter.dateTo.split('T')[0])
             : undefined,
         })
       } else {
@@ -184,9 +187,16 @@ export default function FilterDialog({
       }
 
       if (initialFilter && initialFilter.id) {
+        // For updates, explicitly send null for cleared price range to ensure backend updates it
+        const updatePayload = {
+          ...payload,
+          minPrice: useAmountRange ? amountRange[0] : null,
+          maxPrice: useAmountRange ? amountRange[1] : null,
+        } as ApiUpdateFilterDto
+
         await apiClient.filters.filterControllerUpdate(
           initialFilter.id,
-          payload as ApiUpdateFilterDto
+          updatePayload
         )
         toast.success('Filter aktualisiert')
       } else {

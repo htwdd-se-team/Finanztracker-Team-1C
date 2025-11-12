@@ -30,7 +30,7 @@ import {
   ApiFilterSortOption,
   ApiTransactionType,
 } from '@/__generated__/api'
-import { DateValue } from '@internationalized/date'
+import { DateValue, parseDate } from '@internationalized/date'
 
 export default function TablePage() {
   const [filterDialogOpen, setFilterDialogOpen] = useState(false)
@@ -189,37 +189,10 @@ export default function TablePage() {
                       setSelectedCategories(filter.categoryIds || [])
                       setDateRange({
                         start: filter.dateFrom
-                          ? (new Date(filter.dateFrom) as unknown as DateValue)
+                          ? parseDate(filter.dateFrom.split('T')[0])
                           : undefined,
                         end: filter.dateTo
-                          ? (new Date(filter.dateTo) as unknown as DateValue)
-                          : undefined,
-                      })
-                      setDescription(filter.searchText || '')
-                      setTransactionType(filter.transactionType || undefined)
-                      setSortBy(
-                        filter.sortOption === ApiFilterSortOption.HIGHEST_AMOUNT
-                          ? ApiEntrySortBy.AmountDesc
-                          : filter.sortOption ===
-                              ApiFilterSortOption.LOWEST_AMOUNT
-                            ? ApiEntrySortBy.AmountAsc
-                            : filter.sortOption ===
-                                ApiFilterSortOption.OLDEST_FIRST
-                              ? ApiEntrySortBy.CreatedAtAsc
-                              : ApiEntrySortBy.CreatedAtDesc
-                      )
-                      // Apply filter settings
-                      setAmountRange([
-                        filter.minPrice || 0,
-                        filter.maxPrice || filterDetails?.maxPrice || 50000,
-                      ])
-                      setSelectedCategories(filter.categoryIds || [])
-                      setDateRange({
-                        start: filter.dateFrom
-                          ? (new Date(filter.dateFrom) as unknown as DateValue)
-                          : undefined,
-                        end: filter.dateTo
-                          ? (new Date(filter.dateTo) as unknown as DateValue)
+                          ? parseDate(filter.dateTo.split('T')[0])
                           : undefined,
                       })
                       setDescription(filter.searchText || '')
