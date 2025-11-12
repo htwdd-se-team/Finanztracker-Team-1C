@@ -1,5 +1,7 @@
-import { PartialType } from "@nestjs/swagger";
+import { PartialType, OmitType } from "@nestjs/swagger";
 
 import { CreateEntryDto } from "./create-entry.dto";
 
-export class UpdateEntryDto extends PartialType(CreateEntryDto) {}
+export class UpdateEntryDto extends PartialType(
+  OmitType(CreateEntryDto, ["isRecurring"]),
+) {}
