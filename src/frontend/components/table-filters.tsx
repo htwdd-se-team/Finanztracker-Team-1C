@@ -233,9 +233,9 @@ export function TableFilters({
           {hasActiveFilters && (
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={onReset}
-              className="flex items-center gap-2"
+              className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
               title="Filter zurücksetzen"
             >
               <RotateCcw className="w-4 h-4" />
@@ -243,9 +243,9 @@ export function TableFilters({
           )}
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => setAccordionOpen(!accordionOpen)}
-            className="flex items-center gap-2"
+            className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
             title="Filter öffnen"
           >
             <ChevronDown
