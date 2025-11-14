@@ -74,7 +74,7 @@ export function TransactionDialog({
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const [calendarOpen, setCalendarOpen] = useState(false)
-  // Recurring state (kept out of the zod schema to avoid touching generated API types)
+
   const [isRecurring, setIsRecurring] = useState(false)
   const [recurrenceIntervalMonths, setRecurrenceIntervalMonths] = useState<
     number | undefined
@@ -112,9 +112,7 @@ export function TransactionDialog({
           currency: editData.currency,
           createdAt: editData.createdAt?.split('T')[0],
         })
-        // populate recurring state if available on editData (use unknown->Record to avoid explicit any)
         const ed = editData as unknown as Record<string, unknown>
-        // API uses `isRecurring` and `recurringBaseInterval` (and optional recurringType)
         const recurringFlag = Boolean(ed.isRecurring)
         setIsRecurring(recurringFlag)
         const initialInterval =
@@ -123,7 +121,6 @@ export function TransactionDialog({
             : typeof ed.recurrenceIntervalMonths === 'number'
               ? (ed.recurrenceIntervalMonths as number)
               : undefined
-        // if recurring is true but no interval provided, default to 1
         setRecurrenceIntervalMonths(
           recurringFlag && initialInterval === undefined ? 1 : initialInterval
         )
@@ -166,10 +163,8 @@ export function TransactionDialog({
         amount: Math.floor(values.amount * 100),
       }
 
-      // attach recurring data if enabled (use a payload record to avoid strict inferred types)
       const payload = { ...apiValues } as unknown as Record<string, unknown>
 
-      // CREATE path: ApiCreateEntryDto supports `isRecurring`, `recurringBaseInterval`, `recurringType`
       if (!editData) {
         payload['isRecurring'] = Boolean(isRecurring)
         if (isRecurring) {
@@ -184,7 +179,6 @@ export function TransactionDialog({
         ).data
       }
 
-      // UPDATE path: use ApiUpdateEntryDto (partial) and handle turning recurring off
       const updatePayload = { ...apiValues } as unknown as Record<
         string,
         unknown
@@ -198,7 +192,6 @@ export function TransactionDialog({
         (editData as unknown as Record<string, unknown>).isRecurring
       )
 
-      // First, send the update for common fields (and recurring fields if enabling)
       const updated = (
         await apiClient.entries.entryControllerUpdate(
           editData.id,
@@ -206,7 +199,6 @@ export function TransactionDialog({
         )
       ).data
 
-      // If the entry was recurring before but user disabled it, call disable endpoint
       if (!isRecurring && wasRecurringOriginally) {
         await apiClient.entries.entryControllerDisableScheduledEntry(
           editData.id
@@ -394,9 +386,9 @@ export function TransactionDialog({
                 </FormItem>
               )}
             />
-            {/* Date and Category Row (swapped) */}
+            {/* Date and Category Row */}
             <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
-              {/* Date (moved before Category) */}
+              {/* Date  */}
               <FormField
                 control={form.control}
                 name="createdAt"
@@ -461,7 +453,7 @@ export function TransactionDialog({
                 }}
               />
 
-              {/* Category (moved after Date) */}
+              {/* Category */}
               <FormField
                 control={form.control}
                 name="categoryId"
@@ -488,9 +480,26 @@ export function TransactionDialog({
               />
             </div>
 
-            {/* Recurring toggle + interval input (styled like FilterDialog) */}
+            {/* Recurring toggle + interval input */}
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="mr-5">
+                  <Switch
+                    checked={isRecurring}
+                    onCheckedChange={val => {
+                      const b = Boolean(val)
+                      setIsRecurring(b)
+                      if (
+                        b &&
+                        (recurrenceIntervalMonths === undefined ||
+                          recurrenceIntervalMonths === null)
+                      ) {
+                        setRecurrenceIntervalMonths(1)
+                      }
+                    }}
+                    className="cursor-pointer"
+                  />
+                </div>
                 <div className="relative">
                   <div
                     className="group inline-block relative"
@@ -509,24 +518,6 @@ export function TransactionDialog({
                       Intervall automatisch wiederholt.
                     </div>
                   </div>
-                </div>
-                <div>
-                  <Switch
-                    checked={isRecurring}
-                    onCheckedChange={val => {
-                      const b = Boolean(val)
-                      setIsRecurring(b)
-                      // when enabling recurring, default to 1 month if no value set
-                      if (
-                        b &&
-                        (recurrenceIntervalMonths === undefined ||
-                          recurrenceIntervalMonths === null)
-                      ) {
-                        setRecurrenceIntervalMonths(1)
-                      }
-                    }}
-                    className="cursor-pointer"
-                  />
                 </div>
               </div>
 
