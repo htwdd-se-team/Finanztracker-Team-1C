@@ -44,7 +44,7 @@ export default function GraphsPage() {
   ]
 
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="relative flex flex-col">
       <Background />
       <div className="z-10 relative flex-1 p-4 sm:p-6 overflow-auto">
         <div className="mx-auto max-w-6xl">

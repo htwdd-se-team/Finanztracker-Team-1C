@@ -32,7 +32,7 @@ export function SidebarDesktop() {
     >
       <SidebarContent>
         <SidebarGroup>
-          <FinAppLogo className="text-2xl" />
+          <FinAppLogo className="text-2xl mb-8" />
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map(item => (

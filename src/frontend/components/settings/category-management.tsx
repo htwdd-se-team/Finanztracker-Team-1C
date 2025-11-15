@@ -191,11 +191,11 @@ export function CategoryManagement() {
 
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-muted/50 to-muted/30">
+      <CardHeader className="">
         <div className="flex justify-between items-center">
           <CardTitle className="flex items-center gap-2">
-            <div className="flex justify-center items-center bg-primary/10 rounded-lg w-8 h-8">
-              <Folder className="w-5 h-5 text-primary" />
+            <div className="flex justify-center items-center w-8 h-8">
+              <Folder className="w-5 h-5 text-foreground" />
             </div>
             Kategorien verwalten
           </CardTitle>

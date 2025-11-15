@@ -30,8 +30,14 @@ enum RangeType {
   ALL = 'all',
 }
 
-const tabTriggerClass =
-  'bg-[var(--card)] data-[state=active]:border-[var(--color-chart-2)] data-[state=active]:bg-[color:var(--color-chart-2)/0.1]'
+const tabTriggerClass = `
+  data-[state=inactive]:bg-transparent
+  data-[state=active]:border-[var(--color-chart-2)]
+  data-[state=active]:bg-[var(--color-chart-2)]/10
+  dark:data-[state=inactive]:bg-transparent
+  dark:data-[state=active]:border-[var(--color-chart-2)]
+  dark:data-[state=active]:bg-[var(--color-chart-2)]/15
+ `
 
 type SelectorTileProps = {
   value: RangeType | string
@@ -84,7 +90,7 @@ export function SelectorTile({
 
   return (
     <Card className={cn('h-18', className)}>
-      <CardContent className="relative flex flex-col justify-center p-0 h-full">
+      <CardContent className="p-0 m-0 flex flex-col justify-center h-full">
         <Dialog open={showPicker} onOpenChange={setShowPicker}>
           <Tabs
             value={value}
@@ -97,7 +103,13 @@ export function SelectorTile({
             }}
             className=""
           >
-            <TabsList className="grid grid-cols-2 grid-rows-2 bg-var(--card) rounded-[calc(var(--radius)-2px)] w-full h-full">
+            <TabsList className="
+              grid grid-cols-2 grid-rows-2
+              w-full h-full
+              bg-transparent
+              p-0 m-0
+              items-stretch
+            ">
               <TabsTrigger value={RangeType.WEEK} className={tabTriggerClass}>
                 Woche
               </TabsTrigger>

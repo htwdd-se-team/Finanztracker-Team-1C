@@ -139,7 +139,7 @@ export default function TablePage() {
 
   return (
     <>
-      <div className="relative flex flex-col h-screen">
+      <div className="relative flex flex-col">
         <Background />
         <div className="z-10 relative flex-1 p-2 sm:p-4 overflow-y-auto">
           <div className="mx-auto max-w-4xl">

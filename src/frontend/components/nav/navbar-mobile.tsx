@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo} from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { SquarePlus } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -22,10 +22,9 @@ export default function NavbarMobile() {
     return undefined
   }, [pathname])
 
-  const [activeTab, setActiveTab] = useState<TabValues | undefined>(useMemoTab)
+  const activeTab = useMemoTab
 
   const handleTabChange = (val: TabValues) => {
-    setActiveTab(val)
     router.push(`/${val}`)
   }
 
@@ -58,7 +57,14 @@ export default function NavbarMobile() {
                     key={item.value}
                     value={item.value}
                     data-state="inactive"
-                    className="relative flex flex-col justify-center items-center"
+                    className="
+                    relative flex flex-col justify-center items-center
+                    transition
+                    hover:bg-white/20 hover:text-[var(--chart-3)]/100 hover:shadow-[0_0_8px_rgba(0,0,0,0.15)]
+                    hover:border hover:border-[var(--chart-4)]/70
+                    dark:hover:bg-white/5 dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] dark:hover:text-[var(--chart-4)]
+                    rounded-md
+                    "
                   >
                     {activeTab === item.value && (
                       <motion.div

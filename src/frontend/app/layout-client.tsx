@@ -9,6 +9,7 @@ import NavbarMobile from '@/components/nav/navbar-mobile'
 import { CategoryProvider } from '@/components/provider/category-provider'
 import { UserProvider, useUser } from '@/components/provider/user-provider'
 import { AppLoader } from '@/components/nav/app-loader'
+import { TopBar } from '@/components/nav/top-bar'
 
 const nonLayoutRoutes = ['/login', '/register']
 
@@ -43,13 +44,16 @@ const LoggedInLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Background />
-      <SidebarProvider>
-        <SidebarDesktop />
-        <main className="flex-1 mb-20 sm:mb-0 w-full sm:h-screen overflow-auto">
-          {children}
-        </main>
-      </SidebarProvider>
-      <NavbarMobile />
+      <div className="flex flex-col w-full relative">
+        <TopBar />
+        <SidebarProvider>
+          <SidebarDesktop />
+          <main className="flex-1 mb-20 sm:mb-0 w-full sm:h-screen overflow-auto">
+            {children}
+          </main>
+        </SidebarProvider>
+        <NavbarMobile />
+      </div>
     </>
   )
 }
