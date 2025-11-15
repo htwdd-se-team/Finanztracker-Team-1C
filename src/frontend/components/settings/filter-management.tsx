@@ -144,7 +144,7 @@ export function FilterManagement() {
 
   return (
     <>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden bg-card/90 dark:bg-card/60">
         <CardHeader className="">
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">

@@ -56,7 +56,7 @@ export default function ProfilePage() {
       <div className="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
         {/* User Information Card */}
         {user ? (
-          <Card>
+          <Card className="bg-card/90 dark:bg-card/60">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="w-5 h-5" />
@@ -79,8 +79,8 @@ export default function ProfilePage() {
 
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium text-sm">Mitglied seit:</span>
-                  <Badge variant="secondary" className="text-xs">
+                  <span className="font-medium text-sm -mr-2">Mitglied seit:</span>
+                  <Badge variant="secondary" className="text-xs bg-transparent">
                     {DateTime.fromISO(user.createdAt).toLocaleString(
                       DateTime.DATE_FULL
                     )}
@@ -109,7 +109,7 @@ export default function ProfilePage() {
         )}
 
         {/* Settings Card */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 bg-card/90 dark:bg-card/60">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="w-5 h-5" />

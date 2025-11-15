@@ -141,7 +141,7 @@ export default function TablePage() {
     <>
       <div className="relative flex flex-col">
         <Background />
-        <div className="z-10 relative flex-1 p-2 sm:p-4 overflow-y-auto">
+        <div className="z-10 relative flex-1 p-2 sm:p-4 overflow-y-auto bg-card/90 dark:bg-card/60">
           <div className="mx-auto max-w-4xl">
             <div className="z-50 relative">
               {filterDetails && (

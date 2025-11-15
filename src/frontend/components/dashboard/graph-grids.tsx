@@ -22,11 +22,11 @@ function GraphGrids() {
     <div className="gap-2 grid grid-cols-2 lg:grid-cols-3 mx-2 pt-2">
       {/* Row 1: Kontostand (Balance + Selector) */}
       <div className="gap-2 grid grid-cols-3 col-span-2 lg:col-span-3">
-        <BalanceTile className="col-span-2 bg-card/90 dark:bg-card/30" />
+        <BalanceTile className="col-span-2 bg-card/90 dark:bg-card/60" />
         <SelectorTile
           value={range.type}
           onRangeChange={setRange}
-          className="col-span-1 bg-card/90 dark:bg-card/30"
+          className="col-span-1 bg-card/90 dark:bg-card/60"
         />
       </div>
 
@@ -34,23 +34,23 @@ function GraphGrids() {
       <HistoryTile
         startDate={range.startDate}
         endDate={range.endDate}
-        className="col-span-2 lg:col-span-3 bg-card/90 dark:bg-card/30"
+        className="col-span-2 lg:col-span-3 bg-card/90 dark:bg-card/60"
       />
 
       {/* Row 2: Savings Goal - Always full width on second line */}
-      <SavingsGoal className="col-span-2 lg:col-span-3 p-1.5 bg-card/90 dark:bg-card/30" />
+      <SavingsGoal className="col-span-2 lg:col-span-3 p-1.5 bg-card/90 dark:bg-card/60" />
 
       {/* Row 3: Delta and PieChart */}
 
       <PieChartTileIcons
         startDate={range.startDate}
         endDate={range.endDate}
-        className="col-span-1 lg:col-span-1 bg-card/90 dark:bg-card/30"
+        className="col-span-1 lg:col-span-1 bg-card/90 dark:bg-card/60"
       />
       <DeltaTile
         startDate={range.startDate}
         endDate={range.endDate}
-        className="col-span-1 lg:col-span-1 bg-card/90 dark:bg-card/30"
+        className="col-span-1 lg:col-span-1 bg-card/90 dark:bg-card/60"
       />
     </div>
   )

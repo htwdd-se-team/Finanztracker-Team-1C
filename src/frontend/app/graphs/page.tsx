@@ -63,7 +63,7 @@ export default function GraphsPage() {
             {chartCards.map((chart, index) => (
               <Card
                 key={index}
-                className="opacity-75 hover:opacity-90 hover:shadow-lg border-2 border-dashed transition-shadow duration-200"
+                className="hover:opacity-90 hover:shadow-lg border-2 border-dashed transition-shadow duration-200 bg-card/90 dark:bg-card/60"
               >
                 <CardHeader className="pb-3 text-center">
                   <div className="flex justify-center mb-3">{chart.icon}</div>
