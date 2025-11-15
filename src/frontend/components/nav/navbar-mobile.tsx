@@ -56,6 +56,7 @@ export default function NavbarMobile() {
                   <TabsTrigger
                     key={item.value}
                     value={item.value}
+                    disabled={activeTab === item.value}
                     data-state="inactive"
                     className="
                     relative flex flex-col justify-center items-center
@@ -64,6 +65,7 @@ export default function NavbarMobile() {
                     hover:border hover:border-[var(--chart-4)]/70
                     dark:hover:bg-white/5 dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] dark:hover:text-[var(--chart-4)]
                     rounded-md
+                    disabled:opacity-100
                     "
                   >
                     {activeTab === item.value && (
@@ -96,7 +98,16 @@ export default function NavbarMobile() {
 
         {/* Floating Button */}
         <TransactionDialog>
-          <Button className="-top-6 left-1/2 z-10 absolute flex justify-center items-center bg-primary hover:bg-primary/90 shadow-lg rounded-full w-16 h-16 text-primary-foreground transition -translate-x-1/2">
+          <Button className="
+            -top-6 left-1/2 z-10 -translate-x-1/2
+            absolute flex justify-center items-center
+            w-16 h-16
+            transition
+            bg-primary
+            hover:bg-primary/95 hover:scale-107 hover:shadow-[0_0_10px_rgba(0,0,0,0.4),_0_0_6px_var(--primary)]
+            shadow-lg rounded-full text-primary-foreground
+            "
+          >
             <SquarePlus className="size-8" />
           </Button>
         </TransactionDialog>

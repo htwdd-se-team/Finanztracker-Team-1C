@@ -37,6 +37,11 @@ const tabTriggerClass = `
   dark:data-[state=inactive]:bg-transparent
   dark:data-[state=active]:border-[var(--color-chart-2)]
   dark:data-[state=active]:bg-[var(--color-chart-2)]/15
+  transition
+  hover:shadow-[0_0_8px_rgba(0,0,0,0.15)]
+  hover:border hover:border-[var(--chart-4)]/40
+  dark:hover:shadow-[0_0_4px_rgba(255,255,255,0.2)]
+  rounded-md
  `
 
 type SelectorTileProps = {
