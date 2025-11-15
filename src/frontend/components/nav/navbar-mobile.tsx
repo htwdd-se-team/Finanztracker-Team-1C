@@ -61,9 +61,9 @@ export default function NavbarMobile() {
                     className="
                     relative flex flex-col justify-center items-center
                     transition
-                    hover:bg-white/20 hover:text-[var(--chart-3)]/100 hover:shadow-[0_0_8px_rgba(0,0,0,0.15)]
-                    hover:border hover:border-[var(--chart-4)]/70
-                    dark:hover:bg-white/5 dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] dark:hover:text-[var(--chart-4)]
+                    hover:bg-white/20 hover:shadow-[0_0_8px_rgba(0,0,0,0.15)]
+                    hover:border hover:border-[var(--chart-2)]/70
+                    dark:hover:bg-white/5 dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.2)]
                     rounded-md
                     disabled:opacity-100
                     "
@@ -104,7 +104,7 @@ export default function NavbarMobile() {
             w-16 h-16
             transition
             bg-primary
-            hover:bg-primary/95 hover:scale-107 hover:shadow-[0_0_10px_rgba(0,0,0,0.4),_0_0_6px_var(--primary)]
+            hover:bg-primary/95 hover:scale-105 hover:shadow-[0_0_10px_rgba(0,0,0,0.4),_0_0_6px_var(--primary)]
             shadow-lg rounded-full text-primary-foreground
             "
           >
