@@ -21,6 +21,7 @@ import {
   ApiTransactionType,
 } from '@/__generated__/api'
 import { DateValue, parseDate } from '@internationalized/date'
+import { TableProperties } from 'lucide-react'
 
 export default function TablePage() {
   const [filterDialogOpen, setFilterDialogOpen] = useState(false)
@@ -139,10 +140,19 @@ export default function TablePage() {
 
   return (
     <>
-      <div className="relative flex flex-col">
+      <div className="mx-auto max-w-4xl px-2 sm:px-6 relative flex flex-col container">
         <Background />
-        <div className="z-10 relative flex-1 p-2 sm:p-4 overflow-y-auto bg-card/90 dark:bg-card/60">
-          <div className="mx-auto max-w-4xl">
+        <div className="">
+          <h1 className="flex gap-3 font-bold text-2xl ml-2 mt-4 sm:mt-6 mb-2">
+            <TableProperties className="w-8 h-8" />
+            Belegübersicht
+          </h1>
+          <p className="ml-2 mt-2 text-muted-foreground mb-6">
+            Einsicht über Ihre Belege
+          </p>
+        </div>
+        <div className="z-10 relative flex-1 overflow-y-auto">
+          <div className="">
             <div className="z-50 relative">
               {filterDetails && (
                 <TableFilters

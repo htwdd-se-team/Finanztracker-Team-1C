@@ -45,7 +45,9 @@ const LoggedInLayout = ({ children }: { children: ReactNode }) => {
     <>
       <Background />
       <div className="flex flex-col w-full relative">
-        <TopBar />
+        <div className="sm:hidden">
+          <TopBar />
+        </div>
         <SidebarProvider>
           <SidebarDesktop />
           <main className="flex-1 mb-20 sm:mb-0 w-full sm:h-screen overflow-auto">

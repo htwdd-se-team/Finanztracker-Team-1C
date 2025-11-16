@@ -19,9 +19,9 @@ function GraphGrids() {
   })
 
   return (
-    <div className="gap-2 grid grid-cols-2 lg:grid-cols-3 mx-2 pt-2">
+    <div className="gap-2 sm:gap-6 grid grid-cols-2">
       {/* Row 1: Kontostand (Balance + Selector) */}
-      <div className="gap-2 grid grid-cols-3 col-span-2 lg:col-span-3">
+      <div className="gap-2 sm:gap-6 grid grid-cols-3 col-span-2">
         <BalanceTile className="col-span-2 bg-card/90 dark:bg-card/60" />
         <SelectorTile
           value={range.type}
@@ -30,27 +30,27 @@ function GraphGrids() {
         />
       </div>
 
-      {/* Row 1: Historie (Mobile: next row, Desktop: same row) */}
+      {/* Row 2: Savings Goal - Always full width on second line */}
+      <SavingsGoal className="col-span-2 p-1.5 bg-card/90 dark:bg-card/60" />
+
+      {/* Row 3: Historie (Mobile: next row, Desktop: same row) */}
       <HistoryTile
         startDate={range.startDate}
         endDate={range.endDate}
-        className="col-span-2 lg:col-span-3 bg-card/90 dark:bg-card/60"
+        className="col-span-2 bg-card/90 dark:bg-card/60"
       />
 
-      {/* Row 2: Savings Goal - Always full width on second line */}
-      <SavingsGoal className="col-span-2 lg:col-span-3 p-1.5 bg-card/90 dark:bg-card/60" />
-
-      {/* Row 3: Delta and PieChart */}
+      {/* Row 4: Delta and PieChart */}
 
       <PieChartTileIcons
         startDate={range.startDate}
         endDate={range.endDate}
-        className="col-span-1 lg:col-span-1 bg-card/90 dark:bg-card/60"
+        className="col-span-1 bg-card/90 dark:bg-card/60"
       />
       <DeltaTile
         startDate={range.startDate}
         endDate={range.endDate}
-        className="col-span-1 lg:col-span-1 bg-card/90 dark:bg-card/60"
+        className="col-span-1 bg-card/90 dark:bg-card/60"
       />
     </div>
   )

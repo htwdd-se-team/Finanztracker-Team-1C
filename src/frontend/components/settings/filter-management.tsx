@@ -144,8 +144,8 @@ export function FilterManagement() {
 
   return (
     <>
-      <Card className="overflow-hidden bg-card/90 dark:bg-card/60">
-        <CardHeader className="">
+      <Card className="overflow-hidden bg-card/90 dark:bg-card/60 p-0">
+        <CardHeader className="p-4">
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">
               <div className="flex justify-center items-center w-8 h-8">
@@ -167,7 +167,7 @@ export function FilterManagement() {
           </div>
         </CardHeader>
 
-        <CardContent className="p-6">
+        <CardContent className="px-5">
           {isLoading ? (
             <div className="py-12 text-center">
               <div className="flex justify-center items-center mx-auto mb-4">
@@ -176,7 +176,7 @@ export function FilterManagement() {
               <p className="text-muted-foreground">Filter werden geladen...</p>
             </div>
           ) : filters && filters.length > 0 ? (
-            <div className="gap-3 grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            <div className="gap-3 grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 mb-4">
               {filters.map(filter => (
                 <FilterCard
                   key={filter.id}

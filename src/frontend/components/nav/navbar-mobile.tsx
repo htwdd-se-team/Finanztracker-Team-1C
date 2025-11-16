@@ -24,17 +24,14 @@ export default function NavbarMobile() {
 
   const activeTab = useMemoTab
 
-  const handleTabChange = (val: TabValues) => {
+  const handleTabClick = (val: TabValues) => {
     router.push(`/${val}`)
   }
 
   return (
     <div className="sm:hidden block bottom-0 z-50 fixed inset-x-0 bg-background border-t">
       <div className="relative">
-        <Tabs
-          value={activeTab}
-          onValueChange={val => handleTabChange(val as TabValues)}
-        >
+        <Tabs key={activeTab ?? 'none'} value={activeTab}>
           <TabsList
             className={`relative grid rounded-none w-full h-14 ${
               navItems.length === 2
@@ -56,16 +53,18 @@ export default function NavbarMobile() {
                   <TabsTrigger
                     key={item.value}
                     value={item.value}
-                    disabled={activeTab === item.value}
-                    data-state="inactive"
+                    data-active={activeTab === item.value}
+                    onClick={() => handleTabClick(item.value)}
                     className="
                     relative flex flex-col justify-center items-center
                     transition
-                    hover:bg-white/20 hover:shadow-[0_0_8px_rgba(0,0,0,0.15)]
-                    hover:border hover:border-[var(--chart-2)]/70
-                    dark:hover:bg-white/5 dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.2)]
+                    data-[active=false]:hover:bg-white/20
+                    data-[active=false]:hover:shadow-[0_0_8px_rgba(0,0,0,0.15)]
+                    data-[active=false]:hover:border
+                    data-[active=false]:hover:border-[var(--chart-2)]/70
+                    dark:data-[active=false]:hover:bg-white/5
+                    dark:data-[active=false]:hover:shadow-[0_0_10px_rgba(255,255,255,0.2)]
                     rounded-md
-                    disabled:opacity-100
                     "
                   >
                     {activeTab === item.value && (

@@ -131,7 +131,7 @@ export function TableFilters({
   const [accordionOpen, setAccordionOpen] = useState(false)
 
   return (
-    <div className="bg-card/90 dark:bg-card/60 mb-4 border rounded-lg">
+    <div className="bg-card/90 dark:bg-card/60 mb-4 border rounded-xl">
       {/* Always visible row: Description, filters, and expand/reset buttons */}
       <div className="flex justify-between items-center gap-2 p-4">
         <div className="flex-1">

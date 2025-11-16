@@ -50,7 +50,7 @@ export function EntryList({
         return (
           <li
             key={entry.id}
-            className="relative flex flex-col bg-card/90 dark:bg-card/30 shadow-sm border rounded-xl h-30 overflow-hidden"
+            className="relative flex flex-col bg-card/90 dark:bg-card/60 shadow-sm border rounded-xl h-30 overflow-hidden"
           >
             {/* Farbiger Streifen links */}
             <span
