@@ -523,7 +523,7 @@ export function TransactionDialog({
 
               {isRecurring && (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm">Wiederholung aller</span>
+                  <span className="text-sm">aller</span>
                   <Input
                     type="number"
                     min={1}
