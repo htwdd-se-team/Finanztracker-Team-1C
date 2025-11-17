@@ -7,6 +7,8 @@ import { EntryResponseDto } from "./entry-response.dto";
 export class CreateEntryDto extends OmitType(EntryResponseDto, [
   "id",
   "createdAt",
+  "transactionId",
+  "recurringDisabled",
 ]) {
   @ApiPropertyOptional({
     description:

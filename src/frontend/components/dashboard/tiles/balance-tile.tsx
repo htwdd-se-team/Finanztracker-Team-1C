@@ -30,7 +30,7 @@ function BalanceTile({ className }: { className?: string }) {
             Kontostand
           </div>
           <div className="flex flex-col justify-center h-full">
-            <div className="font-bold text-xl leading-tight">
+            <div className="font-bold text-2xl leading-tight">
               {(data?.balance / 100).toLocaleString('de-DE', {
                 style: 'currency',
                 currency: 'EUR',

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { FilterSortOption, Prisma, Transaction, User } from "@prisma/client";
 
 import {
@@ -12,15 +16,57 @@ import {
 } from "../dto";
 
 import { PrismaService } from "./prisma.service";
+import { RecurringEntryService } from "./recurring-entry.service";
 
 @Injectable()
 export class EntryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly recurringEntryService: RecurringEntryService,
+  ) {}
 
   async createEntry(
     user: User,
     data: CreateEntryDto,
   ): Promise<EntryResponseDto> {
+    // recurring entry
+    if (data.isRecurring) {
+      // shadow element
+      const parentEntry = await this.prisma.transaction.create({
+        data: {
+          type: data.type,
+          amount: data.amount,
+          description: data.description,
+          currency: data.currency || Currency.EUR,
+          userId: user.id,
+          isRecurring: true,
+          categoryId: data.categoryId,
+          createdAt: data.createdAt,
+          recurringType: data.recurringType,
+          recurringBaseInterval: data.recurringBaseInterval ?? 1,
+          recurringDisabled: false,
+        },
+      });
+
+      // actual transaction
+      const childEntry = await this.prisma.transaction.create({
+        data: {
+          type: data.type,
+          amount: data.amount,
+          description: data.description,
+          currency: data.currency || Currency.EUR,
+          userId: user.id,
+          isRecurring: false,
+          categoryId: data.categoryId,
+          createdAt: data.createdAt || new Date(),
+          transactionId: parentEntry.id,
+        },
+      });
+
+      return EntryService.mapEntryToResponseDto(childEntry);
+    }
+
+    // Create non-recurring entry
     const entry = await this.prisma.transaction.create({
       data: {
         type: data.type,
@@ -28,14 +74,9 @@ export class EntryService {
         description: data.description,
         currency: data.currency || Currency.EUR,
         userId: user.id,
-        isRecurring: data.isRecurring ?? false,
-        recurringInterval: data.recurringInterval,
+        isRecurring: false,
         categoryId: data.categoryId,
         createdAt: data.createdAt,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        transactionId: data.transactionId,
-        recurringType: data.recurringType,
       },
     });
 
@@ -64,7 +105,7 @@ export class EntryService {
     {
       take,
       cursorId,
-      sortBy = EntrySortBy.CREATED_AT_DESC,
+      sortBy,
       dateFrom,
       dateTo,
       transactionType,
@@ -149,6 +190,9 @@ export class EntryService {
           mode: "insensitive",
         },
       }),
+      NOT: {
+        isRecurring: true,
+      },
     };
 
     const entries = await this.prisma.transaction.findMany({
@@ -172,18 +216,30 @@ export class EntryService {
   }
 
   async deleteEntry(user: User, entryId: number): Promise<void> {
-    const deleted = await this.prisma.transaction.deleteMany({
-      where: {
-        id: entryId,
-        userId: user.id,
-      },
+    // Check if entry exists and belongs to user
+    const entry = await this.prisma.transaction.findUnique({
+      where: { id: entryId },
     });
 
-    if (!deleted.count) {
+    if (!entry || entry.userId !== user.id) {
       throw new NotFoundException(
         "Entry not found or not authorized to delete",
       );
     }
+
+    // If this is a parent entry (recurring=true and no parent), disable it instead of deleting
+    if (entry.isRecurring && !entry.transactionId) {
+      await this.prisma.transaction.update({
+        where: { id: entryId },
+        data: { recurringDisabled: true },
+      });
+      return;
+    }
+
+    // Otherwise, delete normally (for child entries or non-recurring entries)
+    await this.prisma.transaction.delete({
+      where: { id: entryId },
+    });
   }
 
   async updateEntry(
@@ -191,19 +247,32 @@ export class EntryService {
     entryId: number,
     data: UpdateEntryDto,
   ): Promise<EntryResponseDto> {
-    const updated = await this.prisma.transaction.updateMany({
+    const checkEntry = await this.prisma.transaction.findUnique({
+      where: { id: entryId, userId: user.id },
+    });
+
+    if (!checkEntry) {
+      throw new NotFoundException(
+        "Entry not found or not authorized to update",
+      );
+    }
+
+    if (
+      !checkEntry.isRecurring &&
+      (data.recurringType || data.recurringBaseInterval)
+    ) {
+      throw new BadRequestException(
+        "Cannot update recurring properties for non-recurring entry",
+      );
+    }
+
+    await this.prisma.transaction.updateMany({
       where: {
         id: entryId,
         userId: user.id,
       },
       data,
     });
-
-    if (!updated.count) {
-      throw new NotFoundException(
-        "Entry not found or not authorized to update",
-      );
-    }
 
     const entry = await this.prisma.transaction.findUnique({
       where: { id: entryId },
@@ -227,19 +296,18 @@ export class EntryService {
     }
 
     return {
-      id: entry.id,
-      type: entry.type,
-      amount: entry.amount,
-      description: entry.description,
-      currency,
-      categoryId: entry.categoryId,
-      endDate: entry.endDate,
-      createdAt: entry.createdAt,
-      isRecurring: entry.isRecurring,
-      recurringInterval: entry.recurringInterval ?? undefined,
-      recurringType: entry.recurringType ?? undefined,
-      transactionId: entry.transactionId ?? undefined,
-      startDate: entry.startDate,
+  id: entry.id,
+  type: entry.type,
+  amount: entry.amount,
+  description: entry.description,
+  currency,
+  categoryId: entry.categoryId,
+  createdAt: entry.createdAt,
+  isRecurring: entry.isRecurring,
+  recurringType: entry.recurringType ?? undefined,
+  recurringBaseInterval: entry.recurringBaseInterval ?? undefined,
+  recurringDisabled: entry.recurringDisabled ?? undefined,
+  transactionId: entry.transactionId ?? undefined,
     };
   }
 

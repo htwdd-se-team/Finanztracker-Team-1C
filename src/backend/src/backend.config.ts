@@ -1,5 +1,7 @@
 import { Type } from "class-transformer";
-import { IsOptional, IsString, IsNumber } from "class-validator";
+import { IsOptional, IsString, IsNumber, IsBoolean } from "class-validator";
+
+import { TransformBooleanString } from "./transformers";
 
 export class BackendConfig {
   @IsOptional()
@@ -15,6 +17,10 @@ export class BackendConfig {
   @IsString()
   @IsOptional()
   public readonly JWT_EXPIRATION = "31d";
+
+  @IsBoolean()
+  @TransformBooleanString()
+  public readonly RUN_SCHEDULED_ENTRIES = false;
 
   @IsNumber()
   @Type(() => Number)

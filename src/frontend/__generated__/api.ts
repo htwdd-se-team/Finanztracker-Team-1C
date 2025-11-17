@@ -35,7 +35,6 @@ export enum ApiRecurringTransactionType {
   DAILY = "DAILY",
   WEEKLY = "WEEKLY",
   MONTHLY = "MONTHLY",
-  YEARLY = "YEARLY",
 }
 
 /** ISO 4217 currency code */
@@ -156,7 +155,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-11-03T13:41:32.138Z"
+   * @example "2025-11-12T15:09:11.521Z"
    */
   createdAt: string;
   /**
@@ -208,30 +207,18 @@ export interface ApiCreateEntryDto {
    * @example 3
    */
   categoryId?: number;
-  /** @example false */
+  /**
+   * recurring entry properties
+   * @example false
+   */
   isRecurring?: boolean;
-  /**
-   * Start date for recurring transactions
-   * @format date-time
-   */
-  startDate?: string;
-  /**
-   * End date for recurring transactions
-   * @format date-time
-   */
-  endDate?: string;
   /** @example "MONTHLY" */
   recurringType?: ApiRecurringTransactionType;
   /**
-   * Recurring interval
+   * Base recurring interval (1x Monthly, 2x Monthly, etc.)
    * @example 1
    */
-  recurringInterval?: number;
-  /**
-   * Parent transaction ID
-   * @example null
-   */
-  transactionId?: number;
+  recurringBaseInterval?: number;
   /**
    * Creation timestamp. If not provided, defaults to the current date and time.
    * @format date-time
@@ -274,27 +261,25 @@ export interface ApiEntryResponseDto {
    * @example 3
    */
   categoryId?: number;
-  /** @example false */
+  /**
+   * recurring entry properties
+   * @example false
+   */
   isRecurring?: boolean;
-  /**
-   * Start date for recurring transactions
-   * @format date-time
-   */
-  startDate?: string;
-  /**
-   * End date for recurring transactions
-   * @format date-time
-   */
-  endDate?: string;
   /** @example "MONTHLY" */
   recurringType?: ApiRecurringTransactionType;
   /**
-   * Recurring interval
+   * Base recurring interval (1x Monthly, 2x Monthly, etc.)
    * @example 1
    */
-  recurringInterval?: number;
+  recurringBaseInterval?: number;
   /**
-   * Parent transaction ID
+   * Whether the recurring entry is disabled
+   * @example false
+   */
+  recurringDisabled?: boolean;
+  /**
+   * Parent transaction ID (null if not a child)
    * @example null
    */
   transactionId?: number;
@@ -339,35 +324,33 @@ export interface ApiUpdateEntryDto {
    * @example 3
    */
   categoryId?: number;
-  /** @example false */
-  isRecurring?: boolean;
-  /**
-   * Start date for recurring transactions
-   * @format date-time
-   */
-  startDate?: string;
-  /**
-   * End date for recurring transactions
-   * @format date-time
-   */
-  endDate?: string;
   /** @example "MONTHLY" */
   recurringType?: ApiRecurringTransactionType;
   /**
-   * Recurring interval
+   * Base recurring interval (1x Monthly, 2x Monthly, etc.)
    * @example 1
    */
-  recurringInterval?: number;
-  /**
-   * Parent transaction ID
-   * @example null
-   */
-  transactionId?: number;
+  recurringBaseInterval?: number;
   /**
    * Creation timestamp. If not provided, defaults to the current date and time.
    * @format date-time
    */
   createdAt?: string;
+}
+
+export interface ApiScheduledEntriesResponseDto {
+  /** Scheduled entries (parent recurring transactions) */
+  entries: ApiEntryResponseDto[];
+  /**
+   * Next cursor ID for pagination
+   * @example 5
+   */
+  cursorId?: number;
+  /**
+   * Number of entries returned
+   * @example 10
+   */
+  count: number;
 }
 
 export interface ApiCreateFilterDto {
@@ -1029,6 +1012,80 @@ export class Api<
         secure: true,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerGetScheduledEntries
+     * @request GET:/entries/scheduled-entries/list
+     * @secure
+     */
+    entryControllerGetScheduledEntries: (
+      query: {
+        /**
+         * The number of items to return
+         * @min 1
+         * @max 30
+         * @default 10
+         */
+        take: number;
+        /** The ID of the last item in the previous page */
+        cursorId?: number;
+        /**
+         * Filter by disabled status. If not provided, returns all active entries.
+         * @example false
+         */
+        disabled?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiScheduledEntriesResponseDto, void>({
+        path: `/entries/scheduled-entries/list`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerDisableScheduledEntry
+     * @request PATCH:/entries/scheduled-entries/{id}/disable
+     * @secure
+     */
+    entryControllerDisableScheduledEntry: (
+      id: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void>({
+        path: `/entries/scheduled-entries/${id}/disable`,
+        method: "PATCH",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerEnableScheduledEntry
+     * @request PATCH:/entries/scheduled-entries/{id}/enable
+     * @secure
+     */
+    entryControllerEnableScheduledEntry: (
+      id: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void>({
+        path: `/entries/scheduled-entries/${id}/enable`,
+        method: "PATCH",
+        secure: true,
         ...params,
       }),
   };

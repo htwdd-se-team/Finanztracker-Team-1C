@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
+import { ScheduleModule } from "@nestjs/schedule";
 import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 
 import { AppController } from "./app.controller";
@@ -23,6 +24,7 @@ import {
   PrismaService,
   CategoryService,
   UserService,
+  RecurringEntryService,
 } from "./services";
 import { JwtStrategy } from "./strategies";
 
@@ -41,6 +43,7 @@ import { JwtStrategy } from "./strategies";
         signOptions: { expiresIn: config.JWT_EXPIRATION },
       }),
     }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [
     AppController,
@@ -60,7 +63,8 @@ import { JwtStrategy } from "./strategies";
     CategoryService,
     UserService,
     FilterService,
-
+    RecurringEntryService,
+    // util services
     KyselyService,
     PrismaService,
     // guards

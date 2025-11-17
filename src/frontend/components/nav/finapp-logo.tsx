@@ -5,7 +5,7 @@ const FinAppLogo = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        'flex justify-center items-center mb-8 text-left',
+        'flex justify-center items-center text-left',
         className
       )}
     >
@@ -21,9 +21,6 @@ const FinAppLogo = ({ className }: { className?: string }) => {
         <div className="flex flex-col">
           <span className="font-bold text-foreground text-2xl tracking-tight">
             Fin<span className="text-primary">App</span>
-          </span>
-          <span className="text-muted-foreground text-xs uppercase tracking-wider">
-            Finance Manager
           </span>
         </div>
       </div>

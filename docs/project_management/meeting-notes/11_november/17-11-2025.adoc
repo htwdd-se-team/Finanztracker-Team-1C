@@ -1,0 +1,111 @@
+= Meeting-Protokoll 17.11.2025
+
+*Datum:* 17.11.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 13:30 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt/Sprintabschluss
+- Sind wir mit allem fertig geworden wie geplant?
+
+*Notizen:* +
+- Alles zu in Review bzw. Done schieben was fertig ist +
+- ... +
+  +
+  
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Termine für Feedbackgespräche
+- Welches Team wollen wir und wann?
+
+*Notizen:* +
+- ... +
+  +
+  
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 3. Sequenzdiagramme?
+
+*Notizen:* +
+- ... +
+  +
+  
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+
+==  Sprintplanung
+=== 1. Was wollen wir erreichen? -> User Stories auswählen für den Sprint
+
+*Notizen:* +
+- (U14) ... +
+- (U18) ... +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Wie wollen wir unser Ziel erreichen? -> Tasks/Tickets ableiten und vergeben
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+== Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+  +
+  +
+
+
+== Nächstes Meeting
+
+- Datum: 24.11.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt
