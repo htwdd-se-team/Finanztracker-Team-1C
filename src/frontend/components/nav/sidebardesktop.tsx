@@ -1,4 +1,4 @@
-import { Plus , UserRoundCog } from 'lucide-react'
+import { Plus, UserRoundCog } from 'lucide-react'
 
 import {
   Sidebar,
@@ -32,7 +32,7 @@ export function SidebarDesktop() {
     >
       <SidebarContent>
         <SidebarGroup>
-          <FinAppLogo className="text-2xl mb-8" />
+          <FinAppLogo className="mb-8 text-2xl" />
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map(item => (
