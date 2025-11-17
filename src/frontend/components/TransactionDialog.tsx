@@ -87,7 +87,7 @@ export function TransactionDialog({
           type: editData.type,
           amount: editData.amount / 100,
           description: editData.description || '',
-          categoryId: editData.categoryId,
+          categoryId: editData.categoryId || undefined,
           currency: editData.currency,
           createdAt: editData.createdAt?.split('T')[0],
         }
@@ -108,7 +108,7 @@ export function TransactionDialog({
           type: editData.type,
           amount: editData.amount / 100,
           description: editData.description || '',
-          categoryId: editData.categoryId,
+          categoryId: editData.categoryId || undefined,
           currency: editData.currency,
           createdAt: editData.createdAt?.split('T')[0],
         })
