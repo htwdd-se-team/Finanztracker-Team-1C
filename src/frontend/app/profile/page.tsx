@@ -5,12 +5,14 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import {
   User,
+  UserRoundCog,
   Mail,
   Calendar,
   Settings,
   Monitor,
   Moon,
   Sun,
+  LogOut,
 } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
@@ -28,7 +30,7 @@ import { CategoryManagement } from '@/components/settings/category-management'
 import { FilterManagement } from '@/components/settings/filter-management'
 
 export default function ProfilePage() {
-  const { user } = useUser()
+  const { user , logout } = useUser()
 
   const { themeVariant, setThemeVariant, colorTheme, setColorTheme } =
     useColorTheme()
@@ -42,52 +44,69 @@ export default function ProfilePage() {
   const fullName = `${user?.givenName} ${user?.familyName || ''}`.trim()
 
   return (
-    <div className="mx-auto p-6 max-w-6xl container">
-      <div className="mb-6">
-        <h1 className="flex items-center gap-2 font-bold text-3xl">
-          <User className="w-8 h-8" />
+    <div className="mx-auto max-w-4xl px-2 sm:px-6 container">
+      <div className="mt-4 sm:mt-6 mb-6">
+        <h1 className="flex gap-3 font-bold text-2xl ml-2 mt-4 sm:mt-6 mb-2">
+          <UserRoundCog className="w-8 h-8" />
           Profil
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="ml-2 mt-2 text-muted-foreground">
           Verwalten Sie Ihre Kontoeinstellungen und Kategorien
         </p>
       </div>
 
-      <div className="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
+      <div className="gap-2 sm:gap-6 grid md:grid-cols-2 lg:grid-cols-3">
         {/* User Information Card */}
         {user ? (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="w-5 h-5" />
-                Benutzerinformationen
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium text-sm">Email:</span>
-                  <span className="text-sm">{user.email}</span>
-                </div>
+          <Card className="bg-card/90 dark:bg-card/60 p-0">
+            <div className="grid grid-cols-2 grid-rows-[auto_auto_1fr]">
+              <CardHeader className="col-span-1 p-4">
+                <CardTitle className="flex items-center gap-2">
+                  <User className="w-5 h-5" />
+                  Benutzer
+                </CardTitle>
+              </CardHeader>
+              <CardHeader className="p-0 flex justify-end items-start col-span-1">
+                <Button
+                variant="outline"
+                onClick={() => logout()}
+                className="
+                  flex items-center gap-1 text-sm text-muted-foreground
+                  hover:text-foreground hover:bg-white/10
+                  rounded-lg
+                  sm:hidden
+                  "
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </Button>
+              </CardHeader>
+              <CardContent className="col-span-2 mt-4 px-5">
+                <div className="">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <span className="font-medium text-sm">Email:</span>
+                    <span className="text-sm">{user.email}</span>
+                  </div>
 
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium text-sm">Name:</span>
-                  <span className="text-sm">{fullName}</span>
-                </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-muted-foreground" />
+                    <span className="font-medium text-sm">Name:</span>
+                    <span className="text-sm">{fullName}</span>
+                  </div>
 
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium text-sm">Mitglied seit:</span>
-                  <Badge variant="secondary" className="text-xs">
-                    {DateTime.fromISO(user.createdAt).toLocaleString(
-                      DateTime.DATE_FULL
-                    )}
-                  </Badge>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="font-medium text-sm -mr-2">Mitglied seit:</span>
+                    <Badge variant="secondary" className="text-sm bg-transparent">
+                      {DateTime.fromISO(user.createdAt).toLocaleString(
+                        DateTime.DATE_FULL
+                      )}
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
+              </CardContent>
+            </div>
           </Card>
         ) : (
           <Card>
@@ -109,14 +128,14 @@ export default function ProfilePage() {
         )}
 
         {/* Settings Card */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
+        <Card className="lg:col-span-2 bg-card/90 dark:bg-card/60 p-0">
+          <CardHeader className="p-4">
             <CardTitle className="flex items-center gap-2">
               <Settings className="w-5 h-5" />
               Einstellungen
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-5">
             <div className="space-y-4">
               <div className={'flex flex-col  gap-3'}>
                 <div className="space-y-0.5">
@@ -163,7 +182,7 @@ export default function ProfilePage() {
 
               <Separator />
 
-              <div className="text-muted-foreground text-sm">
+              <div className="text-muted-foreground text-sm mb-4">
                 Weitere Einstellungen kommen bald...
               </div>
             </div>

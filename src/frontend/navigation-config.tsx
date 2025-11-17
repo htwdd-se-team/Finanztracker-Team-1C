@@ -2,14 +2,14 @@ import {
   Home,
   ChartNoAxesCombined,
   TableProperties,
-  UserRoundCog,
+  CalendarClock,
 } from 'lucide-react'
 
 export enum TabValues {
   OVERVIEW = 'overview',
   CHARTS = 'graphs',
   TABLE = 'table',
-  PROFILE = 'profile',
+  SCHEDULED = 'scheduled-entries',
 }
 
 export const navItems = [
@@ -32,9 +32,9 @@ export const navItems = [
     value: TabValues.TABLE,
   },
   {
-    title: 'Profil',
-    url: '/profile',
-    icon: UserRoundCog,
-    value: TabValues.PROFILE,
+    title: 'Terminüberweisungen',
+    url: '/scheduled-entries',
+    icon: CalendarClock,
+    value: TabValues.SCHEDULED,
   },
 ]

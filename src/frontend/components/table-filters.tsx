@@ -131,12 +131,12 @@ export function TableFilters({
   const [accordionOpen, setAccordionOpen] = useState(false)
 
   return (
-    <div className="bg-background mb-4 border rounded-lg">
+    <div className="bg-card/90 dark:bg-card/60 mb-4 border rounded-xl">
       {/* Always visible row: Description, filters, and expand/reset buttons */}
       <div className="flex justify-between items-center gap-2 p-4">
         <div className="flex-1">
           <Input
-            placeholder="Nach Beschreibung suchen..."
+            placeholder="Titel..."
             value={description}
             onChange={e => onDescriptionChange(e.target.value)}
           />
@@ -245,7 +245,7 @@ export function TableFilters({
             variant="outline"
             size="icon"
             onClick={() => setAccordionOpen(!accordionOpen)}
-            className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+            className="cursor-pointer hover:bg-accent hover:text-accent-foreground bg-transparent dark:bg-input/30"
             title="Filter öffnen"
           >
             <ChevronDown
@@ -293,6 +293,7 @@ export function TableFilters({
                 <div className="space-y-2">
                   <LabelUI>Kategorien</LabelUI>
                   <MultipleSelector
+                    className="dark:bg-input/30"
                     commandProps={{
                       label: 'Kategorien auswählen',
                     }}
@@ -331,7 +332,7 @@ export function TableFilters({
                       Datumsbereich
                     </Label>
                     <div className="flex">
-                      <Group className={cn(dateInputStyle, 'pe-9')}>
+                      <Group className={cn(dateInputStyle, 'pe-9 bg-transparent dark:bg-input/30')}>
                         <DateInput slot="start" unstyled />
                         <span
                           aria-hidden="true"

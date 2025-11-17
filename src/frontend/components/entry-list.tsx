@@ -50,7 +50,7 @@ export function EntryList({
         return (
           <li
             key={entry.id}
-            className="relative flex flex-col bg-card/50 dark:bg-card/50 shadow-sm border rounded-xl h-30 overflow-hidden"
+            className="relative flex flex-col bg-card/90 dark:bg-card/60 shadow-sm border rounded-xl h-30 overflow-hidden"
           >
             {/* Farbiger Streifen links */}
             <span
@@ -84,7 +84,7 @@ export function EntryList({
             <div className="flex items-center gap-2 m-0 p-0 min-w-0 h-[60%]">
               {/* Left Details: Date & Category (grows) */}
               <div className="flex flex-col flex-1 justify-center gap-0 pl-4 min-w-0 text-muted-foreground text-sm">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 mb-2">
                   <Calendar className="flex-shrink-0 mr-1 w-4 h-4" />
                   <span>
                     {new Date(entry.createdAt).toLocaleDateString('de-DE')}
@@ -103,7 +103,7 @@ export function EntryList({
                       iconName={
                         getCategoryFromId(Number(entry.categoryId)).icon
                       }
-                      className="flex-shrink-0 mr-2 w-4 h-4"
+                      className="flex-shrink-0 mr-2 w-5 h-5"
                     />
                     <span className="truncate">
                       {getCategoryFromId(Number(entry.categoryId)).name}
@@ -114,7 +114,7 @@ export function EntryList({
 
               {/* Right Side: Amount + Action Buttons (no grow, align right) */}
               <div className="flex flex-col flex-shrink-0 justify-center items-end gap-0 pr-2">
-                <span className="font-mono font-bold text-md md:text-xl">
+                <span className="font-mono font-bold text-xl md:text-2xl">
                   {isIncome ? '+' : '-'}
                   {(entry.amount / 100).toFixed(2)} {entry.currency}
                 </span>

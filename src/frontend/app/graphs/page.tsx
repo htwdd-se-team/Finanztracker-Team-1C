@@ -7,6 +7,7 @@ import {
   Calendar,
   Target,
   Wallet,
+  ChartNoAxesCombined,
 } from 'lucide-react'
 
 export default function GraphsPage() {
@@ -44,16 +45,17 @@ export default function GraphsPage() {
   ]
 
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="mx-auto max-w-4xl relative flex flex-col px-2 sm:px-6 container">
       <Background />
-      <div className="z-10 relative flex-1 p-4 sm:p-6 overflow-auto">
-        <div className="mx-auto max-w-6xl">
+      <div className="z-10 relative flex-1 overflow-auto">
+        <div className="">
           {/* Header */}
-          <div className="mb-8 text-center">
-            <h1 className="flex justify-center items-center gap-3 mb-2 font-bold text-3xl">
+          <div className="">
+            <h1 className="flex gap-3 font-bold text-2xl ml-2 mt-4 sm:mt-6 mb-2">
+              <ChartNoAxesCombined className="w-8 h-8" />
               Finanzanalysen
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="ml-2 mt-2 mb-6 text-muted-foreground">
               Visualisieren Sie Ihre Finanzdaten mit interaktiven Diagrammen
             </p>
           </div>
@@ -63,7 +65,7 @@ export default function GraphsPage() {
             {chartCards.map((chart, index) => (
               <Card
                 key={index}
-                className="opacity-75 hover:opacity-90 hover:shadow-lg border-2 border-dashed transition-shadow duration-200"
+                className="hover:opacity-90 hover:shadow-lg border-2 border-dashed transition-shadow duration-200 bg-card/90 dark:bg-card/60"
               >
                 <CardHeader className="pb-3 text-center">
                   <div className="flex justify-center mb-3">{chart.icon}</div>
