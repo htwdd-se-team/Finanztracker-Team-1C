@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 import {
   Form,
   FormControl,
@@ -87,7 +88,7 @@ export function TransactionDialog({
           type: editData.type,
           amount: editData.amount / 100,
           description: editData.description || '',
-          categoryId: editData.categoryId,
+          categoryId: editData.categoryId || undefined,
           currency: editData.currency,
           createdAt: editData.createdAt?.split('T')[0],
         }
@@ -108,7 +109,7 @@ export function TransactionDialog({
           type: editData.type,
           amount: editData.amount / 100,
           description: editData.description || '',
-          categoryId: editData.categoryId,
+          categoryId: editData.categoryId || undefined,
           currency: editData.currency,
           createdAt: editData.createdAt?.split('T')[0],
         })
@@ -481,33 +482,32 @@ export function TransactionDialog({
             </div>
 
             {/* Recurring toggle + interval input */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center">
-                <div className="mr-5">
-                  <Switch
-                    checked={isRecurring}
-                    onCheckedChange={val => {
-                      const b = Boolean(val)
-                      setIsRecurring(b)
-                      if (
-                        b &&
-                        (recurrenceIntervalMonths === undefined ||
-                          recurrenceIntervalMonths === null)
-                      ) {
-                        setRecurrenceIntervalMonths(1)
-                      }
-                    }}
-                    className="cursor-pointer"
-                  />
-                </div>
+            <Separator />
+            <div className="flex items-center justify-between gap-4 min-h-10">
+              <div className="flex items-center gap-3">
+                <Switch
+                  checked={isRecurring}
+                  onCheckedChange={val => {
+                    const b = Boolean(val)
+                    setIsRecurring(b)
+                    if (
+                      b &&
+                      (recurrenceIntervalMonths === undefined ||
+                        recurrenceIntervalMonths === null)
+                    ) {
+                      setRecurrenceIntervalMonths(1)
+                    }
+                  }}
+                  className="cursor-pointer"
+                />
                 <div className="relative">
                   <div
                     className="group inline-block relative"
                     aria-describedby="recurring-tooltip"
                   >
-                    <FormLabel>
+                    <FormLabel className="cursor-help">
                       Terminauftrag{' '}
-                      <span className="text-muted-foreground">(optional)</span>
+                      <span className="text-muted-foreground"></span>
                     </FormLabel>
                     <div
                       id="recurring-tooltip"
@@ -522,26 +522,22 @@ export function TransactionDialog({
               </div>
 
               {isRecurring && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <FormLabel className="mb-2">
-                      Widerholungsintervall{' '}
-                      <span className="text-muted-foreground">(Monate)</span>
-                    </FormLabel>
-                    <Input
-                      type="number"
-                      min={1}
-                      step={1}
-                      value={recurrenceIntervalMonths ?? ''}
-                      onChange={e => {
-                        const v = e.target.value
-                        const parsed = v === '' ? undefined : parseInt(v, 10)
-                        setRecurrenceIntervalMonths(parsed)
-                      }}
-                      placeholder="z. B. 1"
-                      className="w-full"
-                    />
-                  </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">Wiederholung aller</span>
+                  <Input
+                    type="number"
+                    min={1}
+                    step={1}
+                    value={recurrenceIntervalMonths ?? ''}
+                    onChange={e => {
+                      const v = e.target.value
+                      const parsed = v === '' ? undefined : parseInt(v, 10)
+                      setRecurrenceIntervalMonths(parsed)
+                    }}
+                    placeholder="1"
+                    className="w-16 h-9"
+                  />
+                  <span className="text-sm">Monate</span>
                 </div>
               )}
             </div>
