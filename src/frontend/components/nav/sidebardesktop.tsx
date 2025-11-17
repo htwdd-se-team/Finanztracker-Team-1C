@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react'
+import { Plus, UserRoundCog } from 'lucide-react'
 
 import {
   Sidebar,
@@ -32,7 +32,7 @@ export function SidebarDesktop() {
     >
       <SidebarContent>
         <SidebarGroup>
-          <FinAppLogo className="text-2xl" />
+          <FinAppLogo className="mb-8 text-2xl" />
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map(item => (
@@ -48,6 +48,17 @@ export function SidebarDesktop() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/profile')}>
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 hover:bg-muted px-3 py-2 rounded-md transition"
+                  >
+                    <UserRoundCog className="w-4 h-4" />
+                    <span>Profileinstellungen</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               <SidebarSeparator />
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
