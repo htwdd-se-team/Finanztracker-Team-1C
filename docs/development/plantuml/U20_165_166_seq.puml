@@ -1,0 +1,61 @@
+@startuml
+
+
+actor User
+participant "EmergencyReserveTile" as Frontend #LightGreen
+participant "UserController" as Controller #Orange
+participant "UserService" as Service #Orange
+participant "PrismaService" as Prisma
+participant "KyselyService" as Kysely
+database "Database" as DB
+
+== Initial Load: Display Emergency Reserve ==
+
+User -> Frontend: View Dashboard
+Frontend -> Controller: GET /user/balance
+Controller -> Service: getBalance(user)
+Service -> Prisma: findUnique({ id: user.id })
+Prisma -> DB: get user data
+DB --> Prisma: User { emergency_reserve: 100000 }
+Prisma --> Service: User { emergency_reserve: 100000 }
+Service -> Kysely: selectFrom("Transaction").where("userId", user.id)
+Kysely -> DB: calculate balance from transactions
+DB --> Kysely: balance result
+Kysely --> Service: { balance, transactionCount }
+Service -> Service: Combine balance + emergency_reserve
+Service --> Controller: UserBalanceResponseDto { balance, emergency_reserve }
+Controller --> Frontend: { balance: 50000, emergency_reserve: 100000 }
+Frontend -> Frontend: Calculate fill percentage\n(balance / emergency_reserve)
+Frontend -> User: Display circle with fill\nand emergency_reserve value
+
+== Edit Emergency Reserve ==
+
+User -> Frontend: Click edit icon
+Frontend -> Frontend: Switch to edit mode\n(show input, change icon to save)
+
+User -> Frontend: Enter new value (e.g., 150000)
+User -> Frontend: Click save icon
+Frontend -> Frontend: Validate input
+Frontend -> Controller: POST /user/emergency-reserve\n{ emergency_reserve: 150000 }
+Controller -> Service: updateEmergencyReserve(user, emergency_reserve)
+Service -> Prisma: update({ where: { id }, data: { emergency_reserve } })
+Prisma -> DB: update user emergency_reserve
+DB --> Prisma: User updated
+Prisma --> Service: User { emergency_reserve: 150000 }
+Service -> Kysely: selectFrom("Transaction").where("userId", user.id)
+Kysely -> DB: calculate balance from transactions
+DB --> Kysely: balance result
+Kysely --> Service: { balance, transactionCount }
+Service -> Service: Combine balance + emergency_reserve
+Service --> Controller: UserBalanceResponseDto { balance, emergency_reserve }
+Controller --> Frontend: { balance: 50000, emergency_reserve: 150000 }
+Frontend -> Frontend: Switch to display mode\n(update fill percentage, show new value)
+Frontend -> User: Display updated circle\nwith new emergency_reserve
+
+legend right
+  |<#LightGreen> New | Component/Operation to be created |
+  |<#Orange> Modified | Component/Operation to be changed |
+  |<#White> Unchanged | No changes required |
+endlegend
+
+@enduml

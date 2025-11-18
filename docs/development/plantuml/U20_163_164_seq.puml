@@ -1,0 +1,45 @@
+@startuml
+
+actor User
+participant "AvailableCapitalPieChart" as Frontend #LightGreen
+participant "AnalyticsController" as Controller #Orange
+participant "AnalyticsService" as Service #Orange
+participant "PrismaService" as Prisma
+participant "KyselyService" as Kysely
+database "Database" as DB
+
+== Display Available Capital Pie Chart ==
+
+User -> Frontend: View /graphs page
+Frontend -> Controller: GET /analytics/available-capital
+Controller -> Service: getAvailableCapital(user)
+Service -> Kysely: selectFrom("Transaction").where("userId", user.id).where("createdAt", "<=", NOW())
+Kysely -> DB: calculate current balance
+DB --> Kysely: balance result
+Kysely --> Service: currentBalance
+Service -> Kysely: selectFrom("Transaction").where("isRecurring", true).where("recurringDisabled", false).where("type", INCOME).where("createdAt", ">=", monthStart)
+Kysely -> DB: get future income transactions this month
+DB --> Kysely: futureIncomeTransactions
+Kysely --> Service: futureIncomeTransactions
+Service -> Kysely: selectFrom("Transaction").where("isRecurring", true).where("recurringDisabled", false).where("type", EXPENSE).where("createdAt", ">=", monthStart)
+Kysely -> DB: get fixed cost transactions this month
+DB --> Kysely: fixedCostTransactions
+Kysely --> Service: fixedCostTransactions
+Service -> Prisma: findMany({ where: { id: { in: categoryIds } } })
+Prisma -> DB: get categories for icons
+DB --> Prisma: categories
+Prisma --> Service: categories
+Service -> Service: Group fixed costs by category\nCalculate totals\nBuild response array
+Service --> Controller: AvailableCapitalItemDto[]
+Controller --> Frontend: [{ key: "available_kapital", label: "Verfügbares Kapital", icon: "ICON_TYPE_X", value: 20021, type: "INCOME" }, ...]
+Frontend -> Frontend: Transform data for pie chart\nSeparate available/fixed costs\nApply color scheme
+Frontend -> User: Display pie chart with total capital\nin center and category slices
+
+legend right
+  |<#LightGreen> New | Component/Operation to be created |
+  |<#Orange> Modified | Component/Operation to be changed |
+  |<#White> Unchanged | No changes required |
+endlegend
+
+@enduml
+

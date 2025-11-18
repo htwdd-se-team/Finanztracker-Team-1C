@@ -1,0 +1,242 @@
+@startuml
+' Auto-generated NestJS Module Dependency Diagram
+' Generated from nestjs-spelunker analysis
+'!theme plain
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+package "AppModule" {
+  class AppController <<Controller>> {
+    -appService: AppService
+    +getHello(): string
+  }
+  class AuthController <<Controller>> {
+    -logger: Logger
+    -authService: AuthService
+    +login(): Promise<LoginResponseDto>
+    +register(): Promise<LoginResponseDto>
+  }
+  class CategoryController <<Controller>> {
+    -categoryService: CategoryService
+    +create(): Promise<CategoryResponseDto>
+    +list(): Promise<CategoryResponseDto[]>
+    +update(): Promise<CategoryResponseDto>
+    +delete(): Promise<void>
+  }
+  class EntryController <<Controller>> {
+    -entryService: EntryService
+    -recurringEntryService: RecurringEntryService
+    +create(): Promise<EntryResponseDto>
+    +list(): Promise<EntryPageDto>
+    +delete(): Promise<void>
+    +update(): Promise<EntryResponseDto>
+    +getScheduledEntries(): Promise<ScheduledEntriesResponseDto>
+    +disableScheduledEntry(): Promise<EntryResponseDto>
+    +enableScheduledEntry(): Promise<EntryResponseDto>
+  }
+  class FilterController <<Controller>> {
+    -filterService: FilterService
+    +create(): Promise<FilterResponseDto>
+    +list(): Promise<FilterResponseDto[]>
+    +delete(): Promise<void>
+    +update(): Promise<FilterResponseDto>
+  }
+  class UserController <<Controller>> {
+    -logger: Logger
+    -userService: UserService
+    +getCurrentUser(): Promise<UserResponseDto>
+    +getBalance(): Promise<UserBalanceResponseDto>
+  }
+  class AnalyticsController <<Controller>> {
+    -analyticsService: AnalyticsService
+    +filterDetails(): Promise<MaxValueDto>
+    +getTransactionBreakdown(): Promise<TransactionBreakdownResponseDto>
+    +getTransactionBalanceHistory(): Promise<TransactionItemDto[]>
+  }
+  class AppService <<Service>> {
+    +getHello(): string
+  }
+  class AnalyticsService <<Service>> {
+    -TIMEZONE: string
+    -prisma: PrismaService
+    -kysely: KyselyService
+    +getTransactionBreakdown(): Promise<TransactionBreakdownResponseDto>
+    +getTransactionBalanceHistory(): Promise<TransactionItemDto[]>
+    -getDateTruncPeriod(): string
+    +getMaxTransactionAmountForUser(): Promise<number>
+  }
+  class AuthService <<Service>> {
+    -prisma: PrismaService
+    -jwtService: JwtService
+    +generateJwtToken(): string
+    +register(): Promise<#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;>
+    +checkUserExists(): Promise<#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;>
+    +validateUser(): Promise<#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;>
+    +hashPassword(): Promise<string>$
+    +comparePasswords(): Promise<boolean>$
+  }
+  class EntryService <<Service>> {
+    -prisma: PrismaService
+    -recurringEntryService: RecurringEntryService
+    +createEntry(): Promise<EntryResponseDto>
+    -mapFilterSortOptionToEntrySortBy(): EntrySortBy
+    +getEntries(): Promise<EntryPageDto>
+    +deleteEntry(): Promise<void>
+    +updateEntry(): Promise<EntryResponseDto>
+    +mapEntryToResponseDto(): EntryResponseDto$
+    +getOrderByEntry(): TransactionOrderByWithRelationInput$
+  }
+  class CategoryService <<Service>> {
+    -prisma: PrismaService
+    +createCategory(): Promise<CategoryResponseDto>
+    +updateCategory(): Promise<CategoryResponseDto>
+    +deleteCategory(): Promise<void>
+    +listCategories(): Promise<CategoryResponseDto[]>
+    -buildOrderBy(): CategoryOrderByWithRelationInput$
+    -getUsageCount(): Promise<number>
+    -mapToResponseDto(): CategoryResponseDto
+  }
+  class UserService <<Service>> {
+    -prisma: PrismaService
+    -kysely: KyselyService
+    +getUser(): Promise<UserResponseDto>
+    +getBalance(): Promise<UserBalanceResponseDto>
+  }
+  class FilterService <<Service>> {
+    -prisma: PrismaService
+    +createFilter(): Promise<FilterResponseDto>
+    +getFilters(): Promise<FilterResponseDto[]>
+    +deleteFilter(): Promise<void>
+    +updateFilter(): Promise<FilterResponseDto>
+    +mapFilterToResponseDto(): FilterResponseDto$
+  }
+  class RecurringEntryService <<Service>> {
+    -logger: Logger
+    -prisma: PrismaService
+    -backendConfig: BackendConfig
+    +processRecurringEntries(): Promise<void>
+    -createChildEntryForParent(): Promise<void>
+    -shouldCreateChild(): boolean
+    +getScheduledEntries(): Promise<ScheduledEntriesResponseDto>
+    +disableRecurringEntry(): Promise<EntryResponseDto>
+    +enableRecurringEntry(): Promise<EntryResponseDto>
+  }
+  class KyselyService <<Service>> {
+    +logger: Logger
+    -options: BackendConfig
+  }
+  class PrismaService <<Service>> {
+    +logger: Logger
+    +config: BackendConfig
+    +onModuleInit(): Promise<void>
+    +onModuleDestroy(): Promise<void>
+  }
+  class JwtAuthGuard <<Guard>>
+  class JwtStrategy <<Strategy>> {
+    -authService: AuthService
+    -backendConfig: BackendConfig
+    +validate(): Promise<#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;>
+  }
+}
+
+package "TypedConfigModule" {
+  note right : NestJS Library Module
+  note right : Exports: BackendConfig
+}
+
+package "JwtModule" {
+  note right : NestJS Library Module
+  note right : Exports: JwtService
+}
+
+package "ScheduleModule" {
+  note right : NestJS Library Module
+  note right : Exports: SchedulerRegistry
+}
+
+' Module Dependencies
+"AppModule" --> "TypedConfigModule" : imports
+"AppModule" --> "JwtModule" : imports
+"AppModule" --> "ScheduleModule" : imports
+"TypedConfigModule" --> "ScheduleModule" : imports
+"TypedConfigModule" --> "TypedConfigModule" : imports
+"JwtModule" --> "TypedConfigModule" : imports
+"JwtModule" --> "TypedConfigModule" : imports
+"JwtModule" --> "ScheduleModule" : imports
+"ScheduleModule" --> "TypedConfigModule" : imports
+
+' Controller-Service Relationships
+AppController --> AppService
+AppController --> AnalyticsService
+AppController --> AuthService
+AppController --> EntryService
+AppController --> CategoryService
+AppController --> UserService
+AppController --> FilterService
+AppController --> RecurringEntryService
+AppController --> KyselyService
+AppController --> PrismaService
+AuthController --> AppService
+AuthController --> AnalyticsService
+AuthController --> AuthService
+AuthController --> EntryService
+AuthController --> CategoryService
+AuthController --> UserService
+AuthController --> FilterService
+AuthController --> RecurringEntryService
+AuthController --> KyselyService
+AuthController --> PrismaService
+CategoryController --> AppService
+CategoryController --> AnalyticsService
+CategoryController --> AuthService
+CategoryController --> EntryService
+CategoryController --> CategoryService
+CategoryController --> UserService
+CategoryController --> FilterService
+CategoryController --> RecurringEntryService
+CategoryController --> KyselyService
+CategoryController --> PrismaService
+EntryController --> AppService
+EntryController --> AnalyticsService
+EntryController --> AuthService
+EntryController --> EntryService
+EntryController --> CategoryService
+EntryController --> UserService
+EntryController --> FilterService
+EntryController --> RecurringEntryService
+EntryController --> KyselyService
+EntryController --> PrismaService
+FilterController --> AppService
+FilterController --> AnalyticsService
+FilterController --> AuthService
+FilterController --> EntryService
+FilterController --> CategoryService
+FilterController --> UserService
+FilterController --> FilterService
+FilterController --> RecurringEntryService
+FilterController --> KyselyService
+FilterController --> PrismaService
+UserController --> AppService
+UserController --> AnalyticsService
+UserController --> AuthService
+UserController --> EntryService
+UserController --> CategoryService
+UserController --> UserService
+UserController --> FilterService
+UserController --> RecurringEntryService
+UserController --> KyselyService
+UserController --> PrismaService
+AnalyticsController --> AppService
+AnalyticsController --> AnalyticsService
+AnalyticsController --> AuthService
+AnalyticsController --> EntryService
+AnalyticsController --> CategoryService
+AnalyticsController --> UserService
+AnalyticsController --> FilterService
+AnalyticsController --> RecurringEntryService
+AnalyticsController --> KyselyService
+AnalyticsController --> PrismaService
+
+' Provider Dependencies
+
+@enduml
