@@ -20,6 +20,10 @@ export class BackendConfig {
 
   @IsBoolean()
   @TransformBooleanString()
+  public readonly GEN_DOCS = false;
+
+  @IsBoolean()
+  @TransformBooleanString()
   public readonly RUN_SCHEDULED_ENTRIES = false;
 
   @IsNumber()

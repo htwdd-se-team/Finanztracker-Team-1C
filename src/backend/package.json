@@ -19,7 +19,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "uml:classes": "tsuml2 --glob \"src/**/*.ts\" --tsconfig tsconfig.json --outMermaidDsl ../../docs/development/plantuml/backend_classes.mermaid",
+    "uml:classes:puml": "tsuml2 --glob \"src/**/*.ts\" --tsconfig tsconfig.json -o ../../docs/development/plantuml/backend_classes.puml"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.3",
@@ -40,6 +42,7 @@
     "kysely": "^0.28.2",
     "luxon": "^3.6.1",
     "nest-typed-config": "^2.10.1",
+    "nestjs-spelunker": "^1.3.2",
     "passport": "^0.7.0",
     "passport-anonymous": "^1.0.1",
     "passport-jwt": "^4.0.1",
@@ -79,6 +82,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "tsuml2": "^0.17.1",
     "typescript-eslint": "^8.35.0"
   },
   "jest": {

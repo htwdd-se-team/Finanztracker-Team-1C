@@ -1,3 +1,5 @@
+import * as path from "path";
+
 import { Logger, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
@@ -5,9 +7,11 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from "@nestjs/swagger";
+import { SpelunkerModule } from "nestjs-spelunker";
 
 import { AppModule } from "./app.module";
 import { BackendConfig } from "./backend.config";
+import { generatePlantUMLFromSpelunker } from "./utils/generate-plantuml";
 
 async function bootstrap() {
   const bootstrapLogger = new Logger("Bootstrap");
@@ -24,7 +28,7 @@ async function bootstrap() {
       forbidUnknownValues: true,
     }),
   );
-  const { CORS_ORIGIN, PORT } = app.get(BackendConfig);
+  const { CORS_ORIGIN, PORT, GEN_DOCS } = app.get(BackendConfig);
 
   if (CORS_ORIGIN) {
     const allowedOrigins = CORS_ORIGIN.split(",").map((origin) =>
@@ -99,6 +103,27 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document, customOptions);
 
+  if (GEN_DOCS) {
+    const spelunker = SpelunkerModule.explore(app, {
+      ignoreImports: [/^DiscoveryModule/i],
+    });
+
+    // Generate PlantUML diagram
+    const outputPath = path.join(
+      __dirname,
+      "../../../docs/development/plantuml/nestjs-modules.puml",
+    );
+    const mermaidPath = path.join(
+      __dirname,
+      "../../../docs/development/plantuml/backend_classes.mermaid",
+    );
+    generatePlantUMLFromSpelunker(spelunker, outputPath, mermaidPath);
+    bootstrapLogger.log(`PlantUML diagram generated: ${outputPath}`);
+
+    // Also log JSON for debugging
+    console.log(JSON.stringify(spelunker, null, 2));
+  }
+
   await app.listen(PORT);
 
   bootstrapLogger.log("Application listening:  " + (await app.getUrl()));
@@ -106,4 +131,7 @@ async function bootstrap() {
   bootstrapLogger.log(`Swagger UI:  ${await app.getUrl()}/api`);
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  console.error("Error starting application:", error);
+  process.exit(1);
+});

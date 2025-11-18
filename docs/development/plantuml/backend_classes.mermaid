@@ -1,0 +1,365 @@
+
+classDiagram
+
+
+class AppController{
+            -appService: AppService
+            +getHello() string
+        }
+class AppModule{
+            
+            
+        }
+class AppService{
+            
+            +getHello() string
+        }
+class BackendConfig{
+            +CORS_ORIGIN: "http://localhost:*"
++DATABASE_URL: string
++JWT_SECRET: string
++JWT_EXPIRATION: "31d"
++GEN_DOCS: false
++RUN_SCHEDULED_ENTRIES: false
++PORT: 3111
+            
+        }
+class AnalyticsController{
+            -analyticsService: AnalyticsService
+            +filterDetails() Promise~MaxValueDto~
++getTransactionBreakdown() Promise~TransactionBreakdownResponseDto~
++getTransactionBalanceHistory() Promise~TransactionItemDto[]~
+        }
+class AuthController{
+            -logger: Logger
+-authService: AuthService
+            +login() Promise~LoginResponseDto~
++register() Promise~LoginResponseDto~
+        }
+class CategoryController{
+            -categoryService: CategoryService
+            +create() Promise~CategoryResponseDto~
++list() Promise~CategoryResponseDto[]~
++update() Promise~CategoryResponseDto~
++delete() Promise~void~
+        }
+class EntryController{
+            -entryService: EntryService
+-recurringEntryService: RecurringEntryService
+            +create() Promise~EntryResponseDto~
++list() Promise~EntryPageDto~
++delete() Promise~void~
++update() Promise~EntryResponseDto~
++getScheduledEntries() Promise~ScheduledEntriesResponseDto~
++disableScheduledEntry() Promise~EntryResponseDto~
++enableScheduledEntry() Promise~EntryResponseDto~
+        }
+class FilterController{
+            -filterService: FilterService
+            +create() Promise~FilterResponseDto~
++list() Promise~FilterResponseDto[]~
++delete() Promise~void~
++update() Promise~FilterResponseDto~
+        }
+class UserController{
+            -logger: Logger
+-userService: UserService
+            +getCurrentUser() Promise~UserResponseDto~
++getBalance() Promise~UserBalanceResponseDto~
+        }
+class TransactionBalanceHistoryParamsDto{
+            +startDate: Date
++endDate: Date
++granularity: Granularity
+            
+        }
+class TransactionBreakdownParamsDto{
+            +withCategory?: boolean
+            
+        }
+class TransactionItemDto{
+            +date: Date
++value: string
+            
+        }
+class TransactionBreakdownItemDto{
+            +type: TransactionType
++category?: number
+            
+        }
+class TransactionBreakdownResponseDto{
+            +data: TransactionBreakdownItemDto[]
+            
+        }
+class MaxValueDto{
+            +maxPrice: number
+            
+        }
+class Granularity {
+        <<enumeration>>
+        DAY
+WEEK
+MONTH
+YEAR
+      }
+TransactionBalanceHistoryParamsDto<|--TransactionBreakdownParamsDto
+TransactionItemDto<|--TransactionBreakdownItemDto
+class LoginDto{
+            +email: string
++password: string
+            
+        }
+class RegisterDto{
+            +givenName: string
++familyName?: string
+            
+        }
+class LoginResponseDto{
+            +token: string
+            
+        }
+LoginDto<|--RegisterDto
+class CategoryPaginationParamsDto{
+            +sortBy?: CategorySortBy
+            
+        }
+class CategorySortBy {
+        <<enumeration>>
+        USAGE_DESC
+CREATED_AT_DESC
+CREATED_AT_ASC
+ALPHA_ASC
+ALPHA_DESC
+      }
+PaginationDto<|--CategoryPaginationParamsDto
+class CategoryResponseDto{
+            +id: number
++name: string
++color: string
++icon: string
++createdAt: Date
++usageCount?: number
+            
+        }
+class CreateCategoryDto{
+            
+            
+        }
+class CreateEntryDto{
+            +createdAt?: Date
+            
+        }
+class CreateFilterDto{
+            +title: string
++icon?: string
++minPrice?: number
++maxPrice?: number
++dateFrom?: Date
++dateTo?: Date
++searchText?: string
++transactionType?: TransactionType
++sortOption?: FilterSortOption
++categoryIds?: number[]
+            
+        }
+class Currency {
+        <<enumeration>>
+        EUR
+USD
+GBP
+JPY
+CHF
+CAD
+AUD
+CNY
+      }
+class EntryResponseDto{
+            +id: number
++type: TransactionType
++amount: number
++description?: string
++currency: Currency
++createdAt: Date
++categoryId?: number
++isRecurring?: boolean
++recurringType?: RecurringTransactionType
++recurringBaseInterval?: number
++recurringDisabled?: boolean
++transactionId?: number
+            
+        }
+class EntryPaginationParamsDto{
+            +sortBy?: EntrySortBy
++dateFrom?: Date
++dateTo?: Date
++transactionType?: TransactionType
++categoryIds?: number[]
++amountMin?: number
++amountMax?: number
++title?: string
++filterId?: number
+            
+        }
+class EntryPageDto{
+            +entries: EntryResponseDto[]
++cursorId?: number
++count?: number
+            
+        }
+class EntrySortBy {
+        <<enumeration>>
+        CREATED_AT_ASC
+CREATED_AT_DESC
+AMOUNT_ASC
+AMOUNT_DESC
+      }
+PaginationDto<|--EntryPaginationParamsDto
+class FilterParamsDto{
+            +filterId?: number
+            
+        }
+class FilterResponseDto{
+            +id: number
++createdAt?: Date
++updatedAt?: Date
+            
+        }
+CreateFilterDto<|--FilterResponseDto
+class PaginationDto{
+            +take: number
++cursorId?: number
+            
+        }
+class ScheduledEntriesParamsDto{
+            +disabled?: boolean
+            
+        }
+PaginationDto<|--ScheduledEntriesParamsDto
+class ScheduledEntriesResponseDto{
+            +entries: EntryResponseDto[]
++cursorId?: number
++count: number
+            
+        }
+class UpdateCategoryDto{
+            
+            
+        }
+class UpdateEntryDto{
+            
+            
+        }
+class UpdateFilterDto{
+            
+            
+        }
+class UserResponseDto{
+            +givenName: string
++familyName?: string
++email: string
++createdAt: Date
+            
+        }
+class UserBalanceResponseDto{
+            +balance: number
++transactionCount: number
+            
+        }
+class JwtAuthGuard{
+            
+            
+        }
+class AnalyticsService{
+            -TIMEZONE: string
+-prisma: PrismaService
+-kysely: KyselyService
+            +getTransactionBreakdown() Promise~TransactionBreakdownResponseDto~
++getTransactionBalanceHistory() Promise~TransactionItemDto[]~
+-getDateTruncPeriod() string
++getMaxTransactionAmountForUser() Promise~number~
+        }
+class AuthService{
+            -prisma: PrismaService
+-jwtService: JwtService
+            +generateJwtToken() string
++register() Promise~#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;~
++checkUserExists() Promise~#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;~
++validateUser() Promise~#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;~
++hashPassword() Promise~string~$
++comparePasswords() Promise~boolean~$
+        }
+class CategoryService{
+            -prisma: PrismaService
+            +createCategory() Promise~CategoryResponseDto~
++updateCategory() Promise~CategoryResponseDto~
++deleteCategory() Promise~void~
++listCategories() Promise~CategoryResponseDto[]~
+-buildOrderBy() CategoryOrderByWithRelationInput$
+-getUsageCount() Promise~number~
+-mapToResponseDto() CategoryResponseDto
+        }
+class EntryService{
+            -prisma: PrismaService
+-recurringEntryService: RecurringEntryService
+            +createEntry() Promise~EntryResponseDto~
+-mapFilterSortOptionToEntrySortBy() EntrySortBy
++getEntries() Promise~EntryPageDto~
++deleteEntry() Promise~void~
++updateEntry() Promise~EntryResponseDto~
++mapEntryToResponseDto() EntryResponseDto$
++getOrderByEntry() TransactionOrderByWithRelationInput$
+        }
+class FilterService{
+            -prisma: PrismaService
+            +createFilter() Promise~FilterResponseDto~
++getFilters() Promise~FilterResponseDto[]~
++deleteFilter() Promise~void~
++updateFilter() Promise~FilterResponseDto~
++mapFilterToResponseDto() FilterResponseDto$
+        }
+class KyselyService{
+            +logger: Logger
+-options: BackendConfig
+            
+        }
+Kysely~DB~<|--KyselyService
+class PrismaService{
+            +logger: Logger
++config: BackendConfig
+            +onModuleInit() Promise~void~
++onModuleDestroy() Promise~void~
+        }
+PrismaClient~ClientOptions,U,ExtArgs~<|--PrismaService
+OnModuleInit<|..PrismaService
+OnModuleDestroy<|..PrismaService
+class RecurringEntryService{
+            -logger: Logger
+-prisma: PrismaService
+-backendConfig: BackendConfig
+            +processRecurringEntries() Promise~void~
+-createChildEntryForParent() Promise~void~
+-shouldCreateChild() boolean
++getScheduledEntries() Promise~ScheduledEntriesResponseDto~
++disableRecurringEntry() Promise~EntryResponseDto~
++enableRecurringEntry() Promise~EntryResponseDto~
+        }
+class UserService{
+            -prisma: PrismaService
+-kysely: KyselyService
+            +getUser() Promise~UserResponseDto~
++getBalance() Promise~UserBalanceResponseDto~
+        }
+class JwtStrategy{
+            -authService: AuthService
+-backendConfig: BackendConfig
+            +validate() Promise~#123; id: number; createdAt: Date; givenName: string; familyName: string; email: string; passwordHash: string; #125;~
+        }
+class SpelunkerModule {
+            <<interface>>
+            +name: string
++imports: string[]
++providers: Record~string, #123; method: string; injections?: string[]; #125;~
++controllers: string[]
++exports: string[]
+            
+        }

@@ -23,5 +23,7 @@
       "@db/kysely/enums": ["./prisma/generated/enums.ts"],
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
 }
