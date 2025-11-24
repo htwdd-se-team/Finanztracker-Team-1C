@@ -51,7 +51,7 @@ jobs:
           echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
 
       - name: Run tests
-        run: pnpm --filter backend test
+        run: pnpm --filter backend test:all
 
   build:
     needs: lint-and-test
