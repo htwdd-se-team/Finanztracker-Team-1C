@@ -100,10 +100,11 @@ async function bootstrap() {
   SwaggerModule.setup("api", app, document, customOptions);
 
   await app.listen(PORT);
+  const url = (await app.getUrl()).replace("[::1]", "localhost");
 
-  bootstrapLogger.log("Application listening:  " + (await app.getUrl()));
-  bootstrapLogger.log(`Swagger JSON:  ${await app.getUrl()}/api-json`);
-  bootstrapLogger.log(`Swagger UI:  ${await app.getUrl()}/api`);
+  bootstrapLogger.log("Application listening:  " + url);
+  bootstrapLogger.log(`Swagger JSON:  ${url}/api-json`);
+  bootstrapLogger.log(`Swagger UI:  ${url}/api`);
 }
 
 bootstrap();
