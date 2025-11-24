@@ -507,4 +507,363 @@ describe("Security (e2e)", () => {
       }
     });
   });
+
+  describe("Malformed/Invalid Data Handling", () => {
+    describe("POST /auth/login - Invalid Data", () => {
+      it("should reject completely invalid JSON structure", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send({ test: "test" })
+          .expect(400);
+      });
+
+      it("should reject missing all required fields", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send({})
+          .expect(400);
+      });
+
+      it("should reject wrong data types - email as number", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send({
+            email: 12345,
+            password: "ValidPass123!",
+          })
+          .expect(400);
+      });
+
+      it("should reject null values", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send({
+            email: null,
+            password: "ValidPass123!",
+          })
+          .expect(400);
+      });
+
+      it("should reject undefined values", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send({
+            email: undefined,
+            password: "ValidPass123!",
+          })
+          .expect(400);
+      });
+
+      it("should reject extra unexpected fields", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send({
+            email: "test@example.com",
+            password: "ValidPass123!",
+            maliciousField: "hack attempt",
+            anotherField: 12345,
+          })
+          .expect(400); // Should reject due to forbidNonWhitelisted
+      });
+
+      it("should reject array instead of object", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send(["test", "data"])
+          .expect(400);
+      });
+
+      it("should reject string instead of object", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send("just a string")
+          .expect(400);
+      });
+    });
+
+    describe("POST /auth/register - Invalid Data", () => {
+      it("should reject completely invalid JSON structure", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/register")
+          .send({ random: "data", stuff: 123 })
+          .expect(400);
+      });
+
+      it("should reject missing required fields", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/register")
+          .send({
+            email: "test@example.com",
+            // missing password and givenName
+          })
+          .expect(400);
+      });
+
+      it("should reject extra unexpected fields", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/register")
+          .send({
+            email: `test_${Math.random().toString(36).substring(2, 15)}@example.com`,
+            password: "ValidPass123!",
+            givenName: "Test",
+            admin: true,
+            role: "admin",
+            maliciousField: "hack",
+          })
+          .expect(400); // Should reject due to forbidNonWhitelisted
+      });
+    });
+
+    describe("POST /categories - Invalid Data", () => {
+      it("should reject completely invalid JSON structure", async () => {
+        await request(app.getHttpServer())
+          .post("/categories")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({ invalid: "data", test: 123 })
+          .expect(400);
+      });
+
+      it("should reject missing required fields", async () => {
+        await request(app.getHttpServer())
+          .post("/categories")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            color: "Blue",
+            // missing name
+          })
+          .expect(400);
+      });
+
+      it("should reject extra unexpected fields", async () => {
+        await request(app.getHttpServer())
+          .post("/categories")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            name: "Test Category",
+            color: "Blue",
+            icon: "test",
+            userId: 999, // trying to set user ID
+            maliciousField: "hack",
+          })
+          .expect(400); // Should reject due to forbidNonWhitelisted
+      });
+
+      it("should reject null required fields", async () => {
+        await request(app.getHttpServer())
+          .post("/categories")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            name: null,
+            color: "Blue",
+            icon: "test",
+          })
+          .expect(400);
+      });
+    });
+
+    describe("POST /entries/create - Invalid Data", () => {
+      it("should reject completely invalid JSON structure", async () => {
+        await request(app.getHttpServer())
+          .post("/entries/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({ random: "stuff", invalid: true })
+          .expect(400);
+      });
+
+      it("should reject missing required fields", async () => {
+        await request(app.getHttpServer())
+          .post("/entries/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            description: "Test entry",
+            // missing type, amount, currency
+          })
+          .expect(400);
+      });
+
+      it("should reject invalid enum values", async () => {
+        await request(app.getHttpServer())
+          .post("/entries/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            type: "INVALID_TYPE",
+            amount: 1000,
+            currency: "EUR",
+          })
+          .expect(400);
+      });
+
+      it("should reject negative amounts", async () => {
+        await request(app.getHttpServer())
+          .post("/entries/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            type: "EXPENSE",
+            amount: -1000,
+            currency: "EUR",
+          })
+          .expect(400);
+      });
+
+      it("should reject zero amounts", async () => {
+        await request(app.getHttpServer())
+          .post("/entries/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            type: "EXPENSE",
+            amount: 0,
+            currency: "EUR",
+          })
+          .expect(400);
+      });
+
+      it("should reject extra unexpected fields", async () => {
+        await request(app.getHttpServer())
+          .post("/entries/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            type: "EXPENSE",
+            amount: 1000,
+            currency: "EUR",
+            userId: 999, // trying to set user ID
+            maliciousField: "hack",
+            admin: true,
+          })
+          .expect(400); // Should reject due to forbidNonWhitelisted
+      });
+    });
+
+    describe("PATCH /entries/:id - Invalid Data", () => {
+      it("should reject completely invalid JSON structure", async () => {
+        await request(app.getHttpServer())
+          .patch("/entries/1")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({ invalid: "data" })
+          .expect(400);
+      });
+
+      it("should reject extra unexpected fields", async () => {
+        await request(app.getHttpServer())
+          .patch("/entries/1")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            amount: 1000,
+            userId: 999,
+            maliciousField: "hack",
+          })
+          .expect(400); // Should reject due to forbidNonWhitelisted
+      });
+    });
+
+    describe("GET /entries/list - Invalid Query Parameters", () => {
+      it("should reject invalid query parameter types", async () => {
+        await request(app.getHttpServer())
+          .get("/entries/list")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .query({
+            take: "not a number",
+          })
+          .expect(400);
+      });
+
+      it("should reject invalid query parameter values", async () => {
+        await request(app.getHttpServer())
+          .get("/entries/list")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .query({
+            take: -1, // negative not allowed
+          })
+          .expect(400);
+      });
+
+      it("should reject take exceeding maximum", async () => {
+        await request(app.getHttpServer())
+          .get("/entries/list")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .query({
+            take: 100, // exceeds max of 30
+          })
+          .expect(400);
+      });
+
+      it("should reject invalid transaction type enum", async () => {
+        await request(app.getHttpServer())
+          .get("/entries/list")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .query({
+            transactionType: "INVALID_TYPE",
+          })
+          .expect(400);
+      });
+    });
+
+    describe("POST /filters/create - Invalid Data", () => {
+      it("should reject completely invalid JSON structure", async () => {
+        await request(app.getHttpServer())
+          .post("/filters/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({ random: "data" })
+          .expect(400);
+      });
+
+      it("should reject missing required fields", async () => {
+        await request(app.getHttpServer())
+          .post("/filters/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            minPrice: 1000,
+            // missing title
+          })
+          .expect(400);
+      });
+
+      it("should reject negative prices", async () => {
+        await request(app.getHttpServer())
+          .post("/filters/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            title: "Test Filter",
+            minPrice: -1000,
+          })
+          .expect(400);
+      });
+
+      it("should reject extra unexpected fields", async () => {
+        await request(app.getHttpServer())
+          .post("/filters/create")
+          .set("Authorization", `Bearer ${testUser.token}`)
+          .send({
+            title: "Test Filter",
+            userId: 999,
+            maliciousField: "hack",
+          })
+          .expect(400); // Should reject due to forbidNonWhitelisted
+      });
+    });
+
+    describe("General Malformed Requests", () => {
+      it("should reject empty body on POST requests", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .send()
+          .expect(400);
+      });
+
+      it("should reject malformed JSON", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .set("Content-Type", "application/json")
+          .send('{"email": "test@example.com", "password": "test"}') // Missing closing brace
+          .expect(400);
+      });
+
+      it("should reject requests with wrong Content-Type", async () => {
+        await request(app.getHttpServer())
+          .post("/auth/login")
+          .set("Content-Type", "text/plain")
+          .send("email=test@example.com&password=test")
+          .expect(400);
+      });
+    });
+  });
 });
