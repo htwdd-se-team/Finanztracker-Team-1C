@@ -74,6 +74,9 @@ importers:
       luxon:
         specifier: ^3.6.1
         version: 3.6.1
+      multer:
+        specifier: ^2.0.2
+        version: 2.0.2
       nest-typed-config:
         specifier: ^2.10.1
         version: 2.10.1(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.10.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typescript@5.8.3)
@@ -141,6 +144,9 @@ importers:
       '@types/luxon':
         specifier: ^3.6.2
         version: 3.6.2
+      '@types/multer':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@types/passport-jwt':
         specifier: ^4.0.1
         version: 4.0.1
@@ -3910,6 +3916,9 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
+  '@types/multer@2.0.0':
+    resolution: {integrity: sha512-C3Z9v9Evij2yST3RSBktxP9STm6OdMc5uR1xF1SGr98uv8dUlAL2hqwrZ3GVB3uyMyiegnscEK6PGtYvNrjTjw==}
+
   '@types/node@22.15.29':
     resolution: {integrity: sha512-LNdjOkUDlU1RZb8e1kOIUpN1qQUlzGkEtbVNo53vbrwDg5om6oduhm4SiUaPW5ASTXhAiP0jInWG8Qx9fVlOeQ==}
 
@@ -6692,6 +6701,10 @@ packages:
 
   multer@2.0.1:
     resolution: {integrity: sha512-Ug8bXeTIUlxurg8xLTEskKShvcKDZALo1THEX5E41pYCD2sCVub5/kIRIGqWNoqV6szyLyQKV6mD4QUrWE5GCQ==}
+    engines: {node: '>= 10.16.0'}
+
+  multer@2.0.2:
+    resolution: {integrity: sha512-u7f2xaZ/UG8oLXHvtF/oWTRvT44p9ecwBBqTwgJVq0+4BW1g8OW01TyMEGWBHbyMOYVHXslaut7qEQ1meATXgw==}
     engines: {node: '>= 10.16.0'}
 
   mute-stream@2.0.0:
@@ -12690,6 +12703,10 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
+  '@types/multer@2.0.0':
+    dependencies:
+      '@types/express': 5.0.3
+
   '@types/node@22.15.29':
     dependencies:
       undici-types: 6.21.0
@@ -15968,6 +15985,16 @@ snapshots:
   ms@2.1.3: {}
 
   multer@2.0.1:
+    dependencies:
+      append-field: 1.0.0
+      busboy: 1.6.0
+      concat-stream: 2.0.0
+      mkdirp: 0.5.6
+      object-assign: 4.1.1
+      type-is: 1.6.18
+      xtend: 4.0.2
+
+  multer@2.0.2:
     dependencies:
       append-field: 1.0.0
       busboy: 1.6.0

@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
+import { MulterModule } from "@nestjs/platform-express";
 import { ScheduleModule } from "@nestjs/schedule";
+import { memoryStorage } from "multer";
 import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 
 import { AppController } from "./app.controller";
@@ -44,6 +46,10 @@ import { JwtStrategy } from "./strategies";
       }),
     }),
     ScheduleModule.forRoot(),
+    MulterModule.register({
+      dest: undefined,
+      storage: memoryStorage(),
+    }),
   ],
   controllers: [
     AppController,
