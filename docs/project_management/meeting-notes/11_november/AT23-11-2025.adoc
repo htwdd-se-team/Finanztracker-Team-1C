@@ -1,0 +1,24 @@
+= Meeting-Protokoll Arbeitstreffen 23.11.2025
+
+*Datum:* 23.11.2025 +
+*Ort:* Online (Discord) +
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Gruppe 1B
+
+==== Feedback Session
+- Davor Bug: Wenn man in einem Filter ein Textfilter hinzufügt, kann man diesen nicht wieder entfernen 
+
+- Terminauftrag -> Dauerauftrag umbenennen
+- Kategorien filtern, nach Eingabe und Ausgabe-Kategorien oder shared
+- Bug, wenn negative Werte oder Buchstaben eingegeben werden, dann Verbuggt das Eurozeichnen
+- Kurzen Info-Text für Dauerauftrage -> die die in Zukunft noch angelegt werden und bei allen anderen Dinge auch sinnvolle Info-Text
+- Pfeil ist nicht als Filter sichtbar -> Symbol zu filter ändern
+- Händische Anpassung -> Input für Betragsspanne
+- Bei der Auswahl auch Daten in der Zukunft wählbar
+
+Fehlende Features, die die Anwendung:
+
+- Transaktionen in der Zukunft anders behandeln -> schon kommende einzelne Zahlungen

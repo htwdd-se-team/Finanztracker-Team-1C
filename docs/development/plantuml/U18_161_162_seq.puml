@@ -1,0 +1,43 @@
+@startuml
+
+actor User
+participant "ImportDialog" as Frontend #LightGreen
+participant "EntryController" as Controller #Orange
+participant "ImportService" as Service #LightGreen
+participant "PrismaService" as Prisma
+database "Database" as DB
+
+== Import Bank Data ==
+
+User -> Frontend: Click import button\n(Homepage/Table/Settings)
+Frontend -> Frontend: Open import dialog
+User -> Frontend: Select files (max 10)\nCSV/TXT/TEXT/MTA
+User -> Frontend: Click import button
+Frontend -> Frontend: Show loading spinner\nDisable import button
+Frontend -> Controller: POST /entries/import\n(Multi-Form with files)
+Controller -> Service: importEntries(user, files)
+Service -> Service: parseFiles(files)\nDetect headers\nExtract transactions
+alt Parsing fails
+  Service --> Controller: Error
+  Controller --> Frontend: 500 Internal Error
+  Frontend -> Frontend: Show error message
+else Parsing succeeds
+  Service -> Service: detectDuplicates(transactions)\nFilter by amount, date, description
+  Service -> Prisma: createMany({ data: transactions })
+  Prisma -> DB: INSERT transactions
+  DB --> Prisma: Transactions created
+  Prisma --> Service: Success
+  Service --> Controller: 200 Success
+  Controller --> Frontend: 200 Success
+  Frontend -> Frontend: Close dialog\nInvalidate transaction queries
+  Frontend -> User: Show success message
+end
+
+legend right
+  |<#LightGreen> New | Component/Operation to be created |
+  |<#Orange> Modified | Component/Operation to be changed |
+  |<#White> Unchanged | No changes required |
+endlegend
+
+@enduml
+

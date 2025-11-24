@@ -1,0 +1,71 @@
+@startuml
+
+package "Frontend" {
+  class ImportDialog <<Functional>> #LightGreen {
+    -files: File[]
+    -isUploading: boolean
+  }
+
+  class UploadButton <<Functional>> #LightGreen {
+    -showProminent: boolean
+  }
+}
+
+package "Presentation" {
+  class EntryController <<Controller>> #Orange {
+    -entryService: EntryService
+    -importService: ImportService
+    +create(): Promise<EntryResponseDto>
+    +list(): Promise<EntryPageDto>
+    +import(user: User, files: File[]): Promise<void>
+  }
+}
+
+package "Application" {
+  class EntryService <<Service>> {
+    -prisma: PrismaService
+    +createEntry(): Promise<EntryResponseDto>
+    +getEntries(): Promise<EntryPageDto>
+  }
+
+  class ImportService <<Service>> #LightGreen {
+    -prisma: PrismaService
+    +importEntries(user: User, files: File[]): Promise<void>
+    -parseFiles(files: File[]): Transaction[]
+    -detectDuplicates(transactions: Transaction[]): Transaction[]
+  }
+}
+
+package "Domain" {
+  interface PrismaService <<Interface>> {
+    +transaction.createMany(): Promise<void>
+  }
+}
+
+package "Infrastructure" {
+  class Transaction {
+    +id: number
+    +type: TransactionType
+    +amount: number
+    +description: string
+    +createdAt: Date
+  }
+}
+
+' Relationships
+ImportDialog --> EntryController : uses
+UploadButton --> ImportDialog : opens
+EntryController --> EntryService : uses
+EntryController --> ImportService : uses
+EntryService --> PrismaService : uses
+ImportService --> PrismaService : uses
+PrismaService --> Transaction : manages
+
+legend right
+  |<#LightGreen> New | Component/Class/Field to be created |
+  |<#Orange> Modified | Component/Class/Field to be changed |
+  |<#White> Unchanged | No changes required |
+endlegend
+
+@enduml
+

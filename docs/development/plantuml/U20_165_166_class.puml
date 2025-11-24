@@ -1,0 +1,80 @@
+@startuml
+
+package "Frontend" {
+  class EmergencyReserveTile <<Functional>> #LightGreen {
+    -isEditing: boolean
+    -emergencyReserve: number
+    -balance: number
+    -fillPercentage: number
+  }
+}
+
+package "Presentation" {
+  class UserController <<Controller>> #Orange {
+    -userService: UserService
+    +getBalance(user: User): Promise<UserBalanceResponseDto>
+    +updateEmergencyReserve(user: User, dto: UpdateEmergencyReserveDto): Promise<UserBalanceResponseDto>
+  }
+
+  class UserBalanceResponseDto #Orange {
+    +balance: number
+    +emergency_reserve: number
+    +transactionCount: number
+  }
+
+  class UpdateEmergencyReserveDto #LightGreen {
+    +emergency_reserve: number
+  }
+}
+
+package "Application" {
+  class UserService <<Service>> #Orange {
+    -prisma: PrismaService
+    -kysely: KyselyService
+    +getBalance(user: User): Promise<UserBalanceResponseDto>
+    +updateEmergencyReserve(user: User, emergencyReserve: number): Promise<UserBalanceResponseDto>
+  }
+}
+
+package "Domain" {
+  interface PrismaService <<Interface>> {
+    +user.findUnique(): Promise<User>
+    +user.update(): Promise<User>
+  }
+
+  interface KyselyService <<Interface>> {
+    +selectFrom(table: string): QueryBuilder
+    +executeTakeFirst(): Promise<Result>
+  }
+}
+
+package "Infrastructure" {
+  class User #Orange {
+    +id: number
+    +email: string
+    +emergency_reserve: number
+    +createdAt: Date
+  }
+
+  class Transaction {
+  }
+}
+
+' Relationships
+EmergencyReserveTile --> UserController : uses
+UserController --> UserService : uses
+UserService --> PrismaService : uses
+UserService --> KyselyService : uses
+PrismaService --> User : manages
+KyselyService --> Transaction : queries
+UserController --> UserBalanceResponseDto : returns
+UserController --> UpdateEmergencyReserveDto : accepts
+UserService --> UserBalanceResponseDto : returns
+
+legend right
+  |<#LightGreen> New | Component/Class/Field to be created |
+  |<#Orange> Modified | Component/Class/Field to be changed |
+  |<#White> Unchanged | No changes required |
+endlegend
+
+@enduml

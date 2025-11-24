@@ -1,0 +1,84 @@
+@startuml
+
+package "Frontend" {
+  class AvailableCapitalPieChart <<Functional>> #LightGreen {
+    -chartData: AvailableCapitalItem[]
+    -totalCapital: number
+  }
+}
+
+package "Presentation" {
+  class AnalyticsController <<Controller>> #Orange {
+    -analyticsService: AnalyticsService
+    +getTransactionBreakdown(): Promise<TransactionBreakdownResponseDto>
+    +getTransactionBalanceHistory(): Promise<TransactionItemDto[]>
+    +getAvailableCapital(user: User): Promise<AvailableCapitalItemDto[]>
+  }
+
+  class AvailableCapitalItemDto #LightGreen {
+    +key: string
+    +label: string
+    +icon: string
+    +value: number
+    +type: TransactionType
+  }
+}
+
+package "Application" {
+  class AnalyticsService <<Service>> #Orange {
+    -prisma: PrismaService
+    -kysely: KyselyService
+    +getTransactionBreakdown(): Promise<TransactionBreakdownResponseDto>
+    +getTransactionBalanceHistory(): Promise<TransactionItemDto[]>
+    +getAvailableCapital(user: User): Promise<AvailableCapitalItemDto[]>
+  }
+}
+
+package "Domain" {
+  interface PrismaService <<Interface>> {
+    +category.findMany(): Promise<Category[]>
+  }
+
+  interface KyselyService <<Interface>> {
+    +selectFrom(table: string): QueryBuilder
+    +executeTakeFirst(): Promise<Result>
+    +where(condition: string): QueryBuilder
+  }
+}
+
+package "Infrastructure" {
+  class Transaction {
+    +id: number
+    +type: TransactionType
+    +amount: number
+    +isRecurring: boolean
+    +recurringDisabled: boolean
+    +categoryId: number
+    +createdAt: Date
+  }
+
+  class Category {
+    +id: number
+    +name: string
+    +icon: string
+  }
+}
+
+' Relationships
+AvailableCapitalPieChart --> AnalyticsController : uses
+AnalyticsController --> AnalyticsService : uses
+AnalyticsService --> PrismaService : uses
+AnalyticsService --> KyselyService : uses
+KyselyService --> Transaction : queries
+PrismaService --> Category : manages
+AnalyticsController --> AvailableCapitalItemDto : returns
+AnalyticsService --> AvailableCapitalItemDto : returns
+
+legend right
+  |<#LightGreen> New | Component/Class/Field to be created |
+  |<#Orange> Modified | Component/Class/Field to be changed |
+  |<#White> Unchanged | No changes required |
+endlegend
+
+@enduml
+

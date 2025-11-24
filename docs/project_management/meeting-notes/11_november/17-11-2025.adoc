@@ -3,9 +3,9 @@
 *Datum:* 17.11.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Ben +
 *Meetingbeginn:* 13:30 +
-*Meetingende:* xx:xx +
+*Meetingende:* 15:15 +
 *Dauer:* xx min +
 
 ==== Anwesenheit: 
@@ -24,8 +24,8 @@
 
 *Notizen:* +
 - Alles zu in Review bzw. Done schieben was fertig ist +
-- ... +
-  +
+- Alles geschafft, einige Bugs sind entstanden durch neue Features, diese werden in Refinement-Tickets im nächstes Sprint umgesetzt  +
+- Devs stellen neue Features vor -> Terminauftrag in den Filter eintragen + Visuell sichtbar das es eine Terminüberweisung  +
   
 
 
@@ -39,7 +39,7 @@
 - Welches Team wollen wir und wann?
 
 *Notizen:* +
-- ... +
+- @Ben fragt nach der Terminen am nächsten Wochenende, danach in Whatsapp Anwesenheit reinschreiben @Paula und @Elias +
   +
   
 
@@ -53,7 +53,7 @@
 === 3. Sequenzdiagramme?
 
 *Notizen:* +
-- ... +
+- Gesamtmodell wurde erzeugt, wir müssen als zusätzliche Dev-Task für die User-Stories die Sequenz-/Klassendiagramme erstellen +
   +
   
 
@@ -69,9 +69,11 @@
 === 1. Was wollen wir erreichen? -> User Stories auswählen für den Sprint
 
 *Notizen:* +
-- (U14) ... +
-- (U18) ... +
-- ... +
+- Problem: Terminüberweisung -> Momentan so das, wenn Terminüberweisung im April, dann nur Terminüberweisung im Aktuellen und im April, dazwischen nicht
+  Terminüberweisung: Nur für den aktuellen Monat aktivieren, eine ersten, wenn das Datum schon vorbei ist, erstelle eine sonst erst zum Datum in diesem Monat
+- (U14) Die User-Story nochmal aufteilen in zwei Parts, Low-Hanging Fruits + zweite Story mit schwerern Features, die kein muss sind +
+- (U18) Einfache Variante einfach reinspeichern, alles nochmal anzeigen oder einfach Validation -> alle Mitglieder schauen, ob sie auch MD9... supporten + 
+... +
   +
 
 *Entscheidungen:* +
@@ -83,7 +85,7 @@
 === 2. Wie wollen wir unser Ziel erreichen? -> Tasks/Tickets ableiten und vergeben
 
 *Notizen:* +
-- ... +
+- @Elias & @Ben morgen 17uhr termin für die Tasks und danach Sequenz-/Klassendiagramme +
   +
 
 *Entscheidungen:* +
