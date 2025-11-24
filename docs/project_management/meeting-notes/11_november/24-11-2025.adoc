@@ -1,0 +1,89 @@
+= Meeting-Protokoll 24.11.2025
+
+*Datum:* 24.11.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- ... +
+  +
+
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 2. Meeting zu den restlichen Tasks & Sequenz-/Klassendiagramme
+wie siehts mit den Sequenz- und Klassendiagrammen aus? Was aus dem Meeting muss mit dem Team besprochen werden?
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+
+
+=== 3. Review-Meeting mit dem anderen Team +
+was wurde besprochen? was können wir verbessern? was können wir uns für die nächste Iteration mitnehmen?
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 4. Fachaustausch Test/ Tests schreiben
+
+*Notizen:* +
+- ... +
+  +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+
+
+== Nächstes Meeting
+
+- Datum: 01.12.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt +
