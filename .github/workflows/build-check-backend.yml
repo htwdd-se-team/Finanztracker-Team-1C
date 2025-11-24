@@ -44,8 +44,14 @@ jobs:
       - name: Run linter
         run: pnpm --filter backend lint
 
-      # - name: Run tests
-      #   run: pnpm --filter backend test
+      - name: Setup Test Env
+        run: |
+          echo "DATABASE_URL_TEST=${{ secrets.DATABASE_URL_TEST }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL_TEST }}" >> $GITHUB_ENV
+          echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: pnpm --filter backend test
 
   build:
     needs: lint-and-test
