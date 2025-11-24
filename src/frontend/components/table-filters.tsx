@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { CalendarIcon, ChevronDown, RotateCcw, Plus, Edit } from 'lucide-react'
 import {
   Button as AriaButton,
@@ -85,6 +85,42 @@ export function TableFilters({
 }: TableFiltersProps) {
   const { categories } = useCategory()
 
+  const [awaitingNewFilter, setAwaitingNewFilter] = useState(false)
+  const prevFiltersLength = useRef<number>(filters?.length || 0)
+
+  useEffect(() => {
+    // If we're waiting for a newly created filter, detect added filters
+    const len = filters?.length || 0
+    if (!awaitingNewFilter) {
+      prevFiltersLength.current = len
+      return
+    }
+
+    if (len > prevFiltersLength.current) {
+      // pick the filter with the highest id (assumed newest)
+      let newest = filters && filters.length > 0 ? filters[0] : undefined
+      if (filters && filters.length > 0) {
+        for (const f of filters) {
+          if (Number(f.id) > Number(newest!.id)) newest = f
+        }
+      }
+      if (newest) {
+        onFilterChange(newest)
+        onDescriptionChange((newest as ApiFilterResponseDto).searchText || '')
+      }
+      setAwaitingNewFilter(false)
+    }
+
+    prevFiltersLength.current = len
+  }, [filters, awaitingNewFilter, onFilterChange, onDescriptionChange])
+
+  // Keep the title field in sync when selectedFilter prop changes
+  useEffect(() => {
+    if (selectedFilter) {
+      onDescriptionChange(selectedFilter.searchText || '')
+    }
+  }, [selectedFilter, onDescriptionChange])
+
   // Fetch max price from backend
 
   // Convert categories to multiselect options
@@ -134,43 +170,39 @@ export function TableFilters({
     <div className="bg-card/90 dark:bg-card/60 mb-4 border rounded-xl">
       {/* Always visible row: Description, filters, and expand/reset buttons */}
       <div className="flex justify-between items-center gap-2 p-4">
-        <div className="flex-1">
-          <Input
-            placeholder="Titel..."
-            value={description}
-            onChange={e => onDescriptionChange(e.target.value)}
-          />
-        </div>
-
-        {/* Filter Management */}
-        <div className="flex items-center gap-2">
+        {/* Filter Management (moved search into expanded panel) */}
+        <div className="flex items-center gap-2 flex-1 min-w-0">
           <Select
             value={selectedFilter?.id?.toString() || 'none'}
             onValueChange={value => {
               if (value === 'none') {
                 onFilterChange(null)
+                onDescriptionChange('')
                 onReset()
                 return
               }
               const filter = filters?.find(f => f.id.toString() === value)
               if (filter) {
                 onFilterChange(filter)
+                onDescriptionChange(filter.searchText || '')
               }
             }}
           >
-            <SelectTrigger className="w-[200px] cursor-pointer hover:bg-accent hover:text-accent-foreground">
+            <SelectTrigger className="flex-1 min-w-0 cursor-pointer hover:bg-accent hover:text-accent-foreground">
               {selectedFilter ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   {selectedFilter.icon && (
                     <IconRender
                       iconName={selectedFilter.icon}
-                      className="w-4 h-4"
+                      className="w-4 h-4 flex-shrink-0"
                     />
                   )}
-                  <span>{selectedFilter.title}</span>
+                  <span className="truncate">{selectedFilter.title}</span>
                 </div>
               ) : (
-                <SelectValue placeholder="Filter auswählen" />
+                <div className="truncate">
+                  <SelectValue placeholder="Filter auswählen" />
+                </div>
               )}
             </SelectTrigger>
             <SelectContent>
@@ -181,6 +213,7 @@ export function TableFilters({
                 onClick={e => {
                   e.preventDefault()
                   e.stopPropagation()
+                  setAwaitingNewFilter(true)
                   onFilterDialogOpen(null)
                 }}
               >
@@ -230,11 +263,14 @@ export function TableFilters({
 
         {/* Expand and Reset Buttons */}
         <div className="flex items-center gap-2">
-          {hasActiveFilters && (
+          {(hasActiveFilters || selectedFilter) && (
             <Button
               variant="outline"
               size="icon"
-              onClick={onReset}
+              onClick={() => {
+                onReset()
+                onFilterChange(null)
+              }}
               className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
               title="Filter zurücksetzen"
             >
@@ -267,6 +303,15 @@ export function TableFilters({
           <AccordionItem value="filters" className="border-0">
             <AccordionContent className="px-0 pt-0 pb-0">
               <div className="space-y-4 p-4 border-t">
+                {/* Search input */}
+                <div className="space-y-2">
+                  <LabelUI>Beschreibung</LabelUI>
+                  <Input
+                    placeholder="Beschreibung..."
+                    value={description}
+                    onChange={e => onDescriptionChange(e.target.value)}
+                  />
+                </div>
                 {/* Amount Range Slider */}
 
                 <div className="space-y-2">
@@ -332,7 +377,12 @@ export function TableFilters({
                       Datumsbereich
                     </Label>
                     <div className="flex">
-                      <Group className={cn(dateInputStyle, 'pe-9 bg-transparent dark:bg-input/30')}>
+                      <Group
+                        className={cn(
+                          dateInputStyle,
+                          'pe-9 bg-transparent dark:bg-input/30'
+                        )}
+                      >
                         <DateInput slot="start" unstyled />
                         <span
                           aria-hidden="true"
@@ -395,8 +445,10 @@ export function TableFilters({
                         onSortByChange(value as ApiEntrySortBy)
                       }
                     >
-                      <SelectTrigger>
-                        <SelectValue />
+                      <SelectTrigger className="min-w-0 w-full px-2">
+                        <div className="truncate w-full">
+                          <SelectValue />
+                        </div>
                       </SelectTrigger>
                       <SelectContent>
                         {sortOptions.map(option => (

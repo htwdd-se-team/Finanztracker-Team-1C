@@ -471,10 +471,12 @@ export default function FilterDialog({
                   setSortOption(v as ApiFilterSortOption)
                 }
               >
-                <SelectTrigger className="cursor-pointer">
-                  <SelectValue />
+                <SelectTrigger className="cursor-pointer w-full">
+                  <div className="w-full truncate">
+                    <SelectValue className="block w-full truncate" />
+                  </div>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="truncate">
                   <SelectItem
                     className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
                     value={ApiFilterSortOption.HIGHEST_AMOUNT}
