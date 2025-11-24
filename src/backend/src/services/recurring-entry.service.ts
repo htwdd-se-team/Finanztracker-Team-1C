@@ -7,6 +7,7 @@ import {
   EntryResponseDto,
   ScheduledEntriesParamsDto,
   ScheduledEntriesResponseDto,
+  ScheduledMonthlyTotalsResponseDto,
 } from "@/dto";
 
 import { EntryService } from "./entry.service";
@@ -93,10 +94,19 @@ export class RecurringEntryService {
 
         this.logger.debug(`Created child entry for parent ${parentId}`);
       }
-    } catch (error) {
+    } catch (err: unknown) {
+      const details = (() => {
+        try {
+          if (typeof err === "string") return err;
+          if (err instanceof Error) return `${err.name}: ${err.message}`;
+          return JSON.stringify(err);
+        } catch {
+          return "[unserializable error]";
+        }
+      })();
+
       this.logger.error(
-        `Error creating child entry for parent ${parentId}:`,
-        error,
+        `Error creating child entry for parent ${parentId}: ${details}`,
       );
     }
   }
@@ -162,6 +172,69 @@ export class RecurringEntryService {
       cursorId:
         entries.length === take ? entries[entries.length - 1]?.id : null,
     };
+  }
+
+  async getScheduledMonthlyTotals(
+    userId: number,
+    year?: number,
+    month?: number,
+  ): Promise<ScheduledMonthlyTotalsResponseDto> {
+    const targetYear = year ?? DateTime.now().year;
+
+    // If a single month is requested, restrict start/end to that month, otherwise use the whole year
+    let start = DateTime.local(targetYear, 1, 1).toJSDate();
+    let end = DateTime.local(targetYear + 1, 1, 1).toJSDate();
+    if (month) {
+      start = DateTime.local(targetYear, month, 1).startOf("day").toJSDate();
+      end = DateTime.local(targetYear, month, 1)
+        .plus({ months: 1 })
+        .startOf("day")
+        .toJSDate();
+    }
+
+    const rows = await this.prisma.$queryRaw<
+      {
+        month: number;
+        income: string | number;
+        expense: string | number;
+      }[]
+    >`
+      SELECT EXTRACT(MONTH FROM "createdAt")::int AS month,
+        COALESCE(SUM(CASE WHEN "type" = 'INCOME' THEN amount ELSE 0 END), 0) AS income,
+        COALESCE(SUM(CASE WHEN "type" = 'EXPENSE' THEN amount ELSE 0 END), 0) AS expense
+      FROM "Transaction"
+      WHERE "userId" = ${userId}
+        AND "transactionId" IS NOT NULL
+        AND "createdAt" >= ${start}
+        AND "createdAt" < ${end}
+      GROUP BY month
+      ORDER BY month;
+    `;
+
+    const map = new Map<number, { income: number; expense: number }>();
+    for (const r of rows) {
+      const m = Number(r.month);
+      map.set(m, {
+        income: Number(r.income) || 0,
+        expense: Number(r.expense) || 0,
+      });
+    }
+
+    const monthsToReturn = month
+      ? [month]
+      : Array.from({ length: 12 }, (_, i) => i + 1);
+
+    const totals = monthsToReturn.map((m) => {
+      const found = map.get(m) ?? { income: 0, expense: 0 };
+      return {
+        month: m,
+        income: found.income,
+        expense: found.expense,
+        net: found.income - found.expense,
+      };
+    });
+
+    return { totals };
   }
 
   /**

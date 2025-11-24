@@ -296,18 +296,18 @@ export class EntryService {
     }
 
     return {
-  id: entry.id,
-  type: entry.type,
-  amount: entry.amount,
-  description: entry.description,
-  currency,
-  categoryId: entry.categoryId,
-  createdAt: entry.createdAt,
-  isRecurring: entry.isRecurring,
-  recurringType: entry.recurringType ?? undefined,
-  recurringBaseInterval: entry.recurringBaseInterval ?? undefined,
-  recurringDisabled: entry.recurringDisabled ?? undefined,
-  transactionId: entry.transactionId ?? undefined,
+      id: entry.id,
+      type: entry.type,
+      amount: entry.amount,
+      description: entry.description,
+      currency,
+      categoryId: entry.categoryId,
+      createdAt: entry.createdAt,
+      isRecurring: entry.isRecurring,
+      recurringType: entry.recurringType ?? undefined,
+      recurringBaseInterval: entry.recurringBaseInterval ?? undefined,
+      recurringDisabled: entry.recurringDisabled ?? undefined,
+      transactionId: entry.transactionId ?? undefined,
     };
   }
 
