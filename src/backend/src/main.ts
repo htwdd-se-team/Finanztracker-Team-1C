@@ -107,9 +107,4 @@ async function bootstrap() {
   bootstrapLogger.log(`Swagger UI:  ${url}/api`);
 }
 
-bootstrap().catch((err) => {
-  // Ensure unhandled bootstrap errors are logged and process exits with failure
-  // This also satisfies the linter rule against floating promises.
-  console.error(err);
-  process.exit(1);
-});
+bootstrap();

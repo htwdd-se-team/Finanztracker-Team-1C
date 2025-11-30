@@ -1,6 +1,9 @@
+import { inspect } from "util";
+
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { RecurringTransactionType } from "@prisma/client";
+import { sql } from "kysely";
 import { DateTime } from "luxon";
 import { BackendConfig } from "@/backend.config";
 import {
@@ -11,6 +14,7 @@ import {
 } from "@/dto";
 
 import { EntryService } from "./entry.service";
+import { KyselyService } from "./kysely.service";
 import { PrismaService } from "./prisma.service";
 
 @Injectable()
@@ -20,6 +24,7 @@ export class RecurringEntryService {
   constructor(
     private readonly prisma: PrismaService,
     @Inject(BackendConfig) private readonly backendConfig: BackendConfig,
+    private readonly kysely: KyselyService,
   ) {}
 
   @Cron(CronExpression.EVERY_30_SECONDS)
@@ -95,19 +100,15 @@ export class RecurringEntryService {
         this.logger.debug(`Created child entry for parent ${parentId}`);
       }
     } catch (err: unknown) {
-      const details = (() => {
-        try {
-          if (typeof err === "string") return err;
-          if (err instanceof Error) return `${err.name}: ${err.message}`;
-          return JSON.stringify(err);
-        } catch {
-          return "[unserializable error]";
-        }
-      })();
-
-      this.logger.error(
-        `Error creating child entry for parent ${parentId}: ${details}`,
-      );
+      const msg = `Error creating child entry for parent ${parentId}`;
+      if (err instanceof Error) {
+        this.logger.error(msg, err.stack);
+      } else {
+        // Use util.inspect to safely stringify objects (handles circular refs)
+        this.logger.error(
+          `${msg}: ${inspect(err, { depth: 3, compact: true })}`,
+        );
+      }
     }
   }
 
@@ -192,24 +193,28 @@ export class RecurringEntryService {
         .toJSDate();
     }
 
-    const rows = await this.prisma.$queryRaw<
-      {
-        month: number;
-        income: string | number;
-        expense: string | number;
-      }[]
-    >`
-      SELECT EXTRACT(MONTH FROM "createdAt")::int AS month,
-        COALESCE(SUM(CASE WHEN "type" = 'INCOME' THEN amount ELSE 0 END), 0) AS income,
-        COALESCE(SUM(CASE WHEN "type" = 'EXPENSE' THEN amount ELSE 0 END), 0) AS expense
-      FROM "Transaction"
-      WHERE "userId" = ${userId}
-        AND "transactionId" IS NOT NULL
-        AND "createdAt" >= ${start}
-        AND "createdAt" < ${end}
-      GROUP BY month
-      ORDER BY month;
-    `;
+    const rows = (await this.kysely
+      .selectFrom("Transaction")
+      .select([
+        sql<number>`EXTRACT(MONTH FROM "createdAt")::int`.as("month"),
+        sql<number>`
+          COALESCE(SUM(CASE WHEN "type" = 'INCOME' THEN "amount" ELSE 0 END), 0)
+        `.as("income"),
+        sql<number>`
+          COALESCE(SUM(CASE WHEN "type" = 'EXPENSE' THEN "amount" ELSE 0 END), 0)
+        `.as("expense"),
+      ])
+      .where("userId", "=", userId)
+      .where(sql<boolean>`"transactionId" IS NOT NULL`)
+      .where("createdAt", ">=", start)
+      .where("createdAt", "<", end)
+      .groupBy(sql`EXTRACT(MONTH FROM "createdAt")::int`)
+      .orderBy("month")
+      .execute()) as {
+      month: number;
+      income: string | number;
+      expense: string | number;
+    }[];
 
     const map = new Map<number, { income: number; expense: number }>();
     for (const r of rows) {
