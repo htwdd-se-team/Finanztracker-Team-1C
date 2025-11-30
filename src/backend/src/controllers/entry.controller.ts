@@ -28,6 +28,8 @@ import {
   EntryResponseDto,
   ScheduledEntriesParamsDto,
   ScheduledEntriesResponseDto,
+  ScheduledMonthlyParamsDto,
+  ScheduledMonthlyTotalsResponseDto,
   UpdateEntryDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
@@ -112,6 +114,22 @@ export class EntryController {
     return await this.recurringEntryService.getScheduledEntries(
       user.id,
       params,
+    );
+  }
+
+  @Get("scheduled-entries/monthly-totals")
+  @ApiOkResponse({
+    type: ScheduledMonthlyTotalsResponseDto as Type<ScheduledMonthlyTotalsResponseDto>,
+    description: "Monthly totals for scheduled (recurring) child transactions",
+  })
+  async getScheduledMonthlyTotals(
+    @UserDecorator() user: User,
+    @Query() params: ScheduledMonthlyParamsDto,
+  ): Promise<ScheduledMonthlyTotalsResponseDto> {
+    return await this.recurringEntryService.getScheduledMonthlyTotals(
+      user.id,
+      params?.year,
+      params?.month,
     );
   }
   @Patch("scheduled-entries/:id/disable")
