@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "@prisma/client";
+import { User, TransactionType } from "@prisma/client";
 import { sql } from "kysely";
+import { DateTime } from "luxon";
 
 import {
   Granularity,
@@ -18,6 +19,7 @@ export class AnalyticsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly kysely: KyselyService,
+    private readonly recurringEntryService: import("./recurring-entry.service").RecurringEntryService,
   ) {}
 
   private TIMEZONE = "Europe/Berlin";
@@ -219,5 +221,92 @@ export class AnalyticsService {
     const max = agg._max?.amount ?? 0;
     const rounded = max > 0 ? Math.ceil(max / 100) * 100 : 0;
     return rounded;
+  }
+
+  async getAvailableCapital(user: User): Promise<import("../dto").AvailableCapitalItemDto[]> {
+    const now = DateTime.now();
+    const start = now.startOf("month").toJSDate();
+    const end = now.plus({ months: 1 }).startOf("month").toJSDate();
+
+    // Current balance (sum of incomes - sum of expenses)
+    const incomeAgg = await this.prisma.transaction.aggregate({
+      where: { userId: user.id, type: "INCOME" },
+      _sum: { amount: true },
+    });
+    const expenseAgg = await this.prisma.transaction.aggregate({
+      where: { userId: user.id, type: "EXPENSE" },
+      _sum: { amount: true },
+    });
+
+    const incomeSum = incomeAgg._sum?.amount ?? 0;
+    const expenseSum = expenseAgg._sum?.amount ?? 0;
+    const balance = incomeSum - expenseSum;
+
+    const items: import("../dto").AvailableCapitalItemDto[] = [];
+
+    items.push({
+      key: "available_capital",
+      label: "Verfügbares Kapital",
+      icon: "account-balance",
+      value: balance,
+      type: TransactionType.INCOME,
+    });
+
+    // Future recurring incomes for the current month (uses scheduled monthly totals)
+    try {
+      const scheduled = await this.recurringEntryService.getScheduledMonthlyTotals(
+        user.id,
+        now.year,
+        now.month,
+      );
+      const futureIncome = scheduled.totals?.[0]?.income ?? 0;
+      items.push({
+        key: "future_incomes",
+        label: "Zukünftige Einnahmen",
+        icon: "fixed-income",
+        value: futureIncome,
+        type: TransactionType.INCOME,
+      });
+    } catch (e) {
+      // If recurring totals fail, still return available capital
+      items.push({
+        key: "future_incomes",
+        label: "Zukünftige Einnahmen",
+        icon: "fixed-income",
+        value: 0,
+        type: TransactionType.INCOME,
+      });
+    }
+
+    // Scheduled transactions in the current month grouped by category (child transactions created this month)
+    const rows = await this.kysely
+      .selectFrom("Transaction")
+      .leftJoin("Category", "Category.id", "Transaction.categoryId")
+      .select((eb) => [
+        "Transaction.categoryId as categoryId",
+        "Category.name as categoryName",
+        "Category.icon as categoryIcon",
+        sql<number>`COALESCE(SUM("Transaction"."amount"), 0)`.as("value"),
+      ])
+      .where("Transaction.userId", "=", user.id)
+      .where(sql<boolean>`"Transaction"."transactionId" IS NOT NULL`)
+      .where("Transaction.createdAt", ">=", start)
+      .where("Transaction.createdAt", "<", end)
+      .groupBy(["Transaction.categoryId", "Category.name", "Category.icon"])
+      .orderBy("value", "desc")
+      .execute();
+
+    for (const r of rows) {
+      const value = Number((r as any).value) || 0;
+      items.push({
+        key: `scheduled_category_${(r as any).categoryId}`,
+        label: (r as any).categoryName ?? "Unkategorisiert",
+        icon: (r as any).categoryIcon ?? "category",
+        value,
+        type: value >= 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
+      });
+    }
+
+    return items;
   }
 }
