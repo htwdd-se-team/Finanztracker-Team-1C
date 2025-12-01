@@ -1,5 +1,3 @@
-import { inspect } from "util";
-
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { RecurringTransactionType } from "@prisma/client";
@@ -99,16 +97,10 @@ export class RecurringEntryService {
 
         this.logger.debug(`Created child entry for parent ${parentId}`);
       }
-    } catch (err: unknown) {
-      const msg = `Error creating child entry for parent ${parentId}`;
-      if (err instanceof Error) {
-        this.logger.error(msg, err.stack);
-      } else {
-        // Use util.inspect to safely stringify objects (handles circular refs)
-        this.logger.error(
-          `${msg}: ${inspect(err, { depth: 3, compact: true })}`,
-        );
-      }
+    } catch (err) {
+      this.logger.error(
+        `Error creating child entry for parent ${parentId}: ${err}`,
+      );
     }
   }
 
@@ -193,7 +185,7 @@ export class RecurringEntryService {
         .toJSDate();
     }
 
-    const rows = (await this.kysely
+    const rows = await this.kysely
       .selectFrom("Transaction")
       .select([
         sql<number>`EXTRACT(MONTH FROM "createdAt")::int`.as("month"),
@@ -210,11 +202,7 @@ export class RecurringEntryService {
       .where("createdAt", "<", end)
       .groupBy(sql`EXTRACT(MONTH FROM "createdAt")::int`)
       .orderBy("month")
-      .execute()) as {
-      month: number;
-      income: string | number;
-      expense: string | number;
-    }[];
+      .execute();
 
     const map = new Map<number, { income: number; expense: number }>();
     for (const r of rows) {

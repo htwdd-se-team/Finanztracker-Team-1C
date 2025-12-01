@@ -25,14 +25,6 @@ export class EntryService {
     private readonly recurringEntryService: RecurringEntryService,
   ) {}
 
-  private static readonly CURRENCY_SET = new Set<string>(
-    Object.values(Currency) as string[],
-  );
-
-  private static isCurrency(v: unknown): v is Currency {
-    return typeof v === "string" && EntryService.CURRENCY_SET.has(v);
-  }
-
   async createEntry(
     user: User,
     data: CreateEntryDto,
@@ -294,16 +286,12 @@ export class EntryService {
   }
 
   static mapEntryToResponseDto(entry: Transaction): EntryResponseDto {
-    const currency: Currency = EntryService.isCurrency(entry.currency)
-      ? entry.currency
-      : Currency.EUR;
-
     return {
       id: entry.id,
       type: entry.type,
       amount: entry.amount,
       description: entry.description,
-      currency,
+      currency: entry.currency as Currency,
       categoryId: entry.categoryId,
       createdAt: entry.createdAt,
       isRecurring: entry.isRecurring,
