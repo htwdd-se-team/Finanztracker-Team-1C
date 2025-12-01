@@ -10,13 +10,18 @@ import {
   Param,
   ParseIntPipe,
   Type,
+  UseInterceptors,
+  UploadedFiles,
 } from "@nestjs/common";
+import { FilesInterceptor } from "@nestjs/platform-express";
 import {
   ApiTags,
   ApiBadRequestResponse,
   ApiOkResponse,
   ApiSecurity,
   ApiNotFoundResponse,
+  ApiConsumes,
+  ApiBody,
 } from "@nestjs/swagger";
 import { User } from "@prisma/client";
 
@@ -33,7 +38,12 @@ import {
   UpdateEntryDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
-import { EntryService, RecurringEntryService } from "../services";
+import {
+  EntryService,
+  ImportService,
+  RecurringEntryService,
+} from "../services";
+import { entryImportFileFilter } from "../utils/file-filter.util";
 
 @ApiTags("Entry")
 @Controller("entries")
@@ -43,8 +53,12 @@ export class EntryController {
   constructor(
     private readonly entryService: EntryService,
     private readonly recurringEntryService: RecurringEntryService,
+    private readonly importService: ImportService,
   ) {}
 
+  /**
+   * Create an entry
+   */
   @Post("create")
   @ApiOkResponse({
     type: EntryResponseDto,
@@ -59,6 +73,9 @@ export class EntryController {
     return entry;
   }
 
+  /**
+   * Get all entries
+   */
   @Get("list")
   @ApiOkResponse({
     type: EntryPageDto,
@@ -72,6 +89,9 @@ export class EntryController {
     return this.entryService.getEntries(user, paginationParams);
   }
 
+  /**
+   * Delete an entry by id
+   */
   @Delete(":id")
   @ApiOkResponse({ description: "Entry deleted successfully" })
   @ApiNotFoundResponse({
@@ -84,6 +104,9 @@ export class EntryController {
     await this.entryService.deleteEntry(user, entryId);
   }
 
+  /**
+   * Update an entry by id
+   */
   @Patch(":id")
   @ApiOkResponse({
     type: EntryResponseDto,
@@ -101,6 +124,9 @@ export class EntryController {
     return this.entryService.updateEntry(user, entryId, data);
   }
 
+  /**
+   * Get all scheduled entries
+   */
   @Get("scheduled-entries/list")
   @ApiOkResponse({
     type: ScheduledEntriesResponseDto as Type<ScheduledEntriesResponseDto>,
@@ -132,6 +158,7 @@ export class EntryController {
       params?.month,
     );
   }
+
   @Patch("scheduled-entries/:id/disable")
   @ApiOkResponse({ description: "Scheduled entry disabled successfully" })
   @ApiNotFoundResponse({
@@ -147,6 +174,9 @@ export class EntryController {
     );
   }
 
+  /**
+   * Enable a scheduled entry by id
+   */
   @Patch("scheduled-entries/:id/enable")
   @ApiOkResponse({ description: "Scheduled entry enabled successfully" })
   @ApiNotFoundResponse({
@@ -160,5 +190,44 @@ export class EntryController {
       entryId,
       user.id,
     );
+  }
+
+  /**
+   * Import entries from file (CSV, TXT, or XLSX)
+   */
+  @Post("import")
+  @UseInterceptors(
+    FilesInterceptor("files", 10, { fileFilter: entryImportFileFilter }),
+  )
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        files: {
+          type: "array",
+          items: {
+            type: "file",
+            format: "binary",
+          },
+          description:
+            "Files to import. Allowed formats: TXT, CSV, XLSX, and other text files.",
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    type: EntryResponseDto,
+    isArray: true,
+    description: "Files uploaded successfully",
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid file type or file validation failed",
+  })
+  async importEntries(
+    @UserDecorator() user: User,
+    @UploadedFiles() files: Express.Multer.File[],
+  ): Promise<EntryResponseDto[]> {
+    return await this.importService.importEntries(user, files);
   }
 }
