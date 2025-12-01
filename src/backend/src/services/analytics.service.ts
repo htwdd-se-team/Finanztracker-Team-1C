@@ -223,7 +223,9 @@ export class AnalyticsService {
     return rounded;
   }
 
-  async getAvailableCapital(user: User): Promise<import("../dto").AvailableCapitalItemDto[]> {
+  async getAvailableCapital(
+    user: User,
+  ): Promise<import("../dto").AvailableCapitalItemDto[]> {
     const now = DateTime.now();
     const start = now.startOf("month").toJSDate();
     const end = now.plus({ months: 1 }).startOf("month").toJSDate();
@@ -254,24 +256,25 @@ export class AnalyticsService {
 
     // Future recurring incomes for the current month (uses scheduled monthly totals)
     try {
-      const scheduled = await this.recurringEntryService.getScheduledMonthlyTotals(
-        user.id,
-        now.year,
-        now.month,
-      );
+      const scheduled =
+        await this.recurringEntryService.getScheduledMonthlyTotals(
+          user.id,
+          now.year,
+          now.month,
+        );
       const futureIncome = scheduled.totals?.[0]?.income ?? 0;
       items.push({
         key: "future_incomes",
-        label: "Zukünftige Einnahmen",
+        label: "Future Einnahme",
         icon: "fixed-income",
         value: futureIncome,
         type: TransactionType.INCOME,
       });
-    } catch (e) {
+    } catch {
       // If recurring totals fail, still return available capital
       items.push({
         key: "future_incomes",
-        label: "Zukünftige Einnahmen",
+        label: "Future Einnahmen",
         icon: "fixed-income",
         value: 0,
         type: TransactionType.INCOME,
@@ -279,13 +282,20 @@ export class AnalyticsService {
     }
 
     // Scheduled transactions in the current month grouped by category (child transactions created this month)
-    const rows = await this.kysely
+    interface ScheduledCategoryRow {
+      categoryId: number | null;
+      categoryName: string | null;
+      categoryIcon: string | null;
+      value: number;
+    }
+
+    const rowsRaw = await this.kysely
       .selectFrom("Transaction")
       .leftJoin("Category", "Category.id", "Transaction.categoryId")
       .select((eb) => [
-        "Transaction.categoryId as categoryId",
-        "Category.name as categoryName",
-        "Category.icon as categoryIcon",
+        eb.ref("Transaction.categoryId").as("categoryId"),
+        eb.ref("Category.name").as("categoryName"),
+        eb.ref("Category.icon").as("categoryIcon"),
         sql<number>`COALESCE(SUM("Transaction"."amount"), 0)`.as("value"),
       ])
       .where("Transaction.userId", "=", user.id)
@@ -296,12 +306,47 @@ export class AnalyticsService {
       .orderBy("value", "desc")
       .execute();
 
+    const rows: ScheduledCategoryRow[] = (rowsRaw as unknown[]).map((r) => {
+      const obj = r as Record<string, unknown>;
+      const rawCategoryId = obj["categoryId"];
+      const categoryId =
+        typeof rawCategoryId === "number"
+          ? rawCategoryId
+          : rawCategoryId == null
+            ? null
+            : Number(rawCategoryId);
+
+      const rawCategoryName = obj["categoryName"];
+      const categoryName =
+        typeof rawCategoryName === "string" ? rawCategoryName : null;
+
+      const rawCategoryIcon = obj["categoryIcon"];
+      const categoryIcon =
+        typeof rawCategoryIcon === "string" ? rawCategoryIcon : null;
+
+      const rawValue = obj["value"];
+      const value =
+        typeof rawValue === "number"
+          ? rawValue
+          : rawValue == null
+            ? 0
+            : Number(rawValue);
+
+      return {
+        categoryId,
+        categoryName,
+        categoryIcon,
+        value,
+      };
+    });
+
     for (const r of rows) {
-      const value = Number((r as any).value) || 0;
+      const value = r.value ?? 0;
+      const categoryId = r.categoryId ?? null;
       items.push({
-        key: `scheduled_category_${(r as any).categoryId}`,
-        label: (r as any).categoryName ?? "Unkategorisiert",
-        icon: (r as any).categoryIcon ?? "category",
+        key: `scheduled_category_${categoryId ?? "uncategorized"}`,
+        label: r.categoryName ?? "Unkategorisiert",
+        icon: r.categoryIcon ?? "category",
         value,
         type: value >= 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
       });
