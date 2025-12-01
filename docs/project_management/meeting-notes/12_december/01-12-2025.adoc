@@ -1,0 +1,80 @@
+= Meeting-Protokoll 01.12.2025
+
+*Datum:* 01.12.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick (ist abgemeldet weil krank)
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- ... +
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Update bei den Tests
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 3. Konsultation
+Wollen wir Konsultation machen?
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 4. Fachaustausch Termine?
+Haben wir Kontakt zu einem Team? evtl. schon ein Termin?
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+- ... +
+
+
+== Nächstes Meeting
+
+- Datum: 08.12.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- ... +
