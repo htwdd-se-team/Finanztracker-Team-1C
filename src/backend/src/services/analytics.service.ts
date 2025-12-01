@@ -9,6 +9,7 @@ import {
   TransactionBreakdownResponseDto,
   TransactionItemDto,
   TransactionBalanceHistoryParamsDto,
+  AvailableCapitalItemDto,
 } from "../dto";
 
 import { KyselyService } from "./kysely.service";
@@ -223,9 +224,7 @@ export class AnalyticsService {
     return rounded;
   }
 
-  async getAvailableCapital(
-    user: User,
-  ): Promise<import("../dto").AvailableCapitalItemDto[]> {
+  async getAvailableCapital(user: User): Promise<AvailableCapitalItemDto[]> {
     const now = DateTime.now();
     const start = now.startOf("month").toJSDate();
     const end = now.plus({ months: 1 }).startOf("month").toJSDate();
@@ -244,7 +243,7 @@ export class AnalyticsService {
     const expenseSum = expenseAgg._sum?.amount ?? 0;
     const balance = incomeSum - expenseSum;
 
-    const items: import("../dto").AvailableCapitalItemDto[] = [];
+    const items: AvailableCapitalItemDto[] = [];
 
     items.push({
       key: "available_capital",
