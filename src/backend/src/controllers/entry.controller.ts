@@ -36,7 +36,11 @@ import {
   UpdateEntryDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
-import { EntryService, RecurringEntryService } from "../services";
+import {
+  EntryService,
+  ImportService,
+  RecurringEntryService,
+} from "../services";
 import { entryImportFileFilter } from "../utils/file-filter.util";
 
 @ApiTags("Entry")
@@ -47,6 +51,7 @@ export class EntryController {
   constructor(
     private readonly entryService: EntryService,
     private readonly recurringEntryService: RecurringEntryService,
+    private readonly importService: ImportService,
   ) {}
 
   /**
@@ -196,11 +201,18 @@ export class EntryController {
       },
     },
   })
-  @ApiOkResponse({ description: "Files uploaded successfully" })
+  @ApiOkResponse({
+    type: EntryResponseDto,
+    isArray: true,
+    description: "Files uploaded successfully",
+  })
   @ApiBadRequestResponse({
     description: "Invalid file type or file validation failed",
   })
-  uploadImage(@UploadedFiles() files: Express.Multer.File[]): void {
-    console.log(files);
+  async importEntries(
+    @UserDecorator() user: User,
+    @UploadedFiles() files: Express.Multer.File[],
+  ): Promise<EntryResponseDto[]> {
+    return await this.importService.importEntries(user, files);
   }
 }

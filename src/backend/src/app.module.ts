@@ -27,6 +27,7 @@ import {
   CategoryService,
   UserService,
   RecurringEntryService,
+  ImportService,
 } from "./services";
 import { JwtStrategy } from "./strategies";
 
@@ -70,6 +71,7 @@ import { JwtStrategy } from "./strategies";
     UserService,
     FilterService,
     RecurringEntryService,
+    ImportService,
     // util services
     KyselyService,
     PrismaService,
