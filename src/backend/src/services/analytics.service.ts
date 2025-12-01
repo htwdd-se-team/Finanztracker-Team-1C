@@ -248,7 +248,7 @@ export class AnalyticsService {
 
     items.push({
       key: "available_capital",
-      label: "Verfügbares Kapital",
+      label: "Available Capital",
       icon: "account-balance",
       value: balance,
       type: TransactionType.INCOME,
@@ -265,7 +265,7 @@ export class AnalyticsService {
       const futureIncome = scheduled.totals?.[0]?.income ?? 0;
       items.push({
         key: "future_incomes",
-        label: "Future Einnahme",
+        label: "Future Incomes",
         icon: "fixed-income",
         value: futureIncome,
         type: TransactionType.INCOME,
@@ -274,7 +274,7 @@ export class AnalyticsService {
       // If recurring totals fail, still return available capital
       items.push({
         key: "future_incomes",
-        label: "Future Einnahmen",
+        label: "Future Incomes",
         icon: "fixed-income",
         value: 0,
         type: TransactionType.INCOME,
@@ -345,7 +345,7 @@ export class AnalyticsService {
       const categoryId = r.categoryId ?? null;
       items.push({
         key: `scheduled_category_${categoryId ?? "uncategorized"}`,
-        label: r.categoryName ?? "Unkategorisiert",
+        label: r.categoryName ?? "uncategorized",
         icon: r.categoryIcon ?? "category",
         value,
         type: value >= 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
