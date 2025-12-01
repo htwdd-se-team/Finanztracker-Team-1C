@@ -1,15 +1,18 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { RecurringTransactionType } from "@prisma/client";
+import { sql } from "kysely";
 import { DateTime } from "luxon";
 import { BackendConfig } from "@/backend.config";
 import {
   EntryResponseDto,
   ScheduledEntriesParamsDto,
   ScheduledEntriesResponseDto,
+  ScheduledMonthlyTotalsResponseDto,
 } from "@/dto";
 
 import { EntryService } from "./entry.service";
+import { KyselyService } from "./kysely.service";
 import { PrismaService } from "./prisma.service";
 
 @Injectable()
@@ -19,6 +22,7 @@ export class RecurringEntryService {
   constructor(
     private readonly prisma: PrismaService,
     @Inject(BackendConfig) private readonly backendConfig: BackendConfig,
+    private readonly kysely: KyselyService,
   ) {}
 
   @Cron(CronExpression.EVERY_30_SECONDS)
@@ -93,10 +97,9 @@ export class RecurringEntryService {
 
         this.logger.debug(`Created child entry for parent ${parentId}`);
       }
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        `Error creating child entry for parent ${parentId}:`,
-        error,
+        `Error creating child entry for parent ${parentId}: ${err}`,
       );
     }
   }
@@ -162,6 +165,69 @@ export class RecurringEntryService {
       cursorId:
         entries.length === take ? entries[entries.length - 1]?.id : null,
     };
+  }
+
+  async getScheduledMonthlyTotals(
+    userId: number,
+    year?: number,
+    month?: number,
+  ): Promise<ScheduledMonthlyTotalsResponseDto> {
+    const targetYear = year ?? DateTime.now().year;
+
+    // If a single month is requested, restrict start/end to that month, otherwise use the whole year
+    let start = DateTime.local(targetYear, 1, 1).toJSDate();
+    let end = DateTime.local(targetYear + 1, 1, 1).toJSDate();
+    if (month) {
+      start = DateTime.local(targetYear, month, 1).startOf("day").toJSDate();
+      end = DateTime.local(targetYear, month, 1)
+        .plus({ months: 1 })
+        .startOf("day")
+        .toJSDate();
+    }
+
+    const rows = await this.kysely
+      .selectFrom("Transaction")
+      .select([
+        sql<number>`EXTRACT(MONTH FROM "createdAt")::int`.as("month"),
+        sql<number>`
+          COALESCE(SUM(CASE WHEN "type" = 'INCOME' THEN "amount" ELSE 0 END), 0)
+        `.as("income"),
+        sql<number>`
+          COALESCE(SUM(CASE WHEN "type" = 'EXPENSE' THEN "amount" ELSE 0 END), 0)
+        `.as("expense"),
+      ])
+      .where("userId", "=", userId)
+      .where(sql<boolean>`"transactionId" IS NOT NULL`)
+      .where("createdAt", ">=", start)
+      .where("createdAt", "<", end)
+      .groupBy(sql`EXTRACT(MONTH FROM "createdAt")::int`)
+      .orderBy("month")
+      .execute();
+
+    const map = new Map<number, { income: number; expense: number }>();
+    for (const r of rows) {
+      const m = Number(r.month);
+      map.set(m, {
+        income: Number(r.income) || 0,
+        expense: Number(r.expense) || 0,
+      });
+    }
+
+    const monthsToReturn = month
+      ? [month]
+      : Array.from({ length: 12 }, (_, i) => i + 1);
+
+    const totals = monthsToReturn.map((m) => {
+      const found = map.get(m) ?? { income: 0, expense: 0 };
+      return {
+        month: m,
+        income: found.income,
+        expense: found.expense,
+        net: found.income - found.expense,
+      };
+    });
+
+    return { totals };
   }
 
   /**
