@@ -1,0 +1,97 @@
+= Meeting-Protokoll 24.11.2025
+
+*Datum:* 24.11.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* Cedrick +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* 14:45 +
+*Dauer:* 45 min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- Notgroschen von Elias Übernommen +
+- Neue Export Typen im Ticket #160 zu finden  +
+
+
+*Entscheidungen:* +
+- CSV Formate ähnlich, macht Umsetzung einfacher +
+  +
+  +
+
+=== 2. Meeting zu den restlichen Tasks & Sequenz-/Klassendiagramme
+wie siehts mit den Sequenz- und Klassendiagrammen aus? Was aus dem Meeting muss mit dem Team besprochen werden?
+
+*Notizen:* +
+- Ben noch nicht ganz zufrieden +
+- weiterer Abgleich potenziell nötig  +
+
+*Entscheidungen:* +
+- Erstmal sein lassen, gibt wichtigeres +
+  +
+  +
+
+
+
+
+=== 3. Review-Meeting mit dem anderen Team +
+was wurde besprochen? was können wir verbessern? was können wir uns für die nächste Iteration mitnehmen?
+
+*Notizen:* +
+- Man kann bei den Filtern die Beschreibung nicht mehr entfernen -> Cedrick +
+- Terminüberweisung in Dauerauftrag umbenennen -> Cedrick +
+- Kategorien einteilen in Ausgaben/Einnahmen und Shared -> Vorerst im Backlog lassen (Relevanz unbekannt) +
+- Eurozeichen beim Betrag im Transaktionsformular fixen (wenn Zeichen die nicht erlaubt sind, eingetragen werden, dann rutscht das Eurozeichen nach Unten) -> Backlog +
+- Beschreibungen der verschienen Pages sind theoretisch überflüssig -> Refinement-Ticket +
+- Extend Button auf Tabellenseite zu Filter Icon ändern -> Refinement-Ticket +
+- Betragsslider in den Filtern entfernen, 'einfach' zu inputfeldern -> Refinement-Ticket +  
+- Daueraufträge und geplante Transaktionen visuell von den normalen trennen -> Refinement-Ticket +
+- Kategorien Select im extended Filter anpassen, aktuell nur 6 Elemente sichtbar -> Refinement-Ticket +
+- Datumsauswahlsymbol im extended Filter anpassen, aktuell auf oberster Ebene (überlappt mit Kategorien Select) -> Refinement-Ticket +
+
+*Weiteres:* +
+- Neues Feedbackteam gesucht für 08.12 -> Christoph +
+  +
+  +
+
+
+=== 4. Fachaustausch Test/ Tests schreiben
+
+*Notizen:* +
+- aktuell keine Tests (Problem) +
+- Ticket für Backend-Tests erstellen +
+- min. 1 Test pro Endpunkt + Moduletests +
+
+*Entscheidungen:* +
+- Dienstag 8:00 bis 9:30 Haupttermin +
+- Donnerstag 11:30 bis 13:00 BackupTermin  +
+  +
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Keine* +
+
+
+== Nächstes Meeting
+
+- Datum: 01.12.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt +
+- Fachaustausch Tests +

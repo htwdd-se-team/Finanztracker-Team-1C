@@ -306,7 +306,7 @@ export class EntryService {
       categoryId: entry.categoryId,
       createdAt: entry.createdAt,
       isRecurring: entry.isRecurring,
-      recurringType: entry.recurringType,
+      recurringType: entry.recurringType ?? undefined,
       recurringBaseInterval: entry.recurringBaseInterval ?? undefined,
       recurringDisabled: entry.recurringDisabled ?? undefined,
       transactionId: entry.transactionId ?? undefined,

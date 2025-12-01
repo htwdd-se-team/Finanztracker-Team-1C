@@ -33,6 +33,8 @@ import {
   EntryResponseDto,
   ScheduledEntriesParamsDto,
   ScheduledEntriesResponseDto,
+  ScheduledMonthlyParamsDto,
+  ScheduledMonthlyTotalsResponseDto,
   UpdateEntryDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
@@ -141,9 +143,22 @@ export class EntryController {
     );
   }
 
-  /**
-   * Disable a scheduled entry by id
-   */
+  @Get("scheduled-entries/monthly-totals")
+  @ApiOkResponse({
+    type: ScheduledMonthlyTotalsResponseDto as Type<ScheduledMonthlyTotalsResponseDto>,
+    description: "Monthly totals for scheduled (recurring) child transactions",
+  })
+  async getScheduledMonthlyTotals(
+    @UserDecorator() user: User,
+    @Query() params: ScheduledMonthlyParamsDto,
+  ): Promise<ScheduledMonthlyTotalsResponseDto> {
+    return await this.recurringEntryService.getScheduledMonthlyTotals(
+      user.id,
+      params?.year,
+      params?.month,
+    );
+  }
+
   @Patch("scheduled-entries/:id/disable")
   @ApiOkResponse({ description: "Scheduled entry disabled successfully" })
   @ApiNotFoundResponse({
