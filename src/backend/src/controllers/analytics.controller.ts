@@ -60,10 +60,13 @@ export class AnalyticsController {
   @Get("available-capital")
   @ApiOkResponse({
     type: AvailableCapitalItemDto,
-    description: "Available capital and scheduled transfers for the current month",
+    description:
+      "Available capital and scheduled transfers for the current month",
     isArray: true,
   })
-  async getAvailableCapital(@UserDecorator() user: User): Promise<AvailableCapitalItemDto[]> {
+  async getAvailableCapital(
+    @UserDecorator() user: User,
+  ): Promise<AvailableCapitalItemDto[]> {
     return this.analyticsService.getAvailableCapital(user);
   }
 }
