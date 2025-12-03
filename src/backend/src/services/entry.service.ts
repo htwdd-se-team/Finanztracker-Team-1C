@@ -25,6 +25,17 @@ export class EntryService {
     private readonly recurringEntryService: RecurringEntryService,
   ) {}
 
+  async checkIfEntryExists(user: User, data: CreateEntryDto): Promise<boolean> {
+    const existingTransaction = await this.prisma.transaction.findFirst({
+      where: {
+        amount: data.amount,
+        description: data.description,
+        createdAt: data.createdAt,
+      },
+    });
+    return existingTransaction !== null;
+  }
+
   async createEntry(
     user: User,
     data: CreateEntryDto,
