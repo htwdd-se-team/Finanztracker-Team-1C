@@ -1,6 +1,6 @@
 'use client'
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ReferenceLine } from 'recharts'
 import { TrendingUp, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
@@ -80,17 +80,20 @@ export default function HistoryTile({
   const roundedMinY = Math.floor(bufferedMin / step) * step
   const roundedMaxY = Math.ceil(bufferedMax / step) * step
 
+  const hasPositive = trueMax > 0
+  const hasNegative = trueMin < 0
+
   return (
-    <Card className={cn('px-2 p-1.5',className)}>
-      <CardHeader className="flex flex-row justify-between p-0">
-        <CardTitle className="flex items-center gap-1 font-medium">
+    <Card className={cn('p-0',className)}>
+      <CardHeader className="p-0 m-0">
+        <CardTitle className="p-0 ml-1.5 mt-1.5 mb-0 flex gap-1 font-medium">
           <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 mr-1.5 mt-0">
         <ChartContainer
           config={chartConfig}
-          className="-mt-2 mb-0 w-full max-h-[150px] md:max-h-[200px]"
+          className="w-full max-h-[150px] sm:max-h-[200px] -mt-4"
         >
           <AreaChart
             data={graphData}
@@ -110,9 +113,21 @@ export default function HistoryTile({
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={false}/>
+            {hasPositive && hasNegative && (
+              <ReferenceLine
+              y={0} stroke="#999" strokeDasharray="3 3"
+              label={{
+                value: "0 €",
+                position: "left",
+                fill: "#666",
+                fontSize: 11,
+                dx: -3,
+              }}/>
+            )}
             <YAxis
-              width={50}
+              width={54}
+              tickMargin={2}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}
@@ -126,7 +141,7 @@ export default function HistoryTile({
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={6}
               minTickGap={32}
               tickFormatter={value => {
                 const date = new Date(value)
