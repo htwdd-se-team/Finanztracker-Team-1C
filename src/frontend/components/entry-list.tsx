@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { TrendingUp, TrendingDown, Calendar, Edit, Trash2 } from 'lucide-react'
+import { TrendingUp, TrendingDown, Calendar, CalendarClock, Edit, Trash2 } from 'lucide-react'
 import { getCategoryColorClasses } from '@/lib/color-map'
 import { cn } from '@/lib/utils'
 import { useCategory } from './provider/category-provider'
@@ -63,7 +63,6 @@ export function EntryList({
               )}
               aria-hidden="true"
             />
-
             {/* Top Row: Icon + Description (grows) */}
             <div className="flex items-center gap-2 px-4 py-0 min-w-0 h-[40%]">
               <span
@@ -85,7 +84,7 @@ export function EntryList({
               {/* Left Details: Date & Category (grows) */}
               <div className="flex flex-col flex-1 justify-center gap-0 pl-4 min-w-0 text-muted-foreground text-sm">
                 <div className="flex items-center gap-1 mb-2">
-                  <Calendar className="flex-shrink-0 mr-1 w-4 h-4" />
+                  {entry.transactionId != null ? <CalendarClock className="flex-shrink-0 mr-1 w-4 h-4" /> : <Calendar className="flex-shrink-0 mr-1 w-4 h-4" />}
                   <span>
                     {new Date(entry.createdAt).toLocaleDateString('de-DE')}
                   </span>
