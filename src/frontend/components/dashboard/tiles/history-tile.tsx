@@ -54,11 +54,17 @@ export default function HistoryTile({
     )
   }
 
-  const roundedMinY =
-    Math.floor(Math.min(...graphData.map(item => item.kontostand)) / 1000) *
-    1000
-  const roundedMaxY =
-    Math.ceil(Math.max(...graphData.map(item => item.kontostand)) / 1000) * 1000
+  // Logic behind y-Axis Scale
+  const values = graphData.map(item => item.kontostand)
+  const trueMin = Math.min(...values)
+  const trueMax = Math.max(...values)
+  // Add 10% Buffer
+  const bufferedMin = trueMin < 0 ? trueMin * 1.15 : trueMin * 0.85
+  const bufferedMax = trueMax > 0 ? trueMax * 1.15 : trueMax * 0.85
+  const diff = Math.abs(bufferedMax - bufferedMin)
+  const step = Math.pow(10, Math.floor(Math.log10(diff)))
+  const roundedMinY = Math.floor(bufferedMin / step) * step
+  const roundedMaxY = Math.ceil(bufferedMax / step) * step
 
   return (
     <Card className={cn('px-2 p-1.5',className)}>
@@ -97,7 +103,7 @@ export default function HistoryTile({
               axisLine={false}
               tick={{ fontSize: 11 }}
               tickCount={3}
-              domain={[roundedMinY, 'auto']}
+              domain={[roundedMinY, roundedMaxY]}
               tickFormatter={value =>
                 roundedMaxY >= 10000 ? `${value / 1000}k €` : `${value} €`
               }
@@ -135,7 +141,7 @@ export default function HistoryTile({
             />
             <Area
               dataKey="kontostand"
-              type="natural"
+              type="monotone"
               fill="url(#fillKontostand)"
               stroke="var(--color-chart-2)"
             />
