@@ -36,13 +36,27 @@ export default function HistoryTile({
         endDate: endDate,
         granularity: ApiGranularity.DAY,
       }),
-    select: data =>
-      data.data.map(item => ({
+    select: data => {
+      const mapped = data.data.map(item => ({
         date: new Date(item.date).toISOString(),
         kontostand: Math.round(Number(item.value) / 100),
-      })),
+      }))
+      if (mapped.length > 0) {
+        const firstValue = mapped[0].kontostand
+        const userStartISO = new Date(startDate).toISOString()
+
+        // Erster eingetragener Kontostand-Value liegt hinter dem Startdate
+        if (new Date(mapped[0].date) > new Date(startDate)) {
+          mapped.unshift({
+            date: userStartISO,
+            kontostand: firstValue,
+          })
+        }
+      }
+      return mapped
+    },
     placeholderData: previousData => previousData,
-  })
+    })
 
   if (!graphData) {
     return (
