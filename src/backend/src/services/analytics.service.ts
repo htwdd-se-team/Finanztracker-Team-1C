@@ -14,13 +14,14 @@ import {
 
 import { KyselyService } from "./kysely.service";
 import { PrismaService } from "./prisma.service";
+import { RecurringEntryService } from "./recurring-entry.service";
 
 @Injectable()
 export class AnalyticsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly kysely: KyselyService,
-    private readonly recurringEntryService: import("./recurring-entry.service").RecurringEntryService,
+    private readonly recurringEntryService: RecurringEntryService,
   ) {}
 
   private TIMEZONE = "Europe/Berlin";
