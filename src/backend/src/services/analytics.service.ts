@@ -234,19 +234,29 @@ export class AnalyticsService {
     const start = now.startOf("month").toJSDate();
     const end = now.plus({ months: 1 }).startOf("month").toJSDate();
 
-    // Current balance (sum of incomes - sum of expenses)
-    const incomeAgg = await this.prisma.transaction.aggregate({
-      where: { userId: user.id, type: "INCOME", isRecurring: false },
-      _sum: { amount: true },
-    });
-    const expenseAgg = await this.prisma.transaction.aggregate({
-      where: { userId: user.id, type: "EXPENSE", isRecurring: false },
-      _sum: { amount: true },
-    });
+    // Current balance (sum of incomes - sum of expenses) using a single Kysely aggregate
+    const aggRaw = await this.kysely
+      .selectFrom("Transaction")
+      .where("userId", "=", user.id)
+      .where("isRecurring", "=", false)
+      .select((eb) => [
+        eb.fn
+          .sum(
+            eb
+              .case()
+              .when("type", "=", "INCOME")
+              .then(eb.ref("amount"))
+              .when("type", "=", "EXPENSE")
+              .then(eb.neg(eb.ref("amount")))
+              .else(0)
+              .end(),
+          )
+          .as("balance"),
+      ])
+      .executeTakeFirst();
 
-    const incomeSum = incomeAgg._sum?.amount ?? 0;
-    const expenseSum = expenseAgg._sum?.amount ?? 0;
-    const balance = incomeSum - expenseSum;
+    const agg = aggRaw as Record<string, unknown> | undefined;
+    const balance = Number(agg?.["balance"] ?? 0);
 
     const items: AvailableCapitalItemDto[] = [];
 
@@ -311,31 +321,14 @@ export class AnalyticsService {
       .execute();
 
     const rows: ScheduledCategoryRow[] = (rowsRaw as unknown[]).map((r) => {
-      const obj = r as Record<string, unknown>;
-      const rawCategoryId = obj["categoryId"];
+      const rec = r as Record<string, unknown>;
       const categoryId =
-        typeof rawCategoryId === "number"
-          ? rawCategoryId
-          : rawCategoryId == null
-            ? null
-            : Number(rawCategoryId);
-
-      const rawCategoryName = obj["categoryName"];
+        rec["categoryId"] == null ? null : Number(rec["categoryId"]);
       const categoryName =
-        typeof rawCategoryName === "string" ? rawCategoryName : null;
-
-      const rawCategoryIcon = obj["categoryIcon"];
+        typeof rec["categoryName"] === "string" ? rec["categoryName"] : null;
       const categoryIcon =
-        typeof rawCategoryIcon === "string" ? rawCategoryIcon : null;
-
-      const rawValue = obj["value"];
-      const value =
-        typeof rawValue === "number"
-          ? rawValue
-          : rawValue == null
-            ? 0
-            : Number(rawValue);
-
+        typeof rec["categoryIcon"] === "string" ? rec["categoryIcon"] : null;
+      const value = Number(rec["value"] ?? 0);
       return {
         categoryId,
         categoryName,
