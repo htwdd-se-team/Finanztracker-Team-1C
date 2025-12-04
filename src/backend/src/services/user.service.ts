@@ -32,6 +32,7 @@ export class UserService {
       .where("userId", "=", user.id)
       .where("createdAt", "<=", sql<Date>`NOW()`)
       .where("isRecurring", "=", false)
+      .where("transactionId", "is", null)
       .select((eb) => [
         eb
           .fn("sum", [

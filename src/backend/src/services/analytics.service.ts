@@ -44,6 +44,7 @@ export class AnalyticsService {
             .where("userId", "=", user.id)
             .where("createdAt", ">=", startDate)
             .where("createdAt", "<=", endDate)
+            .where("isRecurring", "=", false)
             .select((eb) => [
               eb
                 .fn("date_trunc", [
@@ -85,6 +86,7 @@ export class AnalyticsService {
             .where("userId", "=", user.id)
             .where("createdAt", ">=", startDate)
             .where("createdAt", "<=", endDate)
+            .where("isRecurring", "=", false)
             .select((eb) => [
               eb
                 .fn("date_trunc", [
@@ -131,6 +133,7 @@ export class AnalyticsService {
           .where("userId", "=", user.id)
           .where("createdAt", "<", startDate)
           .where("createdAt", "<=", sql<Date>`NOW()`)
+          .where("isRecurring", "=", false)
           .select((eb) => [
             eb.fn
               .sum(
@@ -153,6 +156,7 @@ export class AnalyticsService {
           .where("createdAt", ">=", startDate)
           .where("createdAt", "<=", endDate)
           .where("createdAt", "<=", sql<Date>`NOW()`)
+          .where("isRecurring", "=", false)
           .select((eb) => [
             eb
               .fn("date_trunc", [
@@ -231,11 +235,11 @@ export class AnalyticsService {
 
     // Current balance (sum of incomes - sum of expenses)
     const incomeAgg = await this.prisma.transaction.aggregate({
-      where: { userId: user.id, type: "INCOME" },
+      where: { userId: user.id, type: "INCOME", isRecurring: false },
       _sum: { amount: true },
     });
     const expenseAgg = await this.prisma.transaction.aggregate({
-      where: { userId: user.id, type: "EXPENSE" },
+      where: { userId: user.id, type: "EXPENSE", isRecurring: false },
       _sum: { amount: true },
     });
 
