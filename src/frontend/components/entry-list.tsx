@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 import { useCategory } from './provider/category-provider'
 import { IconRender } from '@/lib/icon-map'
 import { TransactionDialog } from './TransactionDialog'
+import { DataImportDialog } from './data-import-dialog'
 import { ApiEntryResponseDto } from '@/__generated__/api'
 
 interface EntryListProps {
@@ -37,7 +38,14 @@ export function EntryList({
   if (entries.length === 0) {
     return (
       <li className="py-8 text-muted-foreground text-center">
-        Keine Einträge gefunden
+        <div className="space-y-4">
+          <div>Keine Einträge gefunden</div>
+          <div>
+            <DataImportDialog>
+              <Button>Bankdaten importieren</Button>
+            </DataImportDialog>
+          </div>
+        </div>
       </li>
     )
   }
