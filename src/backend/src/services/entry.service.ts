@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { FilterSortOption, Prisma, Transaction, User } from "@prisma/client";
-import { DateTime } from "luxon";
 
 import {
   Currency,
@@ -43,43 +42,39 @@ export class EntryService {
   ): Promise<EntryResponseDto> {
     // recurring entry
     if (data.isRecurring) {
-      // Create parent and child in a single transaction to avoid races with the cron
-      const child = await this.prisma.$transaction(async (tx) => {
-        const parentEntry = await tx.transaction.create({
-          data: {
-            type: data.type,
-            amount: data.amount,
-            description: data.description,
-            currency: data.currency || Currency.EUR,
-            userId: user.id,
-            isRecurring: true,
-            categoryId: data.categoryId,
-            createdAt: data.createdAt,
-            recurringType: data.recurringType,
-            recurringBaseInterval: data.recurringBaseInterval ?? 1,
-            recurringDisabled: false,
-          },
-        });
-
-        // create child with server-side now timestamp so the recurring guard will find it
-        const childEntry = await tx.transaction.create({
-          data: {
-            type: data.type,
-            amount: data.amount,
-            description: data.description,
-            currency: data.currency || Currency.EUR,
-            userId: user.id,
-            isRecurring: false,
-            categoryId: data.categoryId,
-            createdAt: DateTime.now().toJSDate(),
-            transactionId: parentEntry.id,
-          },
-        });
-
-        return childEntry;
+      // shadow element
+      const parentEntry = await this.prisma.transaction.create({
+        data: {
+          type: data.type,
+          amount: data.amount,
+          description: data.description,
+          currency: data.currency || Currency.EUR,
+          userId: user.id,
+          isRecurring: true,
+          categoryId: data.categoryId,
+          createdAt: data.createdAt,
+          recurringType: data.recurringType,
+          recurringBaseInterval: data.recurringBaseInterval ?? 1,
+          recurringDisabled: false,
+        },
       });
 
-      return EntryService.mapEntryToResponseDto(child);
+      // actual transaction
+      const childEntry = await this.prisma.transaction.create({
+        data: {
+          type: data.type,
+          amount: data.amount,
+          description: data.description,
+          currency: data.currency || Currency.EUR,
+          userId: user.id,
+          isRecurring: false,
+          categoryId: data.categoryId,
+          createdAt: data.createdAt || new Date(),
+          transactionId: parentEntry.id,
+        },
+      });
+
+      return EntryService.mapEntryToResponseDto(childEntry);
     }
 
     // Create non-recurring entry
