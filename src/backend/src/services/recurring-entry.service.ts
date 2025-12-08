@@ -81,6 +81,51 @@ export class RecurringEntryService {
       );
 
       if (shouldCreateChild) {
+        // Defensive check: ensure we don't create more than one child per period
+        // Calculate current period window depending on recurringType
+        const now = DateTime.now();
+        let periodStart = now.startOf("day");
+        let periodEnd = now.plus({ days: 1 }).startOf("day");
+
+        switch (parent.recurringType) {
+          case RecurringTransactionType.DAILY:
+            periodStart = now.startOf("day");
+            periodEnd = periodStart.plus({
+              days: parent.recurringBaseInterval ?? 1,
+            });
+            break;
+          case RecurringTransactionType.WEEKLY:
+            periodStart = now.startOf("week");
+            periodEnd = periodStart.plus({
+              weeks: parent.recurringBaseInterval ?? 1,
+            });
+            break;
+          case RecurringTransactionType.MONTHLY:
+          default:
+            periodStart = now.startOf("month");
+            periodEnd = periodStart.plus({
+              months: parent.recurringBaseInterval ?? 1,
+            });
+            break;
+        }
+
+        const existingInPeriod = await this.prisma.transaction.findFirst({
+          where: {
+            transactionId: parentId,
+            createdAt: {
+              gte: periodStart.toJSDate(),
+              lt: periodEnd.toJSDate(),
+            },
+          },
+        });
+
+        if (existingInPeriod) {
+          this.logger.debug(
+            `Skipped creating child for parent ${parentId} — child already exists in period`,
+          );
+          return;
+        }
+
         await this.prisma.transaction.create({
           data: {
             type: parent.type,
