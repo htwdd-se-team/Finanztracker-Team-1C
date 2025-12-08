@@ -98,7 +98,7 @@ export default function ProfilePage() {
                   <div className="flex items-center gap-2 mb-4">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
                     <span className="font-medium text-sm -mr-2">Mitglied seit:</span>
-                    <Badge variant="secondary" className="text-sm bg-transparent">
+                    <Badge variant="secondary" className="text-sm text-foreground bg-transparent">
                       {DateTime.fromISO(user.createdAt).toLocaleString(
                         DateTime.DATE_FULL
                       )}
