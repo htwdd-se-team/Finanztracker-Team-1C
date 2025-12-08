@@ -70,6 +70,7 @@
 - Datenimport funktioniert lokal, aber nicht auf dem Master -> Prüfen obs da einen Zusammenhang zu Cloudflare gibt
 - Im Ausgaben-nach-Kategorien PieChart funktioniert der ToolTip nicht, wenn man über das Icon hovert
 - Beim editieren von bestehenden Daueraufträgen kommen 2 Popups, wovon eines unberechtigt ist: "Transaktion angelegt"
+- Summary der Daueraufträge summiert nur dann korrekt auf, wenn es weniger als 11 Daueraufträge gibt
 
 === 6. Kleine Randnotizen
 
