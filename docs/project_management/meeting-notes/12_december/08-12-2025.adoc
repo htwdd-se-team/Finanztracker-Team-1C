@@ -76,7 +76,9 @@
 
 - Vernünftige Rot-Farbe ins Theme einfügen, welches dann global genutzt wird (überall dementsprechend im Tailwind className anpassen)
 - Im Ausgaben-nach-Kategorien PieChart sollen alle Transaktionen, die Ausgaben sind UND keine Kategorie haben, mit unter "Sonstiges" geführt werden
-- Beim Transaktion-Bearbeiten Popup lassen sich Betrag und Bezeichnung schlecht editieren. Die Komponente muss nochmal überarbeitet werden
+- Bei folgenden Komponenten lässt sich insbesondere im Desktop Betrieb schlecht die Eingabe ändern, z.B. kein markieren möglich. Muss überarbeitet werden!
+  * Transaktion Popup: Betrag und Bezeichnung
+  * Account Registrierungs Window: alle Felder
 
 
 
