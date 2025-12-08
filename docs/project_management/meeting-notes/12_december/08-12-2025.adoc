@@ -3,10 +3,10 @@
 *Datum:* 08.12.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Christoph +
 *Meetingbeginn:* 14:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min +
+*Meetingende:* 15:15 +
+*Dauer:* 75 min +
 
 ==== Anwesenheit: 
 - Elias
@@ -14,125 +14,88 @@
 - Khang
 - Christoph
 - Cedrick
-- Ben
-
-== Tagesordnung
+- Ben 
 
 ==  Weekly Stand-up/Backlog Refinement
 === 1. Ticketfortschritt
-Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
 
 *Notizen:* +
-- ... +
-
-*Entscheidungen:* +
-- ... +
-  +
-  +
-
+- Die Bearbeitung der Tickets dieses Sprints ist weit fortgeschritten und es gibt keinen Grund zur Annahme, dass Tickets bis zur nächsten Sprintplanung unvollendet bleiben +
+- Khang und Christoph treffen sich nach dem Meeting nochmal um diverse Edge Cases zu testen, damit sichergestellt werden kann, dass die Bugs in der Frontend-Ausgabe behoben sind +
 
 
 === 2. Wie weit sind die Tests?
 
 *Notizen:* +
-- ... +
-
-*Entscheidungen:* +
-- ... +
-  +
-  +
-
+- Tests sind implementiert +
+- Die Tests fürs Backend laufen bei jedem Merge auf den Master Branch +
+- Die Tests fürs Frontend (umgesetzt mit Playwright) werden nur punktuell nach Bedarf laufen gelassen, da sehr aufwändig +
+- Last Test wird nur für mäßig sinnvoll befunden, da wir ohnehin Cloudflare Pages benutzen +
 
 
 === 3. Fachaustausch Tests
 
 *Notizen:* +
-- ... +
-
-*Entscheidungen:* +
-- ... +
-  +
-  +
+- Ist vorbereitet und wird heute Nachmittag nochmal von Cedrick und Elias finalisiert +
 
 
 === 4. Infos aus der Konsultation letzte Woche
-=====================
-- Wer hat am 16.12. (Dienstag) um 18Uhr Zeit? → 2 Leute noch dazu
-    - Meeting mit Externen zwar nach unserem Sprint Planning → einfach kurzes Update mit Begründung am Dienstag
-=====================
-=====================
-- Termin Task-Erstellung & Sequenzdiagramme für den letzten großen Sprint (alles was wir nicht im Sprint Planning schaffen) → Elias
-=====================
-=====================
+- Wer hat am 16.12. (Dienstag) um 18Uhr Zeit? → Ben, Elias, Cedrick +
+  * Meeting mit Externen zwar nach unserem Sprint Planning → einfach kurzes Update mit Begründung am Dienstag
+
+- Termin Task-Erstellung & Sequenzdiagramme für den letzten großen Sprint (alles was wir nicht im Sprint Planning schaffen)
+  * Elias und Ben machen das direkt nach dem kommenden Meeting am 15.12.
+
 - Thema Test: 10% Systemtest (Lasttest = 1000 User auf einmal) oder UX-Heuristik, 20% Integrationstests und 70% Unit-Test (komplexe Stellen und Kompontenten mit hohem Wert)
-=====================
-=====================
+
 - SCRUM-Master kannst du nochmal unsere Regeln (DoD und DoR) durchgehen und schauen, wie wir diese umsetzen + potenzielle Verbesserungsmaßnahmen an den Regeln oder unserer Vorgehensweise → bevor nicht getestet wurde (automatisch) kein Merge
-=====================
-=====================
+  * Paula schaut sich das bis zum nächsten Meeting nochmal an
+
 - Feedback Sequenz - und Klassendiagramme
-    - Sequenzdiagramme sind gut → nächstes Mal leicht vereinfachen und Überprüfung, der Devs, ob wir diese so umgesetzt haben, wenn nicht kurze Begründung an das Ticket, warum nicht
-    - Klassendiagramm
-        - DTO ist die falsche Stelle zur Validierung → Clean Architektur anschauen
-        - Fachliche und technische Sicht auseinander halten → Auch in den Bewertungskriterien, daher technische User-Story für bessere Wartbarkeit und Schnelligkeit für Nutzer
-=====================
-=====================
+    * Sequenzdiagramme sind gut → nächstes Mal leicht vereinfachen und Überprüfung, der Devs, ob wir diese so umgesetzt haben, wenn nicht kurze Begründung an das Ticket, warum nicht
+    * Klassendiagramm
+        * DTO ist die falsche Stelle zur Validierung → Clean Architektur anschauen
+        * Fachliche und technische Sicht auseinander halten → Auch in den Bewertungskriterien, daher technische User-Story für bessere Wartbarkeit und Schnelligkeit für Nutzer
+        * Elias bereitet Mail für Ruben vor und Ben kontaktiert ihn dann
+
 - Abgabedokument durchgehen
-    - Folie 1 von der Belegarbeitsabgabe
-    - Alle neuen Dokumentationstasks für die nächste Iteration zeigen und zuweisen → Bitte seine Aufgabe durchlesen bis nächste Woche, damit wir es besser einplanen können
-=====================
+    * Folie 1 von der Belegarbeitsabgabe
+    * Alle neuen Dokumentationstasks für die nächste Iteration zeigen und zuweisen → Bitte seine Aufgabe durchlesen bis nächste Woche, damit wir es besser einplanen können
 
-*Notizen:* +
-- ... +
-
-
-*Entscheidungen:* +
-- ... +
-  +
-  +
 
 
 === 5. Bugs der letzten Woche?
 
-*Notizen:* +
-- ... +
+- DateSelector verdreht die Daten: OverviewPage -> von Gesamt zu "Auswahl" wechseln -> bspw. kommt vorausgefüllt Dezember vor November +
+- Datenimport funktioniert lokal, aber nicht auf dem Master -> Prüfen obs da einen Zusammenhang zu Cloudflare gibt
+- Im Ausgaben-nach-Kategorien PieChart funktioniert der ToolTip nicht, wenn man über das Icon hovert
+- Beim editieren von bestehenden Daueraufträgen kommen 2 Popups, wovon eines unberechtigt ist: "Transaktion angelegt"
+
+=== 6. Kleine Randnotizen
+
+- Vernünftige Rot-Farbe ins Theme einfügen, welches dann global genutzt wird (überall dementsprechend im Tailwind className anpassen)
+- Im Ausgaben-nach-Kategorien PieChart sollen alle Transaktionen, die Ausgaben sind UND keine Kategorie haben, mit unter "Sonstiges" geführt werden
+- Beim Transaktion-Bearbeiten Popup lässt sich der Betrag schlecht editieren. Die Komponente muss nochmal überarbeitet werden
 
 
-*Entscheidungen:* +
-- ... +
-  +
-  +
 
-
-
-=== 6. Review durch externe Gruppe
+=== 7. Review durch externe Gruppe
 Termin: Di 16.12 18 Uhr ? (bleibt der Termin?) +
 Wer kommt mit?
+- Elias, Ben, Cedrick +
 
 
-*Notizen:* +
-- ... +
-
-*Entscheidungen:* +
-- ... +
-  +
-  +
-
-
-
-== Retrospektive
-*Dinge aus dem letzten Sprint*: +
+=== Retrospektive
 - keine Meetings mehr in Person, alles Online +
+  * Am Tag unseres Meetings haben fast alle Mitglieder keine Präsenztermine in der Uni. Der Aufwand ließe sich also kaum rechtfertigen, zumal die Kommunikation im Team bestens läuft +
 - ursprünglich Review & Retro im Meeting eine Woche vor Sprintplanung +
-    -> Änderung: Retro eine Woche vor Sprintplanung im wöchentlichen Meeting, externes Review möglichst kurz vor (wenige Tage) der Sprintplanung, internes Review im gleichen Meeting wie Sprintplanung (am Anfang des Meetings) +
-- ... +
+  * Durch Abhängigkeit von den verfügbaren Zeitslots des externen Teams ist das oft gar nicht umsetzbar gewesen
+  * Obendrein sind eine Woche im Voraus zum Teil auch noch wichtige Tickets unbearbeitet
+    * Änderung: Retro eine Woche vor Sprintplanung im wöchentlichen Meeting, externes Review möglichst kurz vor (wenige Tage) der Sprintplanung, internes Review im gleichen Meeting wie Sprintplanung (am Anfang des Meetings) +
+- Es wurde angesprochen, ob es Bedarf für Time-Boxed Meetings gibt. Das wurde allerdings verneint, da das Team üblicherweise die geplante Dauer der Meetings einhält und so in Ruhe die Punkte besprochen werden können ohne durch die Zeit abgelenkt zu sein +
 
 
 
-
-=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
-
-- ... +
 
 
 == Nächstes Meeting
