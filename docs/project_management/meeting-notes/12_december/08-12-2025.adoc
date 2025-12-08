@@ -1,0 +1,123 @@
+= Meeting-Protokoll 08.12.2025
+
+*Datum:* 08.12.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+
+=== 2. Wie weit sind die Tests?
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+
+=== 3. Fachaustausch Tests
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 4. Infos aus der Konsultation letzte Woche
+
+*Notizen:* +
+- ... +
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 5. Bugs der letzten Woche?
+
+*Notizen:* +
+- ... +
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+
+=== 6. Review durch externe Gruppe
+Termin: Di 16.12 18 Uhr ? (bleibt der Termin?) +
+Wer kommt mit?
+
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+
+== Retrospektive
+*Dinge aus dem letzten Sprint*: +
+- keine Meetings mehr in Person, alles Online +
+- ursprünglich Review & Retro im Meeting eine Woche vor Sprintplanung +
+    -> Änderung: Retro eine Woche vor Sprintplanung im wöchentlichen Meeting, externes Review möglichst kurz vor (wenige Tage) der Sprintplanung, internes Review im gleichen Meeting wie Sprintplanung (am Anfang des Meetings) +
+- ... +
+
+
+
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+- ... +
+
+
+== Nächstes Meeting
+
+- Datum: 15.12.2025
+- Zeit: 13:30
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- To-Do's aus dem Externen Review +
+- Internes Review +
+- Sprintplanung +
