@@ -52,14 +52,14 @@ export default function ScheduledEntriesPage() {
           <ul className="space-y-2 w-full">
             <h1 className="flex gap-3 mt-4 sm:mt-6 mb-2 ml-2 font-bold text-2xl">
               <CalendarClock className="w-8 h-8" />
-              Terminüberweisungen
+              Daueraufträge
             </h1>
             <p className="mt-2 mb-6 ml-2 text-muted-foreground">
               Verwalten Sie Ihre regelmäßigen Transaktionen
             </p>
 
             {/* SUMMARY BOX */}
-            <Card className="p-2 border bg-card/80">
+            <Card className="p-2 border bg-card/90 dark:bg-card/60">
               <CardContent className="p-0">
                 <div className="grid grid-cols-3 gap-3 text-center">
                   {/* Anzahl Daueraufträge */}

@@ -47,6 +47,17 @@ export function EntryList({
     )
   }
 
+  let list = entries
+  if (isCompactView) {
+    list = [...entries].sort((a, b) => {
+      // Einkommen vor Ausgaben
+      if (a.type !== b.type) {
+        return a.type === "INCOME" ? -1 : 1
+      }
+      return b.amount - a.amount
+    })
+  }
+
   return (
     <>
       {isCompactView ? (
@@ -55,77 +66,83 @@ export function EntryList({
         // --------------------------------------------------------
         <Card className="p-0 bg-card/90 dark:bg-card/60 shadow-sm border rounded-xl">
           <CardContent className="p-0">
-            {entries.map((entry, index) => {
+            {list.map((entry, index) => {
               if (!entry.isRecurring) return null
               const isLast = index === entries.length - 1
               const isIncome = entry.type === 'INCOME'
 
               return(
-                <div key={entry.id} className="flex flex-col">
-                  {/* Top Row */}
-                  <div className="px-3 py-1 flex items-start justify-between">
-                    {/* Left */}
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-base truncate">
-                        {entry.description}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        Frequenz: jeden
+                <div key={entry.id} className="px-2 flex flex-col">
+                  {/* Zeile 1: Titel + Betrag */}
+                  <div className="flex items-center justify-between gap-3">
+                    {/* Title */}
+                    <span className="font-semibold text-base truncate flex-1 min-w-0">
+                      {entry.description}
+                    </span>
+                    {/* Amount */}
+                    <span className="font-mono font-bold text-lg flex-shrink-0">
+                      {isIncome ? '+' : '-'}
+                      {(entry.amount / 100).toFixed(2)} {entry.currency}
+                    </span>
+                  </div>
+
+                  {/* Zeile 2: Details + Buttons */}
+                  <div className="flex items-center justify-between -mt-1 mb-1">
+                    {/* LEFT: Details */}
+                    <div className="text-xs text-muted-foreground flex flex-col">
+                      <span>
+                        Frequenz:
                         {entry.recurringBaseInterval === 1
-                          ? " Monat"
-                          : ` ${entry.recurringBaseInterval}. Monat`}
+                          ? " jeden Monat"
+                          : ` jeden ${entry.recurringBaseInterval}. Monat`}
                       </span>
-                      <span className="text-xs text-muted-foreground">
-                        Erste Ausführung:{" "} {new Date(entry.createdAt).toLocaleDateString("de-DE")}
+
+                      <span>
+                        Erste Ausführung:{" "}
+                        {new Date(entry.createdAt).toLocaleDateString("de-DE")}
                       </span>
                     </div>
-                    {/* Right */}
-                    <div className="flex flex-col items-end gap-1">
-                      <span className="font-mono font-bold text-lg">
-                        {isIncome ? '+' : '-'}
-                        {(entry.amount / 100).toFixed(2)} {entry.currency}
-                      </span>
 
-                      <div className="flex gap-1">
-                        <TransactionDialog editData={entry}>
+                    {/* RIGHT: Edit/Delete Buttons */}
+                    <div className="flex gap-1 flex-shrink-0">
+                      <TransactionDialog editData={entry}>
+                        <Button
+                          variant="ghost"
+                          className="p-1 w-7 h-7 cursor-pointer"
+                        >
+                          <Edit className="stroke-[2] !w-4 !h-4" />
+                        </Button>
+                      </TransactionDialog>
+
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="flex-shrink-0 p-1 w-7 h-7 cursor-pointer"
+                            className="flex-shrink-0 p-1 w-7 h-7 text-destructive cursor-pointer"
+                            disabled={isDeleting && deletingEntryId === entry.id}
+                            onClick={() => setDeletingEntryId(entry.id)}
                           >
-                            <Edit className="stroke-[2] !w-4 !h-4" />
+                            <Trash2 className="stroke-[2] !w-4 !h-4" />
                           </Button>
-                        </TransactionDialog>
-
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className="flex-shrink-0 p-1 w-7 h-7 text-destructive cursor-pointer"
-                              disabled={isDeleting && deletingEntryId === entry.id}
-                              onClick={() => setDeletingEntryId(entry.id)}
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Diese Aktion kann nicht rückgängig gemacht werden.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(entry.id)}
+                              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                             >
-                              <Trash2 className="stroke-[2] !w-4 !h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Diese Aktion kann nicht rückgängig gemacht werden.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(entry.id)}
-                                className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
-                              >
-                                Löschen
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
+                              Löschen
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                   {/* Divider außer beim letzten Entry */}
