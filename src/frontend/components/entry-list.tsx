@@ -17,6 +17,8 @@ import { useCategory } from './provider/category-provider'
 import { IconRender } from '@/lib/icon-map'
 import { TransactionDialog } from './TransactionDialog'
 import { ApiEntryResponseDto } from '@/__generated__/api'
+import { Card, CardContent } from '@/components/ui/card'
+import { usePathname } from 'next/navigation'
 
 interface EntryListProps {
   entries: ApiEntryResponseDto[]
@@ -34,6 +36,9 @@ export function EntryList({
   handleDelete,
 }: EntryListProps) {
   const { getCategoryFromId } = useCategory()
+  const pathname = usePathname()
+  const isCompactView = pathname === "/scheduled-entries"
+
   if (entries.length === 0) {
     return (
       <li className="py-8 text-muted-foreground text-center">
@@ -44,130 +49,220 @@ export function EntryList({
 
   return (
     <>
-      {entries.map(entry => {
-        const isIncome = entry.type === 'INCOME'
+      {isCompactView ? (
+        // --------------------------------------------------------
+        // ---- Compact mode for parent-recurring-transactions ----
+        // --------------------------------------------------------
+        <Card className="p-0 bg-card/90 dark:bg-card/60 shadow-sm border rounded-xl">
+          <CardContent className="p-0">
+            {entries.map((entry, index) => {
+              if (!entry.isRecurring) return null
+              const isLast = index === entries.length - 1
+              const isIncome = entry.type === 'INCOME'
 
-        return (
-          <li
-            key={entry.id}
-            className="relative flex flex-col bg-card/90 dark:bg-card/60 shadow-sm border rounded-xl h-30 overflow-hidden"
-          >
-            {/* Farbiger Streifen links */}
-            <span
-              className={cn(
-                'top-2 bottom-2 left-0 absolute rounded-full w-1.5',
-                entry.categoryId &&
-                  getCategoryColorClasses(
-                    getCategoryFromId(Number(entry.categoryId)).color
-                  )
-              )}
-              aria-hidden="true"
-            />
-            {/* Top Row: Icon + Description (grows) */}
-            <div className="flex items-center gap-2 px-4 py-0 min-w-0 h-[40%]">
-              <span
-                className={`inline-flex items-center justify-center rounded-full h-8 w-8 text-base flex-shrink-0 ${
-                  isIncome
-                    ? 'bg-green-100 text-green-600'
-                    : 'bg-red-100 text-red-600'
-                }`}
-              >
-                {isIncome ? <TrendingUp /> : <TrendingDown />}
-              </span>
-              <span className="flex-1 font-semibold text-lg truncate">
-                {entry.description || '-'}
-              </span>
-            </div>
+              return(
+                <div key={entry.id} className="flex flex-col">
+                  {/* Top Row */}
+                  <div className="px-3 py-1 flex items-start justify-between">
+                    {/* Left */}
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-base truncate">
+                        {entry.description}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        Frequenz: jeden
+                        {entry.recurringBaseInterval === 1
+                          ? " Monat"
+                          : ` ${entry.recurringBaseInterval}. Monat`}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        Erste Ausführung:{" "} {new Date(entry.createdAt).toLocaleDateString("de-DE")}
+                      </span>
+                    </div>
+                    {/* Right */}
+                    <div className="flex flex-col items-end gap-1">
+                      <span className="font-mono font-bold text-lg">
+                        {isIncome ? '+' : '-'}
+                        {(entry.amount / 100).toFixed(2)} {entry.currency}
+                      </span>
 
-            {/* Bottom Row: Details (grow left) + Price & Actions (right, no grow) */}
-            <div className="flex items-center gap-2 m-0 p-0 min-w-0 h-[60%]">
-              {/* Left Details: Date & Category (grows) */}
-              <div className="flex flex-col flex-1 justify-center gap-0 pl-4 min-w-0 text-muted-foreground text-sm">
-                <div className="flex items-center gap-1 mb-2">
-                  {entry.transactionId != null ? <CalendarClock className="flex-shrink-0 mr-1 w-4 h-4" /> : <Calendar className="flex-shrink-0 mr-1 w-4 h-4" />}
-                  <span>
-                    {new Date(entry.createdAt).toLocaleDateString('de-DE')}
-                  </span>
+                      <div className="flex gap-1">
+                        <TransactionDialog editData={entry}>
+                          <Button
+                            variant="ghost"
+                            className="flex-shrink-0 p-1 w-7 h-7 cursor-pointer"
+                          >
+                            <Edit className="stroke-[2] !w-4 !h-4" />
+                          </Button>
+                        </TransactionDialog>
+
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              className="flex-shrink-0 p-1 w-7 h-7 text-destructive cursor-pointer"
+                              disabled={isDeleting && deletingEntryId === entry.id}
+                              onClick={() => setDeletingEntryId(entry.id)}
+                            >
+                              <Trash2 className="stroke-[2] !w-4 !h-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Diese Aktion kann nicht rückgängig gemacht werden.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDelete(entry.id)}
+                                className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                              >
+                                Löschen
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Divider außer beim letzten Entry */}
+                  {!isLast && <div className="w-full h-px bg-border/40" />}
                 </div>
-                {entry.categoryId && (
-                  <div
-                    className={cn(
-                      'inline-flex items-center gap-0 rounded-full w-fit font-medium',
-                      getCategoryColorClasses(
-                        getCategoryFromId(Number(entry.categoryId)).color
-                      )
-                    )}
-                  >
-                    <IconRender
-                      iconName={
-                        getCategoryFromId(Number(entry.categoryId)).icon
-                      }
-                      className="flex-shrink-0 mr-2 w-5 h-5"
-                    />
-                    <span className="truncate">
-                      {getCategoryFromId(Number(entry.categoryId)).name}
+              )
+            })}
+            </CardContent>
+          </Card>
+        ) : (
+          // -------------------------------------------------
+          // ----- Detailed view for normal transactions -----
+          // -------------------------------------------------
+          entries.map(entry => {
+            const isIncome = entry.type === 'INCOME'
+            return (
+              <li
+                key={entry.id}
+                className="relative flex flex-col bg-card/90 dark:bg-card/60 shadow-sm border rounded-xl h-30 overflow-hidden"
+              >
+              {/* Farbiger Streifen links */}
+              <span
+                className={cn(
+                  'top-2 bottom-2 left-0 absolute rounded-full w-1.5',
+                  entry.categoryId &&
+                    getCategoryColorClasses(
+                      getCategoryFromId(Number(entry.categoryId)).color
+                    )
+                )}
+                aria-hidden="true"
+              />
+              {/* Top Row: Icon + Description (grows) */}
+              <div className="flex items-center gap-2 px-4 py-0 min-w-0 h-[40%]">
+                <span
+                  className={`inline-flex items-center justify-center rounded-full h-8 w-8 text-base flex-shrink-0 ${
+                    isIncome
+                      ? 'bg-green-100 text-green-600'
+                      : 'bg-red-100 text-red-600'
+                  }`}
+                >
+                  {isIncome ? <TrendingUp /> : <TrendingDown />}
+                </span>
+                <span className="flex-1 font-semibold text-lg truncate">
+                  {entry.description || '-'}
+                </span>
+              </div>
+
+              {/* Bottom Row: Details (grow left) + Price & Actions (right, no grow) */}
+              <div className="flex items-center gap-2 m-0 p-0 min-w-0 h-[60%]">
+                {/* Left Details: Date & Category (grows) */}
+                <div className="flex flex-col flex-1 justify-center gap-0 pl-4 min-w-0 text-muted-foreground text-sm">
+                  <div className="flex items-center gap-1 mb-2">
+                    {entry.transactionId != null ? <CalendarClock className="flex-shrink-0 mr-1 w-4 h-4" /> : <Calendar className="flex-shrink-0 mr-1 w-4 h-4" />}
+                    <span>
+                      {new Date(entry.createdAt).toLocaleDateString('de-DE')}
                     </span>
                   </div>
-                )}
-              </div>
-
-              {/* Right Side: Amount + Action Buttons (no grow, align right) */}
-              <div className="flex flex-col flex-shrink-0 justify-center items-end gap-0 pr-2">
-                <span className="font-mono font-bold text-xl md:text-2xl">
-                  {isIncome ? '+' : '-'}
-                  {(entry.amount / 100).toFixed(2)} {entry.currency}
-                </span>
-                <div className="flex gap-0">
-                  <TransactionDialog editData={entry}>
-                    <Button
-                      variant="ghost"
-                      className="flex-shrink-0 p-0 w-8 h-8 cursor-pointer"
+                  {entry.categoryId && (
+                    <div
+                      className={cn(
+                        'inline-flex items-center gap-0 rounded-full w-fit font-medium',
+                        getCategoryColorClasses(
+                          getCategoryFromId(Number(entry.categoryId)).color
+                        )
+                      )}
                     >
-                      <Edit className="stroke-[2] !w-5 !h-5" />
-                    </Button>
-                  </TransactionDialog>
+                      <IconRender
+                        iconName={
+                          getCategoryFromId(Number(entry.categoryId)).icon
+                        }
+                        className="flex-shrink-0 mr-2 w-5 h-5"
+                      />
+                      <span className="truncate">
+                        {getCategoryFromId(Number(entry.categoryId)).name}
+                      </span>
+                    </div>
+                  )}
+                </div>
 
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
+                {/* Right Side: Amount + Action Buttons (no grow, align right) */}
+                <div className="flex flex-col flex-shrink-0 justify-center items-end gap-0 pr-2">
+                  <span className="font-mono font-bold text-xl md:text-2xl">
+                    {isIncome ? '+' : '-'}
+                    {(entry.amount / 100).toFixed(2)} {entry.currency}
+                  </span>
+                  <div className="flex gap-0">
+                    <TransactionDialog editData={entry}>
                       <Button
                         variant="ghost"
-                        className="flex-shrink-0 p-0 w-8 h-8 text-destructive cursor-pointer"
-                        disabled={isDeleting && deletingEntryId === entry.id}
-                        onClick={() => setDeletingEntryId(entry.id)}
+                        className="flex-shrink-0 p-0 w-8 h-8 cursor-pointer"
                       >
-                        <Trash2
-                          className="stroke-[2] !w-5 !h-5"
-                          style={{
-                            color:
-                              'color-mix(in srgb, var(--destructive) 80%, white)',
-                          }}
-                        />
+                        <Edit className="stroke-[2] !w-5 !h-5" />
                       </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Diese Aktion kann nicht rückgängig gemacht werden.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDelete(entry.id)}
-                          className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                    </TransactionDialog>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="flex-shrink-0 p-0 w-8 h-8 text-destructive cursor-pointer"
+                          disabled={isDeleting && deletingEntryId === entry.id}
+                          onClick={() => setDeletingEntryId(entry.id)}
                         >
-                          Löschen
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                          <Trash2
+                            className="stroke-[2] !w-5 !h-5"
+                            style={{
+                              color:
+                                'color-mix(in srgb, var(--destructive) 80%, white)',
+                            }}
+                          />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Diese Aktion kann nicht rückgängig gemacht werden.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(entry.id)}
+                            className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                          >
+                            Löschen
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-        )
-      })}
+            </li>
+          )
+        })
+      )}
     </>
   )
 }
