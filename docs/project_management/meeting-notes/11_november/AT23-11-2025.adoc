@@ -6,8 +6,7 @@
 ==== Anwesenheit: 
 - Elias
 - Ben
-- Gruppe 1B
-
+- Gruppe Prüfungstracker 
 ==== Feedback Session
 - Davor Bug: Wenn man in einem Filter ein Textfilter hinzufügt, kann man diesen nicht wieder entfernen 
 
