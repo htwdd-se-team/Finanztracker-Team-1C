@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { X } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
+import { apiClient } from '@/api/api-client'
 
 export function DataImportDialog({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false)
@@ -33,17 +34,18 @@ export function DataImportDialog({ children }: { children?: React.ReactNode }) {
 
     try {
       setIsUploading(true)
-      const res = await fetch('/entries/import', {
-        method: 'POST',
-        body: fd,
+
+      // Get token from localStorage
+      const token = localStorage.getItem('jwt')
+
+      const res = await apiClient.instance.post('/entries/import', fd, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
       })
 
-      if (!res.ok) {
-        const text = await res.text()
-        throw new Error(text || 'Fehler beim Upload')
-      }
-
-      const data = await res.json().catch(() => null)
+      const data = res.data
       // If backend returns array of created entries, show count
       if (Array.isArray(data)) {
         toast.success(`${data.length} Einträge importiert`)
