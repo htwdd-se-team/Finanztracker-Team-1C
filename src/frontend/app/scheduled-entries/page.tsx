@@ -6,6 +6,7 @@ import { apiClient } from '@/api/api-client'
 import { toast } from 'sonner'
 import { EntryList } from '@/components/entry-list'
 import { CalendarClock } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 
 export default function ScheduledEntriesPage() {
   const queryClient = useQueryClient()
@@ -21,6 +22,15 @@ export default function ScheduledEntriesPage() {
       return res.data.entries
     },
   })
+
+  const totalCount = data?.length ?? 0
+  const totalIncome = data
+  ?.filter(e => e.type === 'INCOME')
+  .reduce((sum, e) => sum + e.amount, 0) ?? 0
+
+  const totalExpense = data
+  ?.filter(e => e.type === 'EXPENSE')
+  .reduce((sum, e) => sum + e.amount, 0) ?? 0
 
   async function handleDelete(entryId: number) {
     setIsDeleting(true)
@@ -47,6 +57,39 @@ export default function ScheduledEntriesPage() {
             <p className="mt-2 mb-6 ml-2 text-muted-foreground">
               Verwalten Sie Ihre regelmäßigen Transaktionen
             </p>
+
+            {/* SUMMARY BOX */}
+            <Card className="p-2 border bg-card/80">
+              <CardContent className="p-0">
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  {/* Anzahl Daueraufträge */}
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      Daueraufträge
+                    </p>
+                    <p className="text-lg font-semibold">{totalCount}</p>
+                  </div>
+                  {/* Einnahmen */}
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      Einnahmen
+                    </p>
+                    <p className="text-lg font-semibold text-green-600">
+                      +{(totalIncome / 100).toFixed(2)} €
+                    </p>
+                  </div>
+                  {/* Ausgaben */}
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      Ausgaben
+                    </p>
+                    <p className="text-lg font-semibold text-red-700">
+                      -{(totalExpense / 100).toFixed(2)} €
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {isLoading ? (
               <div className="flex justify-center items-center h-40">
