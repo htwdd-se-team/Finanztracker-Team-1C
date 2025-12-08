@@ -56,6 +56,31 @@ Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werde
 
 
 === 4. Infos aus der Konsultation letzte Woche
+=====================
+- Wer hat am 16.12. (Dienstag) um 18Uhr Zeit? → 2 Leute noch dazu
+    - Meeting mit Externen zwar nach unserem Sprint Planning → einfach kurzes Update mit Begründung am Dienstag
+=====================
+=====================
+- Termin Task-Erstellung & Sequenzdiagramme für den letzten großen Sprint (alles was wir nicht im Sprint Planning schaffen) → Elias
+=====================
+=====================
+- Thema Test: 10% Systemtest (Lasttest = 1000 User auf einmal) oder UX-Heuristik, 20% Integrationstests und 70% Unit-Test (komplexe Stellen und Kompontenten mit hohem Wert)
+=====================
+=====================
+- SCRUM-Master kannst du nochmal unsere Regeln (DoD und DoR) durchgehen und schauen, wie wir diese umsetzen + potenzielle Verbesserungsmaßnahmen an den Regeln oder unserer Vorgehensweise → bevor nicht getestet wurde (automatisch) kein Merge
+=====================
+=====================
+- Feedback Sequenz - und Klassendiagramme
+    - Sequenzdiagramme sind gut → nächstes Mal leicht vereinfachen und Überprüfung, der Devs, ob wir diese so umgesetzt haben, wenn nicht kurze Begründung an das Ticket, warum nicht
+    - Klassendiagramm
+        - DTO ist die falsche Stelle zur Validierung → Clean Architektur anschauen
+        - Fachliche und technische Sicht auseinander halten → Auch in den Bewertungskriterien, daher technische User-Story für bessere Wartbarkeit und Schnelligkeit für Nutzer
+=====================
+=====================
+- Abgabedokument durchgehen
+    - Folie 1 von der Belegarbeitsabgabe
+    - Alle neuen Dokumentationstasks für die nächste Iteration zeigen und zuweisen → Bitte seine Aufgabe durchlesen bis nächste Woche, damit wir es besser einplanen können
+=====================
 
 *Notizen:* +
 - ... +
