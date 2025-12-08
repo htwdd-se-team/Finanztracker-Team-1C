@@ -45,7 +45,12 @@ export class AnalyticsService {
             .where("userId", "=", user.id)
             .where("createdAt", ">=", startDate)
             .where("createdAt", "<=", endDate)
-            .where("isRecurring", "=", false)
+            .where((eb) =>
+              eb.or([
+                eb("isRecurring", "=", false),
+                eb("transactionId", "is not", null),
+              ]),
+            )
             .select((eb) => [
               eb
                 .fn("date_trunc", [
@@ -87,7 +92,12 @@ export class AnalyticsService {
             .where("userId", "=", user.id)
             .where("createdAt", ">=", startDate)
             .where("createdAt", "<=", endDate)
-            .where("isRecurring", "=", false)
+            .where((eb) =>
+              eb.or([
+                eb("isRecurring", "=", false),
+                eb("transactionId", "is not", null),
+              ]),
+            )
             .select((eb) => [
               eb
                 .fn("date_trunc", [
