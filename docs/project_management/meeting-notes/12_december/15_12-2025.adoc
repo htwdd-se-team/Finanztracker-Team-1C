@@ -22,4 +22,4 @@
 - Wurden DoD und DoR überprüft?
 - Wie ist das Feedback von Ruben auf die Mail ausgefallen?
 - Wurden die Bugs gefixt?
-- Wurde Rot als Theme-Farbe implementiert? Inkludiert das Homescreen-Piechart die unkategorisierten Ausgaben in "Sonstiges"? Wurde die Betrag-Komponente des Transaktions-Popups überarbeitet?
+- Wurde Rot als Theme-Farbe implementiert? Inkludiert das Homescreen-Piechart die unkategorisierten Ausgaben in "Sonstiges"? Wurden die schlecht bearbeitbaren Komponenten (Transaktion, Registrierung) überarbeitet?
