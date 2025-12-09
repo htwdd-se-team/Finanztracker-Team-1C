@@ -8,6 +8,7 @@ import {
   TransactionBreakdownParamsDto,
   TransactionBreakdownResponseDto,
   TransactionItemDto,
+  AvailableCapitalItemDto,
   MaxValueDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
@@ -54,5 +55,18 @@ export class AnalyticsController {
     @Query() params: TransactionBalanceHistoryParamsDto,
   ): Promise<TransactionItemDto[]> {
     return this.analyticsService.getTransactionBalanceHistory(user, params);
+  }
+
+  @Get("available-capital")
+  @ApiOkResponse({
+    type: AvailableCapitalItemDto,
+    description:
+      "Available capital and scheduled transfers for the current month",
+    isArray: true,
+  })
+  async getAvailableCapital(
+    @UserDecorator() user: User,
+  ): Promise<AvailableCapitalItemDto[]> {
+    return this.analyticsService.getAvailableCapital(user);
   }
 }

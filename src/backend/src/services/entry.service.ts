@@ -69,7 +69,7 @@ export class EntryService {
           userId: user.id,
           isRecurring: false,
           categoryId: data.categoryId,
-          createdAt: data.createdAt || new Date(),
+          createdAt: data.createdAt,
           transactionId: parentEntry.id,
         },
       });

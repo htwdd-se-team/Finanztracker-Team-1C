@@ -1,0 +1,25 @@
+= Meeting-Protokoll 15.12.2025
+
+*Datum:* 15.12.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:*  +
+*Meetingbeginn:* xx:xx +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben 
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Checkliste vergangener Woche
+- Haben Devs geprüft ob sie die Sequenzdiagramme im Code korrekt umgesetzt haben?
+- Wurden DoD und DoR überprüft?
+- Wie ist das Feedback von Ruben auf die Mail ausgefallen?
+- Wurden die Bugs gefixt?
+- Wurde Rot als Theme-Farbe implementiert? Inkludiert das Homescreen-Piechart die unkategorisierten Ausgaben in "Sonstiges"? Wurden die schlecht bearbeitbaren Komponenten (Transaktion, Registrierung) überarbeitet?

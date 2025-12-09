@@ -119,3 +119,42 @@ export class MaxValueDto {
   @IsInt()
   maxPrice: number;
 }
+
+export class AvailableCapitalItemDto {
+  @ApiProperty({
+    description: "Unique key for this item",
+    example: "available_capital",
+  })
+  @IsString()
+  key: string;
+
+  @ApiProperty({
+    description: "Human readable label",
+    example: "Verfügbares Kapital",
+  })
+  @IsString()
+  label: string;
+
+  @ApiProperty({
+    description: "Icon identifier for the UI",
+    example: "account-balance",
+  })
+  @IsString()
+  icon: string;
+
+  @ApiProperty({
+    description: "Amount in cents",
+    example: 20021,
+  })
+  @IsNumber()
+  @Type(() => Number)
+  value: number;
+
+  @ApiProperty({
+    description: "Transaction type hint (INCOME/EXPENSE)",
+    enum: TransactionType,
+    example: TransactionType.INCOME,
+  })
+  @IsEnum(TransactionType)
+  type: TransactionType;
+}

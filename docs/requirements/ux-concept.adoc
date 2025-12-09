@@ -29,7 +29,7 @@ a| * Alter: 24
 * Familienstand: ledig
 * Wohnort: Dresden
 
-image:magdalena_meier.png[width=150]
+image:magdalena_meier.png[width=300]
 
 |*Verhaltensvariablen*
 a| * Budgetbewusst (2/10)
@@ -69,7 +69,7 @@ a| * Alter: 28
 * Familienstand: verheiratet
 * Wohnort: Leipzig
 
-image:alejandro_perez.png[width=150]
+image:alejandro_perez.png[width=200]
 
 |*Verhaltensvariablen*
 a| * Budgetbewusst (9/10)
@@ -111,7 +111,7 @@ a| * Alter: 20
 * Familienstand: ledig
 * Wohnort: Radeburg
 
-image:mario_mueller.png[width=150]
+image:mario_mueller.png[width=250]
 
 |*Verhaltensvariablen*
 a| * Budgetbewusst (7/10)
@@ -151,7 +151,7 @@ a| * Alter: 22
 * Familienstand: ledig  
 * Wohnort: Berlin  
 
-image:lena_schmidt.png[width=150]
+image:lena_schmidt.png[width=200]
 
 |*Verhaltensvariablen*
 a| * Budgetbewusst (4/10)  
