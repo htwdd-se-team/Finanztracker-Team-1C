@@ -155,7 +155,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-11-12T15:09:11.521Z"
+   * @example "2025-12-10T16:06:32.620Z"
    */
   createdAt: string;
   /**
@@ -221,6 +221,7 @@ export interface ApiCreateEntryDto {
   recurringBaseInterval?: number;
   /**
    * Creation timestamp. If not provided, defaults to the current date and time.
+   * For recurring entries, the creation date cannot be more than 30 days in the past.
    * @format date-time
    */
   createdAt?: string;
@@ -333,6 +334,7 @@ export interface ApiUpdateEntryDto {
   recurringBaseInterval?: number;
   /**
    * Creation timestamp. If not provided, defaults to the current date and time.
+   * For recurring entries, the creation date cannot be more than 30 days in the past.
    * @format date-time
    */
   createdAt?: string;
@@ -351,6 +353,33 @@ export interface ApiScheduledEntriesResponseDto {
    * @example 10
    */
   count: number;
+}
+
+export interface ApiScheduledMonthlyTotalDto {
+  /**
+   * Month number (1-12)
+   * @example 1
+   */
+  month: number;
+  /**
+   * Sum of incomes in cents
+   * @example 10000
+   */
+  income: number;
+  /**
+   * Sum of expenses in cents
+   * @example 5000
+   */
+  expense: number;
+  /**
+   * Net (income - expense) in cents
+   * @example 5000
+   */
+  net: number;
+}
+
+export interface ApiScheduledMonthlyTotalsResponseDto {
+  totals: ApiScheduledMonthlyTotalDto[];
 }
 
 export interface ApiCreateFilterDto {
@@ -547,6 +576,43 @@ export interface ApiTransactionItemDto {
    * @example "2122"
    */
   value: string;
+}
+
+export interface ApiAvailableCapitalItemDto {
+  /**
+   * Unique key for this item
+   * @example "available_capital"
+   */
+  key: string;
+  /**
+   * Human readable label
+   * @example "Verfügbares Kapital"
+   */
+  label: string;
+  /**
+   * Icon identifier for the UI
+   * @example "account-balance"
+   */
+  icon: string;
+  /**
+   * Amount in cents
+   * @example 20021
+   */
+  value: number;
+  /**
+   * Transaction type hint (INCOME/EXPENSE)
+   * @example "INCOME"
+   */
+  type: ApiAvailableCapitalItemDtoTypeEnum;
+}
+
+/**
+ * Transaction type hint (INCOME/EXPENSE)
+ * @example "INCOME"
+ */
+export enum ApiAvailableCapitalItemDtoTypeEnum {
+  INCOME = "INCOME",
+  EXPENSE = "EXPENSE",
 }
 
 import type {
@@ -889,6 +955,7 @@ export class Api<
      *
      * @tags Entry
      * @name EntryControllerCreate
+     * @summary Create an entry
      * @request POST:/entries/create
      * @secure
      */
@@ -911,6 +978,7 @@ export class Api<
      *
      * @tags Entry
      * @name EntryControllerList
+     * @summary Get all entries
      * @request GET:/entries/list
      * @secure
      */
@@ -981,6 +1049,7 @@ export class Api<
      *
      * @tags Entry
      * @name EntryControllerDelete
+     * @summary Delete an entry by id
      * @request DELETE:/entries/{id}
      * @secure
      */
@@ -997,6 +1066,7 @@ export class Api<
      *
      * @tags Entry
      * @name EntryControllerUpdate
+     * @summary Update an entry by id
      * @request PATCH:/entries/{id}
      * @secure
      */
@@ -1020,6 +1090,7 @@ export class Api<
      *
      * @tags Entry
      * @name EntryControllerGetScheduledEntries
+     * @summary Get all scheduled entries
      * @request GET:/entries/scheduled-entries/list
      * @secure
      */
@@ -1055,6 +1126,41 @@ export class Api<
      * No description
      *
      * @tags Entry
+     * @name EntryControllerGetScheduledMonthlyTotals
+     * @request GET:/entries/scheduled-entries/monthly-totals
+     * @secure
+     */
+    entryControllerGetScheduledMonthlyTotals: (
+      query?: {
+        /**
+         * Year to aggregate monthly totals for (defaults to current year)
+         * @min 1970
+         * @example 2025
+         */
+        year?: number;
+        /**
+         * Optional month to filter (1-12). If provided, only that month's totals are returned
+         * @min 1
+         * @max 12
+         * @example 1
+         */
+        month?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiScheduledMonthlyTotalsResponseDto, any>({
+        path: `/entries/scheduled-entries/monthly-totals`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
      * @name EntryControllerDisableScheduledEntry
      * @request PATCH:/entries/scheduled-entries/{id}/disable
      * @secure
@@ -1075,6 +1181,7 @@ export class Api<
      *
      * @tags Entry
      * @name EntryControllerEnableScheduledEntry
+     * @summary Enable a scheduled entry by id
      * @request PATCH:/entries/scheduled-entries/{id}/enable
      * @secure
      */
@@ -1086,6 +1193,32 @@ export class Api<
         path: `/entries/scheduled-entries/${id}/enable`,
         method: "PATCH",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerImportEntries
+     * @summary Import entries from file (CSV, TXT, or XLSX)
+     * @request POST:/entries/import
+     * @secure
+     */
+    entryControllerImportEntries: (
+      data: {
+        /** Files to import. Allowed formats: TXT, CSV, XLSX, and other text files. */
+        files?: File[];
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiEntryResponseDto[], void>({
+        path: `/entries/import`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        format: "json",
         ...params,
       }),
   };
@@ -1290,6 +1423,23 @@ export class Api<
         path: `/analytics/transaction-balance-history`,
         method: "GET",
         query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags analytics
+     * @name AnalyticsControllerGetAvailableCapital
+     * @request GET:/analytics/available-capital
+     * @secure
+     */
+    analyticsControllerGetAvailableCapital: (params: RequestParams = {}) =>
+      this.request<ApiAvailableCapitalItemDto[], any>({
+        path: `/analytics/available-capital`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,

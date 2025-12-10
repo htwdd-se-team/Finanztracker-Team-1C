@@ -74,8 +74,23 @@ export function EntryList({
               return(
                 <div key={entry.id} className="px-2 flex flex-col">
                   {/* Zeile 1: Titel + Betrag */}
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center justify-between gap-1.5">
                     {/* Title */}
+                    {entry.categoryId && (
+                      <div
+                        className={cn(
+                          "inline-flex items-center justify-center rounded-lg w-6 h-6 flex-shrink-0",
+                          getCategoryColorClasses(
+                            getCategoryFromId(Number(entry.categoryId)).color
+                          )
+                        )}
+                      >
+                        <IconRender
+                          iconName={getCategoryFromId(Number(entry.categoryId)).icon}
+                          className="w-4 h-4"
+                        />
+                      </div>
+                    )}
                     <span className="font-semibold text-base truncate flex-1 min-w-0">
                       {entry.description}
                     </span>
