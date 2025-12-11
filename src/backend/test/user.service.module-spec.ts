@@ -1,25 +1,19 @@
 import { TestingModule } from "@nestjs/testing";
-import { User } from "@prisma/client";
 
 import { KyselyService } from "../src/services/kysely.service";
 import { PrismaService } from "../src/services/prisma.service";
 import { UserService } from "../src/services/user.service";
 
+import { createMockUser } from "./mock-data-factory";
+import { createMockPrismaService } from "./prisma-mock-factory";
 import { createTestModule } from "./test-helpers";
 
 describe("UserService", () => {
   let service: UserService;
-  let prismaService: PrismaService;
+  let prismaService: jest.Mocked<PrismaService>;
   let kyselyService: KyselyService;
 
-  const mockUser: User = {
-    id: 1,
-    email: "test@example.com",
-    passwordHash: "hashedPassword",
-    givenName: "Test",
-    familyName: "User",
-    createdAt: new Date(),
-  };
+  const mockUser = createMockUser();
 
   const mockKyselySelectBuilder = {
     where: jest.fn().mockReturnThis(),
@@ -28,16 +22,14 @@ describe("UserService", () => {
   };
 
   beforeEach(async () => {
+    const mockPrisma = createMockPrismaService();
+
     const module: TestingModule = await createTestModule({
       providers: [
         UserService,
         {
           provide: PrismaService,
-          useValue: {
-            user: {
-              findUnique: jest.fn(),
-            },
-          },
+          useValue: mockPrisma,
         },
         {
           provide: KyselyService,
@@ -49,7 +41,9 @@ describe("UserService", () => {
     });
 
     service = module.get<UserService>(UserService);
-    prismaService = module.get<PrismaService>(PrismaService);
+    prismaService = module.get<PrismaService>(
+      PrismaService,
+    ) as jest.Mocked<PrismaService>;
     kyselyService = module.get<KyselyService>(KyselyService);
   });
 
@@ -66,13 +60,12 @@ describe("UserService", () => {
         createdAt: mockUser.createdAt,
       };
 
-      jest
-        .spyOn(prismaService.user, "findUnique")
-        .mockResolvedValue(mockUserResponse as any);
+      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
+      findUniqueMock.mockResolvedValue(mockUserResponse as typeof mockUser);
 
       const result = await service.getUser(mockUser);
 
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(findUniqueMock).toHaveBeenCalledWith({
         where: { id: mockUser.id },
         select: {
           givenName: true,
@@ -85,7 +78,8 @@ describe("UserService", () => {
     });
 
     it("should return null if user not found", async () => {
-      jest.spyOn(prismaService.user, "findUnique").mockResolvedValue(null);
+      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
+      findUniqueMock.mockResolvedValue(null);
 
       const result = await service.getUser(mockUser);
 
@@ -106,12 +100,10 @@ describe("UserService", () => {
 
       const result = await service.getBalance(mockUser);
 
-      expect(kyselyService.selectFrom).toHaveBeenCalledWith("Transaction");
-      expect(mockKyselySelectBuilder.where).toHaveBeenCalledWith(
-        "userId",
-        "=",
-        mockUser.id,
-      );
+      const selectFromMock = jest.mocked(kyselyService["selectFrom"]);
+      expect(selectFromMock).toHaveBeenCalledWith("Transaction");
+      const whereMock = jest.mocked(mockKyselySelectBuilder["where"]);
+      expect(whereMock).toHaveBeenCalledWith("userId", "=", mockUser.id);
       expect(result).toEqual({
         balance: 5000,
         transactionCount: 10,
@@ -245,10 +237,9 @@ describe("UserService", () => {
 
   describe("getUser - Edge Cases", () => {
     it("should handle user without familyName", async () => {
-      const userWithoutFamilyName = {
-        ...mockUser,
+      const userWithoutFamilyName = createMockUser({
         familyName: null,
-      };
+      });
       const mockUserResponse = {
         givenName: userWithoutFamilyName.givenName,
         familyName: null,
@@ -256,9 +247,8 @@ describe("UserService", () => {
         createdAt: userWithoutFamilyName.createdAt,
       };
 
-      jest
-        .spyOn(prismaService.user, "findUnique")
-        .mockResolvedValue(mockUserResponse as any);
+      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
+      findUniqueMock.mockResolvedValue(mockUserResponse as typeof mockUser);
 
       const result = await service.getUser(userWithoutFamilyName);
 

@@ -1,7 +1,5 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { User, TransactionType } from "@prisma/client";
-import { Kysely } from "kysely";
-import { DB } from "@db/kysely";
+import { TestingModule } from "@nestjs/testing";
+import { TransactionType } from "@prisma/client";
 
 import {
   TransactionBreakdownParamsDto,
@@ -12,21 +10,15 @@ import { AnalyticsService } from "../src/services/analytics.service";
 import { KyselyService } from "../src/services/kysely.service";
 import { PrismaService } from "../src/services/prisma.service";
 
+import { createMockUser } from "./mock-data-factory";
+import { createMockPrismaService } from "./prisma-mock-factory";
 import { createTestModule } from "./test-helpers";
 
 describe("AnalyticsService", () => {
   let service: AnalyticsService;
-  let prismaService: PrismaService;
-  let kyselyService: KyselyService;
+  let prismaService: jest.Mocked<PrismaService>;
 
-  const mockUser: User = {
-    id: 1,
-    email: "test@example.com",
-    passwordHash: "hashedPassword",
-    givenName: "Test",
-    familyName: "User",
-    createdAt: new Date(),
-  };
+  const mockUser = createMockUser();
 
   const mockKyselyWithBuilder = {
     with: jest.fn().mockReturnThis(),
@@ -40,16 +32,14 @@ describe("AnalyticsService", () => {
   };
 
   beforeEach(async () => {
+    const mockPrisma = createMockPrismaService();
+
     const module: TestingModule = await createTestModule({
       providers: [
         AnalyticsService,
         {
           provide: PrismaService,
-          useValue: {
-            transaction: {
-              aggregate: jest.fn(),
-            },
-          },
+          useValue: mockPrisma,
         },
         {
           provide: KyselyService,
@@ -59,8 +49,9 @@ describe("AnalyticsService", () => {
     });
 
     service = module.get<AnalyticsService>(AnalyticsService);
-    prismaService = module.get<PrismaService>(PrismaService);
-    kyselyService = module.get<KyselyService>(KyselyService);
+    prismaService = module.get<PrismaService>(
+      PrismaService,
+    ) as jest.Mocked<PrismaService>;
   });
 
   afterEach(() => {
@@ -132,7 +123,10 @@ describe("AnalyticsService", () => {
 
       mockKyselyWithBuilder.execute.mockResolvedValue([]);
 
-      const result = await service.getTransactionBreakdown(mockUser, weeklyParams);
+      const result = await service.getTransactionBreakdown(
+        mockUser,
+        weeklyParams,
+      );
 
       expect(mockKyselyWithBuilder.with).toHaveBeenCalled();
       expect(result.data).toEqual([]);
@@ -160,7 +154,10 @@ describe("AnalyticsService", () => {
 
       mockKyselyWithBuilder.execute.mockResolvedValue(mockResults);
 
-      const result = await service.getTransactionBalanceHistory(mockUser, params);
+      const result = await service.getTransactionBalanceHistory(
+        mockUser,
+        params,
+      );
 
       expect(result).toHaveLength(2);
       expect(result[0].value).toBe("5000");
@@ -170,7 +167,10 @@ describe("AnalyticsService", () => {
     it("should calculate initial balance before start date", async () => {
       mockKyselyWithBuilder.execute.mockResolvedValue([]);
 
-      const result = await service.getTransactionBalanceHistory(mockUser, params);
+      const result = await service.getTransactionBalanceHistory(
+        mockUser,
+        params,
+      );
 
       expect(mockKyselyWithBuilder.with).toHaveBeenCalled();
       expect(result).toEqual([]);
@@ -179,7 +179,10 @@ describe("AnalyticsService", () => {
     it("should handle empty results", async () => {
       mockKyselyWithBuilder.execute.mockResolvedValue([]);
 
-      const result = await service.getTransactionBalanceHistory(mockUser, params);
+      const result = await service.getTransactionBalanceHistory(
+        mockUser,
+        params,
+      );
 
       expect(result).toEqual([]);
     });
@@ -187,7 +190,8 @@ describe("AnalyticsService", () => {
 
   describe("getMaxTransactionAmountForUser", () => {
     it("should return maximum transaction amount rounded up", async () => {
-      jest.spyOn(prismaService.transaction, "aggregate").mockResolvedValue({
+      const aggregateMock = jest.mocked(prismaService.transaction["aggregate"]);
+      aggregateMock.mockResolvedValue({
         _max: { amount: 1234 },
         _count: { id: 0 },
         _avg: { amount: null },
@@ -197,7 +201,7 @@ describe("AnalyticsService", () => {
 
       const result = await service.getMaxTransactionAmountForUser(mockUser);
 
-      expect(prismaService.transaction.aggregate).toHaveBeenCalledWith({
+      expect(aggregateMock).toHaveBeenCalledWith({
         where: { userId: mockUser.id },
         _max: { amount: true },
       });
@@ -205,7 +209,8 @@ describe("AnalyticsService", () => {
     });
 
     it("should return 0 when no transactions exist", async () => {
-      jest.spyOn(prismaService.transaction, "aggregate").mockResolvedValue({
+      const aggregateMock = jest.mocked(prismaService.transaction["aggregate"]);
+      aggregateMock.mockResolvedValue({
         _max: { amount: null },
         _count: { id: 0 },
         _avg: { amount: null },
@@ -219,7 +224,8 @@ describe("AnalyticsService", () => {
     });
 
     it("should round up to nearest 100", async () => {
-      jest.spyOn(prismaService.transaction, "aggregate").mockResolvedValue({
+      const aggregateMock = jest.mocked(prismaService.transaction["aggregate"]);
+      aggregateMock.mockResolvedValue({
         _max: { amount: 199 },
         _count: { id: 0 },
         _avg: { amount: null },
@@ -233,7 +239,8 @@ describe("AnalyticsService", () => {
     });
 
     it("should handle exact multiples of 100", async () => {
-      jest.spyOn(prismaService.transaction, "aggregate").mockResolvedValue({
+      const aggregateMock = jest.mocked(prismaService.transaction["aggregate"]);
+      aggregateMock.mockResolvedValue({
         _max: { amount: 1000 },
         _count: { id: 0 },
         _avg: { amount: null },
@@ -322,7 +329,10 @@ describe("AnalyticsService", () => {
 
       mockKyselyWithBuilder.execute.mockResolvedValue(mockResults);
 
-      const result = await service.getTransactionBreakdown(mockUser, baseParams);
+      const result = await service.getTransactionBreakdown(
+        mockUser,
+        baseParams,
+      );
 
       expect(result.data).toHaveLength(2);
       expect(result.data[0].type).toBe(TransactionType.INCOME);
@@ -405,7 +415,10 @@ describe("AnalyticsService", () => {
 
       mockKyselyWithBuilder.execute.mockResolvedValue(mockResults);
 
-      const result = await service.getTransactionBalanceHistory(mockUser, baseParams);
+      const result = await service.getTransactionBalanceHistory(
+        mockUser,
+        baseParams,
+      );
 
       expect(result).toHaveLength(3);
       expect(result[0].value).toBe("1000");
@@ -414,4 +427,3 @@ describe("AnalyticsService", () => {
     });
   });
 });
-

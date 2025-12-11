@@ -107,4 +107,5 @@ async function bootstrap() {
   bootstrapLogger.log(`Swagger UI:  ${url}/api`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises -- we want to bootstrap the application so dont need to await it
 bootstrap();

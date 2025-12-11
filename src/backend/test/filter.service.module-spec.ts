@@ -1,70 +1,39 @@
 import { NotFoundException } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
-import {
-  Filter,
-  FilterCategory,
-  User,
-  TransactionType,
-  FilterSortOption,
-} from "@prisma/client";
+import { TransactionType, FilterSortOption } from "@prisma/client";
 
 import { CreateFilterDto, UpdateFilterDto } from "../src/dto";
 import { FilterService } from "../src/services/filter.service";
 import { PrismaService } from "../src/services/prisma.service";
 
+import { createMockUser, createMockFilter } from "./mock-data-factory";
+import { createMockPrismaService } from "./prisma-mock-factory";
 import { createTestModule } from "./test-helpers";
 
 describe("FilterService", () => {
   let service: FilterService;
-  let prismaService: PrismaService;
+  let prismaService: jest.Mocked<PrismaService>;
 
-  const mockUser: User = {
-    id: 1,
-    email: "test@example.com",
-    passwordHash: "hashedPassword",
-    givenName: "Test",
-    familyName: "User",
-    createdAt: new Date(),
-  };
-
-  const mockFilter: Filter & { filterCategories: FilterCategory[] } = {
-    id: 1,
-    title: "Test Filter",
-    icon: "test-icon",
-    minPrice: 1000,
-    maxPrice: 5000,
-    dateFrom: null,
-    dateTo: null,
-    searchText: "test",
-    transactionType: TransactionType.EXPENSE,
-    sortOption: null,
-    userId: mockUser.id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    filterCategories: [],
-  };
+  const mockUser = createMockUser();
+  const mockFilter = createMockFilter({ userId: mockUser.id });
 
   beforeEach(async () => {
+    const mockPrisma = createMockPrismaService();
+
     const module: TestingModule = await createTestModule({
       providers: [
         FilterService,
         {
           provide: PrismaService,
-          useValue: {
-            filter: {
-              create: jest.fn(),
-              findMany: jest.fn(),
-              findUnique: jest.fn(),
-              update: jest.fn(),
-              deleteMany: jest.fn(),
-            },
-          },
+          useValue: mockPrisma,
         },
       ],
     });
 
     service = module.get<FilterService>(FilterService);
-    prismaService = module.get<PrismaService>(PrismaService);
+    prismaService = module.get<PrismaService>(
+      PrismaService,
+    ) as jest.Mocked<PrismaService>;
   });
 
   afterEach(() => {
@@ -82,21 +51,19 @@ describe("FilterService", () => {
     };
 
     it("should create filter successfully", async () => {
-      const createdFilter = {
-        ...mockFilter,
+      const createdFilter = createMockFilter({
         title: createDto.title,
         icon: createDto.icon,
         minPrice: createDto.minPrice,
         maxPrice: createDto.maxPrice,
         transactionType: createDto.transactionType,
-      };
-      jest
-        .spyOn(prismaService.filter, "create")
-        .mockResolvedValue(createdFilter as any);
+      });
+      const createMock = jest.mocked(prismaService.filter["create"]);
+      createMock.mockResolvedValue(createdFilter);
 
       const result = await service.createFilter(mockUser, createDto);
 
-      expect(prismaService.filter.create).toHaveBeenCalledWith({
+      expect(createMock).toHaveBeenCalledWith({
         data: {
           title: createDto.title,
           icon: createDto.icon,
@@ -126,16 +93,28 @@ describe("FilterService", () => {
         title: "Filter without categories",
       };
 
-      jest.spyOn(prismaService.filter, "create").mockResolvedValue(mockFilter);
+      const createMock = jest.mocked(prismaService.filter["create"]);
+      createMock.mockResolvedValue(mockFilter);
 
       await service.createFilter(mockUser, dtoWithoutCategories);
 
-      expect(prismaService.filter.create).toHaveBeenCalledWith({
-        data: expect.not.objectContaining({
-          filterCategories: expect.anything(),
+      expect(createMock).toHaveBeenCalled();
+      const callArgs = createMock.mock.calls[0];
+      expect(callArgs).toBeDefined();
+      if (
+        callArgs &&
+        callArgs[0] &&
+        typeof callArgs[0] === "object" &&
+        "data" in callArgs[0]
+      ) {
+        const data = callArgs[0].data as Record<string, unknown>;
+        expect(data).not.toHaveProperty("filterCategories");
+      }
+      expect(createMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          include: { filterCategories: true },
         }),
-        include: { filterCategories: true },
-      });
+      );
     });
   });
 
@@ -143,13 +122,12 @@ describe("FilterService", () => {
     it("should return all filters for user", async () => {
       const mockFilters = [mockFilter];
 
-      jest
-        .spyOn(prismaService.filter, "findMany")
-        .mockResolvedValue(mockFilters as any);
+      const findManyMock = jest.mocked(prismaService.filter["findMany"]);
+      findManyMock.mockResolvedValue(mockFilters);
 
       const result = await service.getFilters(mockUser);
 
-      expect(prismaService.filter.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId: mockUser.id },
         include: { filterCategories: true },
         orderBy: { createdAt: "desc" },
@@ -159,7 +137,8 @@ describe("FilterService", () => {
     });
 
     it("should return empty array when no filters exist", async () => {
-      jest.spyOn(prismaService.filter, "findMany").mockResolvedValue([]);
+      const findManyMock = jest.mocked(prismaService.filter["findMany"]);
+      findManyMock.mockResolvedValue([]);
 
       const result = await service.getFilters(mockUser);
 
@@ -167,17 +146,15 @@ describe("FilterService", () => {
     });
 
     it("should include category IDs in response", async () => {
-      const filterWithCategories = {
-        ...mockFilter,
+      const filterWithCategories = createMockFilter({
         filterCategories: [
-          { categoryId: 1 },
-          { categoryId: 2 },
-        ] as FilterCategory[],
-      };
+          { categoryId: 1, filterId: 1 },
+          { categoryId: 2, filterId: 1 },
+        ],
+      });
 
-      jest
-        .spyOn(prismaService.filter, "findMany")
-        .mockResolvedValue([filterWithCategories] as any);
+      const findManyMock = jest.mocked(prismaService.filter["findMany"]);
+      findManyMock.mockResolvedValue([filterWithCategories]);
 
       const result = await service.getFilters(mockUser);
 
@@ -192,19 +169,20 @@ describe("FilterService", () => {
     };
 
     it("should update filter successfully", async () => {
-      jest
-        .spyOn(prismaService.filter, "findUnique")
-        .mockResolvedValue(mockFilter);
-      jest
-        .spyOn(prismaService.filter, "update")
-        .mockResolvedValue({ ...mockFilter, ...updateDto } as any);
+      const findUniqueMock = jest.mocked(prismaService.filter["findUnique"]);
+      const updateMock = jest.mocked(prismaService.filter["update"]);
+      findUniqueMock.mockResolvedValue(mockFilter);
+      updateMock.mockResolvedValue({
+        ...mockFilter,
+        ...updateDto,
+      });
 
       const result = await service.updateFilter(mockUser, 1, updateDto);
 
-      expect(prismaService.filter.findUnique).toHaveBeenCalledWith({
+      expect(findUniqueMock).toHaveBeenCalledWith({
         where: { id: 1, userId: mockUser.id },
       });
-      expect(prismaService.filter.update).toHaveBeenCalledWith({
+      expect(updateMock).toHaveBeenCalledWith({
         where: { id: 1, userId: mockUser.id },
         data: updateDto,
         include: { filterCategories: true },
@@ -217,16 +195,14 @@ describe("FilterService", () => {
         categoryIds: [3, 4],
       };
 
-      jest
-        .spyOn(prismaService.filter, "findUnique")
-        .mockResolvedValue(mockFilter);
-      jest
-        .spyOn(prismaService.filter, "update")
-        .mockResolvedValue(mockFilter as any);
+      const findUniqueMock = jest.mocked(prismaService.filter["findUnique"]);
+      const updateMock = jest.mocked(prismaService.filter["update"]);
+      findUniqueMock.mockResolvedValue(mockFilter);
+      updateMock.mockResolvedValue(mockFilter);
 
       await service.updateFilter(mockUser, 1, updateWithCategories);
 
-      expect(prismaService.filter.update).toHaveBeenCalledWith({
+      expect(updateMock).toHaveBeenCalledWith({
         where: { id: 1, userId: mockUser.id },
         data: {
           filterCategories: {
@@ -246,16 +222,14 @@ describe("FilterService", () => {
         categoryIds: [],
       };
 
-      jest
-        .spyOn(prismaService.filter, "findUnique")
-        .mockResolvedValue(mockFilter);
-      jest
-        .spyOn(prismaService.filter, "update")
-        .mockResolvedValue(mockFilter as any);
+      const findUniqueMock = jest.mocked(prismaService.filter["findUnique"]);
+      const updateMock = jest.mocked(prismaService.filter["update"]);
+      findUniqueMock.mockResolvedValue(mockFilter);
+      updateMock.mockResolvedValue(mockFilter);
 
       await service.updateFilter(mockUser, 1, updateWithEmptyCategories);
 
-      expect(prismaService.filter.update).toHaveBeenCalledWith({
+      expect(updateMock).toHaveBeenCalledWith({
         where: { id: 1, userId: mockUser.id },
         data: {
           filterCategories: {
@@ -267,7 +241,8 @@ describe("FilterService", () => {
     });
 
     it("should throw NotFoundException if filter not found", async () => {
-      jest.spyOn(prismaService.filter, "findUnique").mockResolvedValue(null);
+      const findUniqueMock = jest.mocked(prismaService.filter["findUnique"]);
+      findUniqueMock.mockResolvedValue(null);
 
       await expect(
         service.updateFilter(mockUser, 999, updateDto),
@@ -277,13 +252,12 @@ describe("FilterService", () => {
 
   describe("deleteFilter", () => {
     it("should delete filter successfully", async () => {
-      jest
-        .spyOn(prismaService.filter, "deleteMany")
-        .mockResolvedValue({ count: 1 });
+      const deleteManyMock = jest.mocked(prismaService.filter["deleteMany"]);
+      deleteManyMock.mockResolvedValue({ count: 1 });
 
       await service.deleteFilter(mockUser, 1);
 
-      expect(prismaService.filter.deleteMany).toHaveBeenCalledWith({
+      expect(deleteManyMock).toHaveBeenCalledWith({
         where: { id: 1, userId: mockUser.id },
       });
     });
@@ -324,12 +298,20 @@ describe("FilterService", () => {
         categoryIds: [1, 2, 3],
       };
 
-      jest.spyOn(prismaService.filter, "create").mockResolvedValue(mockFilter);
+      const createMock = jest.mocked(prismaService.filter["create"]);
+      createMock.mockResolvedValue(mockFilter);
 
       await service.createFilter(mockUser, completeDto);
 
-      expect(prismaService.filter.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
+      expect(createMock).toHaveBeenCalled();
+      const callArgs = createMock.mock.calls[0];
+      expect(callArgs).toBeDefined();
+      if (callArgs && callArgs[0] && typeof callArgs[0] === "object") {
+        const callData = callArgs[0] as {
+          data: Record<string, unknown>;
+          include: unknown;
+        };
+        expect(callData.data).toMatchObject({
           title: completeDto.title,
           icon: completeDto.icon,
           minPrice: completeDto.minPrice,
@@ -339,9 +321,9 @@ describe("FilterService", () => {
           searchText: completeDto.searchText,
           transactionType: completeDto.transactionType,
           sortOption: completeDto.sortOption,
-        }),
-        include: { filterCategories: true },
-      });
+        });
+        expect(callData.include).toEqual({ filterCategories: true });
+      }
     });
 
     it("should create filter with minimal required fields", async () => {
@@ -349,39 +331,44 @@ describe("FilterService", () => {
         title: "Minimal Filter",
       };
 
-      jest.spyOn(prismaService.filter, "create").mockResolvedValue(mockFilter);
+      const createMock = jest.mocked(prismaService.filter["create"]);
+      createMock.mockResolvedValue(mockFilter);
 
       await service.createFilter(mockUser, minimalDto);
 
-      expect(prismaService.filter.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
+      expect(createMock).toHaveBeenCalled();
+      const callArgs = createMock.mock.calls[0];
+      expect(callArgs).toBeDefined();
+      if (callArgs && callArgs[0] && typeof callArgs[0] === "object") {
+        const callData = callArgs[0] as {
+          data: Record<string, unknown>;
+          include: unknown;
+        };
+        expect(callData.data).toMatchObject({
           title: minimalDto.title,
-        }),
-        include: { filterCategories: true },
-      });
+        });
+        expect(callData.include).toEqual({ filterCategories: true });
+      }
     });
   });
 
   describe("getFilters - Edge Cases", () => {
     it("should return filters ordered by createdAt desc", async () => {
-      const olderFilter = {
-        ...mockFilter,
+      const olderFilter = createMockFilter({
         id: 1,
         createdAt: new Date("2024-01-01"),
-      };
-      const newerFilter = {
-        ...mockFilter,
+      });
+      const newerFilter = createMockFilter({
         id: 2,
         createdAt: new Date("2024-12-31"),
-      };
+      });
 
-      jest
-        .spyOn(prismaService.filter, "findMany")
-        .mockResolvedValue([newerFilter, olderFilter] as any);
+      const findManyMock = jest.mocked(prismaService.filter["findMany"]);
+      findManyMock.mockResolvedValue([newerFilter, olderFilter]);
 
       const result = await service.getFilters(mockUser);
 
-      expect(prismaService.filter.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId: mockUser.id },
         include: { filterCategories: true },
         orderBy: { createdAt: "desc" },

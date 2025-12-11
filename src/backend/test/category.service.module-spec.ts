@@ -1,6 +1,5 @@
 import { NotFoundException } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
-import { Category } from "@prisma/client";
 
 import {
   CategorySortBy,
@@ -11,47 +10,37 @@ import {
 import { CategoryService } from "../src/services/category.service";
 import { PrismaService } from "../src/services/prisma.service";
 
+import {
+  createMockCategory,
+  createMockCategoryWithCount,
+} from "./mock-data-factory";
+import { createMockPrismaService } from "./prisma-mock-factory";
 import { createTestModule } from "./test-helpers";
 
 describe("CategoryService", () => {
   let service: CategoryService;
-  let prismaService: PrismaService;
+  let prismaService: jest.Mocked<PrismaService>;
 
   const userId = 1;
-  const mockCategory: Category = {
-    id: 1,
-    name: "Test Category",
-    color: "Blue",
-    icon: "test-icon",
-    userId,
-    createdAt: new Date(),
-  };
+  const mockCategory = createMockCategory({ userId });
 
   beforeEach(async () => {
+    const mockPrisma = createMockPrismaService();
+
     const module: TestingModule = await createTestModule({
       providers: [
         CategoryService,
         {
           provide: PrismaService,
-          useValue: {
-            category: {
-              create: jest.fn(),
-              findFirst: jest.fn(),
-              findMany: jest.fn(),
-              update: jest.fn(),
-              delete: jest.fn(),
-              count: jest.fn(),
-            },
-            transaction: {
-              count: jest.fn(),
-            },
-          },
+          useValue: mockPrisma,
         },
       ],
     });
 
     service = module.get<CategoryService>(CategoryService);
-    prismaService = module.get<PrismaService>(PrismaService);
+    prismaService = module.get<PrismaService>(
+      PrismaService,
+    ) as jest.Mocked<PrismaService>;
   });
 
   afterEach(() => {
@@ -66,14 +55,14 @@ describe("CategoryService", () => {
     };
 
     it("should create a category successfully", async () => {
-      jest
-        .spyOn(prismaService.category, "create")
-        .mockResolvedValue(mockCategory);
-      jest.spyOn(prismaService.category, "count").mockResolvedValue(0);
+      const createMock = jest.mocked(prismaService.category["create"]);
+      const countMock = jest.mocked(prismaService.category["count"]);
+      createMock.mockResolvedValue(mockCategory);
+      countMock.mockResolvedValue(0);
 
       const result = await service.createCategory(userId, createDto);
 
-      expect(prismaService.category.create).toHaveBeenCalledWith({
+      expect(createMock).toHaveBeenCalledWith({
         data: {
           ...createDto,
           userId,
@@ -90,15 +79,17 @@ describe("CategoryService", () => {
     });
 
     it("should return usage count as 0 for new category", async () => {
-      jest
-        .spyOn(prismaService.category, "create")
-        .mockResolvedValue(mockCategory);
+      const createMock = jest.mocked(prismaService.category["create"]);
+      const transactionCountMock = jest.mocked(
+        prismaService.transaction["count"],
+      );
+      createMock.mockResolvedValue(mockCategory);
 
       const result = await service.createCategory(userId, createDto);
 
       // createCategory always returns usageCount as 0 (hardcoded)
       expect(result.usageCount).toBe(0);
-      expect(prismaService.transaction.count).not.toHaveBeenCalled();
+      expect(transactionCountMock).not.toHaveBeenCalled();
     });
   });
 
@@ -109,20 +100,24 @@ describe("CategoryService", () => {
     };
 
     it("should update category successfully", async () => {
-      jest
-        .spyOn(prismaService.category, "findFirst")
-        .mockResolvedValue(mockCategory);
-      jest
-        .spyOn(prismaService.category, "update")
-        .mockResolvedValue({ ...mockCategory, ...updateDto });
-      jest.spyOn(prismaService.transaction, "count").mockResolvedValue(3);
+      const findFirstMock = jest.mocked(prismaService.category["findFirst"]);
+      const updateMock = jest.mocked(prismaService.category["update"]);
+      const transactionCountMock = jest.mocked(
+        prismaService.transaction["count"],
+      );
+      findFirstMock.mockResolvedValue(mockCategory);
+      updateMock.mockResolvedValue({
+        ...mockCategory,
+        ...updateDto,
+      });
+      transactionCountMock.mockResolvedValue(3);
 
       const result = await service.updateCategory(userId, 1, updateDto);
 
-      expect(prismaService.category.findFirst).toHaveBeenCalledWith({
+      expect(findFirstMock).toHaveBeenCalledWith({
         where: { id: 1, userId },
       });
-      expect(prismaService.category.update).toHaveBeenCalledWith({
+      expect(updateMock).toHaveBeenCalledWith({
         where: { id: 1 },
         data: updateDto,
       });
@@ -131,16 +126,19 @@ describe("CategoryService", () => {
     });
 
     it("should throw NotFoundException if category not found", async () => {
-      jest.spyOn(prismaService.category, "findFirst").mockResolvedValue(null);
+      const findFirstMock = jest.mocked(prismaService.category["findFirst"]);
+      const updateMock = jest.mocked(prismaService.category["update"]);
+      findFirstMock.mockResolvedValue(null);
 
       await expect(
         service.updateCategory(userId, 999, updateDto),
       ).rejects.toThrow(NotFoundException);
-      expect(prismaService.category.update).not.toHaveBeenCalled();
+      expect(updateMock).not.toHaveBeenCalled();
     });
 
     it("should throw NotFoundException if category belongs to different user", async () => {
-      jest.spyOn(prismaService.category, "findFirst").mockResolvedValue(null);
+      const findFirstMock = jest.mocked(prismaService.category["findFirst"]);
+      findFirstMock.mockResolvedValue(null);
 
       await expect(
         service.updateCategory(userId, 1, updateDto),
@@ -150,48 +148,46 @@ describe("CategoryService", () => {
 
   describe("deleteCategory", () => {
     it("should delete category successfully", async () => {
-      jest
-        .spyOn(prismaService.category, "findFirst")
-        .mockResolvedValue(mockCategory);
-      jest
-        .spyOn(prismaService.category, "delete")
-        .mockResolvedValue(mockCategory);
+      const findFirstMock = jest.mocked(prismaService.category["findFirst"]);
+      const deleteMock = jest.mocked(prismaService.category["delete"]);
+      findFirstMock.mockResolvedValue(mockCategory);
+      deleteMock.mockResolvedValue(mockCategory);
 
       await service.deleteCategory(userId, 1);
 
-      expect(prismaService.category.findFirst).toHaveBeenCalledWith({
+      expect(findFirstMock).toHaveBeenCalledWith({
         where: { id: 1, userId },
       });
-      expect(prismaService.category.delete).toHaveBeenCalledWith({
+      expect(deleteMock).toHaveBeenCalledWith({
         where: { id: 1 },
       });
     });
 
     it("should throw NotFoundException if category not found", async () => {
-      jest.spyOn(prismaService.category, "findFirst").mockResolvedValue(null);
+      const findFirstMock = jest.mocked(prismaService.category["findFirst"]);
+      const deleteMock = jest.mocked(prismaService.category["delete"]);
+      findFirstMock.mockResolvedValue(null);
 
       await expect(service.deleteCategory(userId, 999)).rejects.toThrow(
         NotFoundException,
       );
-      expect(prismaService.category.delete).not.toHaveBeenCalled();
+      expect(deleteMock).not.toHaveBeenCalled();
     });
   });
 
   describe("listCategories", () => {
     it("should list categories with default sorting", async () => {
       const mockCategories = [
-        { ...mockCategory, _count: { Transaction: 2 } },
-        {
-          ...mockCategory,
+        createMockCategoryWithCount({ id: 1, _count: { Transaction: 2 } }),
+        createMockCategoryWithCount({
           id: 2,
           name: "Category 2",
           _count: { Transaction: 5 },
-        },
+        }),
       ];
 
-      jest
-        .spyOn(prismaService.category, "findMany")
-        .mockResolvedValue(mockCategories as any);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue(mockCategories);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
@@ -200,7 +196,7 @@ describe("CategoryService", () => {
 
       const result = await service.listCategories(userId, params);
 
-      expect(prismaService.category.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId },
         orderBy: { createdAt: "desc" },
         include: {
@@ -217,11 +213,12 @@ describe("CategoryService", () => {
     });
 
     it("should sort by usage count descending", async () => {
-      const mockCategories = [{ ...mockCategory, _count: { Transaction: 10 } }];
+      const mockCategories = [
+        createMockCategoryWithCount({ _count: { Transaction: 10 } }),
+      ];
 
-      jest
-        .spyOn(prismaService.category, "findMany")
-        .mockResolvedValue(mockCategories as any);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue(mockCategories);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
@@ -230,7 +227,7 @@ describe("CategoryService", () => {
 
       await service.listCategories(userId, params);
 
-      expect(prismaService.category.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId },
         orderBy: {
           Transaction: {
@@ -248,11 +245,12 @@ describe("CategoryService", () => {
     });
 
     it("should sort alphabetically ascending", async () => {
-      const mockCategories = [{ ...mockCategory, _count: { Transaction: 0 } }];
+      const mockCategories = [
+        createMockCategoryWithCount({ _count: { Transaction: 0 } }),
+      ];
 
-      jest
-        .spyOn(prismaService.category, "findMany")
-        .mockResolvedValue(mockCategories as any);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue(mockCategories);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
@@ -261,7 +259,7 @@ describe("CategoryService", () => {
 
       await service.listCategories(userId, params);
 
-      expect(prismaService.category.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId },
         orderBy: { name: "asc" },
         include: {
@@ -275,7 +273,8 @@ describe("CategoryService", () => {
     });
 
     it("should return empty array when no categories exist", async () => {
-      jest.spyOn(prismaService.category, "findMany").mockResolvedValue([]);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue([]);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
@@ -288,11 +287,12 @@ describe("CategoryService", () => {
     });
 
     it("should sort by CREATED_AT_ASC", async () => {
-      const mockCategories = [{ ...mockCategory, _count: { Transaction: 0 } }];
+      const mockCategories = [
+        createMockCategoryWithCount({ _count: { Transaction: 0 } }),
+      ];
 
-      jest
-        .spyOn(prismaService.category, "findMany")
-        .mockResolvedValue(mockCategories as any);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue(mockCategories);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
@@ -301,7 +301,7 @@ describe("CategoryService", () => {
 
       await service.listCategories(userId, params);
 
-      expect(prismaService.category.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId },
         orderBy: { createdAt: "asc" },
         include: {
@@ -315,11 +315,12 @@ describe("CategoryService", () => {
     });
 
     it("should sort by CREATED_AT_DESC", async () => {
-      const mockCategories = [{ ...mockCategory, _count: { Transaction: 0 } }];
+      const mockCategories = [
+        createMockCategoryWithCount({ _count: { Transaction: 0 } }),
+      ];
 
-      jest
-        .spyOn(prismaService.category, "findMany")
-        .mockResolvedValue(mockCategories as any);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue(mockCategories);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
@@ -328,7 +329,7 @@ describe("CategoryService", () => {
 
       await service.listCategories(userId, params);
 
-      expect(prismaService.category.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId },
         orderBy: { createdAt: "desc" },
         include: {
@@ -342,11 +343,12 @@ describe("CategoryService", () => {
     });
 
     it("should sort by ALPHA_DESC", async () => {
-      const mockCategories = [{ ...mockCategory, _count: { Transaction: 0 } }];
+      const mockCategories = [
+        createMockCategoryWithCount({ _count: { Transaction: 0 } }),
+      ];
 
-      jest
-        .spyOn(prismaService.category, "findMany")
-        .mockResolvedValue(mockCategories as any);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue(mockCategories);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
@@ -355,7 +357,7 @@ describe("CategoryService", () => {
 
       await service.listCategories(userId, params);
 
-      expect(prismaService.category.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId },
         orderBy: { name: "desc" },
         include: {
@@ -369,20 +371,21 @@ describe("CategoryService", () => {
     });
 
     it("should default to CREATED_AT_DESC when sortBy is not provided", async () => {
-      const mockCategories = [{ ...mockCategory, _count: { Transaction: 0 } }];
+      const mockCategories = [
+        createMockCategoryWithCount({ _count: { Transaction: 0 } }),
+      ];
 
-      jest
-        .spyOn(prismaService.category, "findMany")
-        .mockResolvedValue(mockCategories as any);
+      const findManyMock = jest.mocked(prismaService.category["findMany"]);
+      findManyMock.mockResolvedValue(mockCategories);
 
       const params: CategoryPaginationParamsDto = {
         take: 10,
-        sortBy: undefined as any,
+        sortBy: undefined as CategorySortBy | undefined,
       };
 
       await service.listCategories(userId, params);
 
-      expect(prismaService.category.findMany).toHaveBeenCalledWith({
+      expect(findManyMock).toHaveBeenCalledWith({
         where: { userId },
         orderBy: { createdAt: "desc" },
         include: {
@@ -404,10 +407,12 @@ describe("CategoryService", () => {
         icon: "test-icon",
       };
 
-      jest
-        .spyOn(prismaService.category, "create")
-        .mockResolvedValue(mockCategory);
-      jest.spyOn(prismaService.transaction, "count").mockResolvedValue(0);
+      const createMock = jest.mocked(prismaService.category["create"]);
+      const transactionCountMock = jest.mocked(
+        prismaService.transaction["count"],
+      );
+      createMock.mockResolvedValue(mockCategory);
+      transactionCountMock.mockResolvedValue(0);
 
       const result = await service.createCategory(userId, createDto);
 
@@ -423,17 +428,21 @@ describe("CategoryService", () => {
         name: "Updated Name Only",
       };
 
-      jest
-        .spyOn(prismaService.category, "findFirst")
-        .mockResolvedValue(mockCategory);
-      jest
-        .spyOn(prismaService.category, "update")
-        .mockResolvedValue({ ...mockCategory, ...partialUpdate });
-      jest.spyOn(prismaService.transaction, "count").mockResolvedValue(0);
+      const findFirstMock = jest.mocked(prismaService.category["findFirst"]);
+      const updateMock = jest.mocked(prismaService.category["update"]);
+      const transactionCountMock = jest.mocked(
+        prismaService.transaction["count"],
+      );
+      findFirstMock.mockResolvedValue(mockCategory);
+      updateMock.mockResolvedValue({
+        ...mockCategory,
+        ...partialUpdate,
+      });
+      transactionCountMock.mockResolvedValue(0);
 
       const result = await service.updateCategory(userId, 1, partialUpdate);
 
-      expect(prismaService.category.update).toHaveBeenCalledWith({
+      expect(updateMock).toHaveBeenCalledWith({
         where: { id: 1 },
         data: partialUpdate,
       });
