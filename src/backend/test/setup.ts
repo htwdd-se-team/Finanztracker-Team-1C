@@ -1,4 +1,5 @@
 // Test setup file - sets NODE_ENV to test before any imports
+import "reflect-metadata";
 
 process.env.NODE_ENV = "test";
 if (!process.env.DATABASE_URL_TEST) {

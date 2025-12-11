@@ -50,8 +50,65 @@ jobs:
           echo "DATABASE_URL=${{ secrets.DATABASE_URL_TEST }}" >> $GITHUB_ENV
           echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
 
-      - name: Run tests
-        run: pnpm --filter backend test:all
+      - name: Run unit tests with coverage
+        id: unit-tests
+        continue-on-error: false
+        run: |
+          pnpm --filter backend test:module --coverage || exit 1
+          if [ -f "src/backend/coverage/module/coverage-summary.json" ]; then
+            COVERAGE_UNIT=$(cat src/backend/coverage/module/coverage-summary.json | jq -r '.total.lines.pct')
+            echo "unit_coverage=$COVERAGE_UNIT" >> $GITHUB_OUTPUT
+            echo "Unit test coverage: ${COVERAGE_UNIT}%"
+          else
+            echo "unit_coverage=0" >> $GITHUB_OUTPUT
+            echo "Warning: Coverage file not found for unit tests"
+          fi
+
+      - name: Run e2e tests with coverage
+        id: e2e-tests
+        continue-on-error: false
+        run: |
+          pnpm --filter backend test:e2e --coverage || exit 1
+          if [ -f "src/backend/coverage/e2e/coverage-summary.json" ]; then
+            COVERAGE_E2E=$(cat src/backend/coverage/e2e/coverage-summary.json | jq -r '.total.lines.pct')
+            echo "e2e_coverage=$COVERAGE_E2E" >> $GITHUB_OUTPUT
+            echo "E2E test coverage: ${COVERAGE_E2E}%"
+          else
+            echo "e2e_coverage=0" >> $GITHUB_OUTPUT
+            echo "Warning: Coverage file not found for e2e tests"
+          fi
+
+      - name: Check coverage thresholds
+        if: always()
+        run: |
+          UNIT_COV=${{ steps.unit-tests.outputs.unit_coverage }}
+          E2E_COV=${{ steps.e2e-tests.outputs.e2e_coverage }}
+          THRESHOLD=70
+
+          # Use awk for floating point comparison (more reliable and available by default)
+          if [ -n "$UNIT_COV" ] && [ "$UNIT_COV" != "null" ] && [ "$UNIT_COV" != "0" ]; then
+            UNIT_BELOW=$(echo "$UNIT_COV $THRESHOLD" | awk '{if ($1 < $2) print "yes"; else print "no"}')
+            if [ "$UNIT_BELOW" = "yes" ]; then
+              echo "::warning::Unit test coverage is ${UNIT_COV}%, which is below the threshold of ${THRESHOLD}%"
+            fi
+          fi
+
+          if [ -n "$E2E_COV" ] && [ "$E2E_COV" != "null" ] && [ "$E2E_COV" != "0" ]; then
+            E2E_BELOW=$(echo "$E2E_COV $THRESHOLD" | awk '{if ($1 < $2) print "yes"; else print "no"}')
+            if [ "$E2E_BELOW" = "yes" ]; then
+              echo "::warning::E2E test coverage is ${E2E_COV}%, which is below the threshold of ${THRESHOLD}%"
+            fi
+          fi
+
+          if [ -n "$UNIT_COV" ] && [ -n "$E2E_COV" ] && [ "$UNIT_COV" != "null" ] && [ "$E2E_COV" != "null" ] && [ "$UNIT_COV" != "0" ] && [ "$E2E_COV" != "0" ]; then
+            OVERALL_COV=$(echo "$UNIT_COV $E2E_COV" | awk '{printf "%.2f", ($1 + $2) / 2}')
+            echo "Overall test coverage: ${OVERALL_COV}%"
+
+            OVERALL_BELOW=$(echo "$OVERALL_COV $THRESHOLD" | awk '{if ($1 < $2) print "yes"; else print "no"}')
+            if [ "$OVERALL_BELOW" = "yes" ]; then
+              echo "::warning::Overall test coverage is ${OVERALL_COV}%, which is below the threshold of ${THRESHOLD}%"
+            fi
+          fi
 
   build:
     needs: lint-and-test

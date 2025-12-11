@@ -1,62 +1,81 @@
+import { createMock } from "@golevelup/ts-jest";
 import { TestingModule } from "@nestjs/testing";
-import { RecurringTransactionType } from "@prisma/client";
+import {
+  RecurringTransactionType,
+  Transaction,
+  TransactionType,
+  User,
+} from "@prisma/client";
 import { DateTime } from "luxon";
 
 import { BackendConfig } from "../src/backend.config";
-import { ScheduledEntriesParamsDto } from "../src/dto";
+import { Currency, ScheduledEntriesParamsDto } from "../src/dto";
 import { PrismaService } from "../src/services/prisma.service";
 import { RecurringEntryService } from "../src/services/recurring-entry.service";
 
-import { createMockUser, createMockTransaction } from "./mock-data-factory";
-import { createMockPrismaService } from "./prisma-mock-factory";
 import { createTestModule } from "./test-helpers";
 
 describe("RecurringEntryService", () => {
-  let service: RecurringEntryService;
-  let prismaService: jest.Mocked<PrismaService>;
+  let module: TestingModule;
+  let mockBackendConfig: BackendConfig;
 
-  const mockUser = createMockUser();
-
-  const mockParentTransaction = createMockTransaction({
+  const mockUser: User = {
     id: 1,
+    email: "test@example.com",
+    passwordHash: "hashed",
+    givenName: "Test",
+    familyName: "User",
+    createdAt: new Date("2024-01-01"),
+  };
+
+  const mockRecurringTransaction: Transaction = {
+    id: 1,
+    type: TransactionType.EXPENSE,
+    amount: 1000,
+    description: "Monthly Subscription",
+    currency: Currency.EUR,
     userId: mockUser.id,
-    createdAt: DateTime.now().minus({ months: 1 }).toJSDate(),
+    categoryId: null,
+    createdAt: new Date("2024-01-01"),
     isRecurring: true,
     recurringType: RecurringTransactionType.MONTHLY,
     recurringBaseInterval: 1,
     recurringDisabled: false,
     transactionId: null,
-  });
+  };
 
-  const mockChildTransaction = createMockTransaction({
-    id: 2,
-    userId: mockUser.id,
-    createdAt: DateTime.now().minus({ days: 15 }).toJSDate(),
-    isRecurring: false,
-    recurringType: null,
-    recurringBaseInterval: null,
-    recurringDisabled: null,
-    transactionId: 1,
-  });
-
-  beforeEach(async () => {
-    const mockBackendConfig = {
+  const createMockBackendConfig = (
+    runScheduledEntries: boolean,
+  ): BackendConfig => {
+    return {
+      RUN_SCHEDULED_ENTRIES: runScheduledEntries,
       CORS_ORIGIN: "http://localhost:*",
-      DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy",
+      DATABASE_URL: "postgresql://test",
       JWT_SECRET: "test-secret",
       JWT_EXPIRATION: "31d",
-      RUN_SCHEDULED_ENTRIES: true,
       PORT: 3111,
-    };
+    } as unknown as BackendConfig;
+  };
 
-    const mockPrisma = createMockPrismaService();
+  beforeAll(async () => {
+    mockBackendConfig = createMockBackendConfig(true);
 
-    const module: TestingModule = await createTestModule({
+    const mockPrismaService = createMock<PrismaService>({
+      transaction: {
+        findMany: jest.fn(),
+        findUnique: jest.fn(),
+        findFirst: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+      },
+    } as unknown as PrismaService);
+
+    module = await createTestModule({
       providers: [
         RecurringEntryService,
         {
           provide: PrismaService,
-          useValue: mockPrisma,
+          useValue: mockPrismaService,
         },
         {
           provide: BackendConfig,
@@ -65,29 +84,67 @@ describe("RecurringEntryService", () => {
       ],
     });
 
-    service = module.get<RecurringEntryService>(RecurringEntryService);
-    prismaService = module.get<PrismaService>(
-      PrismaService,
-    ) as jest.Mocked<PrismaService>;
+    // Service is created per test
+  });
+
+  afterAll(async () => {
+    await module.close();
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+    // Spy on DateTime.now instead of mocking the entire module
+    const nowDate = DateTime.fromJSDate(new Date());
+    if (!nowDate.isValid) {
+      throw new Error("Invalid DateTime created");
+    }
+    jest.spyOn(DateTime, "now").mockReturnValue(nowDate);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.useRealTimers();
+    jest.restoreAllMocks();
   });
 
   describe("getScheduledEntries", () => {
-    const params: ScheduledEntriesParamsDto = {
-      disabled: false,
-      take: 10,
-    };
-
     it("should return active scheduled entries", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([mockParentTransaction]);
+      const params: ScheduledEntriesParamsDto = {
+        take: 10,
+      };
 
-      const result = await service.getScheduledEntries(mockUser.id, params);
+      const entries = [mockRecurringTransaction];
+      const mockFindMany = jest.fn().mockResolvedValue(entries);
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+        },
+      } as unknown as PrismaService);
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
+
+      const result = await testService.getScheduledEntries(mockUser.id, params);
+
+      expect(result.entries).toHaveLength(1);
+      expect(result.count).toBe(1);
+      expect(result.entries[0].isRecurring).toBe(true);
+      expect(mockFindMany).toHaveBeenCalledWith({
         where: {
           userId: mockUser.id,
           isRecurring: true,
@@ -98,30 +155,51 @@ describe("RecurringEntryService", () => {
           amount: "desc",
         },
       });
-      expect(result.entries).toHaveLength(1);
-      expect(result.count).toBe(1);
+
+      await testModule.close();
     });
 
     it("should return disabled scheduled entries when disabled=true", async () => {
-      const disabledParent = createMockTransaction({
-        ...mockParentTransaction,
-        recurringDisabled: true,
-      });
-
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([disabledParent]);
-
-      const paramsDisabled: ScheduledEntriesParamsDto = {
-        disabled: true,
+      const params: ScheduledEntriesParamsDto = {
         take: 10,
+        disabled: true,
       };
 
-      const result = await service.getScheduledEntries(
-        mockUser.id,
-        paramsDisabled,
+      const disabledEntry = {
+        ...mockRecurringTransaction,
+        recurringDisabled: true,
+      };
+
+      const mockFindMany = jest.fn().mockResolvedValue([disabledEntry]);
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      const result = await testService.getScheduledEntries(mockUser.id, params);
+
+      expect(result.entries).toHaveLength(1);
+      expect(result.entries[0].recurringDisabled).toBe(true);
+      expect(mockFindMany).toHaveBeenCalledWith({
         where: {
           userId: mockUser.id,
           isRecurring: true,
@@ -132,21 +210,50 @@ describe("RecurringEntryService", () => {
           amount: "desc",
         },
       });
-      expect(result.entries).toHaveLength(1);
+
+      await testModule.close();
     });
 
     it("should handle pagination with cursor", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([mockParentTransaction]);
-
-      const paramsWithCursor: ScheduledEntriesParamsDto = {
-        ...params,
+      const params: ScheduledEntriesParamsDto = {
+        take: 10,
         cursorId: 5,
       };
 
-      await service.getScheduledEntries(mockUser.id, paramsWithCursor);
+      const entries = Array.from({ length: 10 }, (_, i) => ({
+        ...mockRecurringTransaction,
+        id: 6 + i,
+      }));
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      const mockFindMany = jest.fn().mockResolvedValue(entries);
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
+
+      const result = await testService.getScheduledEntries(mockUser.id, params);
+
+      expect(result.cursorId).toBe(15);
+      expect(mockFindMany).toHaveBeenCalledWith({
         where: {
           userId: mockUser.id,
           isRecurring: true,
@@ -159,373 +266,843 @@ describe("RecurringEntryService", () => {
           amount: "desc",
         },
       });
+
+      await testModule.close();
     });
 
     it("should set cursorId when entries match take limit", async () => {
-      const manyEntries = Array.from({ length: 10 }, (_, i) =>
-        createMockTransaction({ ...mockParentTransaction, id: i + 1 }),
+      const params: ScheduledEntriesParamsDto = {
+        take: 10,
+      };
+
+      const entries = Array.from({ length: 10 }, (_, i) => ({
+        ...mockRecurringTransaction,
+        id: i + 1,
+      }));
+
+      const mockFindMany = jest.fn().mockResolvedValue(entries);
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue(manyEntries);
-
-      const result = await service.getScheduledEntries(mockUser.id, params);
+      const result = await testService.getScheduledEntries(mockUser.id, params);
 
       expect(result.cursorId).toBe(10);
+
+      await testModule.close();
     });
 
     it("should set cursorId to null when entries are less than take limit", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([mockParentTransaction]);
+      const params: ScheduledEntriesParamsDto = {
+        take: 10,
+      };
 
-      const result = await service.getScheduledEntries(mockUser.id, params);
+      const entries = Array.from({ length: 5 }, (_, i) => ({
+        ...mockRecurringTransaction,
+        id: i + 1,
+      }));
+
+      const mockFindMany = jest.fn().mockResolvedValue(entries);
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
+
+      const result = await testService.getScheduledEntries(mockUser.id, params);
 
       expect(result.cursorId).toBeNull();
+
+      await testModule.close();
     });
   });
 
   describe("disableRecurringEntry", () => {
     it("should disable a recurring entry", async () => {
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      const updateMock = jest.mocked(prismaService.transaction["update"]);
-      findUniqueMock
-        .mockResolvedValueOnce(mockParentTransaction)
-        .mockResolvedValueOnce(
-          createMockTransaction({
-            ...mockParentTransaction,
-            recurringDisabled: true,
-          }),
-        );
-      updateMock.mockResolvedValue(
-        createMockTransaction({
-          ...mockParentTransaction,
+      const mockFindUnique = jest
+        .fn()
+        .mockResolvedValueOnce(mockRecurringTransaction)
+        .mockResolvedValueOnce({
+          ...mockRecurringTransaction,
           recurringDisabled: true,
-        }),
+        });
+      const mockUpdate = jest.fn().mockResolvedValue({
+        ...mockRecurringTransaction,
+        recurringDisabled: true,
+      });
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findUnique: mockFindUnique,
+          update: mockUpdate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
 
-      const result = await service.disableRecurringEntry(1, mockUser.id);
+      const result = await testService.disableRecurringEntry(1, mockUser.id);
 
-      expect(findUniqueMock).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
-      expect(updateMock).toHaveBeenCalledWith({
+      expect(result.recurringDisabled).toBe(true);
+      expect(mockUpdate).toHaveBeenCalledWith({
         where: { id: 1 },
         data: { recurringDisabled: true },
       });
-      expect(result.recurringDisabled).toBe(true);
+
+      await testModule.close();
     });
 
     it("should throw error if entry not found", async () => {
-      jest
-        .spyOn(prismaService.transaction, "findUnique")
-        .mockResolvedValue(null);
+      const mockFindUnique = jest.fn().mockResolvedValue(null);
+      const mockUpdate = jest.fn();
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findUnique: mockFindUnique,
+          update: mockUpdate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
 
       await expect(
-        service.disableRecurringEntry(999, mockUser.id),
+        testService.disableRecurringEntry(999, mockUser.id),
       ).rejects.toThrow("Invalid recurring entry");
+      expect(mockUpdate).not.toHaveBeenCalled();
+
+      await testModule.close();
     });
 
     it("should throw error if entry belongs to different user", async () => {
-      const otherUserTransaction = createMockTransaction({
-        ...mockParentTransaction,
+      const differentUserEntry = {
+        ...mockRecurringTransaction,
         userId: 999,
+      };
+
+      const mockFindUnique = jest.fn().mockResolvedValue(differentUserEntry);
+      const mockUpdate = jest.fn();
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findUnique: mockFindUnique,
+          update: mockUpdate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
       });
 
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
-      findUniqueMock.mockResolvedValue(otherUserTransaction);
 
       await expect(
-        service.disableRecurringEntry(1, mockUser.id),
+        testService.disableRecurringEntry(1, mockUser.id),
       ).rejects.toThrow("Invalid recurring entry");
+
+      await testModule.close();
     });
 
     it("should throw error if entry is not recurring", async () => {
-      const nonRecurringTransaction = createMockTransaction({
-        ...mockParentTransaction,
+      const nonRecurringEntry = {
+        ...mockRecurringTransaction,
         isRecurring: false,
+      };
+
+      const mockFindUnique = jest.fn().mockResolvedValue(nonRecurringEntry);
+      const mockUpdate = jest.fn();
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findUnique: mockFindUnique,
+          update: mockUpdate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
       });
 
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
-      findUniqueMock.mockResolvedValue(nonRecurringTransaction);
 
       await expect(
-        service.disableRecurringEntry(1, mockUser.id),
+        testService.disableRecurringEntry(1, mockUser.id),
       ).rejects.toThrow("Invalid recurring entry");
+
+      await testModule.close();
     });
   });
 
   describe("enableRecurringEntry", () => {
     it("should enable a disabled recurring entry", async () => {
-      const disabledParent = createMockTransaction({
-        ...mockParentTransaction,
+      const disabledEntry = {
+        ...mockRecurringTransaction,
         recurringDisabled: true,
+      };
+
+      const mockFindUnique = jest
+        .fn()
+        .mockResolvedValueOnce(disabledEntry)
+        .mockResolvedValueOnce({
+          ...mockRecurringTransaction,
+          recurringDisabled: false,
+        });
+      const mockUpdate = jest.fn().mockResolvedValue({
+        ...mockRecurringTransaction,
+        recurringDisabled: false,
       });
 
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      const updateMock = jest.mocked(prismaService.transaction["update"]);
-      findUniqueMock
-        .mockResolvedValueOnce(disabledParent)
-        .mockResolvedValueOnce(
-          createMockTransaction({
-            ...disabledParent,
-            recurringDisabled: false,
-          }),
-        );
-      updateMock.mockResolvedValue(
-        createMockTransaction({
-          ...disabledParent,
-          recurringDisabled: false,
-        }),
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findUnique: mockFindUnique,
+          update: mockUpdate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
 
-      const result = await service.enableRecurringEntry(1, mockUser.id);
+      const result = await testService.enableRecurringEntry(1, mockUser.id);
 
-      expect(updateMock).toHaveBeenCalledWith({
+      expect(result.recurringDisabled).toBe(false);
+      expect(mockUpdate).toHaveBeenCalledWith({
         where: { id: 1 },
         data: { recurringDisabled: false },
       });
-      expect(result.recurringDisabled).toBe(false);
+
+      await testModule.close();
     });
 
     it("should throw error if entry not found", async () => {
-      jest
-        .spyOn(prismaService.transaction, "findUnique")
-        .mockResolvedValue(null);
+      const mockFindUnique = jest.fn().mockResolvedValue(null);
+      const mockUpdate = jest.fn();
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findUnique: mockFindUnique,
+          update: mockUpdate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: mockBackendConfig,
+          },
+        ],
+      });
+
+      const testService = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
 
       await expect(
-        service.enableRecurringEntry(999, mockUser.id),
+        testService.enableRecurringEntry(999, mockUser.id),
       ).rejects.toThrow("Invalid recurring entry");
+      expect(mockUpdate).not.toHaveBeenCalled();
+
+      await testModule.close();
     });
   });
 
   describe("processRecurringEntries", () => {
     it("should skip processing if RUN_SCHEDULED_ENTRIES is false", async () => {
-      const disabledConfig = {
-        CORS_ORIGIN: "http://localhost:*",
-        DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy",
-        JWT_SECRET: "test-secret",
-        JWT_EXPIRATION: "31d",
-        RUN_SCHEDULED_ENTRIES: false,
-        PORT: 3111,
-      };
+      const config = createMockBackendConfig(false);
 
-      const moduleWithDisabledConfig: TestingModule = await createTestModule({
+      const mockFindMany = jest.fn();
+      // Access the prisma service from the module
+      const testModule = await createTestModule({
         providers: [
           RecurringEntryService,
           {
             provide: PrismaService,
-            useValue: {
+            useValue: createMock<PrismaService>({
               transaction: {
-                findMany: jest.fn(),
-                findUnique: jest.fn(),
-                findFirst: jest.fn(),
-                create: jest.fn(),
-                update: jest.fn(),
+                findMany: mockFindMany,
               },
-            },
+            } as unknown as PrismaService),
           },
           {
             provide: BackendConfig,
-            useValue: disabledConfig,
+            useValue: config,
           },
         ],
       });
 
-      const serviceWithDisabled =
-        moduleWithDisabledConfig.get<RecurringEntryService>(
-          RecurringEntryService,
-        );
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
 
-      await serviceWithDisabled.processRecurringEntries();
+      await serviceToTest.processRecurringEntries();
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      expect(findManyMock).not.toHaveBeenCalled();
+      expect(mockFindMany).not.toHaveBeenCalled();
+
+      await testModule.close();
     });
 
     it("should process active recurring entries", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([mockParentTransaction]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      findFirstMock.mockResolvedValue(mockChildTransaction);
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      createMock.mockResolvedValue(mockChildTransaction);
+      const config = createMockBackendConfig(true);
+      const parentEntries = [mockRecurringTransaction];
 
-      await service.processRecurringEntries();
+      const mockFindMany = jest.fn().mockResolvedValue(parentEntries);
+      const mockFindUnique = jest
+        .fn()
+        .mockResolvedValue(mockRecurringTransaction);
+      const mockFindFirst = jest.fn().mockResolvedValue(null);
+      const mockCreate = jest.fn().mockResolvedValue({
+        ...mockRecurringTransaction,
+        id: 2,
+        isRecurring: false,
+        transactionId: 1,
+      });
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      // Mock DateTime.now() to return a date far enough in the future
+      const futureDate = DateTime.fromJSDate(new Date("2024-02-15"));
+      if (!futureDate.isValid) {
+        throw new Error("Invalid DateTime created");
+      }
+      jest.spyOn(DateTime, "now").mockReturnValue(futureDate);
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+          findUnique: mockFindUnique,
+          findFirst: mockFindFirst,
+          create: mockCreate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
+      });
+
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
+
+      await serviceToTest.processRecurringEntries();
+
+      expect(mockFindMany).toHaveBeenCalledWith({
         where: {
           isRecurring: true,
           recurringDisabled: false,
           transactionId: null,
         },
       });
+
+      await testModule.close();
     });
 
     it("should not create child if not enough time has passed", async () => {
-      const recentChild = {
-        ...mockChildTransaction,
-        createdAt: DateTime.now().minus({ days: 1 }).toJSDate(),
-      };
+      const config = createMockBackendConfig(true);
+      const parentEntries = [mockRecurringTransaction];
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      findManyMock.mockResolvedValue([mockParentTransaction]);
-      findFirstMock.mockResolvedValue(recentChild);
+      const mockFindMany = jest.fn().mockResolvedValue(parentEntries);
+      const mockFindUnique = jest
+        .fn()
+        .mockResolvedValue(mockRecurringTransaction);
+      const mockFindFirst = jest.fn().mockResolvedValue({
+        ...mockRecurringTransaction,
+        id: 2,
+        createdAt: new Date("2024-01-15"),
+      });
+      const mockCreate = jest.fn();
 
-      await service.processRecurringEntries();
+      // Mock DateTime.now() to return a date that's not far enough
+      const recentDate = DateTime.fromJSDate(new Date("2024-01-16"));
+      if (!recentDate.isValid) {
+        throw new Error("Invalid DateTime created");
+      }
+      jest.spyOn(DateTime, "now").mockReturnValue(recentDate);
 
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      expect(createMock).not.toHaveBeenCalled();
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+          findUnique: mockFindUnique,
+          findFirst: mockFindFirst,
+          create: mockCreate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
+      });
+
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
+
+      await serviceToTest.processRecurringEntries();
+
+      expect(mockCreate).not.toHaveBeenCalled();
+
+      await testModule.close();
     });
 
     it("should create child for daily recurring entry when enough time has passed", async () => {
-      const dailyParent = createMockTransaction({
-        ...mockParentTransaction,
-        id: 1,
+      const config = createMockBackendConfig(true);
+      const dailyParent = {
+        ...mockRecurringTransaction,
         recurringType: RecurringTransactionType.DAILY,
-        recurringBaseInterval: 1,
-        createdAt: DateTime.now().minus({ days: 5 }).toJSDate(),
+        createdAt: new Date("2024-01-01"),
+      };
+
+      const mockFindMany = jest.fn().mockResolvedValue([dailyParent]);
+      const mockFindUnique = jest.fn().mockResolvedValue(dailyParent);
+      const mockFindFirst = jest.fn().mockResolvedValue({
+        ...dailyParent,
+        id: 2,
+        createdAt: new Date("2024-01-01"),
       });
-      const oldChild = createMockTransaction({
-        ...mockChildTransaction,
-        createdAt: DateTime.now().minus({ days: 2 }).toJSDate(),
+      const mockCreate = jest.fn().mockResolvedValue({
+        ...dailyParent,
+        id: 3,
+        isRecurring: false,
+        transactionId: 1,
       });
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
+      // Mock DateTime.now() to return a date far enough in the future for daily
+      const futureDate = DateTime.fromJSDate(new Date("2024-01-03"));
+      if (!futureDate.isValid) {
+        throw new Error("Invalid DateTime created");
+      }
+      jest.spyOn(DateTime, "now").mockReturnValue(futureDate);
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+          findUnique: mockFindUnique,
+          findFirst: mockFindFirst,
+          create: mockCreate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
+      });
+
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      findManyMock.mockResolvedValue([dailyParent]);
-      findFirstMock.mockResolvedValue(oldChild);
-      findUniqueMock.mockResolvedValue(dailyParent);
-      createMock.mockResolvedValue(mockChildTransaction);
 
-      await service.processRecurringEntries();
+      await serviceToTest.processRecurringEntries();
 
-      expect(createMock).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalled();
+
+      await testModule.close();
     });
 
     it("should create child for weekly recurring entry when enough time has passed", async () => {
-      const weeklyParent = createMockTransaction({
-        ...mockParentTransaction,
-        id: 1,
+      const config = createMockBackendConfig(true);
+      const weeklyParent = {
+        ...mockRecurringTransaction,
         recurringType: RecurringTransactionType.WEEKLY,
-        recurringBaseInterval: 1,
-        createdAt: DateTime.now().minus({ weeks: 5 }).toJSDate(),
+        createdAt: new Date("2024-01-01"),
+      };
+
+      const mockFindMany = jest.fn().mockResolvedValue([weeklyParent]);
+      const mockFindUnique = jest.fn().mockResolvedValue(weeklyParent);
+      const mockFindFirst = jest.fn().mockResolvedValue({
+        ...weeklyParent,
+        id: 2,
+        createdAt: new Date("2024-01-01"),
       });
-      const oldChild = createMockTransaction({
-        ...mockChildTransaction,
-        createdAt: DateTime.now().minus({ weeks: 2 }).toJSDate(),
+      const mockCreate = jest.fn().mockResolvedValue({
+        ...weeklyParent,
+        id: 3,
+        isRecurring: false,
+        transactionId: 1,
       });
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
+      // Mock DateTime.now() to return a date far enough in the future for weekly
+      const futureDate = DateTime.fromJSDate(new Date("2024-01-15"));
+      if (!futureDate.isValid) {
+        throw new Error("Invalid DateTime created");
+      }
+      jest.spyOn(DateTime, "now").mockReturnValue(futureDate);
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+          findUnique: mockFindUnique,
+          findFirst: mockFindFirst,
+          create: mockCreate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
+      });
+
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      findManyMock.mockResolvedValue([weeklyParent]);
-      findFirstMock.mockResolvedValue(oldChild);
-      findUniqueMock.mockResolvedValue(weeklyParent);
-      createMock.mockResolvedValue(mockChildTransaction);
 
-      await service.processRecurringEntries();
+      await serviceToTest.processRecurringEntries();
 
-      expect(createMock).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalled();
+
+      await testModule.close();
     });
 
     it("should handle monthly recurring entry with interval > 1", async () => {
-      const monthlyParent = createMockTransaction({
-        ...mockParentTransaction,
-        id: 1,
+      const config = createMockBackendConfig(true);
+      const monthlyParent = {
+        ...mockRecurringTransaction,
         recurringType: RecurringTransactionType.MONTHLY,
-        recurringBaseInterval: 2, // Every 2 months
-        createdAt: DateTime.now().minus({ months: 6 }).toJSDate(),
+        recurringBaseInterval: 2,
+        createdAt: new Date("2024-01-01"),
+      };
+
+      const mockFindMany = jest.fn().mockResolvedValue([monthlyParent]);
+      const mockFindUnique = jest.fn().mockResolvedValue(monthlyParent);
+      const mockFindFirst = jest.fn().mockResolvedValue({
+        ...monthlyParent,
+        id: 2,
+        createdAt: new Date("2024-01-01"),
       });
-      const oldChild = createMockTransaction({
-        ...mockChildTransaction,
-        createdAt: DateTime.now().minus({ months: 3 }).toJSDate(),
+      const mockCreate = jest.fn().mockResolvedValue({
+        ...monthlyParent,
+        id: 3,
+        isRecurring: false,
+        transactionId: 1,
       });
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
+      // Mock DateTime.now() to return a date far enough in the future for 2 months
+      const futureDate = DateTime.fromJSDate(new Date("2024-03-15"));
+      if (!futureDate.isValid) {
+        throw new Error("Invalid DateTime created");
+      }
+      jest.spyOn(DateTime, "now").mockReturnValue(futureDate);
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+          findUnique: mockFindUnique,
+          findFirst: mockFindFirst,
+          create: mockCreate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
+      });
+
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      findManyMock.mockResolvedValue([monthlyParent]);
-      findFirstMock.mockResolvedValue(oldChild);
-      findUniqueMock.mockResolvedValue(monthlyParent);
-      createMock.mockResolvedValue(mockChildTransaction);
 
-      await service.processRecurringEntries();
+      await serviceToTest.processRecurringEntries();
 
-      expect(createMock).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalled();
+
+      await testModule.close();
     });
 
     it("should use parent createdAt when no child exists", async () => {
-      const parentWithoutChild = createMockTransaction({
-        ...mockParentTransaction,
-        id: 1,
-        createdAt: DateTime.now().minus({ months: 2 }).toJSDate(),
+      const config = createMockBackendConfig(true);
+      const parentCreatedAt = new Date("2024-01-01");
+      const monthlyParent = {
+        ...mockRecurringTransaction,
+        recurringType: RecurringTransactionType.MONTHLY,
+        createdAt: parentCreatedAt,
+      };
+
+      const mockFindMany = jest.fn().mockResolvedValue([monthlyParent]);
+      const mockFindUnique = jest.fn().mockResolvedValue(monthlyParent);
+      const mockFindFirst = jest.fn().mockResolvedValue(null);
+      const mockCreate = jest.fn().mockResolvedValue({
+        ...monthlyParent,
+        id: 2,
+        isRecurring: false,
+        transactionId: 1,
       });
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
+      // Mock DateTime.now() to return a date far enough in the future
+      const futureDate = DateTime.fromJSDate(new Date("2024-02-15"));
+      if (!futureDate.isValid) {
+        throw new Error("Invalid DateTime created");
+      }
+      jest.spyOn(DateTime, "now").mockReturnValue(futureDate);
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+          findUnique: mockFindUnique,
+          findFirst: mockFindFirst,
+          create: mockCreate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
+      });
+
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      findManyMock.mockResolvedValue([parentWithoutChild]);
-      findFirstMock.mockResolvedValue(null);
-      findUniqueMock.mockResolvedValue(parentWithoutChild);
-      createMock.mockResolvedValue(mockChildTransaction);
 
-      await service.processRecurringEntries();
+      await serviceToTest.processRecurringEntries();
 
-      expect(createMock).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalled();
+
+      await testModule.close();
     });
 
     it("should skip disabled recurring entries", async () => {
-      const disabledParent = createMockTransaction({
-        ...mockParentTransaction,
-        recurringDisabled: true,
+      const config = createMockBackendConfig(true);
+
+      const mockFindMany = jest.fn().mockResolvedValue([]);
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
       });
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      findManyMock.mockResolvedValue([disabledParent]);
-      findFirstMock.mockResolvedValue(null);
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
+      );
 
-      await service.processRecurringEntries();
+      await serviceToTest.processRecurringEntries();
 
-      expect(findFirstMock).not.toHaveBeenCalled();
+      expect(mockFindMany).toHaveBeenCalledWith({
+        where: {
+          isRecurring: true,
+          recurringDisabled: false,
+          transactionId: null,
+        },
+      });
+
+      await testModule.close();
     });
 
     it("should skip entry if parent is not found", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      const findFirstMock = jest.mocked(prismaService.transaction["findFirst"]);
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
+      const config = createMockBackendConfig(true);
+      const parentEntries = [mockRecurringTransaction];
+
+      const mockFindMany = jest.fn().mockResolvedValue(parentEntries);
+      const mockFindUnique = jest.fn().mockResolvedValue(null);
+      const mockCreate = jest.fn();
+
+      const mockPrismaService = createMock<PrismaService>({
+        transaction: {
+          findMany: mockFindMany,
+          findUnique: mockFindUnique,
+          create: mockCreate,
+        },
+      } as unknown as PrismaService);
+
+      const testModule = await createTestModule({
+        providers: [
+          RecurringEntryService,
+          {
+            provide: PrismaService,
+            useValue: mockPrismaService,
+          },
+          {
+            provide: BackendConfig,
+            useValue: config,
+          },
+        ],
+      });
+
+      const serviceToTest = testModule.get<RecurringEntryService>(
+        RecurringEntryService,
       );
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      findManyMock.mockResolvedValue([mockParentTransaction]);
-      findFirstMock.mockResolvedValue(null);
-      findUniqueMock.mockResolvedValue(null);
 
-      await service.processRecurringEntries();
+      await serviceToTest.processRecurringEntries();
 
-      expect(createMock).not.toHaveBeenCalled();
+      expect(mockCreate).not.toHaveBeenCalled();
+
+      await testModule.close();
     });
   });
 });

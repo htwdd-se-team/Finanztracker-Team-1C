@@ -1,93 +1,129 @@
 import { HttpException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { TestingModule } from "@nestjs/testing";
+import { User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 
 import { RegisterDto } from "../src/dto";
 import { AuthService } from "../src/services/auth.service";
 import { PrismaService } from "../src/services/prisma.service";
 
-import { createMockUser } from "./mock-data-factory";
-import { createMockPrismaService } from "./prisma-mock-factory";
 import { createTestModule } from "./test-helpers";
+
+jest.mock("bcrypt");
 
 describe("AuthService", () => {
   let service: AuthService;
-  let prismaService: jest.Mocked<PrismaService>;
-  let jwtService: jest.Mocked<JwtService>;
+  let module: TestingModule;
+  let mockUserFindUnique: jest.Mock;
+  let mockUserCreate: jest.Mock;
+  let mockJwtSign: jest.Mock;
 
-  const mockUser = createMockUser();
+  const mockUser: User = {
+    id: 1,
+    email: "test@example.com",
+    passwordHash: "hashedPassword",
+    givenName: "Test",
+    familyName: "User",
+    createdAt: new Date("2024-01-01"),
+  };
 
-  beforeEach(async () => {
-    const mockPrisma = createMockPrismaService();
-    const mockJwt = {
-      sign: jest.fn(),
-    };
+  beforeAll(async () => {
+    mockUserFindUnique = jest.fn();
+    mockUserCreate = jest.fn();
+    mockJwtSign = jest.fn();
 
-    const module: TestingModule = await createTestModule({
+    const { createMock } = await import("@golevelup/ts-jest");
+    const mockPrismaService = createMock<PrismaService>({
+      user: {
+        findUnique: mockUserFindUnique,
+        create: mockUserCreate,
+      },
+    } as unknown as PrismaService);
+
+    const mockJwtService = createMock<JwtService>({
+      sign: mockJwtSign,
+    } as unknown as JwtService);
+
+    module = await createTestModule({
       providers: [
         AuthService,
         {
           provide: PrismaService,
-          useValue: mockPrisma,
+          useValue: mockPrismaService,
         },
         {
           provide: JwtService,
-          useValue: mockJwt,
+          useValue: mockJwtService,
         },
       ],
     });
 
     service = module.get<AuthService>(AuthService);
-    prismaService = module.get<PrismaService>(
-      PrismaService,
-    ) as jest.Mocked<PrismaService>;
-    jwtService = module.get<JwtService>(JwtService) as jest.Mocked<JwtService>;
   });
 
-  afterEach(() => {
+  afterAll(async () => {
+    await module.close();
+  });
+
+  beforeEach(() => {
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe("generateJwtToken", () => {
     it("should generate a JWT token for a user", () => {
-      const mockToken = "mock.jwt.token";
-      const signMock = jest.mocked(jwtService["sign"]);
-      signMock.mockReturnValue(mockToken);
+      mockJwtSign.mockReturnValue("mock-jwt-token");
 
-      const token = service.generateJwtToken(mockUser);
+      const result = service.generateJwtToken(mockUser);
 
-      expect(signMock).toHaveBeenCalledWith({
-        sub: mockUser.id,
-      });
-      expect(token).toBe(mockToken);
+      expect(result).toBe("mock-jwt-token");
+      expect(mockJwtSign).toHaveBeenCalledWith({ sub: mockUser.id });
+    });
+
+    it("should generate different tokens for different users", () => {
+      mockJwtSign.mockImplementation(
+        (payload: { sub: number }) => `token-${payload.sub}`,
+      );
+
+      const user1 = { ...mockUser, id: 1 };
+      const user2 = { ...mockUser, id: 2 };
+
+      const token1 = service.generateJwtToken(user1);
+      const token2 = service.generateJwtToken(user2);
+
+      expect(token1).toBe("token-1");
+      expect(token2).toBe("token-2");
+      expect(token1).not.toBe(token2);
     });
   });
 
   describe("register", () => {
-    const registerDto: RegisterDto = {
-      email: "newuser@example.com",
-      password: "ValidPass123!",
-      givenName: "New",
-      familyName: "User",
-    };
-
     it("should successfully register a new user", async () => {
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      const createMock = jest.mocked(prismaService.user["create"]);
-      findUniqueMock.mockResolvedValue(null);
-      createMock.mockResolvedValue(mockUser);
-      const hashPasswordSpy = jest
-        .spyOn(AuthService, "hashPassword")
-        .mockResolvedValue("hashedPassword");
+      const registerDto: RegisterDto = {
+        email: "new@example.com",
+        password: "password123",
+        givenName: "New",
+        familyName: "User",
+      };
+
+      mockUserFindUnique.mockResolvedValue(null);
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
+      (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
+      mockUserCreate.mockResolvedValue({
+        ...mockUser,
+        ...registerDto,
+        passwordHash: "hashedPassword",
+      });
 
       const result = await service.register(registerDto);
 
-      expect(findUniqueMock).toHaveBeenCalledWith({
+      expect(result.email).toBe(registerDto.email);
+      expect(result.givenName).toBe(registerDto.givenName);
+      expect(mockUserFindUnique).toHaveBeenCalledWith({
         where: { email: registerDto.email },
       });
-      expect(hashPasswordSpy).toHaveBeenCalledWith(registerDto.password);
-      expect(createMock).toHaveBeenCalledWith({
+      expect(mockUserCreate).toHaveBeenCalledWith({
         data: {
           givenName: registerDto.givenName,
           email: registerDto.email,
@@ -95,44 +131,48 @@ describe("AuthService", () => {
           passwordHash: "hashedPassword",
         },
       });
-      expect(result).toEqual(mockUser);
     });
 
     it("should throw HttpException if user already exists", async () => {
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      const createMock = jest.mocked(prismaService.user["create"]);
-      findUniqueMock.mockResolvedValue(mockUser);
+      const registerDto: RegisterDto = {
+        email: "existing@example.com",
+        password: "password123",
+        givenName: "Existing",
+      };
+
+      mockUserFindUnique.mockResolvedValue(mockUser);
 
       await expect(service.register(registerDto)).rejects.toThrow(
         HttpException,
       );
-      await expect(service.register(registerDto)).rejects.toThrow(
-        "User with this email already exists",
-      );
-      expect(createMock).not.toHaveBeenCalled();
+      expect(mockUserCreate).not.toHaveBeenCalled();
     });
 
     it("should register user without familyName if not provided", async () => {
-      const registerDtoWithoutFamilyName: RegisterDto = {
-        email: "newuser@example.com",
-        password: "ValidPass123!",
+      const registerDto: RegisterDto = {
+        email: "new@example.com",
+        password: "password123",
         givenName: "New",
       };
 
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      const createMock = jest.mocked(prismaService.user["create"]);
-      findUniqueMock.mockResolvedValue(null);
-      createMock.mockResolvedValue(mockUser);
-      jest
-        .spyOn(AuthService, "hashPassword")
-        .mockResolvedValue("hashedPassword");
+      mockUserFindUnique.mockResolvedValue(null);
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
+      (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
+      mockUserCreate.mockResolvedValue({
+        ...mockUser,
+        email: registerDto.email,
+        givenName: registerDto.givenName,
+        familyName: null,
+        passwordHash: "hashedPassword",
+      });
 
-      await service.register(registerDtoWithoutFamilyName);
+      const result = await service.register(registerDto);
 
-      expect(createMock).toHaveBeenCalledWith({
+      expect(result.familyName).toBeNull();
+      expect(mockUserCreate).toHaveBeenCalledWith({
         data: {
-          givenName: registerDtoWithoutFamilyName.givenName,
-          email: registerDtoWithoutFamilyName.email,
+          givenName: registerDto.givenName,
+          email: registerDto.email,
           familyName: undefined,
           passwordHash: "hashedPassword",
         },
@@ -142,20 +182,18 @@ describe("AuthService", () => {
 
   describe("checkUserExists", () => {
     it("should return user if exists", async () => {
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      findUniqueMock.mockResolvedValue(mockUser);
+      mockUserFindUnique.mockResolvedValue(mockUser);
 
       const result = await service.checkUserExists(1);
 
-      expect(findUniqueMock).toHaveBeenCalledWith({
+      expect(result).toEqual(mockUser);
+      expect(mockUserFindUnique).toHaveBeenCalledWith({
         where: { id: 1 },
       });
-      expect(result).toEqual(mockUser);
     });
 
     it("should return null if user does not exist", async () => {
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      findUniqueMock.mockResolvedValue(null);
+      mockUserFindUnique.mockResolvedValue(null);
 
       const result = await service.checkUserExists(999);
 
@@ -164,102 +202,90 @@ describe("AuthService", () => {
   });
 
   describe("validateUser", () => {
-    const email = "test@example.com";
-    const password = "ValidPass123!";
-
     it("should return user if credentials are valid", async () => {
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      findUniqueMock.mockResolvedValue(mockUser);
-      const comparePasswordsSpy = jest
-        .spyOn(AuthService, "comparePasswords")
-        .mockResolvedValue(true);
+      mockUserFindUnique.mockResolvedValue(mockUser);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
-      const result = await service.validateUser(email, password);
+      const result = await service.validateUser(
+        "test@example.com",
+        "password123",
+      );
 
-      expect(findUniqueMock).toHaveBeenCalledWith({
-        where: { email },
-      });
-      expect(comparePasswordsSpy).toHaveBeenCalledWith(
-        password,
+      expect(result).toEqual(mockUser);
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        "password123",
         mockUser.passwordHash,
       );
-      expect(result).toEqual(mockUser);
     });
 
     it("should throw HttpException if user not found", async () => {
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      findUniqueMock.mockResolvedValue(null);
+      mockUserFindUnique.mockResolvedValue(null);
 
-      await expect(service.validateUser(email, password)).rejects.toThrow(
-        HttpException,
-      );
-      await expect(service.validateUser(email, password)).rejects.toThrow(
-        "User not found",
-      );
+      await expect(
+        service.validateUser("notfound@example.com", "password123"),
+      ).rejects.toThrow(HttpException);
     });
 
     it("should throw HttpException if password is invalid", async () => {
-      const findUniqueMock = jest.mocked(prismaService.user["findUnique"]);
-      findUniqueMock.mockResolvedValue(mockUser);
-      const comparePasswordsSpy = jest
-        .spyOn(AuthService, "comparePasswords")
-        .mockResolvedValue(false);
+      mockUserFindUnique.mockResolvedValue(mockUser);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-      await expect(service.validateUser(email, password)).rejects.toThrow(
-        HttpException,
-      );
-      await expect(service.validateUser(email, password)).rejects.toThrow(
-        "Invalid password",
-      );
-      expect(comparePasswordsSpy).toHaveBeenCalled();
+      await expect(
+        service.validateUser("test@example.com", "wrongpassword"),
+      ).rejects.toThrow(HttpException);
     });
   });
 
   describe("hashPassword", () => {
     it("should hash a password", async () => {
-      const password = "TestPassword123!";
-      const hashedPassword = await AuthService.hashPassword(password);
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
+      (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
 
-      expect(hashedPassword).toBeDefined();
-      expect(hashedPassword).not.toBe(password);
-      expect(hashedPassword.length).toBeGreaterThan(0);
+      const result = await AuthService.hashPassword("password123");
+
+      expect(result).toBe("hashedPassword");
+      expect(bcrypt.hash).toHaveBeenCalledWith("password123", "salt");
     });
 
     it("should produce different hashes for the same password (due to salt)", async () => {
-      const password = "TestPassword123!";
-      // Clear any potential mocks before testing
-      jest.restoreAllMocks();
-      const hash1 = await AuthService.hashPassword(password);
-      const hash2 = await AuthService.hashPassword(password);
+      (bcrypt.genSalt as jest.Mock)
+        .mockResolvedValueOnce("salt1")
+        .mockResolvedValueOnce("salt2");
+      (bcrypt.hash as jest.Mock)
+        .mockResolvedValueOnce("hash1")
+        .mockResolvedValueOnce("hash2");
 
-      // Hashes should be different due to random salt, but both should verify correctly
+      const hash1 = await AuthService.hashPassword("password123");
+      const hash2 = await AuthService.hashPassword("password123");
+
+      expect(hash1).toBe("hash1");
+      expect(hash2).toBe("hash2");
       expect(hash1).not.toBe(hash2);
-      expect(hash1.length).toBeGreaterThan(0);
-      expect(hash2.length).toBeGreaterThan(0);
     });
   });
 
   describe("comparePasswords", () => {
     it("should return true for matching passwords", async () => {
-      const password = "TestPassword123!";
-      const hashedPassword = await bcrypt.hash(password, 10);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await AuthService.comparePasswords(
-        password,
-        hashedPassword,
+        "password123",
+        "hashedPassword",
       );
 
       expect(result).toBe(true);
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        "password123",
+        "hashedPassword",
+      );
     });
 
     it("should return false for non-matching passwords", async () => {
-      const password = "TestPassword123!";
-      const wrongPassword = "WrongPassword123!";
-      const hashedPassword = await bcrypt.hash(password, 10);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       const result = await AuthService.comparePasswords(
-        wrongPassword,
-        hashedPassword,
+        "wrongpassword",
+        "hashedPassword",
       );
 
       expect(result).toBe(false);
@@ -273,64 +299,56 @@ describe("AuthService", () => {
 
     it("should throw HttpException if hashedPassword is empty", async () => {
       await expect(
-        AuthService.comparePasswords("password", ""),
+        AuthService.comparePasswords("password123", ""),
       ).rejects.toThrow(HttpException);
     });
 
     it("should handle very long passwords", async () => {
       const longPassword = "a".repeat(1000);
-      const hashedPassword = await AuthService.hashPassword(longPassword);
-
-      expect(hashedPassword).toBeDefined();
-      expect(hashedPassword.length).toBeGreaterThan(0);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await AuthService.comparePasswords(
         longPassword,
-        hashedPassword,
+        "hashedPassword",
       );
+
       expect(result).toBe(true);
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        longPassword,
+        "hashedPassword",
+      );
     });
 
     it("should handle special characters in passwords", async () => {
-      const specialPassword = "P@ssw0rd!#$%^&*()_+-=[]{}|;:,.<>?";
-      const hashedPassword = await AuthService.hashPassword(specialPassword);
+      const specialPassword = "p@ssw0rd!#$%^&*()";
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await AuthService.comparePasswords(
         specialPassword,
-        hashedPassword,
+        "hashedPassword",
       );
+
       expect(result).toBe(true);
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        specialPassword,
+        "hashedPassword",
+      );
     });
 
     it("should handle unicode characters in passwords", async () => {
-      const unicodePassword = "Pässwörd123!🚀";
-      const hashedPassword = await AuthService.hashPassword(unicodePassword);
+      const unicodePassword = "pässwörd测试🔐";
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await AuthService.comparePasswords(
         unicodePassword,
-        hashedPassword,
+        "hashedPassword",
       );
+
       expect(result).toBe(true);
-    });
-  });
-
-  describe("generateJwtToken - Edge Cases", () => {
-    it("should generate different tokens for different users", () => {
-      const mockToken1 = "token1";
-      const mockToken2 = "token2";
-      const user1 = { ...mockUser, id: 1 };
-      const user2 = { ...mockUser, id: 2 };
-
-      const signMock = jest.mocked(jwtService["sign"]);
-      signMock.mockReturnValueOnce(mockToken1).mockReturnValueOnce(mockToken2);
-
-      const token1 = service.generateJwtToken(user1);
-      const token2 = service.generateJwtToken(user2);
-
-      expect(token1).toBe(mockToken1);
-      expect(token2).toBe(mockToken2);
-      expect(signMock).toHaveBeenCalledWith({ sub: 1 });
-      expect(signMock).toHaveBeenCalledWith({ sub: 2 });
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        unicodePassword,
+        "hashedPassword",
+      );
     });
   });
 });

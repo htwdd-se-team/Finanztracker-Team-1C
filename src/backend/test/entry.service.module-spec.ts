@@ -1,190 +1,360 @@
+import { createMock } from "@golevelup/ts-jest";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
 import {
-  TransactionType,
-  RecurringTransactionType,
   FilterSortOption,
+  RecurringTransactionType,
+  Transaction,
+  TransactionType,
+  User,
 } from "@prisma/client";
 
 import {
   Currency,
-  EntrySortBy,
   CreateEntryDto,
-  UpdateEntryDto,
   EntryPaginationParamsDto,
+  EntrySortBy,
+  UpdateEntryDto,
 } from "../src/dto";
 import { EntryService } from "../src/services/entry.service";
 import { PrismaService } from "../src/services/prisma.service";
 import { RecurringEntryService } from "../src/services/recurring-entry.service";
 
-import {
-  createMockUser,
-  createMockTransaction,
-  createMockFilter,
-} from "./mock-data-factory";
-import { createMockPrismaService } from "./prisma-mock-factory";
 import { createTestModule } from "./test-helpers";
 
 describe("EntryService", () => {
   let service: EntryService;
-  let prismaService: jest.Mocked<PrismaService>;
+  let module: TestingModule;
+  let mockTransactionCreate: jest.Mock;
+  let mockTransactionFindUnique: jest.Mock;
+  let mockTransactionFindMany: jest.Mock;
+  let mockTransactionUpdate: jest.Mock;
+  let mockTransactionUpdateMany: jest.Mock;
+  let mockTransactionDelete: jest.Mock;
+  let mockFilterFindUnique: jest.Mock;
 
-  const mockUser = createMockUser();
-  const mockTransaction = createMockTransaction({ userId: mockUser.id });
+  const mockUser: User = {
+    id: 1,
+    email: "test@example.com",
+    passwordHash: "hashed",
+    givenName: "Test",
+    familyName: "User",
+    createdAt: new Date("2024-01-01"),
+  };
 
-  beforeEach(async () => {
-    const mockPrisma = createMockPrismaService();
+  const mockTransaction: Transaction = {
+    id: 1,
+    type: TransactionType.EXPENSE,
+    amount: 1000,
+    description: "Test Entry",
+    currency: Currency.EUR,
+    userId: mockUser.id,
+    categoryId: null,
+    createdAt: new Date("2024-01-01"),
+    isRecurring: false,
+    recurringType: null,
+    recurringBaseInterval: null,
+    recurringDisabled: null,
+    transactionId: null,
+  };
 
-    const module: TestingModule = await createTestModule({
+  beforeAll(async () => {
+    mockTransactionCreate = jest.fn();
+    mockTransactionFindUnique = jest.fn();
+    mockTransactionFindMany = jest.fn();
+    mockTransactionUpdate = jest.fn();
+    mockTransactionUpdateMany = jest.fn();
+    mockTransactionDelete = jest.fn();
+    mockFilterFindUnique = jest.fn();
+
+    const mockPrismaService = createMock<PrismaService>({
+      transaction: {
+        create: mockTransactionCreate,
+        findUnique: mockTransactionFindUnique,
+        findMany: mockTransactionFindMany,
+        update: mockTransactionUpdate,
+        updateMany: mockTransactionUpdateMany,
+        delete: mockTransactionDelete,
+      },
+      filter: {
+        findUnique: mockFilterFindUnique,
+      },
+    } as unknown as PrismaService);
+
+    const mockRecurringEntryService = createMock<RecurringEntryService>({});
+
+    module = await createTestModule({
       providers: [
         EntryService,
         {
           provide: PrismaService,
-          useValue: mockPrisma,
+          useValue: mockPrismaService,
         },
         {
           provide: RecurringEntryService,
-          useValue: {},
+          useValue: mockRecurringEntryService,
         },
       ],
     });
 
     service = module.get<EntryService>(EntryService);
-    prismaService = module.get<PrismaService>(
-      PrismaService,
-    ) as jest.Mocked<PrismaService>;
   });
 
-  afterEach(() => {
+  afterAll(async () => {
+    await module.close();
+  });
+
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe("createEntry", () => {
-    const createDto: CreateEntryDto = {
-      type: TransactionType.EXPENSE,
-      amount: 1000,
-      description: "Test entry",
-      currency: Currency.EUR,
-    };
-
     it("should create a non-recurring entry successfully", async () => {
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      createMock.mockResolvedValue(mockTransaction);
+      const createDto: CreateEntryDto = {
+        type: TransactionType.EXPENSE,
+        amount: 1000,
+        description: "Test Entry",
+        currency: Currency.EUR,
+      };
+
+      mockTransactionCreate.mockResolvedValue(mockTransaction);
 
       const result = await service.createEntry(mockUser, createDto);
-      expect(createMock).toHaveBeenCalledWith({
+
+      expect(result.id).toBe(mockTransaction.id);
+      expect(result.amount).toBe(1000);
+      expect(result.isRecurring).toBe(false);
+      expect(mockTransactionCreate).toHaveBeenCalledTimes(1);
+      expect(mockTransactionCreate).toHaveBeenCalledWith({
         data: {
           type: createDto.type,
           amount: createDto.amount,
           description: createDto.description,
-          currency: createDto.currency,
+          currency: Currency.EUR,
           userId: mockUser.id,
           isRecurring: false,
           categoryId: createDto.categoryId,
           createdAt: createDto.createdAt,
         },
       });
-      expect(result.id).toBe(mockTransaction.id);
-      expect(result.isRecurring).toBe(false);
     });
 
     it("should create a recurring entry with parent and child", async () => {
-      const recurringDto: CreateEntryDto = {
-        ...createDto,
+      const createDto: CreateEntryDto = {
+        type: TransactionType.EXPENSE,
+        amount: 2000,
+        description: "Recurring Entry",
+        currency: Currency.EUR,
         isRecurring: true,
         recurringType: RecurringTransactionType.MONTHLY,
         recurringBaseInterval: 1,
+        createdAt: new Date("2024-01-01"),
       };
 
-      const parentTransaction = createMockTransaction({
+      const parentEntry = {
+        ...mockTransaction,
         id: 1,
         isRecurring: true,
-        transactionId: null,
-      });
-      const childTransaction = createMockTransaction({
+        recurringType: RecurringTransactionType.MONTHLY,
+        recurringBaseInterval: 1,
+        recurringDisabled: false,
+      };
+
+      const childEntry = {
+        ...mockTransaction,
         id: 2,
         isRecurring: false,
         transactionId: 1,
-      });
+      };
 
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      createMock
-        .mockResolvedValueOnce(parentTransaction)
-        .mockResolvedValueOnce(childTransaction);
+      mockTransactionCreate
+        .mockResolvedValueOnce(parentEntry)
+        .mockResolvedValueOnce(childEntry);
 
-      const result = await service.createEntry(mockUser, recurringDto);
+      const result = await service.createEntry(mockUser, createDto);
 
-      expect(createMock).toHaveBeenCalledTimes(2);
-      expect(result.id).toBe(childTransaction.id);
-      expect(result.isRecurring).toBe(false);
+      expect(result.id).toBe(2);
       expect(result.transactionId).toBe(1);
+      expect(mockTransactionCreate).toHaveBeenCalledTimes(2);
     });
 
     it("should default currency to EUR if not provided", async () => {
-      const dtoWithoutCurrency: CreateEntryDto = {
+      const createDto: CreateEntryDto = {
         type: TransactionType.EXPENSE,
         amount: 1000,
-        description: "Test",
         currency: Currency.EUR,
       };
 
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      createMock.mockResolvedValue(mockTransaction);
+      mockTransactionCreate.mockResolvedValue(mockTransaction);
 
-      await service.createEntry(mockUser, dtoWithoutCurrency);
+      await service.createEntry(mockUser, createDto);
 
-      const expectedData = expect.objectContaining({
-        currency: Currency.EUR,
+      expect(mockTransactionCreate).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          currency: Currency.EUR,
+        }),
       });
-      expect(createMock).toHaveBeenCalledWith({
-        data: expectedData,
+    });
+
+    it("should default recurringBaseInterval to 1 if not provided", async () => {
+      const createDto: CreateEntryDto = {
+        type: TransactionType.EXPENSE,
+        amount: 2000,
+        currency: Currency.EUR,
+        isRecurring: true,
+        recurringType: RecurringTransactionType.MONTHLY,
+      };
+
+      const parentEntry = {
+        ...mockTransaction,
+        id: 1,
+        isRecurring: true,
+        recurringBaseInterval: 1,
+      };
+
+      const childEntry = {
+        ...mockTransaction,
+        id: 2,
+        transactionId: 1,
+      };
+
+      mockTransactionCreate
+        .mockResolvedValueOnce(parentEntry)
+        .mockResolvedValueOnce(childEntry);
+
+      await service.createEntry(mockUser, createDto);
+
+      expect(mockTransactionCreate).toHaveBeenNthCalledWith(1, {
+        data: expect.objectContaining({
+          recurringBaseInterval: 1,
+        }),
+      });
+    });
+
+    it("should use provided createdAt for recurring entry", async () => {
+      const createdAt = new Date("2024-01-15");
+      const createDto: CreateEntryDto = {
+        type: TransactionType.EXPENSE,
+        amount: 2000,
+        currency: Currency.EUR,
+        isRecurring: true,
+        recurringType: RecurringTransactionType.MONTHLY,
+        createdAt,
+      };
+
+      const parentEntry = {
+        ...mockTransaction,
+        id: 1,
+        isRecurring: true,
+        createdAt,
+      };
+
+      const childEntry = {
+        ...mockTransaction,
+        id: 2,
+        transactionId: 1,
+        createdAt,
+      };
+
+      mockTransactionCreate
+        .mockResolvedValueOnce(parentEntry)
+        .mockResolvedValueOnce(childEntry);
+
+      await service.createEntry(mockUser, createDto);
+
+      expect(mockTransactionCreate).toHaveBeenNthCalledWith(1, {
+        data: expect.objectContaining({
+          createdAt,
+        }),
+      });
+      expect(mockTransactionCreate).toHaveBeenNthCalledWith(2, {
+        data: expect.objectContaining({
+          createdAt,
+        }),
+      });
+    });
+
+    it("should default createdAt to now for child if not provided", async () => {
+      const createdAt = new Date("2024-01-15");
+      const createDto: CreateEntryDto = {
+        type: TransactionType.EXPENSE,
+        amount: 2000,
+        currency: Currency.EUR,
+        isRecurring: true,
+        recurringType: RecurringTransactionType.MONTHLY,
+        createdAt,
+      };
+
+      const parentEntry = {
+        ...mockTransaction,
+        id: 1,
+        isRecurring: true,
+        createdAt,
+      };
+
+      const childEntry = {
+        ...mockTransaction,
+        id: 2,
+        transactionId: 1,
+      };
+
+      mockTransactionCreate
+        .mockResolvedValueOnce(parentEntry)
+        .mockResolvedValueOnce(childEntry);
+
+      await service.createEntry(mockUser, createDto);
+
+      expect(mockTransactionCreate).toHaveBeenNthCalledWith(2, {
+        data: expect.objectContaining({
+          createdAt: expect.any(Date),
+        }),
       });
     });
   });
 
   describe("getEntries", () => {
     it("should get entries with pagination", async () => {
-      const mockEntries = [mockTransaction];
       const params: EntryPaginationParamsDto = {
         take: 10,
-        sortBy: EntrySortBy.CREATED_AT_DESC,
       };
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue(mockEntries);
+      const entries = [mockTransaction];
+      mockTransactionFindMany.mockResolvedValue(entries);
 
       const result = await service.getEntries(mockUser, params);
 
-      expect(findManyMock).toHaveBeenCalled();
       expect(result.entries).toHaveLength(1);
       expect(result.count).toBe(1);
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          userId: mockUser.id,
+          NOT: { isRecurring: true },
+        }),
+        take: 10,
+        orderBy: { createdAt: "desc" },
+      });
     });
 
     it("should filter entries by date range", async () => {
-      const dateFrom = new Date("2024-01-01");
-      const dateTo = new Date("2024-12-31");
       const params: EntryPaginationParamsDto = {
         take: 10,
-        dateFrom,
-        dateTo,
+        dateFrom: new Date("2024-01-01"),
+        dateTo: new Date("2024-12-31"),
       };
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
+      mockTransactionFindMany.mockResolvedValue([]);
 
       await service.getEntries(mockUser, params);
 
-      const expectedWhere = expect.objectContaining({
-        createdAt: {
-          gte: dateFrom,
-          lte: dateTo,
-        },
-      });
-      const expectedOrderBy = expect.objectContaining({});
-      expect(findManyMock).toHaveBeenCalledWith({
-        where: expectedWhere,
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          createdAt: {
+            gte: params.dateFrom,
+            lte: params.dateTo,
+          },
+        }),
         take: 10,
-        orderBy: expectedOrderBy,
+        orderBy: { createdAt: "desc" },
       });
     });
 
@@ -194,19 +364,16 @@ describe("EntryService", () => {
         transactionType: TransactionType.INCOME,
       };
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
+      mockTransactionFindMany.mockResolvedValue([]);
 
       await service.getEntries(mockUser, params);
 
-      const expectedWhere = expect.objectContaining({
-        type: TransactionType.INCOME,
-      });
-      const expectedOrderBy = expect.objectContaining({});
-      expect(findManyMock).toHaveBeenCalledWith({
-        where: expectedWhere,
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          type: TransactionType.INCOME,
+        }),
         take: 10,
-        orderBy: expectedOrderBy,
+        orderBy: { createdAt: "desc" },
       });
     });
 
@@ -216,19 +383,16 @@ describe("EntryService", () => {
         categoryIds: [1, 2, 3],
       };
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
+      mockTransactionFindMany.mockResolvedValue([]);
 
       await service.getEntries(mockUser, params);
 
-      const expectedWhere = expect.objectContaining({
-        categoryId: { in: [1, 2, 3] },
-      });
-      const expectedOrderBy = expect.objectContaining({});
-      expect(findManyMock).toHaveBeenCalledWith({
-        where: expectedWhere,
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          categoryId: { in: [1, 2, 3] },
+        }),
         take: 10,
-        orderBy: expectedOrderBy,
+        orderBy: { createdAt: "desc" },
       });
     });
 
@@ -237,248 +401,54 @@ describe("EntryService", () => {
         take: 10,
       };
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
+      mockTransactionFindMany.mockResolvedValue([]);
 
       await service.getEntries(mockUser, params);
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.objectContaining({
-          NOT: {
-            isRecurring: true,
-          },
+          NOT: { isRecurring: true },
         }),
         take: 10,
-        orderBy: expect.any(Object),
+        orderBy: { createdAt: "desc" },
       });
     });
 
     it("should apply filter when filterId is provided", async () => {
-      const mockFilter = createMockFilter({
-        id: 1,
-        userId: mockUser.id,
-        transactionType: TransactionType.EXPENSE,
-        minPrice: 1000,
-        maxPrice: 5000,
-        searchText: "test",
-      });
-
-      const filterFindUniqueMock = jest.mocked(
-        prismaService.filter["findUnique"],
-      );
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      filterFindUniqueMock.mockResolvedValue(mockFilter);
-      findManyMock.mockResolvedValue([]);
-
       const params: EntryPaginationParamsDto = {
         take: 10,
         filterId: 1,
       };
 
-      await service.getEntries(mockUser, params);
-
-      expect(filterFindUniqueMock).toHaveBeenCalledWith({
-        where: { id: 1, userId: mockUser.id },
-        include: { filterCategories: true },
-      });
-      const expectedWhere = expect.objectContaining({
-        type: TransactionType.EXPENSE,
-        amount: {
-          gte: 1000,
-          lte: 5000,
-        },
-        description: {
-          contains: "test",
-          mode: "insensitive",
-        },
-      });
-      const expectedOrderBy = expect.objectContaining({});
-      expect(findManyMock).toHaveBeenCalledWith({
-        where: expectedWhere,
-        take: 10,
-        orderBy: expectedOrderBy,
-      });
-    });
-
-    it("should throw NotFoundException if filter not found", async () => {
-      const filterFindUniqueMock = jest.mocked(
-        prismaService.filter["findUnique"],
-      );
-      filterFindUniqueMock.mockResolvedValue(null);
-
-      const params: EntryPaginationParamsDto = {
-        take: 10,
-        filterId: 999,
-      };
-
-      await expect(service.getEntries(mockUser, params)).rejects.toThrow(
-        NotFoundException,
-      );
-    });
-  });
-
-  describe("updateEntry", () => {
-    const updateDto: UpdateEntryDto = {
-      amount: 2000,
-      description: "Updated description",
-    };
-
-    it("should update entry successfully", async () => {
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      const updateManyMock = jest.mocked(
-        prismaService.transaction["updateMany"],
-      );
-      findUniqueMock
-        .mockResolvedValueOnce(mockTransaction)
-        .mockResolvedValueOnce(createMockTransaction(updateDto));
-      updateManyMock.mockResolvedValue({ count: 1 });
-
-      const result = await service.updateEntry(mockUser, 1, updateDto);
-
-      expect(findUniqueMock).toHaveBeenCalledWith({
-        where: { id: 1, userId: mockUser.id },
-      });
-      expect(updateManyMock).toHaveBeenCalledWith({
-        where: {
-          id: 1,
-          userId: mockUser.id,
-        },
-        data: updateDto,
-      });
-      expect(result.amount).toBe(updateDto.amount);
-    });
-
-    it("should throw NotFoundException if entry not found", async () => {
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      findUniqueMock.mockResolvedValue(null);
-
-      await expect(
-        service.updateEntry(mockUser, 999, updateDto),
-      ).rejects.toThrow(NotFoundException);
-    });
-
-    it("should throw BadRequestException when updating recurring properties on non-recurring entry", async () => {
-      const nonRecurringTransaction = createMockTransaction({
-        isRecurring: false,
-      });
-      const recurringUpdateDto: UpdateEntryDto = {
-        recurringType: RecurringTransactionType.MONTHLY,
-      };
-
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      findUniqueMock.mockResolvedValue(nonRecurringTransaction);
-
-      await expect(
-        service.updateEntry(mockUser, 1, recurringUpdateDto),
-      ).rejects.toThrow(BadRequestException);
-    });
-  });
-
-  describe("deleteEntry", () => {
-    it("should delete non-recurring entry successfully", async () => {
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      const deleteMock = jest.mocked(prismaService.transaction["delete"]);
-      findUniqueMock.mockResolvedValue(mockTransaction);
-      deleteMock.mockResolvedValue(mockTransaction);
-
-      await service.deleteEntry(mockUser, 1);
-
-      expect(findUniqueMock).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
-      expect(deleteMock).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
-    });
-
-    it("should disable recurring parent entry instead of deleting", async () => {
-      const recurringParent = createMockTransaction({
+      const mockFilter = {
         id: 1,
-        isRecurring: true,
-        transactionId: null,
-      });
-
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      const updateMock = jest.mocked(prismaService.transaction["update"]);
-      findUniqueMock.mockResolvedValue(recurringParent);
-      updateMock.mockResolvedValue({
-        ...recurringParent,
-        recurringDisabled: true,
-      } as typeof recurringParent);
-
-      await service.deleteEntry(mockUser, 1);
-
-      expect(updateMock).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: { recurringDisabled: true },
-      });
-      const deleteMock = jest.mocked(prismaService.transaction["delete"]);
-      expect(deleteMock).not.toHaveBeenCalled();
-    });
-
-    it("should throw NotFoundException if entry not found", async () => {
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      findUniqueMock.mockResolvedValue(null);
-
-      await expect(service.deleteEntry(mockUser, 999)).rejects.toThrow(
-        NotFoundException,
-      );
-    });
-
-    it("should throw NotFoundException if entry belongs to different user", async () => {
-      const otherUserTransaction = createMockTransaction({
-        userId: 999,
-      });
-
-      const findUniqueMock = jest.mocked(
-        prismaService.transaction["findUnique"],
-      );
-      findUniqueMock.mockResolvedValue(otherUserTransaction);
-
-      await expect(service.deleteEntry(mockUser, 1)).rejects.toThrow(
-        NotFoundException,
-      );
-    });
-  });
-
-  describe("getEntries - Advanced Filtering", () => {
-    it("should handle combined filters (date range + type + category + amount)", async () => {
-      const params: EntryPaginationParamsDto = {
-        take: 10,
+        sortOption: FilterSortOption.HIGHEST_AMOUNT,
         dateFrom: new Date("2024-01-01"),
         dateTo: new Date("2024-12-31"),
         transactionType: TransactionType.EXPENSE,
-        categoryIds: [1, 2, 3],
-        amountMin: 1000,
-        amountMax: 5000,
-        title: "test",
+        minPrice: 1000,
+        maxPrice: 5000,
+        searchText: "test",
+        filterCategories: [{ filterId: 1, categoryId: 1 }],
       };
 
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
+      mockFilterFindUnique.mockResolvedValue(mockFilter);
+      mockTransactionFindMany.mockResolvedValue([]);
 
       await service.getEntries(mockUser, params);
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      expect(mockFilterFindUnique).toHaveBeenCalledWith({
+        where: { id: 1, userId: mockUser.id },
+        include: { filterCategories: true },
+      });
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.objectContaining({
           createdAt: {
-            gte: params.dateFrom,
-            lte: params.dateTo,
+            gte: mockFilter.dateFrom,
+            lte: mockFilter.dateTo,
           },
           type: TransactionType.EXPENSE,
-          categoryId: { in: [1, 2, 3] },
+          categoryId: { in: [1] },
           amount: {
             gte: 1000,
             lte: 5000,
@@ -489,44 +459,92 @@ describe("EntryService", () => {
           },
         }),
         take: 10,
-        orderBy: expect.any(Object),
+        orderBy: { amount: "desc" },
+      });
+    });
+
+    it("should throw NotFoundException if filter not found", async () => {
+      const params: EntryPaginationParamsDto = {
+        take: 10,
+        filterId: 999,
+      };
+
+      mockFilterFindUnique.mockResolvedValue(null);
+
+      await expect(service.getEntries(mockUser, params)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it("should handle combined filters (date range + type + category + amount)", async () => {
+      const params: EntryPaginationParamsDto = {
+        take: 10,
+        dateFrom: new Date("2024-01-01"),
+        dateTo: new Date("2024-12-31"),
+        transactionType: TransactionType.EXPENSE,
+        categoryIds: [1, 2],
+        amountMin: 1000,
+        amountMax: 5000,
+      };
+
+      mockTransactionFindMany.mockResolvedValue([]);
+
+      await service.getEntries(mockUser, params);
+
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          createdAt: {
+            gte: params.dateFrom,
+            lte: params.dateTo,
+          },
+          type: TransactionType.EXPENSE,
+          categoryId: { in: [1, 2] },
+          amount: {
+            gte: 1000,
+            lte: 5000,
+          },
+        }),
+        take: 10,
+        orderBy: { createdAt: "desc" },
       });
     });
 
     it("should handle cursor pagination correctly", async () => {
-      const mockEntries = Array.from({ length: 10 }, (_, i) =>
-        createMockTransaction({ id: i + 1 }),
-      );
-
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue(mockEntries);
-
       const params: EntryPaginationParamsDto = {
         take: 10,
         cursorId: 5,
       };
 
+      const entries = Array.from({ length: 10 }, (_, i) => ({
+        ...mockTransaction,
+        id: 6 + i,
+      }));
+
+      mockTransactionFindMany.mockResolvedValue(entries);
+
       const result = await service.getEntries(mockUser, params);
 
-      const expectedWhere = expect.objectContaining({});
-      const expectedOrderBy = expect.objectContaining({});
-      expect(findManyMock).toHaveBeenCalledWith({
-        where: expectedWhere,
+      expect(result.cursorId).toBe(15);
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.any(Object),
         cursor: { id: 5 },
         skip: 1,
         take: 10,
-        orderBy: expectedOrderBy,
+        orderBy: { createdAt: "desc" },
       });
-      expect(result.cursorId).toBe(10); // Last entry ID when count equals take
     });
 
     it("should set cursorId to null when fewer entries than take", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([mockTransaction]);
-
       const params: EntryPaginationParamsDto = {
         take: 10,
       };
+
+      const entries = Array.from({ length: 5 }, (_, i) => ({
+        ...mockTransaction,
+        id: i + 1,
+      }));
+
+      mockTransactionFindMany.mockResolvedValue(entries);
 
       const result = await service.getEntries(mockUser, params);
 
@@ -534,112 +552,120 @@ describe("EntryService", () => {
     });
 
     it("should apply filter sortOption mapping correctly", async () => {
-      const mockFilter = createMockFilter({
-        id: 1,
-        userId: mockUser.id,
-        sortOption: FilterSortOption.HIGHEST_AMOUNT,
-      });
-
-      const filterFindUniqueMock = jest.mocked(
-        prismaService.filter["findUnique"],
-      );
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      filterFindUniqueMock.mockResolvedValue(mockFilter);
-      findManyMock.mockResolvedValue([]);
-
       const params: EntryPaginationParamsDto = {
         take: 10,
         filterId: 1,
       };
 
+      const mockFilter = {
+        id: 1,
+        sortOption: FilterSortOption.LOWEST_AMOUNT,
+        filterCategories: [],
+      };
+
+      mockFilterFindUnique.mockResolvedValue(mockFilter);
+      mockTransactionFindMany.mockResolvedValue([]);
+
       await service.getEntries(mockUser, params);
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.any(Object),
         take: 10,
-        orderBy: { amount: "desc" },
+        orderBy: { amount: "asc" },
       });
     });
 
     it("should handle all filter sort options", async () => {
-      const sortOptions = [
-        FilterSortOption.HIGHEST_AMOUNT,
-        FilterSortOption.LOWEST_AMOUNT,
-        FilterSortOption.NEWEST_FIRST,
-        FilterSortOption.OLDEST_FIRST,
+      const testCases = [
+        {
+          sortOption: FilterSortOption.HIGHEST_AMOUNT,
+          expectedOrderBy: { amount: "desc" },
+        },
+        {
+          sortOption: FilterSortOption.LOWEST_AMOUNT,
+          expectedOrderBy: { amount: "asc" },
+        },
+        {
+          sortOption: FilterSortOption.NEWEST_FIRST,
+          expectedOrderBy: { createdAt: "desc" },
+        },
+        {
+          sortOption: FilterSortOption.OLDEST_FIRST,
+          expectedOrderBy: { createdAt: "asc" },
+        },
       ];
 
-      for (const sortOption of sortOptions) {
-        const mockFilter = createMockFilter({
-          id: 1,
-          userId: mockUser.id,
-          sortOption,
-        });
-
-        jest
-          .mocked(prismaService.filter["findUnique"])
-          .mockResolvedValue(mockFilter);
-        const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-        findManyMock.mockResolvedValue([]);
-
-        await service.getEntries(mockUser, { take: 10, filterId: 1 });
-
+      for (const testCase of testCases) {
         jest.clearAllMocks();
+        const params: EntryPaginationParamsDto = {
+          take: 10,
+          filterId: 1,
+        };
+
+        const mockFilter = {
+          id: 1,
+          sortOption: testCase.sortOption,
+          filterCategories: [],
+        };
+
+        mockFilterFindUnique.mockResolvedValue(mockFilter);
+        mockTransactionFindMany.mockResolvedValue([]);
+
+        await service.getEntries(mockUser, params);
+
+        expect(mockTransactionFindMany).toHaveBeenCalledWith({
+          where: expect.any(Object),
+          take: 10,
+          orderBy: testCase.expectedOrderBy,
+        });
       }
     });
-  });
 
-  describe("getEntries - Sort Options", () => {
     it("should sort by CREATED_AT_ASC", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
-
       const params: EntryPaginationParamsDto = {
         take: 10,
         sortBy: EntrySortBy.CREATED_AT_ASC,
       };
 
+      mockTransactionFindMany.mockResolvedValue([]);
+
       await service.getEntries(mockUser, params);
 
-      const expectedWhere = expect.objectContaining({});
-      expect(findManyMock).toHaveBeenCalledWith({
-        where: expectedWhere,
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.any(Object),
         take: 10,
         orderBy: { createdAt: "asc" },
       });
     });
 
     it("should sort by AMOUNT_ASC", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
-
       const params: EntryPaginationParamsDto = {
         take: 10,
         sortBy: EntrySortBy.AMOUNT_ASC,
       };
 
+      mockTransactionFindMany.mockResolvedValue([]);
+
       await service.getEntries(mockUser, params);
 
-      const expectedWhere = expect.objectContaining({});
-      expect(findManyMock).toHaveBeenCalledWith({
-        where: expectedWhere,
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
+        where: expect.any(Object),
         take: 10,
         orderBy: { amount: "asc" },
       });
     });
 
     it("should sort by AMOUNT_DESC", async () => {
-      const findManyMock = jest.mocked(prismaService.transaction["findMany"]);
-      findManyMock.mockResolvedValue([]);
-
       const params: EntryPaginationParamsDto = {
         take: 10,
         sortBy: EntrySortBy.AMOUNT_DESC,
       };
 
+      mockTransactionFindMany.mockResolvedValue([]);
+
       await service.getEntries(mockUser, params);
 
-      expect(findManyMock).toHaveBeenCalledWith({
+      expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.any(Object),
         take: 10,
         orderBy: { amount: "desc" },
@@ -647,118 +673,111 @@ describe("EntryService", () => {
     });
   });
 
-  describe("createEntry - Recurring Edge Cases", () => {
-    it("should default recurringBaseInterval to 1 if not provided", async () => {
-      const recurringDto: CreateEntryDto = {
-        type: TransactionType.EXPENSE,
-        amount: 1000,
-        description: "Test",
-        currency: Currency.EUR,
-        isRecurring: true,
-        recurringType: RecurringTransactionType.MONTHLY,
+  describe("updateEntry", () => {
+    it("should update entry successfully", async () => {
+      const updateDto: UpdateEntryDto = {
+        amount: 2000,
+        description: "Updated Entry",
       };
 
-      const parentTransaction = createMockTransaction({
-        id: 1,
-        isRecurring: true,
-        recurringBaseInterval: 1,
-      });
-      const childTransaction = createMockTransaction({
-        id: 2,
-        isRecurring: false,
-        transactionId: 1,
-      });
+      mockTransactionFindUnique.mockResolvedValue(mockTransaction);
+      mockTransactionUpdateMany.mockResolvedValue({ count: 1 });
+      mockTransactionFindUnique
+        .mockResolvedValueOnce(mockTransaction)
+        .mockResolvedValueOnce({
+          ...mockTransaction,
+          ...updateDto,
+        });
 
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      createMock
-        .mockResolvedValueOnce(parentTransaction)
-        .mockResolvedValueOnce(childTransaction);
+      const result = await service.updateEntry(mockUser, 1, updateDto);
 
-      await service.createEntry(mockUser, recurringDto);
-      const expectedData = expect.objectContaining({
-        recurringBaseInterval: 1,
-      });
-      expect(createMock).toHaveBeenNthCalledWith(1, {
-        data: expectedData,
+      expect(result.amount).toBe(2000);
+      expect(result.description).toBe("Updated Entry");
+      expect(mockTransactionUpdateMany).toHaveBeenCalledWith({
+        where: { id: 1, userId: mockUser.id },
+        data: updateDto,
       });
     });
 
-    it("should use provided createdAt for recurring entry", async () => {
-      const customDate = new Date("2024-01-15");
-      const recurringDto: CreateEntryDto = {
-        type: TransactionType.EXPENSE,
-        amount: 1000,
-        description: "Test",
-        currency: Currency.EUR,
-        isRecurring: true,
-        recurringType: RecurringTransactionType.MONTHLY,
-        createdAt: customDate,
+    it("should throw NotFoundException if entry not found", async () => {
+      const updateDto: UpdateEntryDto = {
+        amount: 2000,
       };
 
-      const parentTransaction = createMockTransaction({
-        id: 1,
-        isRecurring: true,
-      });
-      const childTransaction = createMockTransaction({
-        id: 2,
-        isRecurring: false,
-        transactionId: 1,
-      });
+      mockTransactionFindUnique.mockResolvedValue(null);
 
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      createMock
-        .mockResolvedValueOnce(parentTransaction)
-        .mockResolvedValueOnce(childTransaction);
+      await expect(
+        service.updateEntry(mockUser, 999, updateDto),
+      ).rejects.toThrow(NotFoundException);
+      expect(mockTransactionUpdateMany).not.toHaveBeenCalled();
+    });
 
-      await service.createEntry(mockUser, recurringDto);
-      const expectedData1 = expect.objectContaining({
-        createdAt: customDate,
-      });
-      const expectedData2 = expect.objectContaining({
-        createdAt: customDate,
-      });
-      expect(createMock).toHaveBeenNthCalledWith(1, {
-        data: expectedData1,
-      });
-      expect(createMock).toHaveBeenNthCalledWith(2, {
-        data: expectedData2,
+    it("should throw BadRequestException when updating recurring properties on non-recurring entry", async () => {
+      const updateDto: UpdateEntryDto = {
+        recurringType: RecurringTransactionType.MONTHLY,
+      };
+
+      mockTransactionFindUnique.mockResolvedValue(mockTransaction);
+
+      await expect(service.updateEntry(mockUser, 1, updateDto)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+  });
+
+  describe("deleteEntry", () => {
+    it("should delete non-recurring entry successfully", async () => {
+      mockTransactionFindUnique.mockResolvedValue(mockTransaction);
+      mockTransactionDelete.mockResolvedValue(mockTransaction);
+
+      await service.deleteEntry(mockUser, 1);
+
+      expect(mockTransactionDelete).toHaveBeenCalledWith({
+        where: { id: 1 },
       });
     });
 
-    it("should default createdAt to now for child if not provided", async () => {
-      const recurringDto: CreateEntryDto = {
-        type: TransactionType.EXPENSE,
-        amount: 1000,
-        description: "Test",
-        currency: Currency.EUR,
+    it("should disable recurring parent entry instead of deleting", async () => {
+      const recurringEntry = {
+        ...mockTransaction,
         isRecurring: true,
-        recurringType: RecurringTransactionType.MONTHLY,
+        transactionId: null,
       };
 
-      const parentTransaction = createMockTransaction({
-        id: 1,
-        isRecurring: true,
-      });
-      const childTransaction = createMockTransaction({
-        id: 2,
-        isRecurring: false,
-        transactionId: 1,
+      mockTransactionFindUnique.mockResolvedValue(recurringEntry);
+      mockTransactionUpdate.mockResolvedValue({
+        ...recurringEntry,
+        recurringDisabled: true,
       });
 
-      const createMock = jest.mocked(prismaService.transaction["create"]);
-      createMock
-        .mockResolvedValueOnce(parentTransaction)
-        .mockResolvedValueOnce(childTransaction);
+      await service.deleteEntry(mockUser, 1);
 
-      await service.createEntry(mockUser, recurringDto);
+      expect(mockTransactionUpdate).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: { recurringDisabled: true },
+      });
+      expect(mockTransactionDelete).not.toHaveBeenCalled();
+    });
 
-      const expectedCreatedAt = expect.any(Date);
-      const expectedData = expect.objectContaining({
-        createdAt: expectedCreatedAt,
-      });
-      expect(createMock).toHaveBeenNthCalledWith(2, {
-        data: expectedData,
-      });
+    it("should throw NotFoundException if entry not found", async () => {
+      mockTransactionFindUnique.mockResolvedValue(null);
+
+      await expect(service.deleteEntry(mockUser, 999)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it("should throw NotFoundException if entry belongs to different user", async () => {
+      const differentUserEntry = {
+        ...mockTransaction,
+        userId: 999,
+      };
+
+      mockTransactionFindUnique.mockResolvedValue(differentUserEntry);
+
+      await expect(service.deleteEntry(mockUser, 1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });
