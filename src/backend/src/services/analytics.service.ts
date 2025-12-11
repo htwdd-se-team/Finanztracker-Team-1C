@@ -241,7 +241,6 @@ export class AnalyticsService {
 
   async getAvailableCapital(user: User): Promise<AvailableCapitalItemDto[]> {
     const now = DateTime.now();
-    const start = now.startOf("month").toJSDate();
     const end = now.plus({ months: 1 }).startOf("month").toJSDate();
 
     // Current balance (sum of incomes - sum of expenses) using a single Kysely aggregate
@@ -299,7 +298,7 @@ export class AnalyticsService {
       ])
       .where("Transaction.userId", "=", user.id)
       .where(sql<boolean>`"Transaction"."transactionId" IS NOT NULL`)
-      .where("Transaction.createdAt", ">=", start)
+      .where("Transaction.createdAt", ">", sql<Date>`NOW()`)
       .where("Transaction.createdAt", "<", end)
       .groupBy([
         "Transaction.categoryId",
