@@ -9,6 +9,7 @@ import {
 import { AnalyticsService } from "../src/services/analytics.service";
 import { KyselyService } from "../src/services/kysely.service";
 import { PrismaService } from "../src/services/prisma.service";
+import { RecurringEntryService } from "../src/services/recurring-entry.service";
 
 import { createTestModule } from "./test-helpers";
 
@@ -62,6 +63,14 @@ describe("AnalyticsService", () => {
       selectFrom: mockKyselySelectFrom,
     } as unknown as KyselyService;
 
+    // Mock RecurringEntryService (required by AnalyticsService)
+    const mockRecurringEntryService = {
+      getScheduledEntries: jest.fn(),
+      disableRecurringEntry: jest.fn(),
+      enableRecurringEntry: jest.fn(),
+      processRecurringEntries: jest.fn(),
+    } as unknown as RecurringEntryService;
+
     module = await createTestModule({
       providers: [
         AnalyticsService,
@@ -72,6 +81,10 @@ describe("AnalyticsService", () => {
         {
           provide: KyselyService,
           useValue: mockKyselyService,
+        },
+        {
+          provide: RecurringEntryService,
+          useValue: mockRecurringEntryService,
         },
       ],
     });
