@@ -68,7 +68,11 @@ jobs:
         id: e2e-tests
         continue-on-error: false
         run: |
-          pnpm --filter backend test:e2e --coverage || exit 1
+          # Run tests - coverage is generated even if some tests fail
+          set +e
+          pnpm --filter backend test:e2e --coverage
+          TEST_EXIT_CODE=$?
+          set -e
           if [ -f "src/backend/coverage/e2e/coverage-summary.json" ]; then
             COVERAGE_E2E=$(cat src/backend/coverage/e2e/coverage-summary.json | jq -r '.total.lines.pct')
             echo "e2e_coverage=$COVERAGE_E2E" >> $GITHUB_OUTPUT
@@ -77,6 +81,8 @@ jobs:
             echo "e2e_coverage=0" >> $GITHUB_OUTPUT
             echo "Warning: Coverage file not found for e2e tests"
           fi
+          # Exit with the test exit code if tests failed
+          exit $TEST_EXIT_CODE
 
       - name: Check coverage thresholds
         if: always()
