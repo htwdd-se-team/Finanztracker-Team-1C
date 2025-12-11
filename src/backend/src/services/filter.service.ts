@@ -68,6 +68,16 @@ export class FilterService {
   ): Promise<FilterResponseDto> {
     const { categoryIds, ...rest } = data as Partial<CreateFilterDto>;
 
+    const checkFilter = await this.prisma.filter.findUnique({
+      where: { id: filterId, userId: user.id },
+    });
+
+    if (!checkFilter) {
+      throw new NotFoundException(
+        "Filter not found or not authorized to update",
+      );
+    }
+
     const filter = await this.prisma.filter.update({
       where: { id: filterId, userId: user.id },
       data: {

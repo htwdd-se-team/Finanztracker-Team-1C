@@ -9,6 +9,7 @@
     "build:frontend": "pnpm --filter frontend build",
     "build:backend": "pnpm --filter backend build",
     "test": "pnpm run --recursive test",
+    "test:e2e": "pnpm --filter tests test",
     "lint": "pnpm run --recursive lint",
     "clean": "pnpm run --recursive clean"
   },
