@@ -10,6 +10,7 @@ import { DateTime } from "luxon";
 
 import { BackendConfig } from "../src/backend.config";
 import { Currency, ScheduledEntriesParamsDto } from "../src/dto";
+import { KyselyService } from "../src/services/kysely.service";
 import { PrismaService } from "../src/services/prisma.service";
 import { RecurringEntryService } from "../src/services/recurring-entry.service";
 
@@ -57,6 +58,12 @@ describe("RecurringEntryService", () => {
     } as unknown as BackendConfig;
   };
 
+  const createMockKyselyService = (): KyselyService => {
+    return {
+      selectFrom: jest.fn(),
+    } as unknown as KyselyService;
+  };
+
   beforeAll(async () => {
     mockBackendConfig = createMockBackendConfig(true);
 
@@ -70,6 +77,11 @@ describe("RecurringEntryService", () => {
       },
     } as unknown as PrismaService);
 
+    // Mock KyselyService (even though not directly used, NestJS may try to resolve it)
+    const mockKyselyService = {
+      selectFrom: jest.fn(),
+    } as unknown as KyselyService;
+
     module = await createTestModule({
       providers: [
         RecurringEntryService,
@@ -80,6 +92,10 @@ describe("RecurringEntryService", () => {
         {
           provide: BackendConfig,
           useValue: mockBackendConfig,
+        },
+        {
+          provide: KyselyService,
+          useValue: mockKyselyService,
         },
       ],
     });
@@ -131,6 +147,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: mockBackendConfig,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -188,6 +208,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: mockBackendConfig,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -242,6 +266,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: mockBackendConfig,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -298,6 +326,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: mockBackendConfig,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -339,6 +371,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: mockBackendConfig,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -387,6 +423,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: mockBackendConfig,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -426,6 +466,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: mockBackendConfig,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -469,6 +513,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: mockBackendConfig,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -509,6 +557,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: mockBackendConfig,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -562,6 +614,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: mockBackendConfig,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -602,6 +658,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: mockBackendConfig,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -638,6 +698,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: config,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -695,6 +759,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: config,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -757,6 +825,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: config,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -821,6 +893,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: config,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -883,6 +959,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: config,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -948,6 +1028,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: config,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -1008,6 +1092,10 @@ describe("RecurringEntryService", () => {
             provide: BackendConfig,
             useValue: config,
           },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
+          },
         ],
       });
 
@@ -1043,6 +1131,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: config,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
@@ -1090,6 +1182,10 @@ describe("RecurringEntryService", () => {
           {
             provide: BackendConfig,
             useValue: config,
+          },
+          {
+            provide: KyselyService,
+            useValue: createMockKyselyService(),
           },
         ],
       });
