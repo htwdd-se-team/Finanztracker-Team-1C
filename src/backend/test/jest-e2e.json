@@ -6,7 +6,9 @@
   "setupFilesAfterEnv": ["<rootDir>/test/setup.ts"],
   "testTimeout": 30000,
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
+    "^.+\\.(t|j)s$": ["ts-jest", {
+      "tsconfig": "<rootDir>/test/tsconfig.e2e.json"
+    }]
   },
   "moduleNameMapper": {
     "^@/(.*)$": "<rootDir>/src/$1"

@@ -55,7 +55,9 @@ export class AnalyticsService {
               eb
                 .fn("date_trunc", [
                   eb.val(dateTruncPeriod),
-                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                    `'${this.TIMEZONE}'`,
+                  )}`,
                 ])
                 .as("date_period"),
               "type",
@@ -64,6 +66,33 @@ export class AnalyticsService {
             ]),
         )
         .selectFrom("grouped_transactions")
+        .where((eb) => {
+          // Filter by timezone-aware date_period to match the grouping
+          return eb.and([
+            eb(
+              "date_period",
+              ">=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${startDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+            eb(
+              "date_period",
+              "<=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${endDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+          ]);
+        })
         .select((eb) => [
           "date_period as date",
           "type",
@@ -102,7 +131,9 @@ export class AnalyticsService {
               eb
                 .fn("date_trunc", [
                   eb.val(dateTruncPeriod),
-                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                    `'${this.TIMEZONE}'`,
+                  )}`,
                 ])
                 .as("date_period"),
               "type",
@@ -110,6 +141,35 @@ export class AnalyticsService {
             ]),
         )
         .selectFrom("grouped_transactions")
+        .where((eb) => {
+          // Filter by timezone-aware date_period to match the grouping
+          // This ensures transactions are filtered based on their timezone-aware date,
+          // not just UTC timestamp, matching how they're grouped
+          return eb.and([
+            eb(
+              "date_period",
+              ">=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${startDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+            eb(
+              "date_period",
+              "<=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${endDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+          ]);
+        })
         .select((eb) => [
           "date_period as date",
           "type",

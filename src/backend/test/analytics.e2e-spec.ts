@@ -64,7 +64,7 @@ describe("AnalyticsController (e2e)", () => {
 
     // Create a comprehensive set of test transactions with known amounts and dates
     const now = DateTime.now();
-    const baseDate = now.minus({ days: 5 });
+    const baseDate = now.minus({ days: 5 }).startOf("day");
 
     // Day 1: Income 10000, Expense 3000
     const entry1 = await request(app.getHttpServer())
@@ -112,7 +112,7 @@ describe("AnalyticsController (e2e)", () => {
     });
 
     // Day 2: Income 5000, Expense 2000
-    const day2 = baseDate.plus({ days: 1 });
+    const day2 = baseDate.plus({ days: 1 }).startOf("day");
     const entry3 = await request(app.getHttpServer())
       .post("/entries/create")
       .set("Authorization", `Bearer ${testUser.token}`)
@@ -158,7 +158,7 @@ describe("AnalyticsController (e2e)", () => {
     });
 
     // Day 3: Large expense 15000
-    const day3 = baseDate.plus({ days: 2 });
+    const day3 = baseDate.plus({ days: 2 }).startOf("day");
     const entry5 = await request(app.getHttpServer())
       .post("/entries/create")
       .set("Authorization", `Bearer ${testUser.token}`)
@@ -339,8 +339,14 @@ describe("AnalyticsController (e2e)", () => {
     it("should respect date range filters", async () => {
       const startDate = DateTime.now().minus({ days: 10 }).toISO();
       // Set endDate to end of Day 2 to exclude Day 3
-      // Day 2 ends at: now.minus({ days: 4 }).endOf('day')
-      const endDate = DateTime.now().minus({ days: 4 }).endOf("day").toISO();
+      // Day 2 ends at: baseDate + 1 day = now.minus({ days: 5 }) + 1 = now.minus({ days: 4 })
+      // Day 3 starts at: baseDate + 2 days = now.minus({ days: 5 }) + 2 = now.minus({ days: 3 })
+      // Use Europe/Berlin timezone to match the service's TIMEZONE setting
+      const day2End = DateTime.now()
+        .setZone("Europe/Berlin")
+        .minus({ days: 4 })
+        .endOf("day");
+      const endDate = day2End.toISO();
 
       const response = await request(app.getHttpServer())
         .get("/analytics/transaction-breakdown")
@@ -506,12 +512,26 @@ describe("AnalyticsController (e2e)", () => {
       expect(Array.isArray(balanceHistory)).toBe(true);
 
       // All dates should be within the range
+      // For DAY granularity, dates are normalized to day boundaries, so we compare by day
       balanceHistory.forEach((item) => {
-        const itemDate = new Date(item.date);
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        expect(itemDate.getTime()).toBeGreaterThanOrEqual(start.getTime());
-        expect(itemDate.getTime()).toBeLessThanOrEqual(end.getTime());
+        // item.date comes from JSON response, so it's serialized as a string
+        const itemDateStr =
+          typeof item.date === "string"
+            ? item.date
+            : item.date instanceof Date
+              ? item.date.toISOString()
+              : new Date(item.date).toISOString();
+        const itemDate = DateTime.fromISO(itemDateStr);
+        const start = DateTime.fromISO(startDate);
+        const end = DateTime.fromISO(endDate);
+
+        // Compare dates at day level to account for day boundary normalization
+        const itemDay = itemDate.startOf("day");
+        const startDay = start.startOf("day");
+        const endDay = end.startOf("day");
+
+        expect(itemDay >= startDay).toBe(true);
+        expect(itemDay <= endDay).toBe(true);
       });
     });
 
