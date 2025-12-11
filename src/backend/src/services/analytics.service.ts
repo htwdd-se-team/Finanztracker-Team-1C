@@ -328,16 +328,29 @@ export class AnalyticsService {
       };
     });
 
-    for (const r of rows) {
+    // Calculate future incomes (sum of all positive scheduled transactions)
+    const futureIncome = rows
+      .filter((r) => r.type === TransactionType.INCOME)
+      .reduce((sum, r) => sum + r.value, 0);
+
+    // Insert future incomes at position 1 (after available_capital)
+    items.splice(1, 0, {
+      key: "future_incomes",
+      label: "Future Incomes",
+      icon: "fixed-income",
+      value: futureIncome,
+      type: TransactionType.INCOME,
+    });
+
+    // Add individual EXPENSE categories (INCOME already shown as total)
+    for (const r of rows.filter((r) => r.type === TransactionType.EXPENSE)) {
       const value = r.value ?? 0;
       const categoryId = r.categoryId ?? null;
-      // Respect transaction type: INCOME is positive, EXPENSE is negative
-      const displayValue = r.type === TransactionType.EXPENSE ? -value : value;
       items.push({
         key: `scheduled_category_${categoryId ?? "uncategorized"}`,
         label: r.categoryName ?? "uncategorized",
         icon: r.categoryIcon ?? "category",
-        value: displayValue,
+        value: -value,
         type: r.type,
       });
     }
