@@ -278,38 +278,12 @@ export class AnalyticsService {
       type: TransactionType.INCOME,
     });
 
-    // Future recurring incomes for the current month (uses scheduled monthly totals)
-    try {
-      const scheduled =
-        await this.recurringEntryService.getScheduledMonthlyTotals(
-          user.id,
-          now.year,
-          now.month,
-        );
-      const futureIncome = scheduled.totals?.[0]?.income ?? 0;
-      items.push({
-        key: "future_incomes",
-        label: "Future Incomes",
-        icon: "fixed-income",
-        value: futureIncome,
-        type: TransactionType.INCOME,
-      });
-    } catch {
-      // If recurring totals fail, still return available capital
-      items.push({
-        key: "future_incomes",
-        label: "Future Incomes",
-        icon: "fixed-income",
-        value: 0,
-        type: TransactionType.INCOME,
-      });
-    }
-
-    // Scheduled transactions in the current month grouped by category (child transactions created this month)
+    // Scheduled transactions in the current month grouped by category (child transactions)
     interface ScheduledCategoryRow {
       categoryId: number | null;
       categoryName: string | null;
       categoryIcon: string | null;
+      type: TransactionType;
       value: number;
     }
 
@@ -320,13 +294,19 @@ export class AnalyticsService {
         eb.ref("Transaction.categoryId").as("categoryId"),
         eb.ref("Category.name").as("categoryName"),
         eb.ref("Category.icon").as("categoryIcon"),
+        eb.ref("Transaction.type").as("type"),
         sql<number>`COALESCE(SUM("Transaction"."amount"), 0)`.as("value"),
       ])
       .where("Transaction.userId", "=", user.id)
       .where(sql<boolean>`"Transaction"."transactionId" IS NOT NULL`)
       .where("Transaction.createdAt", ">=", start)
       .where("Transaction.createdAt", "<", end)
-      .groupBy(["Transaction.categoryId", "Category.name", "Category.icon"])
+      .groupBy([
+        "Transaction.categoryId",
+        "Category.name",
+        "Category.icon",
+        "Transaction.type",
+      ])
       .orderBy("value", "desc")
       .execute();
 
@@ -338,11 +318,13 @@ export class AnalyticsService {
         typeof rec["categoryName"] === "string" ? rec["categoryName"] : null;
       const categoryIcon =
         typeof rec["categoryIcon"] === "string" ? rec["categoryIcon"] : null;
+      const type = rec["type"] as TransactionType;
       const value = Number(rec["value"] ?? 0);
       return {
         categoryId,
         categoryName,
         categoryIcon,
+        type,
         value,
       };
     });
@@ -350,12 +332,14 @@ export class AnalyticsService {
     for (const r of rows) {
       const value = r.value ?? 0;
       const categoryId = r.categoryId ?? null;
+      // Respect transaction type: INCOME is positive, EXPENSE is negative
+      const displayValue = r.type === TransactionType.EXPENSE ? -value : value;
       items.push({
         key: `scheduled_category_${categoryId ?? "uncategorized"}`,
         label: r.categoryName ?? "uncategorized",
         icon: r.categoryIcon ?? "category",
-        value,
-        type: value >= 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
+        value: displayValue,
+        type: r.type,
       });
     }
 

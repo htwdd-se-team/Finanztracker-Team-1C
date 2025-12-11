@@ -54,10 +54,12 @@ export class UserService {
       select: { emergencyReserve: true },
     });
 
+    const emergencyReserveValue: number = userData?.emergencyReserve ?? 100000;
+
     return {
       balance: parseInt(result?.balance as string) || 0,
       transactionCount: parseInt(result?.transaction_count) || 0,
-      emergencyReserve: userData?.emergencyReserve || 100000,
+      emergencyReserve: emergencyReserveValue,
     };
   }
 
