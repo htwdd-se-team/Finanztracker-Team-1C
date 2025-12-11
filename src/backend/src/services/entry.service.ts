@@ -25,6 +25,17 @@ export class EntryService {
     private readonly recurringEntryService: RecurringEntryService,
   ) {}
 
+  async checkIfEntryExists(user: User, data: CreateEntryDto): Promise<boolean> {
+    const existingTransaction = await this.prisma.transaction.findFirst({
+      where: {
+        amount: data.amount,
+        description: data.description,
+        createdAt: data.createdAt,
+      },
+    });
+    return existingTransaction !== null;
+  }
+
   async createEntry(
     user: User,
     data: CreateEntryDto,
@@ -58,7 +69,7 @@ export class EntryService {
           userId: user.id,
           isRecurring: false,
           categoryId: data.categoryId,
-          createdAt: data.createdAt || new Date(),
+          createdAt: data.createdAt,
           transactionId: parentEntry.id,
         },
       });
@@ -295,7 +306,7 @@ export class EntryService {
       categoryId: entry.categoryId,
       createdAt: entry.createdAt,
       isRecurring: entry.isRecurring,
-      recurringType: entry.recurringType,
+      recurringType: entry.recurringType ?? undefined,
       recurringBaseInterval: entry.recurringBaseInterval ?? undefined,
       recurringDisabled: entry.recurringDisabled ?? undefined,
       transactionId: entry.transactionId ?? undefined,

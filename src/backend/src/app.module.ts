@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
+import { MulterModule } from "@nestjs/platform-express";
 import { ScheduleModule } from "@nestjs/schedule";
+import { memoryStorage } from "multer";
 import { dotenvLoader, TypedConfigModule } from "nest-typed-config";
 
 import { AppController } from "./app.controller";
@@ -25,6 +27,7 @@ import {
   CategoryService,
   UserService,
   RecurringEntryService,
+  ImportService,
 } from "./services";
 import { JwtStrategy } from "./strategies";
 
@@ -44,6 +47,10 @@ import { JwtStrategy } from "./strategies";
       }),
     }),
     ScheduleModule.forRoot(),
+    MulterModule.register({
+      dest: undefined,
+      storage: memoryStorage(),
+    }),
   ],
   controllers: [
     AppController,
@@ -64,6 +71,7 @@ import { JwtStrategy } from "./strategies";
     UserService,
     FilterService,
     RecurringEntryService,
+    ImportService,
     // util services
     KyselyService,
     PrismaService,

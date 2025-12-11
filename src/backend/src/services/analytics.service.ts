@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "@prisma/client";
+import { User, TransactionType } from "@prisma/client";
 import { sql } from "kysely";
+import { DateTime } from "luxon";
 
 import {
   Granularity,
@@ -8,16 +9,19 @@ import {
   TransactionBreakdownResponseDto,
   TransactionItemDto,
   TransactionBalanceHistoryParamsDto,
+  AvailableCapitalItemDto,
 } from "../dto";
 
 import { KyselyService } from "./kysely.service";
 import { PrismaService } from "./prisma.service";
+import { RecurringEntryService } from "./recurring-entry.service";
 
 @Injectable()
 export class AnalyticsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly kysely: KyselyService,
+    private readonly recurringEntryService: RecurringEntryService,
   ) {}
 
   private TIMEZONE = "Europe/Berlin";
@@ -41,6 +45,12 @@ export class AnalyticsService {
             .where("userId", "=", user.id)
             .where("createdAt", ">=", startDate)
             .where("createdAt", "<=", endDate)
+            .where((eb) =>
+              eb.or([
+                eb("isRecurring", "=", false),
+                eb("transactionId", "is not", null),
+              ]),
+            )
             .select((eb) => [
               eb
                 .fn("date_trunc", [
@@ -82,6 +92,12 @@ export class AnalyticsService {
             .where("userId", "=", user.id)
             .where("createdAt", ">=", startDate)
             .where("createdAt", "<=", endDate)
+            .where((eb) =>
+              eb.or([
+                eb("isRecurring", "=", false),
+                eb("transactionId", "is not", null),
+              ]),
+            )
             .select((eb) => [
               eb
                 .fn("date_trunc", [
@@ -128,6 +144,7 @@ export class AnalyticsService {
           .where("userId", "=", user.id)
           .where("createdAt", "<", startDate)
           .where("createdAt", "<=", sql<Date>`NOW()`)
+          .where("isRecurring", "=", false)
           .select((eb) => [
             eb.fn
               .sum(
@@ -150,6 +167,7 @@ export class AnalyticsService {
           .where("createdAt", ">=", startDate)
           .where("createdAt", "<=", endDate)
           .where("createdAt", "<=", sql<Date>`NOW()`)
+          .where("isRecurring", "=", false)
           .select((eb) => [
             eb
               .fn("date_trunc", [
@@ -219,5 +237,128 @@ export class AnalyticsService {
     const max = agg._max?.amount ?? 0;
     const rounded = max > 0 ? Math.ceil(max / 100) * 100 : 0;
     return rounded;
+  }
+
+  async getAvailableCapital(user: User): Promise<AvailableCapitalItemDto[]> {
+    const now = DateTime.now();
+    const start = now.startOf("month").toJSDate();
+    const end = now.plus({ months: 1 }).startOf("month").toJSDate();
+
+    // Current balance (sum of incomes - sum of expenses) using a single Kysely aggregate
+    const aggRaw = await this.kysely
+      .selectFrom("Transaction")
+      .where("userId", "=", user.id)
+      .where("isRecurring", "=", false)
+      .select((eb) => [
+        eb.fn
+          .sum(
+            eb
+              .case()
+              .when("type", "=", "INCOME")
+              .then(eb.ref("amount"))
+              .when("type", "=", "EXPENSE")
+              .then(eb.neg(eb.ref("amount")))
+              .else(0)
+              .end(),
+          )
+          .as("balance"),
+      ])
+      .executeTakeFirst();
+
+    const agg = aggRaw as Record<string, unknown> | undefined;
+    const balance = Number(agg?.["balance"] ?? 0);
+
+    const items: AvailableCapitalItemDto[] = [];
+
+    items.push({
+      key: "available_capital",
+      label: "Available Capital",
+      icon: "account-balance",
+      value: balance,
+      type: TransactionType.INCOME,
+    });
+
+    // Future recurring incomes for the current month (uses scheduled monthly totals)
+    try {
+      const scheduled =
+        await this.recurringEntryService.getScheduledMonthlyTotals(
+          user.id,
+          now.year,
+          now.month,
+        );
+      const futureIncome = scheduled.totals?.[0]?.income ?? 0;
+      items.push({
+        key: "future_incomes",
+        label: "Future Incomes",
+        icon: "fixed-income",
+        value: futureIncome,
+        type: TransactionType.INCOME,
+      });
+    } catch {
+      // If recurring totals fail, still return available capital
+      items.push({
+        key: "future_incomes",
+        label: "Future Incomes",
+        icon: "fixed-income",
+        value: 0,
+        type: TransactionType.INCOME,
+      });
+    }
+
+    // Scheduled transactions in the current month grouped by category (child transactions created this month)
+    interface ScheduledCategoryRow {
+      categoryId: number | null;
+      categoryName: string | null;
+      categoryIcon: string | null;
+      value: number;
+    }
+
+    const rowsRaw = await this.kysely
+      .selectFrom("Transaction")
+      .leftJoin("Category", "Category.id", "Transaction.categoryId")
+      .select((eb) => [
+        eb.ref("Transaction.categoryId").as("categoryId"),
+        eb.ref("Category.name").as("categoryName"),
+        eb.ref("Category.icon").as("categoryIcon"),
+        sql<number>`COALESCE(SUM("Transaction"."amount"), 0)`.as("value"),
+      ])
+      .where("Transaction.userId", "=", user.id)
+      .where(sql<boolean>`"Transaction"."transactionId" IS NOT NULL`)
+      .where("Transaction.createdAt", ">=", start)
+      .where("Transaction.createdAt", "<", end)
+      .groupBy(["Transaction.categoryId", "Category.name", "Category.icon"])
+      .orderBy("value", "desc")
+      .execute();
+
+    const rows: ScheduledCategoryRow[] = (rowsRaw as unknown[]).map((r) => {
+      const rec = r as Record<string, unknown>;
+      const categoryId =
+        rec["categoryId"] == null ? null : Number(rec["categoryId"]);
+      const categoryName =
+        typeof rec["categoryName"] === "string" ? rec["categoryName"] : null;
+      const categoryIcon =
+        typeof rec["categoryIcon"] === "string" ? rec["categoryIcon"] : null;
+      const value = Number(rec["value"] ?? 0);
+      return {
+        categoryId,
+        categoryName,
+        categoryIcon,
+        value,
+      };
+    });
+
+    for (const r of rows) {
+      const value = r.value ?? 0;
+      const categoryId = r.categoryId ?? null;
+      items.push({
+        key: `scheduled_category_${categoryId ?? "uncategorized"}`,
+        label: r.categoryName ?? "uncategorized",
+        icon: r.categoryIcon ?? "category",
+        value,
+        type: value >= 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
+      });
+    }
+
+    return items;
   }
 }

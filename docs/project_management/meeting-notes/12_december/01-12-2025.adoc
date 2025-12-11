@@ -1,0 +1,87 @@
+= Meeting-Protokoll 01.12.2025
+
+*Datum:* 01.12.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* Ben +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* 14:30 +
+*Dauer:* 30 min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick (ist abgemeldet weil krank)
+- Ben
+
+== Tagesordnung
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit seit ihr? Gibts was zu besprechen? Müssen noch Aufgaben verteilt werden?
+
+*Notizen:* +
+- Elias: An den Import und Tests gearbeitet, File Upload geht - muss noch verbessert werden +
+- Okayer Stand
+
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+
+=== 2. Update bei den Tests
+
+*Notizen:* +
+- Elias: 109 API-Test erstellt +
+- Bis jetzt nur Integrationstests bei uns -> jedes mal, wenn in main gepusht wird werden die API-Tests durchgeführt
+- Noch Unit-Tests schreiben 
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 3. Konsultation
+Wollen wir Konsultation machen?
+
+*Notizen:* +
+- Was sollen wir genau testen, bei uns aufgrund flacher Hierarchie. +
+- Sqeuenz- und Klassendiagramme unsere zeigen und fragen was man da genau machen soll in Zukunft
+- 
+
+*Entscheidungen:* +
+- 8Uhr morgen früh - Fragen an Herr Anke (Elias und Ben) +
+
+=== 4. Fachaustausch Termine?
+Haben wir Kontakt zu einem Team? evtl. schon ein Termin?
+- Review das nächste Mal rauslösen, da diese nächste Woche noch keinen Sinn macht und dann extra mit einem Team
+- Am Wochenende vor der Sprint Planung -> extrenes Review
+- Nächste Woche nur Retro
+- Übernächste Woche kurz vor dem Sprint Planning ca.10min interes Review
+
+*Notizen:* +
+- ... +
+
+*Entscheidungen:* +
+- ... +
+  +
+  +
+
+=== 5. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+- ... +
+
+
+== Nächstes Meeting
+
+- Datum: 08.12.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- ... +

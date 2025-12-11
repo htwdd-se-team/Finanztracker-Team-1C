@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -28,9 +30,10 @@ import { ThemeCard } from '@/components/settings/ThemeCard'
 import { useUser } from '@/components/provider/user-provider'
 import { CategoryManagement } from '@/components/settings/category-management'
 import { FilterManagement } from '@/components/settings/filter-management'
+import { DataImportDialog } from '@/components/data-import-dialog'
 
 export default function ProfilePage() {
-  const { user , logout } = useUser()
+  const { user, logout } = useUser()
 
   const { themeVariant, setThemeVariant, colorTheme, setColorTheme } =
     useColorTheme()
@@ -42,6 +45,37 @@ export default function ProfilePage() {
   ]
 
   const fullName = `${user?.givenName} ${user?.familyName || ''}`.trim()
+
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const set = (v: boolean) => setIsMobile(v)
+    set(mq.matches)
+    // modern browsers
+    if (mq.addEventListener) {
+      mq.addEventListener('change', e => set(e.matches))
+    } else {
+      // fallback for older browsers
+      ;(
+        mq as unknown as {
+          addListener: (h: (e: MediaQueryListEvent) => void) => void
+        }
+      ).addListener((e: MediaQueryListEvent) => set(e.matches))
+    }
+    return () => {
+      if (mq.removeEventListener) {
+        mq.removeEventListener('change', e => set(e.matches))
+      } else {
+        // fallback for older browsers
+        ;(
+          mq as unknown as {
+            removeListener: (h: (e: MediaQueryListEvent) => void) => void
+          }
+        ).removeListener((e: MediaQueryListEvent) => set(e.matches))
+      }
+    }
+  }, [])
 
   return (
     <div className="mx-auto max-w-4xl px-2 sm:px-6 container">
@@ -66,22 +100,8 @@ export default function ProfilePage() {
                   Benutzer
                 </CardTitle>
               </CardHeader>
-              <CardHeader className="p-0 flex justify-end items-start col-span-1">
-                <Button
-                variant="outline"
-                onClick={() => logout()}
-                className="
-                  flex items-center gap-1 text-sm text-muted-foreground
-                  hover:text-foreground hover:bg-white/10
-                  rounded-lg
-                  sm:hidden
-                  "
-                >
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </Button>
-              </CardHeader>
-              <CardContent className="col-span-2 mt-4 px-5">
+              <CardHeader className="p-0 col-span-1" />
+              <CardContent className="col-span-2 mt-4 px-5 pb-5">
                 <div className="">
                   <div className="flex items-center gap-2 mb-2">
                     <Mail className="w-4 h-4 text-muted-foreground" />
@@ -97,13 +117,38 @@ export default function ProfilePage() {
 
                   <div className="flex items-center gap-2 mb-4">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span className="font-medium text-sm -mr-2">Mitglied seit:</span>
-                    <Badge variant="secondary" className="text-sm bg-transparent">
+                    <span className="font-medium text-sm -mr-2">
+                      Mitglied seit:
+                    </span>
+                    <Badge variant="secondary" className="bg-transparent">
                       {DateTime.fromISO(user.createdAt).toLocaleString(
                         DateTime.DATE_FULL
                       )}
                     </Badge>
                   </div>
+                </div>
+                <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <DataImportDialog>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                    >
+                      Bankdaten importieren
+                    </Button>
+                  </DataImportDialog>
+
+                  {isMobile && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => logout()}
+                      className="w-full sm:w-auto flex items-center gap-1 text-sm"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </div>
