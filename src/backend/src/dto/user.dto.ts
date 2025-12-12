@@ -53,4 +53,20 @@ export class UserBalanceResponseDto {
   })
   @IsNumber()
   transactionCount: number;
+
+  @ApiProperty({
+    description: "The emergency reserve amount in cents",
+    example: 100000,
+  })
+  @IsNumber()
+  emergencyReserve: number;
+}
+
+export class UpdateEmergencyReserveDto {
+  @ApiProperty({
+    description: "The new emergency reserve amount in cents",
+    example: 150000,
+  })
+  @IsNumber()
+  emergencyReserve: number;
 }
