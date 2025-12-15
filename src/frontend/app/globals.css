@@ -33,7 +33,8 @@
   }
 
   .animate-wave {
-    animation: wave 10s linear infinite;
+    animation: wave-slide 4s linear infinite;
+    will-change: transform;
   }
 }
 
@@ -61,12 +62,12 @@
   }
 }
 
-@keyframes wave {
+@keyframes wave-slide {
   0% {
-    background-position-x: 0;
+    transform: translateX(0);
   }
   100% {
-    background-position-x: 200%;
+    transform: translateX(-50%);
   }
 }
 

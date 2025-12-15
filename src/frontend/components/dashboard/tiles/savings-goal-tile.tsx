@@ -136,7 +136,6 @@ function SavingsGoal({ className }: { className?: string }) {
                        style={{ 
                          backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDQwIDMyMCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIwLjIiIGQ9Ik0wLDk2TDQ4LDExMi4yQzk2LDEyOCwxOTIsMTYwLDI4OCwxNjBDMzg0LDE2MCw0ODAsMTI4LDU3NiwxMTJDNjcyLDk2LDc2OCw5Niw4NjQsMTEyQzk2MCwxMjgsMTA1NiwxNjAsMTE1MiwxNjBDMTI0OCwxNjAsMTM0NCwxMjgsMTM5MiwxMTJMMTQ0MCw5NkwxNDQwLDMyMEwxMzkyLDMyMEMxMzQ0LDMyMCwxMjQ4LDMyMCwxMTUyLDMyMEMxMDU2LDMyMCw5NjAsMzIwLDg2NCwzMjBDNzY4LDMyMCw2NzIsMzIwLDU3NiwzMjBDNDgwLDMyMCwzODQsMzIwLDI4OCwzMjBDMTkyLDMyMCw5NiwzMjAsNDgsMzIwTDAsMzIwWiI+PC9wYXRoPjwvc3ZnPg==')",
                          backgroundRepeat: 'repeat-x',
-                         backgroundPosition: '0 bottom',
                          backgroundSize: '50% 100%' 
                        }} 
                   />
