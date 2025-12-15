@@ -26,6 +26,7 @@ describe("RecurringEntryService", () => {
     passwordHash: "hashed",
     givenName: "Test",
     familyName: "User",
+    emergencyReserve: 100000,
     createdAt: new Date("2024-01-01"),
   };
 

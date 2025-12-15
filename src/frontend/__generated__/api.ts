@@ -155,7 +155,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-12-09T13:04:13.156Z"
+   * @example "2025-12-15T11:52:44.010Z"
    */
   createdAt: string;
   /**
@@ -525,6 +525,19 @@ export interface ApiUserBalanceResponseDto {
    * @example 10
    */
   transactionCount: number;
+  /**
+   * The emergency reserve amount in cents
+   * @example 100000
+   */
+  emergencyReserve: number;
+}
+
+export interface ApiUpdateEmergencyReserveDto {
+  /**
+   * The new emergency reserve amount in cents
+   * @example 150000
+   */
+  emergencyReserve: number;
 }
 
 export interface ApiMaxValueDto {
@@ -1332,6 +1345,28 @@ export class Api<
         path: `/user/balance`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerUpdateEmergencyReserve
+     * @request POST:/user/emergency-reserve
+     * @secure
+     */
+    userControllerUpdateEmergencyReserve: (
+      data: ApiUpdateEmergencyReserveDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiUserBalanceResponseDto, any>({
+        path: `/user/emergency-reserve`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
