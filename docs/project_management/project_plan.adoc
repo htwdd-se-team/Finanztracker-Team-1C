@@ -94,6 +94,7 @@ Wann kommt eine Aufgabe in die Sprint-Planung?
 * Das Standard-User-Story-Schema wird verwendet (User Story, Verknüpfte Tasks, Aufwandsschätzung, Akzeptanzkriterien)
 * Die Schätzung des Aufwands wird durch das Dev-Team überprüft und akzeptiert
 * Die weiteren Produktanforderungen können eingehalten werden, zudem gibt es mindestens ein Akzeptanzkriterium, um eine Eingrenzung zu schaffen
+* Es muss mindestens drei Akzeptanzkriterien geben
 
 === Definition of Done
 // Listen Sie hier alle Kritierien auf, damit die Aufgabe eines bestimmten Typs (z.B. Task, User Story) als abgeschlossen gilt.
