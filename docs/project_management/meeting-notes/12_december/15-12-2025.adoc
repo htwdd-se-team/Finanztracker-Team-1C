@@ -1,0 +1,158 @@
+= Meeting-Protokoll 15.12.2025
+
+*Datum:* 15.12.2025 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:*  +
+*Meetingbeginn:* 13:30 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben 
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. To-Do's aus der letzten Woche
+//Notizen von Christoph:
+//- Haben Devs geprüft ob sie die Sequenzdiagramme im Code korrekt umgesetzt haben?
+//- Wurden DoD und DoR überprüft?
+//- Wie ist das Feedback von Ruben auf die Mail ausgefallen?
+//- Wurden die Bugs gefixt?
+//- Wurde Rot als Theme-Farbe implementiert? Inkludiert das Homescreen-Piechart die unkategorisierten Ausgaben in "Sonstiges"? Wurden die schlecht bearbeitbaren Komponenten (Transaktion, Registrierung) überarbeitet?
+
+==== 1.1 Infos aus dem Fachaustausch Test
+Was für Infos gibt es aus dem Fachaustausch?
+
+*Notizen:* +
+- ... +
+
+
+==== 1.2 Update zu E-mail an Ruben
+Wurde die Mail schon geschickt? Wenn ja was war die Rückmeldung?
+
+*Notizen:* +
+- ... +
+
+
+==== 1.3 Bugfixes
+Wurden alles Bugs gefixt?
+
+*Notizen:* +
+- ... +
+
+
+==== 1.4 Restliche Kleinigkeiten
+Wurde Rot als Theme-Farbe implementiert? Inkludiert das Homescreen-Piechart die unkategorisierten Ausgaben in "Sonstiges"? Wurden die schlecht bearbeitbaren Komponenten (Transaktion, Registrierung) überarbeitet?
+
+*Notizen:* +
+- ... +
+
+
+==== 1.5 Überprüfung der DoD und DoR
+Was waren unsere DoD und DoR? Gibt es Praktiken die wir aktuell nicht einhalten? Worauf müssen wir in Zukunft mehr achten? +
+link:../../project_plan.adoc[Project Plan] +
+
+*DoD:* +
+Allgemeine Kriterien: +
+- Die Umsetzung der Aufgabe/User Story wurde mindestens von einem zweiten Teammitglied geprüft (Status: In Review -> Done) +
+
+User-Story/Dev-Task-spezifische Kriterien: +
+- Der Code ist in die Anwendung integriert und funktionsfähig (merge in main-Branch) +
+- Die automatischen Coding-Guidelines werden über ES-Lint eingehalten +
+- Die link:../../../development/development-guidelines.adoc[Coding Guidelines] wurden eingehalten +
+- Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet worden +
+- Automatische Test laufen erfolgreich +
+
+*Notizen:* +
+Ergänzungen +
+- Mehr Tests? +
+
+
+*DoR:* +
+Allgemeine Kriterien: +
+- Die Aufgabe wurde im Team/Dev-Meeting besprochen und abgestimmt, z.B. in Hinblick darauf, ob diese Task/Story in die Iteration passt +
+- Die Aufgabe bringt einen klaren Mehrwert für das Projekt, dies wird durch die Anforderungen der Abgabe und durch die Formulierung der User Stories gewährleistet +
+- Die Beschreibung ist detailliert genug, damit die umsetzende Person ohne Rückfragen direkt beginnen kann +
+
+User-Story-spezifische Kriterien:
+- Die Referenz auf eine unserer Persona's muss erfolgen +
+- Das Standard-User-Story-Schema wird verwendet (User Story, Verknüpfte Tasks, Aufwandsschätzung, Akzeptanzkriterien) +
+- Die Schätzung des Aufwands wird durch das Dev-Team überprüft und akzeptiert +
+- Die weiteren Produktanforderungen können eingehalten werden, zudem gibt es mindestens ein Akzeptanzkriterium, um eine Eingrenzung zu schaffen +
+
+*Notizen:* +
+Ergänzungen +
+- Technische Abhängigkeiten zu anderen Aufgaben wurden identifiziert und dokumentiert? +
+
+
+
+==== 1.6 Abgabedokument
+Wer macht was?
+
+*Notizen:*
+- ... +
+
+
+
+=== 2. Ticketfortschritt
+sh. Review
+
+
+
+
+== Internes Review
+=== Was haben wir gemacht? Sind diese Dinge nach der DoD auch wirklich fertig?
+*Notizen:* +
+- ... +
+
+Wurden die Sequenzdiagramme eingehalten? Wenn nicht Begründung warum ins Ticket +
+
+
+=== Was haben wir nicht geschafft?
+*Notizen:* +
+- ... +
+
+Wenn nicht geschafft -> Tasks zurück zu PBI +
+
+
+
+
+== Sprint Planning
+Was wollen wir diesen Sprint erreichen? -> passende PBIs dafür wählen
+Welche Tasks können wir davon ableiten um das zu erreichen?
+
+*User Stories:*
+- ... +
+
+
+*Tasks/Tickets:*
+- ... +
+
+
+
+
+
+== Weitere organisatorische Aufgaben und/oder offene Punkte
+
+*Notizen:* +
+- ... +
+  +
+  +
+
+
+
+== Nächstes Meeting
+
+- Datum: 22.12.2025
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt
+- Infos aus Externem Meeting
