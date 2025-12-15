@@ -307,6 +307,7 @@ export class AnalyticsService {
     const aggRaw = await this.kysely
       .selectFrom("Transaction")
       .where("userId", "=", user.id)
+      .where("createdAt", "<=", sql<Date>`NOW()`)
       .where("isRecurring", "=", false)
       .select((eb) => [
         eb.fn
@@ -402,6 +403,15 @@ export class AnalyticsService {
 
     // Update the available_capital item with the calculated total
     items[0].value = availableCapital;
+
+    // Add current balance as a separate item
+    items.push({
+      key: "current_balance",
+      label: "Current Balance",
+      icon: "account-balance-wallet",
+      value: balance,
+      type: TransactionType.INCOME,
+    });
 
     // Add individual INCOME categories (split by category)
     for (const r of rows.filter((r) => r.type === TransactionType.INCOME)) {
