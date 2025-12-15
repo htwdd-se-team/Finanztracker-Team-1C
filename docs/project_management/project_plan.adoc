@@ -111,6 +111,7 @@ Wann gilt eine Aufgabe als fertig?
 * Die automatischen Coding-Guidelines werden über ES-Lint eingehalten
 * Die link:../development/development-guidelines.adoc[Coding Guidelines] wurden eingehalten
 * Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet worden
+* Falls Tests wegen des Feature updates kaputt gehen, werden diese ggf. angepass
 * Automatische Test laufen erfolgreich
 
 == Deployment
