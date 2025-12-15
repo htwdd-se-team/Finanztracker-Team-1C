@@ -61,12 +61,26 @@ export default function CapitalPieChart({ className }: { className?: string }) {
     },
   })
 
+  const availableCapitalQuery = useQuery({
+  queryKey: ['graphs', 'available-capital'],
+  queryFn: async () => {
+    const res =
+      await apiClient.analytics.analyticsControllerGetAvailableCapital()
+
+    // 🔍 DEBUG: komplette Backend-Antwort
+    console.log(
+      'DEBUG analyticsControllerGetAvailableCapital:',
+      res.data
+    )
+
+    return res.data
+  },
+})
+
   const entriesQuery = useQuery({
     queryKey: ['graphs', 'recurring-entries'],
     queryFn: async () => {
-      const res = await apiClient.entries.entryControllerGetScheduledEntries({
-        take: 30,
-      })
+      const res = await apiClient.analytics.analyticsControllerGetAvailableCapital
       return res.data.entries
     },
   })
