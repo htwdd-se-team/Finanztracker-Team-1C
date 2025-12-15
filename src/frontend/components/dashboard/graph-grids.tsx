@@ -30,9 +30,6 @@ function GraphGrids() {
         />
       </div>
 
-      {/* Row 2: Savings Goal - Always full width on second line */}
-      <SavingsGoal className="col-span-2 p-1.5 bg-card/90 dark:bg-card/60" />
-
       {/* Row 3: Historie (Mobile: next row, Desktop: same row) */}
       <HistoryTile
         startDate={range.startDate}
@@ -52,6 +49,9 @@ function GraphGrids() {
         endDate={range.endDate}
         className="col-span-1 bg-card/90 dark:bg-card/60"
       />
+
+       {/* Row 4: Savings Goal - Lowest place */}
+       <SavingsGoal className="col-span-2 p-1.5 bg-card/90 dark:bg-card/60" />
     </div>
   )
 }

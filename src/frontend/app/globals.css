@@ -31,6 +31,10 @@
   .animate-spinner-leaf-fade {
     animation: spinner-leaf-fade 800ms linear infinite;
   }
+
+  .animate-wave {
+    animation: wave 10s linear infinite;
+  }
 }
 
 @keyframes blob {
@@ -56,6 +60,17 @@
     opacity: 1;
   }
 }
+
+@keyframes wave {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: 200%;
+  }
+}
+
+
 
 
 
