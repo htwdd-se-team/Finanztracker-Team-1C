@@ -23,6 +23,8 @@ model User {
   email        String @unique
   passwordHash String
 
+  emergencyReserve Int @default(100000) // in cents, default 1000€
+
   createdAt DateTime @default(now())
 
   Transaction Transaction[]

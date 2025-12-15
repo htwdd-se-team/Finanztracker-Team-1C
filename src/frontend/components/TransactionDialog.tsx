@@ -81,6 +81,12 @@ export function TransactionDialog({
     number | undefined
   >(undefined)
 
+  // Helpers for recurring date limits (max 30 days in the past)
+  const formatIso = (d: Date) => d.toISOString().split('T')[0]
+  const thirtyDaysAgoIso = formatIso(
+    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  )
+
   const form = useForm<z.infer<typeof createEntrySchema>>({
     resolver: zodResolver(createEntrySchema),
     defaultValues: editData
@@ -434,8 +440,38 @@ export function TransactionDialog({
                               value={
                                 field.value ? parseDate(field.value) : undefined
                               }
+                              // When recurring is enabled, disallow dates earlier than 30 days ago.
+                              minValue={
+                                isRecurring
+                                  ? parseDate(thirtyDaysAgoIso)
+                                  : undefined
+                              }
                               onChange={date => {
-                                field.onChange(date ? date.toString() : '')
+                                if (!date) {
+                                  field.onChange('')
+                                  setCalendarOpen(false)
+                                  return
+                                }
+
+                                const selectedIso = date.toString()
+
+                                if (isRecurring) {
+                                  const selected = new Date(selectedIso)
+                                  const minDate = new Date(thirtyDaysAgoIso)
+                                  if (selected < minDate) {
+                                    // Clamp to allowed minimum and inform the user
+                                    field.onChange(thirtyDaysAgoIso)
+                                    toast(
+                                      `Datum liegt mehr als 30 Tage in der Vergangenheit. Auf ${new Date(
+                                        thirtyDaysAgoIso
+                                      ).toLocaleDateString('de-DE')} gesetzt.`
+                                    )
+                                    setCalendarOpen(false)
+                                    return
+                                  }
+                                }
+
+                                field.onChange(selectedIso)
                                 setCalendarOpen(false)
                               }}
                             />
@@ -496,6 +532,23 @@ export function TransactionDialog({
                         recurrenceIntervalMonths === null)
                     ) {
                       setRecurrenceIntervalMonths(1)
+                    }
+                    // If enabling recurring, and the currently selected date
+                    // is earlier than 30 days ago, clear the selected date.
+                    if (b) {
+                      const cur = form.getValues('createdAt') as
+                        | string
+                        | undefined
+                      if (cur) {
+                        const curDate = new Date(cur)
+                        const minDate = new Date(thirtyDaysAgoIso)
+                        if (curDate < minDate) {
+                          form.setValue('createdAt', '')
+                          toast(
+                            'Ausgewähltes Datum wurde zurückgesetzt: Bei Terminaufträgen sind nur Daten innerhalb der letzten 30 Tage oder in der Zukunft zulässig.'
+                          )
+                        }
+                      }
                     }
                   }}
                   className="cursor-pointer"

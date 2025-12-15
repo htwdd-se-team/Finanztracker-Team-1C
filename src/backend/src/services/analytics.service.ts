@@ -55,7 +55,9 @@ export class AnalyticsService {
               eb
                 .fn("date_trunc", [
                   eb.val(dateTruncPeriod),
-                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                    `'${this.TIMEZONE}'`,
+                  )}`,
                 ])
                 .as("date_period"),
               "type",
@@ -64,6 +66,33 @@ export class AnalyticsService {
             ]),
         )
         .selectFrom("grouped_transactions")
+        .where((eb) => {
+          // Filter by timezone-aware date_period to match the grouping
+          return eb.and([
+            eb(
+              "date_period",
+              ">=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${startDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+            eb(
+              "date_period",
+              "<=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${endDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+          ]);
+        })
         .select((eb) => [
           "date_period as date",
           "type",
@@ -102,7 +131,9 @@ export class AnalyticsService {
               eb
                 .fn("date_trunc", [
                   eb.val(dateTruncPeriod),
-                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+                  sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                    `'${this.TIMEZONE}'`,
+                  )}`,
                 ])
                 .as("date_period"),
               "type",
@@ -110,6 +141,35 @@ export class AnalyticsService {
             ]),
         )
         .selectFrom("grouped_transactions")
+        .where((eb) => {
+          // Filter by timezone-aware date_period to match the grouping
+          // This ensures transactions are filtered based on their timezone-aware date,
+          // not just UTC timestamp, matching how they're grouped
+          return eb.and([
+            eb(
+              "date_period",
+              ">=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${startDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+            eb(
+              "date_period",
+              "<=",
+              sql<Date>`date_trunc(${sql.raw(
+                `'${dateTruncPeriod}'`,
+              )}, ${sql.raw(
+                `'${endDate.toISOString()}'`,
+              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                `'${this.TIMEZONE}'`,
+              )})`,
+            ),
+          ]);
+        })
         .select((eb) => [
           "date_period as date",
           "type",
@@ -241,7 +301,6 @@ export class AnalyticsService {
 
   async getAvailableCapital(user: User): Promise<AvailableCapitalItemDto[]> {
     const now = DateTime.now();
-    const start = now.startOf("month").toJSDate();
     const end = now.plus({ months: 1 }).startOf("month").toJSDate();
 
     // Current balance (sum of incomes - sum of expenses) using a single Kysely aggregate
@@ -278,38 +337,12 @@ export class AnalyticsService {
       type: TransactionType.INCOME,
     });
 
-    // Future recurring incomes for the current month (uses scheduled monthly totals)
-    try {
-      const scheduled =
-        await this.recurringEntryService.getScheduledMonthlyTotals(
-          user.id,
-          now.year,
-          now.month,
-        );
-      const futureIncome = scheduled.totals?.[0]?.income ?? 0;
-      items.push({
-        key: "future_incomes",
-        label: "Future Incomes",
-        icon: "fixed-income",
-        value: futureIncome,
-        type: TransactionType.INCOME,
-      });
-    } catch {
-      // If recurring totals fail, still return available capital
-      items.push({
-        key: "future_incomes",
-        label: "Future Incomes",
-        icon: "fixed-income",
-        value: 0,
-        type: TransactionType.INCOME,
-      });
-    }
-
-    // Scheduled transactions in the current month grouped by category (child transactions created this month)
+    // Scheduled transactions in the current month grouped by category (child transactions)
     interface ScheduledCategoryRow {
       categoryId: number | null;
       categoryName: string | null;
       categoryIcon: string | null;
+      type: TransactionType;
       value: number;
     }
 
@@ -320,13 +353,19 @@ export class AnalyticsService {
         eb.ref("Transaction.categoryId").as("categoryId"),
         eb.ref("Category.name").as("categoryName"),
         eb.ref("Category.icon").as("categoryIcon"),
+        eb.ref("Transaction.type").as("type"),
         sql<number>`COALESCE(SUM("Transaction"."amount"), 0)`.as("value"),
       ])
       .where("Transaction.userId", "=", user.id)
       .where(sql<boolean>`"Transaction"."transactionId" IS NOT NULL`)
-      .where("Transaction.createdAt", ">=", start)
+      .where("Transaction.createdAt", ">", sql<Date>`NOW()`)
       .where("Transaction.createdAt", "<", end)
-      .groupBy(["Transaction.categoryId", "Category.name", "Category.icon"])
+      .groupBy([
+        "Transaction.categoryId",
+        "Category.name",
+        "Category.icon",
+        "Transaction.type",
+      ])
       .orderBy("value", "desc")
       .execute();
 
@@ -338,24 +377,41 @@ export class AnalyticsService {
         typeof rec["categoryName"] === "string" ? rec["categoryName"] : null;
       const categoryIcon =
         typeof rec["categoryIcon"] === "string" ? rec["categoryIcon"] : null;
+      const type = rec["type"] as TransactionType;
       const value = Number(rec["value"] ?? 0);
       return {
         categoryId,
         categoryName,
         categoryIcon,
+        type,
         value,
       };
     });
 
-    for (const r of rows) {
+    // Calculate future incomes (sum of all positive scheduled transactions)
+    const futureIncome = rows
+      .filter((r) => r.type === TransactionType.INCOME)
+      .reduce((sum, r) => sum + r.value, 0);
+
+    // Insert future incomes at position 1 (after available_capital)
+    items.splice(1, 0, {
+      key: "future_incomes",
+      label: "Future Incomes",
+      icon: "fixed-income",
+      value: futureIncome,
+      type: TransactionType.INCOME,
+    });
+
+    // Add individual EXPENSE categories (INCOME already shown as total)
+    for (const r of rows.filter((r) => r.type === TransactionType.EXPENSE)) {
       const value = r.value ?? 0;
       const categoryId = r.categoryId ?? null;
       items.push({
         key: `scheduled_category_${categoryId ?? "uncategorized"}`,
         label: r.categoryName ?? "uncategorized",
         icon: r.categoryIcon ?? "category",
-        value,
-        type: value >= 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
+        value: -value,
+        type: r.type,
       });
     }
 

@@ -49,9 +49,29 @@ export class UserService {
       ])
       .executeTakeFirst();
 
+    const userData = await this.prisma.user.findUnique({
+      where: { id: user.id },
+      select: { emergencyReserve: true },
+    });
+
+    const emergencyReserveValue: number = userData?.emergencyReserve ?? 100000;
+
     return {
       balance: parseInt(result?.balance as string) || 0,
       transactionCount: parseInt(result?.transaction_count) || 0,
+      emergencyReserve: emergencyReserveValue,
     };
+  }
+
+  async updateEmergencyReserve(
+    user: User,
+    emergencyReserve: number,
+  ): Promise<UserBalanceResponseDto> {
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { emergencyReserve },
+    });
+
+    return this.getBalance(user);
   }
 }

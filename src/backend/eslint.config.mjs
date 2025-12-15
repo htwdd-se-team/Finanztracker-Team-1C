@@ -106,5 +106,11 @@ export default tseslint.config(
       "@typescript-eslint/no-misused-promises": "off",
     },
   },
+  {
+    files: ["**/*.spec.ts", "**/*.e2e-spec.ts", "**/test/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+    },
+  },
   eslintNestJs.configs.flatRecommended,
 );
