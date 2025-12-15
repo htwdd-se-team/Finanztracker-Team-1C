@@ -1,0 +1,14 @@
+= Meeting-Protokoll Externes Review
+
+*Datum:* 16.12.2025 +
+*Ort:* Online (Discord) +
+
+==== Anwesenheit: 
+- Elias
+- Ben
+- Gruppe Prüfungstracker
+
+=== Feedback-Session
+* Umgesetzte Features im Vergleich zu SE1
+* Vorstellungsideen unterschiedliche Design-Muster
+* Selbst- und Clicktest
