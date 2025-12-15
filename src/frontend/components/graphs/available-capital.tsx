@@ -1,8 +1,8 @@
 'use client'
 
-import { Loader2, PieChartIcon } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { Pie, PieChart, ResponsiveContainer, Cell, Label } from 'recharts'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 interface TransformedChartData {
   id: number
   name: string
-  value: number // €
+  value: number
   icon: IconNames
   color: string
 }
@@ -27,14 +27,12 @@ const incomeColors = [
   'hsl(140, 60%, 45%)',
   'hsl(140, 55%, 55%)',
   'hsl(140, 50%, 65%)',
-  'hsl(140, 45%, 75%)',
 ]
 
 const expenseColors = [
   'hsl(0, 70%, 55%)',
   'hsl(0, 65%, 65%)',
   'hsl(0, 60%, 75%)',
-  'hsl(0, 55%, 85%)',
 ]
 
 interface PieLabelProps {
@@ -46,83 +44,184 @@ interface PieLabelProps {
   index: number
 }
 
+const BALANCE_COLOR = 'hsl(210, 60%, 55%)'
+const THRESHOLD_PERCENT = 2
+
 export default function CapitalPieChart({ className }: { className?: string }) {
   const { getCategoryFromId } = useCategory()
 
-  // Query: Recurring Entries
-  const data = useQuery({
-    queryKey: ['capital-pie-chart'],
+  // -----------------------------
+  // Queries
+  // -----------------------------
+  const balanceQuery = useQuery({
+    queryKey: ['graphs', 'balance'],
     queryFn: async () => {
-      const res = await apiClient.entries.entryControllerGetScheduledEntries({ take: 999 })
+      const res = await apiClient.user.userControllerGetBalance()
+      return Number(res.data.balance) / 100
+    },
+  })
+
+  const entriesQuery = useQuery({
+    queryKey: ['graphs', 'recurring-entries'],
+    queryFn: async () => {
+      const res = await apiClient.entries.entryControllerGetScheduledEntries({
+        take: 30,
+      })
       return res.data.entries
     },
-    select: entries => {
-      const incomeTotals: Record<number, number> = {}
-      const expenseTotals: Record<number, number> = {}
-
-      entries.forEach(entry => {
-        if (!entry.categoryId) return
-
-        const value = entry.amount / 100
-        const categoryId = entry.categoryId
-
-        if (entry.type === 'INCOME') {
-          incomeTotals[categoryId] = (incomeTotals[categoryId] || 0) + value
-        } else {
-          expenseTotals[categoryId] = (expenseTotals[categoryId] || 0) + value
-        }
-      })
-
-      const transform = (
-        totals: Record<number, number>,
-        colors: string[]
-      ): TransformedChartData[] =>
-        Object.entries(totals).map(([categoryId, total], idx) => {
-          const category = getCategoryFromId(Number(categoryId))
-          return {
-            id: category.id,
-            name: category.name,
-            value: total,
-            icon: category.icon,
-            color: colors[idx % colors.length],
-          }
-        })
-
-      const incomeData = transform(incomeTotals, incomeColors)
-      const expenseData = transform(expenseTotals, expenseColors)
-
-      return {
-        incomeData,
-        expenseData,
-        pieData: [...incomeData, ...expenseData],
-      }
-    },
   })
 
-  // Query: Available Capital
-  const availableCapitalQuery = useQuery({
-    queryKey: ['available-capital'],
-    queryFn: async () => {
-      const res = await apiClient.analytics.analyticsControllergetAvailableCapital()
-      return Number(res.data.availableCapital) / 100
-    },
-  })
-
-  const isLoading =
-    data.isLoading || availableCapitalQuery.isLoading
-
-  if (isLoading || !data.data || availableCapitalQuery.data == null) {
+  if (
+    balanceQuery.isLoading ||
+    entriesQuery.isLoading ||
+    !balanceQuery.data ||
+    !entriesQuery.data
+  ) {
     return (
       <Card className={cn(className)}>
-        <CardContent className="flex justify-center items-center h-full">
-          <Loader2 className="w-6 h-6 animate-spin" />
+        <CardContent className="flex h-40 items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin" />
         </CardContent>
       </Card>
     )
   }
 
-  const { pieData } = data.data
-  const availableCapital = availableCapitalQuery.data
+  const balance = balanceQuery.data
+  const entries = entriesQuery.data
+
+  // -----------------------------
+  // Upcoming recurring this month
+  // -----------------------------
+  const today = new Date()
+  const y = today.getFullYear()
+  const m = today.getMonth()
+  const d = today.getDate()
+
+  let upcomingIncome = 0
+  let upcomingExpense = 0
+
+  entries.forEach(entry => {
+    if (!entry.isRecurring) return
+    if (!entry.recurringBaseInterval) return
+    const interval = entry.recurringBaseInterval
+
+    const start = new Date(entry.createdAt)
+    const monthsSinceStart =
+      (y - start.getFullYear()) * 12 + (m - start.getMonth())
+
+    if (monthsSinceStart < 0) return
+    if (monthsSinceStart % interval !== 0) return
+
+    if (d >= start.getDate()) return // already executed
+
+    const value = entry.amount / 100
+    if (entry.type === 'INCOME') {
+      upcomingIncome += value
+    } else {
+      upcomingExpense += value
+    }
+  })
+
+  // -----------------------------
+  // Totals by category
+  // -----------------------------
+  const incomeTotals: Record<number, number> = {}
+  const expenseTotals: Record<number, number> = {}
+
+  entries.forEach(e => {
+    if (!e.categoryId) return
+    const v = e.amount / 100
+
+    if (e.type === 'INCOME') {
+      incomeTotals[e.categoryId] = (incomeTotals[e.categoryId] || 0) + v
+    } else {
+      expenseTotals[e.categoryId] = (expenseTotals[e.categoryId] || 0) + v
+    }
+  })
+
+  const transform = (
+    totals: Record<number, number>,
+    colors: string[]
+  ): TransformedChartData[] =>
+    Object.entries(totals).map(([id, value], i) => {
+      const c = getCategoryFromId(Number(id))
+      return {
+        id: c.id,
+        name: c.name,
+        value,
+        icon: c.icon,
+        color: colors[i % colors.length],
+      }
+    })
+
+  const incomeData = transform(incomeTotals, incomeColors)
+  const expenseData = transform(expenseTotals, expenseColors)
+
+  // -----------------------------
+  // GLOBAL TOTAL (important!)
+  // -----------------------------
+  const grandTotal =
+    balance +
+    incomeData.reduce((s, d) => s + d.value, 0) +
+    expenseData.reduce((s, d) => s + d.value, 0)
+
+  // -----------------------------
+  // Threshold logic (GLOBAL)
+  // -----------------------------
+  const applyThreshold = (
+    data: TransformedChartData[],
+    otherLabel: string,
+    otherColor: string
+  ) => {
+    const large = data.filter(
+      d => (d.value / grandTotal) * 100 >= THRESHOLD_PERCENT
+    )
+
+    const small = data.filter(
+      d => (d.value / grandTotal) * 100 < THRESHOLD_PERCENT
+    )
+
+    if (!small.length) return large
+
+    return [
+      ...large,
+      {
+        id: -Math.random(),
+        name: otherLabel,
+        value: small.reduce((s, d) => s + d.value, 0),
+        icon: IconNames.RECEIPT,
+        color: otherColor,
+      },
+    ]
+  }
+
+  const incomeFinal = applyThreshold(
+    incomeData,
+    'Sonstige Einnahmen',
+    'hsl(140, 40%, 70%)'
+  )
+
+  const expenseFinal = applyThreshold(
+    expenseData,
+    'Sonstige Ausgaben',
+    'hsl(0, 40%, 75%)'
+  )
+
+  // -----------------------------
+  // Final Pie Data
+  // -----------------------------
+  const pieData: TransformedChartData[] = [
+    {
+      id: 0,
+      name: 'Kontostand',
+      value: balance,
+      icon: IconNames.WALLET,
+      color: BALANCE_COLOR,
+    },
+    ...incomeFinal,
+    ...expenseFinal,
+  ]
+
   const RADIAN = Math.PI / 180
 
   const renderLabel = ({
@@ -151,13 +250,11 @@ export default function CapitalPieChart({ className }: { className?: string }) {
   }
 
   return (
-    <Card className={cn('p-1.5', className)}>
-      <CardTitle className="flex items-center gap-1 -mb-5 font-medium">
-        <PieChartIcon className="w-4 h-4" />
-        Daueraufträge — Einnahmen & Ausgaben
-      </CardTitle>
-
-      <CardContent className="flex justify-center items-center p-0 m-0 w-full h-full overflow-hidden">
+    <Card className={cn('p-1.5 border-red shadow-none', className)}>
+      <CardHeader className="p-0">
+        <CardTitle className="ml-2 text-lg">Monatlich verfügbares Kapital</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0 m-0 flex justify-center items-center w-full h-full overflow-hidden">
         <ChartContainer
           config={chartConfig}
           className="flex justify-center items-center w-full md:max-h-[200px] aspect-square"
@@ -177,6 +274,8 @@ export default function CapitalPieChart({ className }: { className?: string }) {
                 dataKey="value"
                 stroke="var(--background)"
                 strokeWidth={1}
+                animationDuration={1400}
+                animationEasing="ease-in-out"
               >
                 {pieData.map((entry, idx) => (
                   <Cell key={idx} fill={entry.color} />
@@ -192,9 +291,9 @@ export default function CapitalPieChart({ className }: { className?: string }) {
                         y={viewBox.cy}
                         textAnchor="middle"
                         dominantBaseline="middle"
-                        className="fill-foreground font-bold text-lg lg:text-xl"
+                        className="fill-foreground font-bold text-3xl"
                       >
-                        {availableCapital.toLocaleString('de-DE', {
+                        {(balance + upcomingIncome - upcomingExpense).toLocaleString('de-DE', {
                           style: 'currency',
                           currency: 'EUR',
                           maximumFractionDigits: 0,

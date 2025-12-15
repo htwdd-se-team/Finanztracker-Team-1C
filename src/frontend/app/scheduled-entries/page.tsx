@@ -17,7 +17,7 @@ export default function ScheduledEntriesPage() {
     queryKey: ['scheduled-entries'],
     queryFn: async () => {
       const res = await apiClient.entries.entryControllerGetScheduledEntries({
-        take: 10,
+        take: 30,
       })
       return res.data.entries
     },
@@ -48,64 +48,62 @@ export default function ScheduledEntriesPage() {
   return (
     <div className="relative flex flex-col mx-auto px-2 sm:px-6 max-w-4xl container">
       <div className="z-10 relative flex-1 overflow-y-auto">
-        <div className="">
-          <ul className="space-y-2 w-full">
-            <h1 className="flex gap-3 mt-4 sm:mt-6 mb-2 ml-2 font-bold text-2xl">
-              <CalendarClock className="w-8 h-8" />
-              Daueraufträge
-            </h1>
-            <p className="mt-2 mb-6 ml-2 text-muted-foreground">
-              Verwalten Sie Ihre regelmäßigen Transaktionen
-            </p>
+        <h1 className="flex gap-3 mt-4 sm:mt-6 mb-2 ml-2 font-bold text-2xl">
+          <CalendarClock className="w-8 h-8" />
+          Daueraufträge
+        </h1>
+        <p className="mt-2 mb-6 ml-2 text-muted-foreground">
+          Verwalten Sie Ihre regelmäßigen Transaktionen
+        </p>
 
-            {/* SUMMARY BOX */}
-            <Card className="p-2 border bg-card/90 dark:bg-card/60">
-              <CardContent className="p-0">
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  {/* Anzahl Daueraufträge */}
-                  <div>
-                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                      Daueraufträge
-                    </p>
-                    <p className="text-lg font-semibold">{totalCount}</p>
-                  </div>
-                  {/* Einnahmen */}
-                  <div>
-                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                      Einnahmen
-                    </p>
-                    <p className="text-lg font-semibold text-green-600">
-                      +{(totalIncome / 100).toFixed(2)} €
-                    </p>
-                  </div>
-                  {/* Ausgaben */}
-                  <div>
-                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                      Ausgaben
-                    </p>
-                    <p className="text-lg font-semibold text-red-700">
-                      -{(totalExpense / 100).toFixed(2)} €
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {isLoading ? (
-              <div className="flex justify-center items-center h-40">
-                <div className="mx-auto border-primary border-b-2 rounded-full w-8 h-8 animate-spin"></div>
+        {/* SUMMARY BOX */}
+        <Card className="p-2 h-[70px] mb-4 border bg-card/90 dark:bg-card/60">
+          <CardContent className="p-0 h-full flex items-center">
+            <div className="grid grid-cols-3 gap-3 text-center w-full">
+              {/* Anzahl Daueraufträge */}
+              <div>
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                  Daueraufträge
+                </p>
+                <p className="text-lg font-semibold">{totalCount}</p>
               </div>
-            ) : (
-              <EntryList
-                entries={data || []}
-                isDeleting={isDeleting}
-                deletingEntryId={deletingEntryId}
-                setDeletingEntryId={setDeletingEntryId}
-                handleDelete={handleDelete}
-              />
-            )}
-          </ul>
-        </div>
+              {/* Einnahmen */}
+              <div>
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                  Einnahmen
+                </p>
+                <p className="text-lg font-semibold text-green-600">
+                  +{(totalIncome / 100).toFixed(2)} €
+                </p>
+              </div>
+              {/* Ausgaben */}
+              <div>
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                  Ausgaben
+                </p>
+                <p className="text-lg font-semibold text-red-700">
+                  -{(totalExpense / 100).toFixed(2)} €
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <ul className="space-y-2 w-full">
+          {isLoading ? (
+            <div className="flex justify-center items-center h-40">
+              <div className="mx-auto border-primary border-b-2 rounded-full w-8 h-8 animate-spin"></div>
+            </div>
+          ) : (
+            <EntryList
+              entries={data || []}
+              isDeleting={isDeleting}
+              deletingEntryId={deletingEntryId}
+              setDeletingEntryId={setDeletingEntryId}
+              handleDelete={handleDelete}
+            />
+          )}
+        </ul>
       </div>
     </div>
   )
