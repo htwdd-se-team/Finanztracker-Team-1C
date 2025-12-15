@@ -388,21 +388,35 @@ export class AnalyticsService {
       };
     });
 
-    // Calculate future incomes (sum of all positive scheduled transactions)
-    const futureIncome = rows
+    // Calculate future incomes and expenses
+    const futureIncomes = rows
       .filter((r) => r.type === TransactionType.INCOME)
       .reduce((sum, r) => sum + r.value, 0);
 
-    // Insert future incomes at position 1 (after available_capital)
-    items.splice(1, 0, {
-      key: "future_incomes",
-      label: "Future Incomes",
-      icon: "fixed-income",
-      value: futureIncome,
-      type: TransactionType.INCOME,
-    });
+    const futureExpenses = rows
+      .filter((r) => r.type === TransactionType.EXPENSE)
+      .reduce((sum, r) => sum + r.value, 0);
 
-    // Add individual EXPENSE categories (INCOME already shown as total)
+    // Available Capital = Current Balance + Future Incomes - Future Expenses
+    const availableCapital = balance + futureIncomes - futureExpenses;
+
+    // Update the available_capital item with the calculated total
+    items[0].value = availableCapital;
+
+    // Add individual INCOME categories (split by category)
+    for (const r of rows.filter((r) => r.type === TransactionType.INCOME)) {
+      const value = r.value ?? 0;
+      const categoryId = r.categoryId ?? null;
+      items.push({
+        key: `scheduled_category_${categoryId ?? "uncategorized"}`,
+        label: r.categoryName ?? "uncategorized",
+        icon: r.categoryIcon ?? "category",
+        value: value,
+        type: r.type,
+      });
+    }
+
+    // Add individual EXPENSE categories (split by category)
     for (const r of rows.filter((r) => r.type === TransactionType.EXPENSE)) {
       const value = r.value ?? 0;
       const categoryId = r.categoryId ?? null;
