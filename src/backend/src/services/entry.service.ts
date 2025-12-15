@@ -296,17 +296,14 @@ export class EntryService {
       throw new NotFoundException("Entry not found after update");
     }
 
-    // If this is a parent recurring entry and the createdAt changed, generate a new child
-    if (
-      entry.isRecurring &&
-      !entry.transactionId &&
-      data.createdAt &&
-      oldCreatedAt.getTime() !== data.createdAt.getTime()
-    ) {
+    // If this is a parent recurring entry and fields changed, update future children
+    if (entry.isRecurring && !entry.transactionId) {
+      // Always propagate field changes to future children
       await this.recurringEntryService.handleParentEntryUpdate(
         entry.id,
         oldCreatedAt,
-        data.createdAt,
+        data.createdAt || oldCreatedAt,
+        data as Record<string, unknown>,
       );
     }
 
