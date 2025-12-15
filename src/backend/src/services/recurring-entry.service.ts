@@ -258,6 +258,95 @@ export class RecurringEntryService {
   }
 
   /**
+   * Handle parent entry update: generates a new child entry if the createdAt date changed
+   * and deletes the old child if it exists
+   */
+  async handleParentEntryUpdate(
+    parentId: number,
+    oldCreatedAt: Date,
+    newCreatedAt: Date,
+  ): Promise<void> {
+    const parent = await this.prisma.transaction.findUnique({
+      where: { id: parentId },
+    });
+
+    if (!parent || !parent.isRecurring) {
+      return;
+    }
+
+    // If the date hasn't changed, do nothing
+    if (oldCreatedAt.getTime() === newCreatedAt.getTime()) {
+      return;
+    }
+
+    // Delete old child entry if it exists for the old date
+    // BUT only if it's for today or in the future (date >= today)
+    // Don't delete past transactions as they affect the balance history
+    const todayStart = DateTime.now().startOf("day");
+    const oldChild = await this.prisma.transaction.findFirst({
+      where: {
+        transactionId: parentId,
+        createdAt: {
+          gte: DateTime.fromJSDate(oldCreatedAt).startOf("day").toJSDate(),
+          lt: DateTime.fromJSDate(oldCreatedAt)
+            .plus({ days: 1 })
+            .startOf("day")
+            .toJSDate(),
+        },
+      },
+    });
+
+    // Only delete if the old child is for today or later
+    if (
+      oldChild &&
+      DateTime.fromJSDate(oldChild.createdAt).startOf("day") >= todayStart
+    ) {
+      await this.prisma.transaction.delete({
+        where: { id: oldChild.id },
+      });
+
+      this.logger.debug(
+        `Deleted child entry ${oldChild.id} for parent ${parentId} (date >= today)`,
+      );
+    }
+
+    // Check if a child already exists for the new date
+    const existingChild = await this.prisma.transaction.findFirst({
+      where: {
+        transactionId: parentId,
+        createdAt: {
+          gte: DateTime.fromJSDate(newCreatedAt).startOf("day").toJSDate(),
+          lt: DateTime.fromJSDate(newCreatedAt)
+            .plus({ days: 1 })
+            .startOf("day")
+            .toJSDate(),
+        },
+      },
+    });
+
+    // If no child exists for the new date, create one
+    if (!existingChild) {
+      await this.prisma.transaction.create({
+        data: {
+          type: parent.type,
+          amount: parent.amount,
+          description: parent.description,
+          currency: parent.currency,
+          userId: parent.userId,
+          isRecurring: false,
+          categoryId: parent.categoryId,
+          createdAt: newCreatedAt,
+          transactionId: parentId,
+        },
+      });
+
+      this.logger.debug(
+        `Created child entry for parent ${parentId} on new date`,
+      );
+    }
+  }
+
+  /**
    * Re-enable a disabled recurring entry
    */
   async enableRecurringEntry(
