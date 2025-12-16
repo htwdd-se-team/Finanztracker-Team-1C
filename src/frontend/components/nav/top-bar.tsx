@@ -19,18 +19,31 @@ export function TopBar() {
           variant="ghost"
           onClick={() => router.push('/profile')}
           className={cn(
-            `bg-white/30 hover:bg-[var(--chart-1)]/50 dark:bg-white/5 dark:hover:bg-[var(--chart-1)]/50 disabled:opacity-90 shadow-[0_0_6px_rgba(0,0,0,0.08),_0_0_6px_rgba(255,255,255,0.6)] hover:shadow-[0_0_8px_rgba(0,0,0,0.12),_0_0_8px_rgba(255,255,255,0.75)] active:shadow-inner dark:hover:shadow-[0_0_10px_-1px_rgba(255,255,255,0.45)] dark:shadow-[0_0_8px_-2px_rgba(255,255,255,0.3)] dark:backdrop-blur-sm p-0 border border-white/20 dark:border-white/5 rounded-xl w-9 h-9 disabled:text-foreground transition // LIGHT // DARK`,
+            `
+            p-0 rounded-lg w-9 h-9
+            bg-card/30
+            border border-black/10
+            hover:bg-card/75
+            hover:border-[var(--chart-2)]/70
+            dark:bg-white/7
+            dark:border-white/7
+            dark:hover:bg-white/15
+            dark:hover:border-[var(--chart-2)]/70
+            dark:hover:shadow-[0_0_10px_-1px_rgba(255,255,255,0.1)]
+            transition
+            active:shadow-inner
+            disabled:text-foreground
+            disabled:opacity-90
+            `,
             isActive &&
               `
               // ACTIVE LIGHT
               bg-[var(--chart-1)]/40
               border-[var(--chart-1)]/80
-              shadow-[0_0_12px_rgba(0,0,0,0.35)]
 
               // ACTIVE DARK
-              dark:bg-[var(--chart-1)]/30
+              dark:bg-[var(--chart-1)]/25
               dark:border-[var(--chart-1)]
-              dark:shadow-[0_0_10px_-1px_rgba(255,255,255,0.5)]
               `
           )}
         >

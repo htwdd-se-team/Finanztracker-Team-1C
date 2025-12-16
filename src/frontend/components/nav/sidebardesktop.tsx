@@ -63,8 +63,8 @@ export function SidebarDesktop() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <TransactionDialog>
-                    <Button className="justify-start w-full cursor-pointer">
-                      <Plus className="mr-2 w-4 h-4" />
+                    <Button className="justify-start w-full cursor-pointer text-foreground bg-[var(--color-chart-1)]/40">
+                      <Plus className="w-4 h-4" />
                       Neue Transaktion
                     </Button>
                   </TransactionDialog>
