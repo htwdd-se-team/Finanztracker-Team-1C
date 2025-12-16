@@ -277,6 +277,9 @@ export class EntryService {
       );
     }
 
+    // Store old createdAt for recurring entries
+    const oldCreatedAt = checkEntry.createdAt;
+
     await this.prisma.transaction.updateMany({
       where: {
         id: entryId,
@@ -291,6 +294,17 @@ export class EntryService {
 
     if (!entry) {
       throw new NotFoundException("Entry not found after update");
+    }
+
+    // If this is a parent recurring entry and fields changed, update future children
+    if (entry.isRecurring && !entry.transactionId) {
+      // Always propagate field changes to future children
+      await this.recurringEntryService.handleParentEntryUpdate(
+        entry.id,
+        oldCreatedAt,
+        data.createdAt || oldCreatedAt,
+        data as Record<string, unknown>,
+      );
     }
 
     return EntryService.mapEntryToResponseDto(entry);
