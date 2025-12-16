@@ -5,10 +5,18 @@
 
 ==== Anwesenheit: 
 - Elias
+- Cedrick
 - Ben
-- Gruppe Prüfungstracker
+- Gruppe 3A
 
 === Feedback-Session
 * Umgesetzte Features im Vergleich zu SE1
+
+image:../../images/externesReview.jpeg[width=250] 
+
+image:../../images/externesReview2.jpeg[width=250]
+
+image:../../images/externesReview3.jpeg[width=250]
+
 * Vorstellungsideen unterschiedliche Design-Muster
 * Selbst- und Clicktest
