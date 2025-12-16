@@ -6,34 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
-import { useCategory } from '@/components/provider/category-provider'
 import { IconMap, IconNames } from '@/lib/icon-map'
 import { cn } from '@/lib/utils'
 
 interface TransformedChartData {
-  id: number
+  id: string
   name: string
   value: number
   icon: IconNames
   color: string
 }
-
-const chartConfig = {
-  value: { label: 'Betrag' },
-} satisfies ChartConfig
-
-// Farbschemata
-const incomeColors = [
-  'hsl(140, 60%, 45%)',
-  'hsl(140, 55%, 55%)',
-  'hsl(140, 50%, 65%)',
-]
-
-const expenseColors = [
-  'hsl(0, 70%, 55%)',
-  'hsl(0, 65%, 65%)',
-  'hsl(0, 60%, 75%)',
-]
 
 interface PieLabelProps {
   cx: number
@@ -44,53 +26,124 @@ interface PieLabelProps {
   index: number
 }
 
+const chartConfig = {
+  value: { label: 'Betrag' },
+} satisfies ChartConfig
+
 const BALANCE_COLOR = 'hsl(210, 60%, 55%)'
+const OTHER_INCOME_COLOR = 'hsl(140, 40%, 70%)'
+const OTHER_EXPENSE_COLOR = 'hsl(0, 40%, 75%)'
 const THRESHOLD_PERCENT = 2
 
+function generateShades(
+  hue: number,
+  count: number,
+  saturation = 60,
+  lightnessFrom = 42,
+  lightnessTo = 65
+): string[] {
+  if (count <= 1) {
+    return [`hsl(${hue}, ${saturation}%, ${lightnessFrom}%)`]
+  }
+  const step = (lightnessTo - lightnessFrom) / (count - 1)
+  return Array.from({ length: count }, (_, i) =>
+    `hsl(${hue}, ${saturation}%, ${lightnessFrom + step * i}%)`
+  )
+}
+
+function applyThreshold(
+  data: TransformedChartData[],
+  globalTotal: number,
+  otherLabel: string,
+  otherColor: string,
+  forcedOtherValue = 0
+): TransformedChartData[] {
+  const large = data.filter(
+    d => (d.value / globalTotal) * 100 >= THRESHOLD_PERCENT
+  )
+  const small = data.filter(
+    d => (d.value / globalTotal) * 100 < THRESHOLD_PERCENT
+  )
+  const otherValue =
+    forcedOtherValue + small.reduce((s, d) => s + d.value, 0)
+  const otherPercent = (otherValue / globalTotal) * 100
+  if (otherPercent < 1.5) return large
+  return [
+    ...large,
+    {
+      id: `other_${otherLabel}`,
+      name: otherLabel,
+      value: otherValue,
+      icon: IconNames.RECEIPT,
+      color: otherColor,
+    },
+  ]
+}
+
 export default function CapitalPieChart({ className }: { className?: string }) {
-  const { getCategoryFromId } = useCategory()
-
-  // -----------------------------
-  // Queries
-  // -----------------------------
-  const balanceQuery = useQuery({
-    queryKey: ['graphs', 'balance'],
+  const { data, isLoading } = useQuery({
+    queryKey: ['graphs', 'available-capital'],
     queryFn: async () => {
-      const res = await apiClient.user.userControllerGetBalance()
-      return Number(res.data.balance) / 100
+      const res =
+        await apiClient.analytics.analyticsControllerGetAvailableCapital()
+      return res.data
+    },
+
+    select: items => {
+      const availableCapital =
+        items.find(i => i.key === 'available_capital')!.value / 100
+      const balance =
+        items.find(i => i.key === 'current_balance')!.value / 100
+      const isUncategorized = (key: string) =>
+        key === 'scheduled_category_uncategorized'
+      const incomeCategories = items.filter(
+        i =>
+          i.type === 'INCOME' &&
+          i.key.startsWith('scheduled_category_') &&
+          !isUncategorized(i.key)
+      )
+      const uncategorizedIncome =
+        items
+          .filter(i => i.type === 'INCOME' && isUncategorized(i.key))
+          .reduce((s, i) => s + i.value, 0) / 100
+      const incomes: TransformedChartData[] = incomeCategories.map(i => ({
+        id: i.key.replace('scheduled_category_', ''),
+        name: i.label,
+        value: i.value / 100,
+        icon: i.icon as IconNames,
+        color: '',
+      }))
+
+      const expenseCategories = items.filter(
+        i =>
+          i.type === 'EXPENSE' &&
+          i.key.startsWith('scheduled_category_') &&
+          !isUncategorized(i.key)
+      )
+      const uncategorizedExpense =
+        items
+          .filter(i => i.type === 'EXPENSE' && isUncategorized(i.key))
+          .reduce((s, i) => s + Math.abs(i.value), 0) / 100
+      const expenses: TransformedChartData[] = expenseCategories.map(i => ({
+        id: i.key.replace('scheduled_category_', ''),
+        name: i.label,
+        value: Math.abs(i.value / 100),
+        icon: i.icon as IconNames,
+        color: '',
+      }))
+
+      return {
+        availableCapital,
+        balance,
+        incomes,
+        expenses,
+        uncategorizedIncome,
+        uncategorizedExpense,
+      }
     },
   })
 
-  const availableCapitalQuery = useQuery({
-  queryKey: ['graphs', 'available-capital'],
-  queryFn: async () => {
-    const res =
-      await apiClient.analytics.analyticsControllerGetAvailableCapital()
-
-    // 🔍 DEBUG: komplette Backend-Antwort
-    console.log(
-      'DEBUG analyticsControllerGetAvailableCapital:',
-      res.data
-    )
-
-    return res.data
-  },
-})
-
-  const entriesQuery = useQuery({
-    queryKey: ['graphs', 'recurring-entries'],
-    queryFn: async () => {
-      const res = await apiClient.analytics.analyticsControllerGetAvailableCapital
-      return res.data.entries
-    },
-  })
-
-  if (
-    balanceQuery.isLoading ||
-    entriesQuery.isLoading ||
-    !balanceQuery.data ||
-    !entriesQuery.data
-  ) {
+  if (isLoading || !data) {
     return (
       <Card className={cn(className)}>
         <CardContent className="flex h-40 items-center justify-center">
@@ -100,140 +153,52 @@ export default function CapitalPieChart({ className }: { className?: string }) {
     )
   }
 
-  const balance = balanceQuery.data
-  const entries = entriesQuery.data
+  const { availableCapital, balance, incomes, expenses, uncategorizedIncome, uncategorizedExpense } = data
 
-  // -----------------------------
-  // Upcoming recurring this month
-  // -----------------------------
-  const today = new Date()
-  const y = today.getFullYear()
-  const m = today.getMonth()
-  const d = today.getDate()
-
-  let upcomingIncome = 0
-  let upcomingExpense = 0
-
-  entries.forEach(entry => {
-    if (!entry.isRecurring) return
-    if (!entry.recurringBaseInterval) return
-    const interval = entry.recurringBaseInterval
-
-    const start = new Date(entry.createdAt)
-    const monthsSinceStart =
-      (y - start.getFullYear()) * 12 + (m - start.getMonth())
-
-    if (monthsSinceStart < 0) return
-    if (monthsSinceStart % interval !== 0) return
-
-    if (d >= start.getDate()) return // already executed
-
-    const value = entry.amount / 100
-    if (entry.type === 'INCOME') {
-      upcomingIncome += value
-    } else {
-      upcomingExpense += value
-    }
-  })
-
-  // -----------------------------
-  // Totals by category
-  // -----------------------------
-  const incomeTotals: Record<number, number> = {}
-  const expenseTotals: Record<number, number> = {}
-
-  entries.forEach(e => {
-    if (!e.categoryId) return
-    const v = e.amount / 100
-
-    if (e.type === 'INCOME') {
-      incomeTotals[e.categoryId] = (incomeTotals[e.categoryId] || 0) + v
-    } else {
-      expenseTotals[e.categoryId] = (expenseTotals[e.categoryId] || 0) + v
-    }
-  })
-
-  const transform = (
-    totals: Record<number, number>,
-    colors: string[]
-  ): TransformedChartData[] =>
-    Object.entries(totals).map(([id, value], i) => {
-      const c = getCategoryFromId(Number(id))
-      return {
-        id: c.id,
-        name: c.name,
-        value,
-        icon: c.icon,
-        color: colors[i % colors.length],
-      }
-    })
-
-  const incomeData = transform(incomeTotals, incomeColors)
-  const expenseData = transform(expenseTotals, expenseColors)
-
-  // -----------------------------
-  // GLOBAL TOTAL (important!)
-  // -----------------------------
-  const grandTotal =
+  const globalTotal =
     balance +
-    incomeData.reduce((s, d) => s + d.value, 0) +
-    expenseData.reduce((s, d) => s + d.value, 0)
-
-  // -----------------------------
-  // Threshold logic (GLOBAL)
-  // -----------------------------
-  const applyThreshold = (
-    data: TransformedChartData[],
-    otherLabel: string,
-    otherColor: string
-  ) => {
-    const large = data.filter(
-      d => (d.value / grandTotal) * 100 >= THRESHOLD_PERCENT
-    )
-
-    const small = data.filter(
-      d => (d.value / grandTotal) * 100 < THRESHOLD_PERCENT
-    )
-
-    if (!small.length) return large
-
-    return [
-      ...large,
-      {
-        id: -Math.random(),
-        name: otherLabel,
-        value: small.reduce((s, d) => s + d.value, 0),
-        icon: IconNames.RECEIPT,
-        color: otherColor,
-      },
-    ]
-  }
+    incomes.reduce((s, i) => s + i.value, 0) +
+    expenses.reduce((s, e) => s + e.value, 0)
 
   const incomeFinal = applyThreshold(
-    incomeData,
+    incomes,
+    globalTotal,
     'Sonstige Einnahmen',
-    'hsl(140, 40%, 70%)'
+    OTHER_INCOME_COLOR,
+    uncategorizedIncome
   )
 
   const expenseFinal = applyThreshold(
-    expenseData,
+    expenses,
+    globalTotal,
     'Sonstige Ausgaben',
-    'hsl(0, 40%, 75%)'
+    OTHER_EXPENSE_COLOR,
+    uncategorizedExpense
   )
 
-  // -----------------------------
-  // Final Pie Data
-  // -----------------------------
+  const incomeColors = generateShades(140, incomeFinal.length)
+  const expenseColors = generateShades(0, expenseFinal.length)
+
+  const incomeWithColors = incomeFinal.map((item, i) => ({
+    ...item,
+    color: item.color || incomeColors[i],
+  }))
+
+  const expenseWithColors = expenseFinal.map((item, i) => ({
+    ...item,
+    color: item.color || expenseColors[i],
+  }))
+
   const pieData: TransformedChartData[] = [
     {
-      id: 0,
+      id: 'balance',
       name: 'Kontostand',
       value: balance,
       icon: IconNames.WALLET,
       color: BALANCE_COLOR,
     },
-    ...incomeFinal,
-    ...expenseFinal,
+    ...incomeWithColors,
+    ...expenseWithColors,
   ]
 
   const RADIAN = Math.PI / 180
@@ -251,38 +216,48 @@ export default function CapitalPieChart({ className }: { className?: string }) {
     const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
     const item = pieData[index]
-    const IconComponent = IconMap[item.icon as keyof typeof IconMap]
+    const IconComponent = IconMap[item.icon]
     if (!IconComponent) return null
 
     return (
-      <foreignObject x={x - 12} y={y - 12} width={24} height={24} style={{ overflow: 'visible' }}>
-        <div className="flex justify-center items-center w-6 h-6">
-          <IconComponent className="text-white drop-shadow-md w-4 h-4" />
+      <foreignObject
+        x={x - 12}
+        y={y - 12}
+        width={24}
+        height={24}
+        style={{ overflow: 'visible' }}
+      >
+        <div className="flex items-center justify-center w-6 h-6">
+          <IconComponent className="w-4 h-4 text-white drop-shadow-md" />
         </div>
       </foreignObject>
     )
   }
 
   return (
-    <Card className={cn('p-1.5 border-red shadow-none', className)}>
+    <Card className={cn('p-1.5 shadow-none', className)}>
       <CardHeader className="p-0">
-        <CardTitle className="ml-2 text-lg">Monatlich verfügbares Kapital</CardTitle>
+        <CardTitle className="ml-2 text-lg">
+          Verfügbares Kapital (Monat)
+        </CardTitle>
       </CardHeader>
-      <CardContent className="p-0 m-0 flex justify-center items-center w-full h-full overflow-hidden">
+
+      <CardContent className="p-0 flex justify-center items-center">
         <ChartContainer
           config={chartConfig}
-          className="flex justify-center items-center w-full md:max-h-[200px] aspect-square"
+          className="w-full aspect-square md:max-h-[200px] -mt-8"
         >
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <ChartTooltip />
-
               <Pie
                 data={pieData}
                 cx="50%"
                 cy="50%"
                 innerRadius="50%"
                 outerRadius="95%"
+                startAngle={90}
+                endAngle={450}
                 labelLine={false}
                 label={renderLabel}
                 dataKey="value"
@@ -291,10 +266,9 @@ export default function CapitalPieChart({ className }: { className?: string }) {
                 animationDuration={1400}
                 animationEasing="ease-in-out"
               >
-                {pieData.map((entry, idx) => (
-                  <Cell key={idx} fill={entry.color} />
+                {pieData.map(entry => (
+                  <Cell key={entry.id} fill={entry.color} />
                 ))}
-
                 <Label
                   position="center"
                   content={({ viewBox }) => {
@@ -307,7 +281,7 @@ export default function CapitalPieChart({ className }: { className?: string }) {
                         dominantBaseline="middle"
                         className="fill-foreground font-bold text-3xl"
                       >
-                        {(balance + upcomingIncome - upcomingExpense).toLocaleString('de-DE', {
+                        {availableCapital.toLocaleString('de-DE', {
                           style: 'currency',
                           currency: 'EUR',
                           maximumFractionDigits: 0,

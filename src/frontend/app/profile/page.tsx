@@ -180,7 +180,7 @@ export default function ProfilePage() {
               Einstellungen
             </CardTitle>
           </CardHeader>
-          <CardContent className="px-5">
+          <CardContent className="px-5 mb-5">
             <div className="space-y-4">
               <div className={'flex flex-col  gap-3'}>
                 <div className="space-y-0.5">
@@ -223,12 +223,6 @@ export default function ProfilePage() {
                     />
                   ))}
                 </div>
-              </div>
-
-              <Separator />
-
-              <div className="text-muted-foreground text-sm mb-4">
-                Weitere Einstellungen kommen bald...
               </div>
             </div>
           </CardContent>

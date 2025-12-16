@@ -9,7 +9,6 @@ export default function GraphsPage() {
       <Background />
       <div className="z-10 relative flex-1 overflow-auto">
         <div className="">
-          {/* Header */}
           <div className="">
             <h1 className="flex gap-3 font-bold text-2xl ml-2 mt-4 sm:mt-6 mb-2">
               <ChartNoAxesCombined className="w-8 h-8" />
@@ -20,9 +19,8 @@ export default function GraphsPage() {
             </p>
           </div>
 
-          {/* Chart Preview Cards */}
           <div className="p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            <CapitalPieChart/>
+            <CapitalPieChart className="bg-card/90 dark:bg-card/60"/>
           </div>
         </div>
       </div>
