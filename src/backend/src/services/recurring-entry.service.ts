@@ -321,17 +321,15 @@ export class RecurringEntryService {
         },
       });
 
-      // Only delete if the old child is for today or later
-      if (
-        oldChild &&
-        DateTime.fromJSDate(oldChild.createdAt).startOf("day") >= todayStart
-      ) {
+      // Delete old child entry if it exists (whether past or future)
+      // This ensures consistency: if the date changes, we want only the new child
+      if (oldChild) {
         await this.prisma.transaction.delete({
           where: { id: oldChild.id },
         });
 
         this.logger.debug(
-          `Deleted child entry ${oldChild.id} for parent ${parentId} (date >= today)`,
+          `Deleted child entry ${oldChild.id} for parent ${parentId} (date changed)`,
         );
       }
 
