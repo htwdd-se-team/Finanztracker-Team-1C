@@ -72,7 +72,7 @@ export default function HistoryTile({
   const values = graphData.map(item => item.kontostand)
   const trueMin = Math.min(...values)
   const trueMax = Math.max(...values)
-  // Add 10% Buffer
+  // Add 15% Buffer
   const bufferedMin = trueMin < 0 ? trueMin * 1.15 : trueMin * 0.85
   const bufferedMax = trueMax > 0 ? trueMax * 1.15 : trueMax * 0.85
   const diff = Math.abs(bufferedMax - bufferedMin)
