@@ -19,7 +19,7 @@ export default function GraphsPage() {
             </p>
           </div>
 
-          <div className="p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="p-0 grid grid-cols-1 lg:grid-cols-2">
             <CapitalPieChart className="bg-card/90 dark:bg-card/60"/>
           </div>
         </div>
