@@ -1,12 +1,16 @@
-= Meeting-Protokoll 15.12.2025
+= Meeting-Protokoll 15.12.2025 +
 
 *Datum:* 15.12.2025 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
 *Protokoll:*  +
 *Meetingbeginn:* 13:30 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min +
+*Meetingende:* 15:40 +
+*Dauer:* 130 min +
+
+====
+internes Review + Sprint Planing
+====
 
 ==== Anwesenheit: 
 - Elias
@@ -29,28 +33,30 @@
 Was für Infos gibt es aus dem Fachaustausch?
 
 *Notizen:* +
-- ... +
+- keine neuen Informationen von dem Test Vortrag -> Tests passen soweit +
 
 
 ==== 1.2 Update zu E-mail an Ruben
 Wurde die Mail schon geschickt? Wenn ja was war die Rückmeldung?
 
 *Notizen:* +
-- ... +
+- Antwort bekommen, wir sollen eventuell Richtung Transactional Classes gehen, aber Ruben ist noch in Rücksprache mit Herrn Anke, spätestens in einer Woche anfangen mit der Umsetzung +
 
 
 ==== 1.3 Bugfixes
 Wurden alles Bugs gefixt?
 
 *Notizen:* +
-- ... +
+- Wir müssen die Bugs aus der letzten Woche als Tickets aufnehmen, in der jetzigen Sprint Planung aufnehmen +
 
 
 ==== 1.4 Restliche Kleinigkeiten
 Wurde Rot als Theme-Farbe implementiert? Inkludiert das Homescreen-Piechart die unkategorisierten Ausgaben in "Sonstiges"? Wurden die schlecht bearbeitbaren Komponenten (Transaktion, Registrierung) überarbeitet?
 
 *Notizen:* +
-- ... +
+- Für Backend muss man die Tests noch mit npn run test all ausführen +
+- Sammlung des Kleinzeuges im Product Backlog sammeln +
+- Bugs mit im Product Backlog aufnehmen
 
 
 ==== 1.5 Überprüfung der DoD und DoR
@@ -67,6 +73,11 @@ User-Story/Dev-Task-spezifische Kriterien: +
 - Die link:../../../development/development-guidelines.adoc[Coding Guidelines] wurden eingehalten +
 - Alle weiteren Produktanforderungen und Akzeptanzkriterien sind umgesetzt und getestet worden +
 - Automatische Test laufen erfolgreich +
+
+======
+- Features-Branch für jedes eignen Feature erstellen -> für die Devs +
+- In DoD wurden hinzugefügt, falls Tests breaken, dann musst man diese fixen +
+======
 
 *Notizen:* +
 Ergänzungen +
@@ -89,13 +100,17 @@ User-Story-spezifische Kriterien:
 Ergänzungen +
 - Technische Abhängigkeiten zu anderen Aufgaben wurden identifiziert und dokumentiert? +
 
+====
+- Drei Akzeptanzkritieren pro User-Story ergänzen zur DoR +
+====
+
 
 
 ==== 1.6 Abgabedokument
 Wer macht was?
 
 *Notizen:*
-- ... +
+- Im Sprint Planing mit verteilen +
 
 
 
@@ -108,14 +123,14 @@ sh. Review
 == Internes Review
 === Was haben wir gemacht? Sind diese Dinge nach der DoD auch wirklich fertig?
 *Notizen:* +
-- ... +
+- Screenshots von den verschiedenen Ansichten +
 
 Wurden die Sequenzdiagramme eingehalten? Wenn nicht Begründung warum ins Ticket +
 
 
 === Was haben wir nicht geschafft?
 *Notizen:* +
-- ... +
+- alles wurde geschafft +
 
 Wenn nicht geschafft -> Tasks zurück zu PBI +
 
@@ -126,21 +141,13 @@ Wenn nicht geschafft -> Tasks zurück zu PBI +
 Was wollen wir diesen Sprint erreichen? -> passende PBIs dafür wählen
 Welche Tasks können wir davon ableiten um das zu erreichen?
 
-*User Stories:*
-- ... +
-
-
-*Tasks/Tickets:*
-- ... +
-
-
-
+* Herrn Anke fragen, ob zwei Sprint oder einer -> definierter Schluss
 
 
 == Weitere organisatorische Aufgaben und/oder offene Punkte
 
 *Notizen:* +
-- ... +
+- Nächstes Meeting Plan +
   +
   +
 

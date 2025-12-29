@@ -26,7 +26,7 @@ export const navItems = [
     value: TabValues.CHARTS,
   },
   {
-    title: 'Tabellen',
+    title: 'Belegübersicht',
     url: '/table',
     icon: TableProperties,
     value: TabValues.TABLE,

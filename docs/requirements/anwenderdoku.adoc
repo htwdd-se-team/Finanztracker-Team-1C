@@ -1,0 +1,72 @@
+= Anwenderdokumentation
+include::../_includes/default-attributes.inc.adoc[]
+
+== Einführung
+{project-system-name} ist eine Finanztracker-Anwendung für Studierende. Sie hilft dabei, Einnahmen und Ausgaben schnell zu erfassen, geordnet zu verwalten und die eigene finanzielle Situation besser zu überblicken.
+
+== Zweck
+Ziel des Systems ist es, die persönliche Finanzverwaltung mit minimalem Aufwand zu ermöglichen:
+
+* schnelle Erfassung von Einnahmen und Ausgaben
+* verständliche Übersicht über aktuelle Ausgaben und Einnahmen
+* Unterstützung beim Erkennen von Ausgabenmustern und bei der Planung wiederkehrender Zahlungen
+
+== Funktionsumfang
+Der Funktionsumfang von {project-system-name} umfasst:
+
+* *Konto & Anmeldung*: Konto erstellen, anmelden und abmelden.
+* *Transaktionen ("Belege") verwalten*: Einnahmen und Ausgaben anlegen, bearbeiten und löschen.
+* *Kategorien*: Transaktionen kategorisieren und Kategorien verwalten.
+* *Übersicht*: Dashboard mit den wichtigsten Kennzahlen und den zuletzt erfassten Einträgen.
+* *Belegübersicht*: tabellarische Ansicht mit Such-, Sortier- und Filtermöglichkeiten (z.B. nach Zeitraum, Kategorien, Betrag oder Text).
+* *Gespeicherte Filter*: wiederverwendbare Filtereinstellungen für häufige Abfragen.
+* *Analysen*: Auswertungen und Diagramme zur Visualisierung der Finanzdaten.
+* *Daueraufträge*: wiederkehrende Transaktionen anzeigen und verwalten.
+* *Datenimport*: Bankdaten importieren, um Transaktionen schneller zu übernehmen.
+
+== Lauffähiges System
+* URL: XXX
+* Demo-Account
+** E-Mail: XXX
+** Passwort : XX
+
+== Mobile Setup am Desktop
+Für den nachfolgenden Guide wird ausschließlich die mobile Ansicht aufzeigt, da diese der Fokus des Projektes war. Zusätzlich ist eine Desktop-Ansicht verfügbar, welche sich nur von der Anordnung der Elemente unterscheidet. Für den Testdesktop Aufruf kann auch die mobile Ansicht aktiviert werden mit Rechtem Mausklick den Reiter untersuchen und dann die mobile Aussicht auswählen. In unserem Beispiel wird das für Chrome gezeigt.
+
+1. Schritt +
+image:../images/Guide_Mobile1.png[width=200]
+
+2. Schritt +
+image:../images/Guide_Mobile2.png[width=300]
+
+3. Schritt +
+image:../images/Guide_Mobile3.png[width=200]
+
+== Aufbau der Benutzeroberfläche
+
+== Nutzung
+
+== FAQ
+=== Welche Bankimport-Formate werden unterstützt?
+Der Import arbeitet mit *textbasierten CSV-Daten* und wertet die Spaltenüberschriften (Kopfzeilen) aus. Entscheidend sind daher die vorhandenen *Headernamen*.
+
+Unterstützt werden:
+
+* CSV-Dateien (`.csv`) und andere Textdateien (z.B. `.txt`), sofern sie die passenden Spaltenüberschriften enthalten.
+* Excel-Dateien (`.xlsx`) sollten vor dem Import als CSV exportiert werden (eine echte XLSX-Datei wird nicht zuverlässig erkannt, da der Import die Inhalte als Text einliest).
+
+*Pflicht-Spalten (mindestens diese müssen vorhanden sein):*
+
+* Datum: `Buchungstag` *oder* `Buchungsdatum`
+* Betrag: `Betrag` *oder* `Betrag (€)`
+
+*Optional (verbessert die Beschreibung, aber nicht zwingend):*
+
+* Text 1: `Verwendungszweck`
+* Text 2: `Beguenstigter/Zahlungspflichtiger`
+* Währung: `Waehrung` (falls unbekannt/fehlend wird `EUR` verwendet)
+
+*Format-Hinweise:*
+
+* Datum wird im deutschen Format erwartet: `DD.MM.YYYY` oder `DD.MM.YY`.
+* Ausgaben werden erkannt, wenn der Betrag mit `-` beginnt.
