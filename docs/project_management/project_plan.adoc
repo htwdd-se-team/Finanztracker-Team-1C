@@ -18,7 +18,7 @@ include::../_includes/default-attributes.inc.adoc[]
 - Elias Blume         (Dev)
 - Ben Eisold          (Ansprechpartner, Product Owner)
 - Paula Grahlow       (Scrum Master)
-- Ahmad Ali Nabizada  (Dev)
+- Ahmad Ali Nabizada  (Dev) (nur in SE I)
 - Tuan Khang Pham     (Dev)
 - Christoph Prasser   (Dev)
 - Cedrick Richter     (Dev)
