@@ -64,6 +64,22 @@ const createEntrySchema = z.object({
   createdAt: z.string().optional(),
 }) satisfies z.ZodType<ApiCreateEntryDto>
 
+// Helper to format date to ISO string
+const formatIsoDate = (d: Date): string => d.toISOString().split('T')[0]
+
+// Get date 30 days ago in ISO format
+const getThirtyDaysAgoIso = (): string =>
+  formatIsoDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000))
+
+// Type-safe interface for edit data with optional recurring properties
+interface EditDataWithRecurring extends ApiEntryResponseDto {
+  isRecurring?: boolean
+  recurringBaseInterval?: number
+  recurrenceIntervalMonths?: number
+}
+
+type FormValues = z.infer<typeof createEntrySchema>
+
 export function TransactionDialog({
   children,
   editData,
@@ -75,71 +91,70 @@ export function TransactionDialog({
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const [calendarOpen, setCalendarOpen] = useState(false)
-
   const [isRecurring, setIsRecurring] = useState(false)
   const [recurrenceIntervalMonths, setRecurrenceIntervalMonths] = useState<
     number | undefined
   >(undefined)
 
-  // Helpers for recurring date limits (max 30 days in the past)
-  const formatIso = (d: Date) => d.toISOString().split('T')[0]
-  const thirtyDaysAgoIso = formatIso(
-    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-  )
+  const thirtyDaysAgoIso = getThirtyDaysAgoIso()
 
-  const form = useForm<z.infer<typeof createEntrySchema>>({
+  // Helper to build form default values
+  const getFormDefaults = (data?: ApiEntryResponseDto): FormValues => {
+    if (!data) {
+      return {
+        type: ApiTransactionType.EXPENSE,
+        amount: 0,
+        description: '',
+        categoryId: undefined,
+        currency: ApiCurrency.EUR,
+        createdAt: formatIsoDate(new Date()),
+      }
+    }
+
+    return {
+      type: data.type,
+      amount: data.amount / 100,
+      description: data.description || '',
+      categoryId: data.categoryId || undefined,
+      currency: data.currency,
+      createdAt: data.createdAt?.split('T')[0],
+    }
+  }
+
+  // Helper to extract recurring data from edit data
+  const getRecurringDataFromEdit = (
+    data: ApiEntryResponseDto
+  ): { isRecurring: boolean; interval: number | undefined } => {
+    const editWithRecurring = data as EditDataWithRecurring
+    const isRecurringFlag = Boolean(editWithRecurring.isRecurring)
+    const interval =
+      typeof editWithRecurring.recurringBaseInterval === 'number'
+        ? editWithRecurring.recurringBaseInterval
+        : typeof editWithRecurring.recurrenceIntervalMonths === 'number'
+          ? editWithRecurring.recurrenceIntervalMonths
+          : undefined
+
+    return {
+      isRecurring: isRecurringFlag,
+      interval: isRecurringFlag && interval === undefined ? 1 : interval,
+    }
+  }
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(createEntrySchema),
-    defaultValues: editData
-      ? {
-          type: editData.type,
-          amount: editData.amount / 100,
-          description: editData.description || '',
-          categoryId: editData.categoryId || undefined,
-          currency: editData.currency,
-          createdAt: editData.createdAt?.split('T')[0],
-        }
-      : {
-          type: ApiTransactionType.EXPENSE,
-          amount: 0,
-          description: '',
-          categoryId: undefined,
-          currency: ApiCurrency.EUR,
-          createdAt: new Date().toISOString().split('T')[0],
-        },
+    defaultValues: getFormDefaults(editData),
   })
 
+  // Update form when dialog opens or editData changes
   useEffect(() => {
     if (open) {
+      form.reset(getFormDefaults(editData))
       if (editData) {
-        form.reset({
-          type: editData.type,
-          amount: editData.amount / 100,
-          description: editData.description || '',
-          categoryId: editData.categoryId || undefined,
-          currency: editData.currency,
-          createdAt: editData.createdAt?.split('T')[0],
-        })
-        const ed = editData as unknown as Record<string, unknown>
-        const recurringFlag = Boolean(ed.isRecurring)
-        setIsRecurring(recurringFlag)
-        const initialInterval =
-          typeof ed.recurringBaseInterval === 'number'
-            ? (ed.recurringBaseInterval as number)
-            : typeof ed.recurrenceIntervalMonths === 'number'
-              ? (ed.recurrenceIntervalMonths as number)
-              : undefined
-        setRecurrenceIntervalMonths(
-          recurringFlag && initialInterval === undefined ? 1 : initialInterval
-        )
+        const { isRecurring: isRec, interval } =
+          getRecurringDataFromEdit(editData)
+        setIsRecurring(isRec)
+        setRecurrenceIntervalMonths(interval)
       } else {
-        form.reset({
-          type: ApiTransactionType.EXPENSE,
-          amount: 0,
-          description: '',
-          categoryId: undefined,
-          currency: ApiCurrency.EUR,
-          createdAt: new Date().toISOString().split('T')[0],
-        })
         setIsRecurring(false)
         setRecurrenceIntervalMonths(undefined)
       }
@@ -147,22 +162,77 @@ export function TransactionDialog({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, editData])
 
-  // Mutations
+  // Validation helper
+  const validateRecurrence = (): boolean => {
+    if (
+      isRecurring &&
+      (recurrenceIntervalMonths === undefined ||
+        recurrenceIntervalMonths === null ||
+        recurrenceIntervalMonths < 1 ||
+        !Number.isInteger(recurrenceIntervalMonths))
+    ) {
+      return false
+    }
+    return true
+  }
+
+  // Create new entry
+  const createNewEntry = async (
+    apiValues: Record<string, unknown>
+  ): Promise<ApiEntryResponseDto> => {
+    const payload: Record<string, unknown> = {
+      ...apiValues,
+      isRecurring: Boolean(isRecurring),
+    }
+
+    if (isRecurring) {
+      payload.recurringBaseInterval = recurrenceIntervalMonths ?? 1
+      payload.recurringType = ApiRecurringTransactionType.MONTHLY
+    }
+
+    return (
+      await apiClient.entries.entryControllerCreate(
+        payload as unknown as ApiCreateEntryDto
+      )
+    ).data
+  }
+
+  // Update existing entry
+  const updateExistingEntry = async (
+    apiValues: Record<string, unknown>
+  ): Promise<ApiEntryResponseDto> => {
+    const updatePayload: Record<string, unknown> = { ...apiValues }
+
+    if (isRecurring) {
+      updatePayload.recurringBaseInterval = recurrenceIntervalMonths ?? 1
+      updatePayload.recurringType = ApiRecurringTransactionType.MONTHLY
+    }
+
+    const editDataWithRecurring = editData as EditDataWithRecurring
+    const wasRecurringOriginally = Boolean(editDataWithRecurring.isRecurring)
+
+    const updated = (
+      await apiClient.entries.entryControllerUpdate(
+        editData!.id,
+        updatePayload as ApiUpdateEntryDto
+      )
+    ).data
+
+    if (!isRecurring && wasRecurringOriginally) {
+      await apiClient.entries.entryControllerDisableScheduledEntry(editData!.id)
+    }
+
+    return updated
+  }
+
+  // Mutation handler
   const { mutate, isPending } = useMutation({
     mutationKey: editData
       ? ['transactions', 'update', editData.id]
       : ['transactions', 'create'],
-    mutationFn: async (values: z.infer<typeof createEntrySchema>) => {
-      // validate recurrence before building payload
-      if (isRecurring) {
-        if (
-          recurrenceIntervalMonths === undefined ||
-          recurrenceIntervalMonths === null ||
-          recurrenceIntervalMonths < 1 ||
-          !Number.isInteger(recurrenceIntervalMonths)
-        ) {
-          throw new Error('Ungültiges Intervall')
-        }
+    mutationFn: async (values: FormValues) => {
+      if (!validateRecurrence()) {
+        throw new Error('Ungültiges Intervall')
       }
 
       const apiValues = {
@@ -170,72 +240,26 @@ export function TransactionDialog({
         amount: Math.floor(values.amount * 100),
       }
 
-      const payload = { ...apiValues } as unknown as Record<string, unknown>
-
-      if (!editData) {
-        payload['isRecurring'] = Boolean(isRecurring)
-        if (isRecurring) {
-          payload['recurringBaseInterval'] = recurrenceIntervalMonths ?? 1
-          payload['recurringType'] = ApiRecurringTransactionType.MONTHLY
-        }
-
-        return (
-          await apiClient.entries.entryControllerCreate(
-            payload as unknown as ApiCreateEntryDto
-          )
-        ).data
-      }
-
-      const updatePayload = { ...apiValues } as unknown as Record<
-        string,
-        unknown
-      >
-      if (isRecurring) {
-        updatePayload['recurringBaseInterval'] = recurrenceIntervalMonths ?? 1
-        updatePayload['recurringType'] = ApiRecurringTransactionType.MONTHLY
-      }
-
-      const wasRecurringOriginally = Boolean(
-        (editData as unknown as Record<string, unknown>).isRecurring
-      )
-
-      const updated = (
-        await apiClient.entries.entryControllerUpdate(
-          editData.id,
-          updatePayload as unknown as ApiUpdateEntryDto
-        )
-      ).data
-
-      if (!isRecurring && wasRecurringOriginally) {
-        await apiClient.entries.entryControllerDisableScheduledEntry(
-          editData.id
-        )
-      }
-
-      return updated
+      return editData
+        ? await updateExistingEntry(apiValues)
+        : await createNewEntry(apiValues)
     },
     onSuccess: data => {
-      toast.success(
-        editData
-          ? 'Transaktion erfolgreich aktualisiert'
-          : 'Transaktion erfolgreich erstellt'
-      )
+      const successMessage = editData
+        ? 'Transaktion erfolgreich aktualisiert'
+        : 'Transaktion erfolgreich erstellt'
+      toast.success(successMessage)
 
-      // Always refresh transactions
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
 
-      // If we just created/updated a recurring entry, also refresh scheduled entries
       if (isRecurring) {
         queryClient.invalidateQueries({ queryKey: ['scheduled-entries'] })
 
-        // If the API returned a child transaction (transactionId present), inform the user
-        const entry = data as unknown as ApiEntryResponseDto
-        if (entry && entry.transactionId) {
+        const entry = data as EditDataWithRecurring
+        if (entry?.transactionId) {
           toast(
             'Hinweis: Die API hat eine sofort ausgeführte Transaktion erstellt. Ein geplanter Eintrag wurde angelegt.'
           )
-        } else {
-          toast.success('Terminauftrag angelegt')
         }
       }
 
@@ -243,28 +267,19 @@ export function TransactionDialog({
       setOpen(false)
     },
     onError: () => {
-      toast.error(
-        editData
-          ? 'Fehler beim Aktualisieren der Transaktion'
-          : 'Fehler beim Erstellen der Transaktion'
-      )
+      const errorMessage = editData
+        ? 'Fehler beim Aktualisieren der Transaktion'
+        : 'Fehler beim Erstellen der Transaktion'
+      toast.error(errorMessage)
     },
   })
 
-  function onSubmit(values: z.infer<typeof createEntrySchema>) {
-    // additional validation for recurrence at submit time to show user-friendly toast
-    if (isRecurring) {
-      if (
-        recurrenceIntervalMonths === undefined ||
-        recurrenceIntervalMonths === null ||
-        recurrenceIntervalMonths < 1 ||
-        !Number.isInteger(recurrenceIntervalMonths)
-      ) {
-        toast.error(
-          'Bitte ein gültiges Intervall in Monaten (ganze Zahl > 0) angeben'
-        )
-        return
-      }
+  const onSubmit = (values: FormValues) => {
+    if (isRecurring && !validateRecurrence()) {
+      toast.error(
+        'Bitte ein gültiges Intervall in Monaten (ganze Zahl > 0) angeben'
+      )
+      return
     }
 
     mutate(values)
@@ -275,6 +290,58 @@ export function TransactionDialog({
       form.reset()
     }
     setOpen(newOpen)
+  }
+
+  const handleRecurringToggle = (checked: boolean) => {
+    setIsRecurring(checked)
+
+    if (checked) {
+      if (
+        recurrenceIntervalMonths === undefined ||
+        recurrenceIntervalMonths === null
+      ) {
+        setRecurrenceIntervalMonths(1)
+      }
+
+      // Reset date if it's earlier than 30 days ago
+      const currentDate = form.getValues('createdAt')
+      if (currentDate) {
+        const curDate = new Date(currentDate)
+        const minDate = new Date(thirtyDaysAgoIso)
+        if (curDate < minDate) {
+          form.setValue('createdAt', '')
+          toast(
+            'Ausgewähltes Datum wurde zurückgesetzt: Bei Terminaufträgen sind nur Daten innerhalb der letzten 30 Tage oder in der Zukunft zulässig.'
+          )
+        }
+      }
+    }
+  }
+
+  const handleDateChange = (dateString: string) => {
+    if (!dateString) {
+      form.setValue('createdAt', '')
+      setCalendarOpen(false)
+      return
+    }
+
+    if (isRecurring) {
+      const selected = new Date(dateString)
+      const minDate = new Date(thirtyDaysAgoIso)
+      if (selected < minDate) {
+        form.setValue('createdAt', thirtyDaysAgoIso)
+        toast(
+          `Datum liegt mehr als 30 Tage in der Vergangenheit. Auf ${new Date(
+            thirtyDaysAgoIso
+          ).toLocaleDateString('de-DE')} gesetzt.`
+        )
+        setCalendarOpen(false)
+        return
+      }
+    }
+
+    form.setValue('createdAt', dateString)
+    setCalendarOpen(false)
   }
 
   return (
@@ -395,7 +462,7 @@ export function TransactionDialog({
             />
             {/* Date and Category Row */}
             <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
-              {/* Date  */}
+              {/* Date */}
               <FormField
                 control={form.control}
                 name="createdAt"
@@ -440,39 +507,13 @@ export function TransactionDialog({
                               value={
                                 field.value ? parseDate(field.value) : undefined
                               }
-                              // When recurring is enabled, disallow dates earlier than 30 days ago.
                               minValue={
                                 isRecurring
                                   ? parseDate(thirtyDaysAgoIso)
                                   : undefined
                               }
                               onChange={date => {
-                                if (!date) {
-                                  field.onChange('')
-                                  setCalendarOpen(false)
-                                  return
-                                }
-
-                                const selectedIso = date.toString()
-
-                                if (isRecurring) {
-                                  const selected = new Date(selectedIso)
-                                  const minDate = new Date(thirtyDaysAgoIso)
-                                  if (selected < minDate) {
-                                    // Clamp to allowed minimum and inform the user
-                                    field.onChange(thirtyDaysAgoIso)
-                                    toast(
-                                      `Datum liegt mehr als 30 Tage in der Vergangenheit. Auf ${new Date(
-                                        thirtyDaysAgoIso
-                                      ).toLocaleDateString('de-DE')} gesetzt.`
-                                    )
-                                    setCalendarOpen(false)
-                                    return
-                                  }
-                                }
-
-                                field.onChange(selectedIso)
-                                setCalendarOpen(false)
+                                handleDateChange(date?.toString() || '')
                               }}
                             />
                           </PopoverContent>
@@ -523,34 +564,7 @@ export function TransactionDialog({
               <div className="flex items-center gap-3">
                 <Switch
                   checked={isRecurring}
-                  onCheckedChange={val => {
-                    const b = Boolean(val)
-                    setIsRecurring(b)
-                    if (
-                      b &&
-                      (recurrenceIntervalMonths === undefined ||
-                        recurrenceIntervalMonths === null)
-                    ) {
-                      setRecurrenceIntervalMonths(1)
-                    }
-                    // If enabling recurring, and the currently selected date
-                    // is earlier than 30 days ago, clear the selected date.
-                    if (b) {
-                      const cur = form.getValues('createdAt') as
-                        | string
-                        | undefined
-                      if (cur) {
-                        const curDate = new Date(cur)
-                        const minDate = new Date(thirtyDaysAgoIso)
-                        if (curDate < minDate) {
-                          form.setValue('createdAt', '')
-                          toast(
-                            'Ausgewähltes Datum wurde zurückgesetzt: Bei Terminaufträgen sind nur Daten innerhalb der letzten 30 Tage oder in der Zukunft zulässig.'
-                          )
-                        }
-                      }
-                    }
-                  }}
+                  onCheckedChange={handleRecurringToggle}
                   className="cursor-pointer"
                 />
                 <div className="relative">
@@ -558,10 +572,7 @@ export function TransactionDialog({
                     className="group inline-block relative"
                     aria-describedby="recurring-tooltip"
                   >
-                    <FormLabel className="cursor-help">
-                      Terminauftrag{' '}
-                      <span className="text-muted-foreground"></span>
-                    </FormLabel>
+                    <FormLabel className="cursor-help">Terminauftrag</FormLabel>
                     <div
                       id="recurring-tooltip"
                       role="tooltip"
