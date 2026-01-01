@@ -234,8 +234,6 @@ export function TransactionDialog({
           toast(
             'Hinweis: Die API hat eine sofort ausgeführte Transaktion erstellt. Ein geplanter Eintrag wurde angelegt.'
           )
-        } else {
-          toast.success('Terminauftrag angelegt')
         }
       }
 
