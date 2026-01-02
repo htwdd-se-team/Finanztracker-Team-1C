@@ -1,5 +1,5 @@
 = Glossar: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
@@ -15,10 +15,10 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 // | Kommissionierung | Bereitstellung von Waren aus einem Lager entsprechend eines Kundenauftrags | (keine)
 | Transaktion | Einzelner Finanzvorgang (z.B. Einnahme oder Ausgabe)| Buchung
 | Kategorie | Gruppierung von Transaktionen nach Zweck (z.B. Miete, Lebensmittel) |Kostenart
-| Dashbord | Übersichtseite mit zentralen Kennzahlen wie Saldo, Budget, Sparziele | Übersicht
+| Dashboard | Übersichtseite mit zentralen Kennzahlen wie Saldo, Kategorienübersicht, letzte Transaktionen | Übersicht
 | Saldo | Aktueller Kontostand | Kontostand
-| Budget | Vom Nutzer festgelegter Maximalbetrag für Ausgaben in einem Zeitraum/Kategorie | Ausgabenlimit
-| Sparziel | Definierter Betrag, den der Nutzer ansparen möchte | Zielbetrag
+// | Budget | Vom Nutzer festgelegter Maximalbetrag für Ausgaben in einem Zeitraum/Kategorie | Ausgabenlimit
+// | Sparziel | Definierter Betrag, den der Nutzer ansparen möchte | Zielbetrag
 | Filter | Funktion zur Einschränkung der angezeigten Transaktionen (z. B  nach Kategorie) | Suchfunktion
 | Authentifizierung | Überprüfung der Identität eines Nutzers beim Login | Anmeldung
 | Export | Ausgabe von Daten (z.B. Transaktionen) in Formate wie CSV oder Excel | Datenausgabe
@@ -26,13 +26,16 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | Synchronisierung | Abgleich von Daten zwischen Geräten oder mit der Cloud | Datenabgleich
 | Zwei-Faktor-Authentifizierung | Zusätzliche Sicherheitsmaßnahme beim Login z.B. durch SMS-Code | 2FA/Zwei-Faktor-Verifizierung
 // |Rücklage *(auskommentieren)* | Zurückgelegtes Geld für zukünftige Ausgaben oder Notfälle | Reserve
+| Dauerauftrag | Wiederkehrende automatisch ausgeführte Transaktion | Wiederkehrende Transaktion
 | Fixkosten | Regelmäßig anfallende, meist gleichbleibende Ausgaben | Laufende Kosten
 // | Variable Kosten *(auskommentieren)* | Unregelmäßige oder in der Höhe schwankende Ausgaben | Flexible Ausgaben
 | Einnahme | Geldzufluss z.B. durch Gehalt | Zahlungseingang
 | Analyse | Betrachtung der Finanzen über Zeiträume und verschiedene Parameter | Auswertung, Bericht
 // | Buchungszyklus *(auskommentieren)* | Wiederkehrendes Zeitintervall für Transaktionen (z.B. monatlich) | (keine)
 // | Lastschrift *(auskommentieren)* | Automatische Abbuchung vom Konto durch Dritte | SEPA-Lastschrift
-| Benachrichtigung | Hinweis über bestimmte Ereignisse in der App | Alert, Hinweis
+// | Benachrichtigung | Hinweis über bestimmte Ereignisse in der App | Alert, Hinweis
+| Notgroschen | Einstellbarer Betrag, welcher immer auf dem Konto zur Verfügung stehen sollte | Notreserve, Rücklage
+| Delta | Unterschied zwischen Einnahmen und Ausgaben über einen bestimmten Zeitraum  | Differenz, Abstand
 |===
 
 
@@ -80,7 +83,13 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | Transaktion
 | Einzelner Finanzvorgang, entweder Einnahme oder Ausgabe
 | Objekt
-| Betrag muss numerisch und ≥ 0 sein, Datum gültig formatiert, Kategorie vorhanden
+| Betrag muss numerisch und ≥ 0 sein, Datum gültig formatiert
+| Buchung
+
+| Wiederkehrende Transaktion
+| Automatisch widerholender Finanzvorgang, entweder Einnahme oder Ausgabe
+| Objekt
+| Betrag muss numerisch und ≥ 0 sein, Datum gültig formatiert
 | Buchung
 
 | Kategorie
@@ -101,39 +110,7 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | Zeitraum erforderlich, Filter optional
 | Auswertung
 
-| Budget
-| Festgelegter Maximalbetrag für Ausgaben in einem Zeitraum oder einer Kategorie
-| Objekt
-| Betrag muss positiv sein, Kategorie muss zugewiesen sein
-| Ausgabenlimit
-
-| Sparziel
-| Zielbetrag, den der Nutzer ansparen möchte
-| Objekt
-| Zielbetrag muss positiv sein, aktueller Stand ≥ 0
-| Zielbetrag
-
-| Sparplan
-| Regelmäßiger Betrag, der automatisch einem Sparziel zugewiesen wird
-| Objekt
-| Betrag muss positiv sein, Intervall gültig (z. B. monatlich)
-| Auto-Sparen
-
-| Benachrichtigung
-| Nachricht über ein Ereignis innerhalb der Anwendung
-| Objekt
-| Titel, Typ und Zeitstempel erforderlich
-| Hinweis, Alert
-
 |===
-
-
-// | Wiederkehrende Transaktion
-// | Automatisch geplante, sich wiederholende Buchung.
-// | Objekt
-// | Muss Intervall, Startdatum und Betrag enthalten.
-// | Wiederholungsbuchung
-
 
 
 == Domänenmodell

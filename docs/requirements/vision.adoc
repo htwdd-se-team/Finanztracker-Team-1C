@@ -1,5 +1,5 @@
 = Vision: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
@@ -16,7 +16,7 @@ Dieses Visions-Dokument bezieht sich auf das System {project-system-name}, das v
 
 === Definitionen, Akronyme und Abkürzungen
 //Verweis passend zum Belegabgabe-Template se1_belegabgabe_t00.adoc
-Siehe <<#glossary, Glossar>>.
+Siehe link:glossary.adoc[Glossar].
 //Siehe <<./glossary.adoc#glossary, Glossar>>.
 
 // === Referenzen
@@ -43,7 +43,7 @@ Derzeit sind Finanztracker entweder umfangreich und unübersichtlich oder Nutzer
 | eine  | [Finanzmanagement-Applikation]
 | die | [einfach und flexibel auch offline die Finanzverwaltung erleichtert]
 | anders als | [momentan verbreitete Finanztracker]
-| kann unser Produkt | [kostenlos mit State-of-the-art Features einen einfachen überblick in die Finanzen liefern]
+| kann unser Produkt | [kostenlos mit State-of-the-art Features einen einfachen Überblick in die Finanzen liefern]
 |===
 
 
@@ -93,7 +93,7 @@ Derzeit sind Finanztracker entweder umfangreich und unübersichtlich oder Nutzer
 //| [Fassen Sie die wesentlichen Verantwortlichkeiten des Stakeholder mit Bezug auf das zu entwickelnde System kurz zusammen, d.h. ihr besonderen Interessen. Beispiele: Dieser Stakeholder sorgt dafür, dass das System gewartet wird / dass die angezeigten Daten aktuell sind / überwacht den Projektfortschritt / usw.]
 
 
-Die Verfeinerung der Stakeholder, die das System benutzen, wird im UX-Konzept mittels Personas vorgenommen.
+Die Verfeinerung des Stakeholders (Nutzer*innen), die das System benutzen, wird im UX-Konzept mittels Personas vorgenommen.
 
 
 == Produktüberblick
@@ -122,7 +122,7 @@ a|
 | Sofort verständliche Finanzübersicht
 | Muss 
 a| 
-- Minimalistisches, visuell ansprechendes Dashboard (Saldo, Budget, Sparziele) 
+- Minimalistisches, visuell ansprechendes Dashboard (Saldo, Kategorien, letzte Einträge) 
 | MVP
 
 | Übersichtliche tabellarische Anzeige
