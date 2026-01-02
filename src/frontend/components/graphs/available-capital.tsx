@@ -226,6 +226,7 @@ export default function CapitalPieChart({ className }: { className?: string }) {
         width={24}
         height={24}
         style={{ overflow: 'visible' }}
+        className="pointer-events-none"
       >
         <div className="flex items-center justify-center w-6 h-6">
           <IconComponent className="w-4 h-4 text-white drop-shadow-md" />
