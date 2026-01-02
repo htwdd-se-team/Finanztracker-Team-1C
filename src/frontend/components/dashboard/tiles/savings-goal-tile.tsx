@@ -66,11 +66,11 @@ function SavingsGoal({ className }: { className?: string }) {
   const currentAmount = data.balance
   const targetAmount = data.emergencyReserve || 1 // Avoid division by zero
   const fillPercentage = Math.min(Math.max((currentAmount / targetAmount) * 100, 0), 100)
-  
+
   // Dynamic color based on progress (red -> yellow -> green/primary)
   let fillColor = 'bg-red-500/20'
-  let textColor = 'text-red-600 dark:text-red-400'
-  
+  let textColor = 'text-destructive/90'
+
   if (fillPercentage >= 100) {
     fillColor = 'bg-primary/20'
     textColor = 'text-primary'
@@ -120,11 +120,11 @@ function SavingsGoal({ className }: { className?: string }) {
         <div className="relative w-48 h-48 sm:w-56 sm:h-56">
             {/* Outer ring */}
             <div className="absolute inset-0 rounded-full border-4 border-muted/30" />
-            
+
             {/* Inner fill container */}
             <div className="absolute inset-2 rounded-full overflow-hidden bg-background/50 backdrop-blur-[2px]">
                 {/* Liquid Fill */}
-                <div 
+                <div
                     className={cn(
                         "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out", 
                         fillColor
@@ -133,11 +133,11 @@ function SavingsGoal({ className }: { className?: string }) {
                 >
                   {/* Wave effect */ }
                   <div className="absolute -top-6 w-[200%] h-12 left-0 animate-wave"
-                       style={{ 
+                       style={{
                          backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDQwIDMyMCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIwLjIiIGQ9Ik0wLDk2TDQ4LDExMi4yQzk2LDEyOCwxOTIsMTYwLDI4OCwxNjBDMzg0LDE2MCw0ODAsMTI4LDU3NiwxMTJDNjcyLDk2LDc2OCw5Niw4NjQsMTEyQzk2MCwxMjgsMTA1NiwxNjAsMTE1MiwxNjBDMTI0OCwxNjAsMTM0NCwxMjgsMTM5MiwxMTJMMTQ0MCw5NkwxNDQwLDMyMEwxMzkyLDMyMEMxMzQ0LDMyMCwxMjQ4LDMyMCwxMTUyLDMyMEMxMDU2LDMyMCw5NjAsMzIwLDg2NCwzMjBDNzY4LDMyMCw2NzIsMzIwLDU3NiwzMjBDNDgwLDMyMCwzODQsMzIwLDI4OCwzMjBDMTkyLDMyMCw5NiwzMjAsNDgsMzIwTDAsMzIwWiI+PC9wYXRoPjwvc3ZnPg==')",
                          backgroundRepeat: 'repeat-x',
-                         backgroundSize: '50% 100%' 
-                       }} 
+                         backgroundSize: '50% 100%'
+                       }}
                   />
                 </div>
             </div>
@@ -147,7 +147,7 @@ function SavingsGoal({ className }: { className?: string }) {
                 <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">
                     Notgroschen
                 </span>
-                
+
                 {isEditing ? (
                     <div className="flex items-center justify-center w-32">
                         <Input
@@ -169,7 +169,7 @@ function SavingsGoal({ className }: { className?: string }) {
                         </span>
                     </div>
                 )}
-                
+
                 <div className={cn("mt-2 text-xs font-bold px-2 py-0.5 rounded-full bg-background/60 backdrop-blur-sm border shadow-sm", textColor)}>
                     {Math.round(fillPercentage)}% Erreicht
                 </div>

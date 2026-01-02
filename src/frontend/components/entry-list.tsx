@@ -125,18 +125,18 @@ export function EntryList({
                   <div className="flex gap-1">
                     <TransactionDialog editData={entry}>
                       <Button variant="ghost" className="w-7 h-7">
-                        <Edit className="w-4 h-4" />
+                        <Edit/>
                       </Button>
                     </TransactionDialog>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button
                           variant="ghost"
-                          className="w-7 h-7 text-destructive"
+                          className="w-7 h-7 text-destructive/90 hover:text-destructive/80"
                           disabled={isDeleting && deletingEntryId === entry.id}
                           onClick={() => setDeletingEntryId(entry.id)}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2/>
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -150,7 +150,7 @@ export function EntryList({
                           <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => handleDelete(entry.id)}
-                            className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                            className="bg-destructive/90 hover:bg-destructive/80 text-destructive-foreground"
                           >
                             Löschen
                           </AlertDialogAction>
@@ -253,16 +253,12 @@ export function EntryList({
                     <AlertDialogTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="flex-shrink-0 p-0 w-8 h-8 text-destructive cursor-pointer"
+                        className="flex-shrink-0 p-0 w-8 h-8 text-destructive/90 cursor-pointer"
                         disabled={isDeleting && deletingEntryId === entry.id}
                         onClick={() => setDeletingEntryId(entry.id)}
                       >
                         <Trash2
-                          className="stroke-[2] !w-5 !h-5"
-                          style={{
-                            color:
-                              'color-mix(in srgb, var(--destructive) 80%, white)',
-                          }}
+                          className="stroke-[2] !w-5 !h-5 text-destructive/90"
                         />
                       </Button>
                     </AlertDialogTrigger>
