@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Calendar, CalendarClock, Edit, Trash2, RefreshCcw } from 'lucide-react'
+import { Calendar, CalendarClock, Edit, Trash2, RefreshCcw, SquareSlash } from 'lucide-react'
 import { getCategoryColorClasses } from '@/lib/color-map'
 import { cn } from '@/lib/utils'
 import { useCategory } from './provider/category-provider'
@@ -83,7 +83,7 @@ export function EntryList({
               {/* Zeile 1: Titel + Betrag */}
               <div className="flex items-center justify-between gap-1.5">
                 {/* Icon */}
-                {entry.categoryId && (
+                {entry.categoryId ? (
                   <div
                     className={cn(
                       'inline-flex items-center justify-center rounded-lg w-6 h-6 flex-shrink-0',
@@ -96,6 +96,10 @@ export function EntryList({
                       iconName={getCategoryFromId(Number(entry.categoryId)).icon}
                       className="w-4 h-4"
                     />
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center justify-center rounded-lg w-6 h-6 flex-shrink-0 text-muted-foreground">
+                    <SquareSlash className="w-5 h-5" style={{ strokeDasharray: '1.5 2.5' }} />
                   </div>
                 )}
 
