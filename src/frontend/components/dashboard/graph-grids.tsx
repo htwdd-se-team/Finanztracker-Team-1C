@@ -5,7 +5,6 @@ import SelectorTile from './tiles/selector-tile'
 import BalanceTile from './tiles/balance-tile'
 import DeltaTile from './tiles/delta-tile'
 import HistoryTile from './tiles/history-tile'
-import SavingsGoal from './tiles/savings-goal-tile'
 import PieChartTileIcons from './tiles/pie-chart-icons-tile'
 import { today, getLocalTimeZone } from '@internationalized/date'
 
@@ -49,9 +48,6 @@ function GraphGrids() {
         endDate={range.endDate}
         className="col-span-1 bg-card/90 dark:bg-card/60"
       />
-
-       {/* Row 4: Savings Goal - Lowest place */}
-       <SavingsGoal className="col-span-2 p-1.5 bg-card/90 dark:bg-card/60" />
     </div>
   )
 }

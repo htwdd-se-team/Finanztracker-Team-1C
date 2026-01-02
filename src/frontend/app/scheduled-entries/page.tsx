@@ -81,7 +81,7 @@ export default function ScheduledEntriesPage() {
                 <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
                   Ausgaben
                 </p>
-                <p className="text-lg font-semibold text-red-700">
+                <p className="text-lg font-semibold text-destructive/90">
                   -{(totalExpense / 100).toFixed(2)} €
                 </p>
               </div>

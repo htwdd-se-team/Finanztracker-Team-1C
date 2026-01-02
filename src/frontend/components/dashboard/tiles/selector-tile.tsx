@@ -66,7 +66,7 @@ export function SelectorTile({
     end: CalendarDate
   }>({
     start: startOfMonth(today(getLocalTimeZone())),
-    end: today(getLocalTimeZone()).subtract({ days: 30 }),
+    end: today(getLocalTimeZone()),
   })
 
   const computeRange = useCallback(

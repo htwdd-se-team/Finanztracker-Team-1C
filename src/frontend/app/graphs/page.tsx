@@ -1,5 +1,6 @@
 import Background from '@/components/background'
 import CapitalPieChart from '@/components/graphs/available-capital'
+import SavingsGoal from '@/components/graphs/savings-goal'
 import { ChartNoAxesCombined } from 'lucide-react'
 
 export default function GraphsPage() {
@@ -7,7 +8,7 @@ export default function GraphsPage() {
   return (
     <div className="mx-auto max-w-4xl relative flex flex-col px-2 sm:px-6 container">
       <Background />
-      <div className="z-10 relative flex-1 overflow-auto">
+      <div className="z-10 relative flex-1">
         <div className="">
           <div className="">
             <h1 className="flex gap-3 font-bold text-2xl ml-2 mt-4 sm:mt-6 mb-2">
@@ -19,8 +20,9 @@ export default function GraphsPage() {
             </p>
           </div>
 
-          <div className="p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-6">
             <CapitalPieChart className="bg-card/90 dark:bg-card/60"/>
+            <SavingsGoal className="bg-card/90 dark:bg-card/60"/>
           </div>
         </div>
       </div>
