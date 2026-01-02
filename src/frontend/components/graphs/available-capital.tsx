@@ -2,7 +2,7 @@
 
 import { Loader2 } from 'lucide-react'
 import { Pie, PieChart, ResponsiveContainer, Cell, Label } from 'recharts'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
@@ -235,17 +235,15 @@ export default function CapitalPieChart({ className }: { className?: string }) {
   }
 
   return (
-    <Card className={cn('p-1.5 shadow-none', className)}>
-      <CardHeader className="p-0">
-        <CardTitle className="ml-2 text-lg">
-          Verfügbares Kapital (Monat)
-        </CardTitle>
-      </CardHeader>
+    <Card className={cn('p-1.5', className)}>
+      <CardTitle className="ml-2 text-lg">
+        Verfügbares Kapital (Monat)
+      </CardTitle>
 
       <CardContent className="p-0 flex justify-center items-center">
         <ChartContainer
           config={chartConfig}
-          className="w-full aspect-square max-h-[300px] -mt-8"
+          className="w-full aspect-square max-h-[300px] -mt-6"
         >
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>

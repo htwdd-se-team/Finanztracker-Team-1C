@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Pencil, Save, Loader2 } from 'lucide-react'
@@ -87,7 +87,10 @@ function SavingsGoal({ className }: { className?: string }) {
     })
 
   return (
-    <Card className={cn('relative overflow-hidden', className)}>
+    <Card className={cn('relative overflow-hidden p-1.5', className)}>
+        <CardTitle className="ml-2 text-lg">
+          Notgroschen
+        </CardTitle>
       <div className="absolute top-3 right-3 z-20">
         {isEditing ? (
           <Button
@@ -115,18 +118,18 @@ function SavingsGoal({ className }: { className?: string }) {
         )}
       </div>
 
-      <CardContent className="p-6 h-full flex flex-col items-center justify-center relative z-10">
+      <CardContent className="p-2 h-full flex flex-col items-center justify-center relative z-10">
         {/* Main circular visualization */}
-        <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+        <div className="relative w-72 h-72 -mt-6">
             {/* Outer ring */}
-            <div className="absolute inset-0 rounded-full border-4 border-muted/30" />
+            <div className="absolute inset-0 rounded-full border-4 border-muted/60" />
 
             {/* Inner fill container */}
             <div className="absolute inset-2 rounded-full overflow-hidden bg-background/50 backdrop-blur-[2px]">
                 {/* Liquid Fill */}
                 <div
                     className={cn(
-                        "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out", 
+                        "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out",
                         fillColor
                     )}
                     style={{ height: `${fillPercentage}%` }}
@@ -144,9 +147,6 @@ function SavingsGoal({ className }: { className?: string }) {
 
             {/* Content Overlay */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">
-                    Notgroschen
-                </span>
 
                 {isEditing ? (
                     <div className="flex items-center justify-center w-32">
