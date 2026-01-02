@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SelectorTile from './tiles/selector-tile'
 import BalanceTile from './tiles/balance-tile'
 import DeltaTile from './tiles/delta-tile'
@@ -11,11 +11,23 @@ import { today, getLocalTimeZone } from '@internationalized/date'
 function GraphGrids() {
   const now = today(getLocalTimeZone())
   const oneYearAgo = now.subtract({ years: 1 })
-  const [range, setRange] = useState({
+  const [range, setRange] = useSessionRange('dashboard-range', {
     type: 'all',
     startDate: oneYearAgo.toString(),
     endDate: now.toString(),
   })
+
+  function useSessionRange<T>(key: string, defaultValue: T) {
+    const [state, setState] = useState<T>(() => {
+      if (typeof window === 'undefined') return defaultValue
+      const saved = sessionStorage.getItem(key)
+      return saved ? JSON.parse(saved) : defaultValue
+    })
+    useEffect(() => {
+      sessionStorage.setItem(key, JSON.stringify(state))
+    }, [key, state])
+    return [state, setState] as const
+  }
 
   return (
     <div className="gap-2 sm:gap-6 grid grid-cols-2">
