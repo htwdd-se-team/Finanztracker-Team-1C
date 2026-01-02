@@ -95,45 +95,53 @@ export function SelectorTile({
   )
 
   return (
-    <Card className={cn('h-18', className)}>
-      <CardContent className="p-0 m-0 flex flex-col justify-center h-full">
+    <Card className={cn("h-18 p-0", className)}>
+      <CardContent className="p-0 m-0 h-full w-full">
         <Dialog open={showPicker} onOpenChange={setShowPicker}>
           <Tabs
             value={value}
-            onValueChange={v => {
+            onValueChange={(v) => {
               if (v === RangeType.CUSTOM) {
-                setShowPicker(true)
+                setShowPicker(true);
               } else {
-                computeRange(v as RangeType)
+                computeRange(v as RangeType);
               }
             }}
-            className=""
+            className="h-full w-full"
           >
-            <TabsList className="
-              grid grid-cols-2 grid-rows-2
-              w-full h-full
-              bg-transparent
-              p-0 m-0
-              items-stretch
-            ">
-              <TabsTrigger value={RangeType.WEEK} className={tabTriggerClass}>
+            <TabsList className="grid grid-cols-2 grid-rows-2 w-full h-full p-0 bg-transparent rounded-none flex-none">
+              <TabsTrigger
+                value={RangeType.WEEK}
+                className={tabTriggerClass}
+              >
                 Woche
               </TabsTrigger>
-              <TabsTrigger value={RangeType.MONTH} className={tabTriggerClass}>
+              <TabsTrigger
+                value={RangeType.MONTH}
+                className={tabTriggerClass}
+              >
                 Monat
               </TabsTrigger>
-              <TabsTrigger value={RangeType.CUSTOM} className={tabTriggerClass}>
+              <TabsTrigger
+                value={RangeType.CUSTOM}
+                className={tabTriggerClass}
+              >
                 Auswahl
               </TabsTrigger>
-              <TabsTrigger value={RangeType.ALL} className={tabTriggerClass}>
+              <TabsTrigger
+                value={RangeType.ALL}
+                className={tabTriggerClass}
+              >
                 Gesamt
               </TabsTrigger>
             </TabsList>
           </Tabs>
+
           <DialogContent className="p-4 w-auto">
             <DialogHeader className="pb-2">
               <DialogTitle>Zeitraum wählen</DialogTitle>
             </DialogHeader>
+
             <DateRangePicker
               className="pb-0"
               value={dateRange}
@@ -158,11 +166,13 @@ export function SelectorTile({
                     <CalendarIcon size={16} />
                   </button>
                 </div>
+
                 <div className="p-2 border rounded-md w-full overflow-hidden">
                   <RangeCalendar />
                 </div>
               </div>
             </DateRangePicker>
+
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowPicker(false)}>
                 Abbrechen
