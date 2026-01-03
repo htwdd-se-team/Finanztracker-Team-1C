@@ -125,7 +125,11 @@ export function EntryList({
                       <Calendar className="w-4 h-4 flex-shrink-0" />
                     )}
                     <span className="leading-none">
-                      {new Date(entry.createdAt).toLocaleDateString('de-DE')}
+                      {new Date(entry.createdAt).toLocaleDateString('de-DE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      })}
                     </span>
                   </div>
 
