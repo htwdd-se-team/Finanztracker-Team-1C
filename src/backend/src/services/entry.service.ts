@@ -40,6 +40,15 @@ export class EntryService {
     user: User,
     data: CreateEntryDto,
   ): Promise<EntryResponseDto> {
+    // If only date is provided (no specific time), use current time
+    // This ensures newer entries appear at the top when sorting by createdAt
+    const createdAt = data.createdAt;
+    const isDateOnly =
+      createdAt.getHours() === 0 &&
+      createdAt.getMinutes() === 0 &&
+      createdAt.getSeconds() === 0;
+    const finalCreatedAt = isDateOnly ? new Date() : createdAt;
+
     // recurring entry
     if (data.isRecurring) {
       // shadow element
@@ -52,7 +61,7 @@ export class EntryService {
           userId: user.id,
           isRecurring: true,
           categoryId: data.categoryId,
-          createdAt: data.createdAt,
+          createdAt: finalCreatedAt,
           recurringType: data.recurringType,
           recurringBaseInterval: data.recurringBaseInterval ?? 1,
           recurringDisabled: false,
@@ -69,7 +78,7 @@ export class EntryService {
           userId: user.id,
           isRecurring: false,
           categoryId: data.categoryId,
-          createdAt: data.createdAt,
+          createdAt: finalCreatedAt,
           transactionId: parentEntry.id,
         },
       });
@@ -87,7 +96,7 @@ export class EntryService {
         userId: user.id,
         isRecurring: false,
         categoryId: data.categoryId,
-        createdAt: data.createdAt,
+        createdAt: finalCreatedAt,
       },
     });
 
