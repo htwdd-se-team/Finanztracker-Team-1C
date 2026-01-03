@@ -1,22 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SelectorTile from './tiles/selector-tile'
 import BalanceTile from './tiles/balance-tile'
 import DeltaTile from './tiles/delta-tile'
 import HistoryTile from './tiles/history-tile'
-import SavingsGoal from './tiles/savings-goal-tile'
 import PieChartTileIcons from './tiles/pie-chart-icons-tile'
-import { today, getLocalTimeZone } from '@internationalized/date'
+import { today, getLocalTimeZone, CalendarDate } from '@internationalized/date'
 
 function GraphGrids() {
   const now = today(getLocalTimeZone())
-  const oneYearAgo = now.subtract({ years: 1 })
-  const [range, setRange] = useState({
+  const past = new CalendarDate(1900, 1, 1)
+  const [range, setRange] = useSessionRange('dashboard-range', {
     type: 'all',
-    startDate: oneYearAgo.toString(),
+    startDate: past.toString(),
     endDate: now.toString(),
   })
+
+  function useSessionRange<T>(key: string, defaultValue: T) {
+    const [state, setState] = useState<T>(() => {
+      if (typeof window === 'undefined') return defaultValue
+      const saved = sessionStorage.getItem(key)
+      return saved ? JSON.parse(saved) : defaultValue
+    })
+    useEffect(() => {
+      sessionStorage.setItem(key, JSON.stringify(state))
+    }, [key, state])
+    return [state, setState] as const
+  }
 
   return (
     <div className="gap-2 sm:gap-6 grid grid-cols-2">
@@ -49,9 +60,6 @@ function GraphGrids() {
         endDate={range.endDate}
         className="col-span-1 bg-card/90 dark:bg-card/60"
       />
-
-       {/* Row 4: Savings Goal - Lowest place */}
-       <SavingsGoal className="col-span-2 p-1.5 bg-card/90 dark:bg-card/60" />
     </div>
   )
 }
