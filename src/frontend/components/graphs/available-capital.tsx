@@ -1,6 +1,7 @@
 'use client'
 
-import { Loader2 } from 'lucide-react'
+import { Loader2, Info } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Pie, PieChart, ResponsiveContainer, Cell, Label } from 'recharts'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart'
@@ -237,9 +238,34 @@ export default function CapitalPieChart({ className }: { className?: string }) {
 
   return (
     <Card className={cn('p-1.5', className)}>
-      <CardTitle className="ml-2 text-lg">
-        Verfügbares Kapital (Monat)
-      </CardTitle>
+      <div className="flex items-center justify-between px-2">
+        <CardTitle className="text-lg">
+          Verfügbares Kapital
+        </CardTitle>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className="text-muted-foreground/50 hover:text-foreground transition hover:bg-background/80 mt-1.5"
+              aria-label="Info"
+            >
+              <Info className="w-5 h-5" />
+            </button>
+          </PopoverTrigger>
+
+          <PopoverContent align="end" className="w-72 text-sm">
+            <div className="space-y-1">
+              <div className="font-semibold">Was zeigt dieses Diagramm?</div>
+              <p className="text-muted-foreground">
+                Das aktuell verfügbare Kapital für den laufenden Monat.
+                Es ergibt sich aus dem Kontostand sowie den noch
+                ausstehenden Einnahmen und Ausgaben aus Daueraufträgen.
+              </p>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
 
       <CardContent className="p-0 flex justify-center items-center">
         <ChartContainer

@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react'
 import { Card, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Pencil, Save, Loader2 } from 'lucide-react'
+import { Pencil, Save, Loader2, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { apiClient } from '@/api/api-client'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 function SavingsGoal({ className }: { className?: string }) {
   const queryClient = useQueryClient()
@@ -91,7 +92,7 @@ function SavingsGoal({ className }: { className?: string }) {
         <CardTitle className="ml-2 text-lg">
           Notgroschen
         </CardTitle>
-      <div className="absolute top-3 right-3 z-20">
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
         {isEditing ? (
           <Button
             size="icon"
@@ -116,6 +117,26 @@ function SavingsGoal({ className }: { className?: string }) {
             <Pencil className="h-4 w-4" />
           </Button>
         )}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className="h-8 w-8 flex items-center justify-center hover:bg-background/80 text-muted-foreground/50 hover:text-foreground transition"
+              aria-label="Info"
+            >
+              <Info className="h-5 w-5" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-72 text-sm">
+            <div className="space-y-1">
+              <div className="font-semibold">Notgroschen</div>
+              <p className="text-muted-foreground">
+                Legen Sie fest, welcher Betrag als finanzielle Reserve gelten soll.
+                Dieser Wert dient als Orientierung für Ihren Kontostand.
+              </p>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
       <CardContent className="p-2 h-full flex flex-col items-center justify-center relative z-10">
