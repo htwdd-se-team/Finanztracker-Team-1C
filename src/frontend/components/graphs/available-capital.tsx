@@ -237,17 +237,17 @@ export default function CapitalPieChart({ className }: { className?: string }) {
   }
 
   return (
-    <Card className={cn('p-1.5', className)}>
-      <div className="flex items-center justify-between px-2">
-        <CardTitle className="text-lg">
-          Verfügbares Kapital
-        </CardTitle>
+    <Card className={cn('relative overflow-hidden p-1.5', className)}>
+      <CardTitle className="text-lg ml-2">
+        Verfügbares Kapital
+      </CardTitle>
 
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
         <Popover>
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="text-muted-foreground/50 hover:text-foreground transition hover:bg-background/80 mt-1.5"
+              className="h-8 w-8 flex items-center justify-center text-muted-foreground/50 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50 transition rounded-md"
               aria-label="Info"
             >
               <Info className="w-5 h-5" />

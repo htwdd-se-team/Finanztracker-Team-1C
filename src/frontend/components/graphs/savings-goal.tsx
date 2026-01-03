@@ -92,7 +92,7 @@ function SavingsGoal({ className }: { className?: string }) {
         <CardTitle className="ml-2 text-lg">
           Notgroschen
         </CardTitle>
-      <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
+      <div className="absolute top-2 right-2 z-20 flex items-center">
         {isEditing ? (
           <Button
             size="icon"
@@ -111,7 +111,7 @@ function SavingsGoal({ className }: { className?: string }) {
           <Button
             size="icon"
             variant="ghost"
-            className="h-8 w-8 hover:bg-background/80 text-muted-foreground/50 hover:text-foreground"
+            className="h-8 w-8 text-muted-foreground/50 hover:text-foreground"
             onClick={() => setIsEditing(true)}
           >
             <Pencil className="h-4 w-4" />
@@ -121,7 +121,7 @@ function SavingsGoal({ className }: { className?: string }) {
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="h-8 w-8 flex items-center justify-center hover:bg-background/80 text-muted-foreground/50 hover:text-foreground transition"
+              className="h-8 w-8 flex items-center justify-center text-muted-foreground/50 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50 transition rounded-md"
               aria-label="Info"
             >
               <Info className="h-5 w-5" />
