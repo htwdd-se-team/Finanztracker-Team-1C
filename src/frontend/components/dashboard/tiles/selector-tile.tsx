@@ -80,7 +80,7 @@ export function SelectorTile({
       } else if (type === RangeType.MONTH) {
         start = now.subtract({ days: 30 })
       } else if (type === RangeType.ALL) {
-        start = now.subtract({ days: 365 })
+        start = new CalendarDate(1900, 1, 1)
       } else if (type === RangeType.CUSTOM) {
         start = dateRange.start
         end = dateRange.end

@@ -6,14 +6,14 @@ import BalanceTile from './tiles/balance-tile'
 import DeltaTile from './tiles/delta-tile'
 import HistoryTile from './tiles/history-tile'
 import PieChartTileIcons from './tiles/pie-chart-icons-tile'
-import { today, getLocalTimeZone } from '@internationalized/date'
+import { today, getLocalTimeZone, CalendarDate } from '@internationalized/date'
 
 function GraphGrids() {
   const now = today(getLocalTimeZone())
-  const oneYearAgo = now.subtract({ years: 1 })
+  const past = new CalendarDate(1900, 1, 1)
   const [range, setRange] = useSessionRange('dashboard-range', {
     type: 'all',
-    startDate: oneYearAgo.toString(),
+    startDate: past.toString(),
     endDate: now.toString(),
   })
 
