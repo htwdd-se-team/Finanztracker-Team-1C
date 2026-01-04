@@ -1,5 +1,5 @@
 = Design: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresdsen.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
@@ -8,21 +8,55 @@ include::../_includes/default-attributes.inc.adoc[]
 == Zweck
 Dieses Dokument beschreibt wesentliche Entwurfsentscheidungen auf Ebene der Komponenten und Module. Diese dienen als Vorgabe für die Implementierung und erleichtern das Systemverständnis.
  
-== Ausgewählte Sichten
+== Ausgewählte Sichten (Klassen- & Sequenzdiagramme)
 //Entwurfsklassendiagramme, Sequenzdiagramme
+=== Tasks #161 und #162
+* https://github.com/htwdd-se-team/Finanztracker-Team-1C/issues/161
+* https://github.com/htwdd-se-team/Finanztracker-Team-1C/issues/162
 
-.Beispiel, Sequenzdiagramm
-[plantuml, "{diagramsdir}/example_seq", svg]
+.Klassendiagramm
+[plantuml, "{diagramsdir}/U18_161_162_class", svg]
 ....
-include::{plantumlsdir}/example_seq.puml[]
+include::{plantumlsdir}/U18_161_162_class.puml[]
 ....
 
-// .Beispiel, Klassendiagramm (C4-Level-4)
-// [plantuml, "{diagramsdir}/example_class", svg]
-// ....
-// include::{plantumlsdir}/example_class.puml[]
-//....
-Siehe Datei new_classdiagram.png
+.Sequenzdiagramm
+[plantuml, "{diagramsdir}/U18_161_162_seq", svg]
+....
+include::{plantumlsdir}/U18_161_162_seq.puml[]
+....
+
+=== Tasks #163 und #164
+* https://github.com/htwdd-se-team/Finanztracker-Team-1C/issues/163
+* https://github.com/htwdd-se-team/Finanztracker-Team-1C/issues/164
+
+.Klassendiagramm
+[plantuml, "{diagramsdir}/U20_163_164_class", svg]
+....
+include::{plantumlsdir}/U20_163_164_class.puml[]
+....
+
+.Sequenzdiagramm
+[plantuml, "{diagramsdir}/U20_163_164_seq", svg]
+....
+include::{plantumlsdir}/U20_163_164_seq.puml[]
+....
+
+=== Tasks #165 und #166
+* https://github.com/htwdd-se-team/Finanztracker-Team-1C/issues/165
+* https://github.com/htwdd-se-team/Finanztracker-Team-1C/issues/166
+
+.Klassendiagramm
+[plantuml, "{diagramsdir}/U20_165_166_class", svg]
+....
+include::{plantumlsdir}/U20_165_166_class.puml[]
+....
+
+.Sequenzdiagramm
+[plantuml, "{diagramsdir}/U20_165_166_seq", svg]
+....
+include::{plantumlsdir}/U20_165_166_seq.puml[]
+....
 
 == Schnittstellen
 //Dokumentation oder Verweise auf Schnittstellen, z.B. REST-APIs

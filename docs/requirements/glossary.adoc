@@ -19,7 +19,7 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | Saldo | Aktueller Kontostand | Kontostand
 // | Budget | Vom Nutzer festgelegter Maximalbetrag für Ausgaben in einem Zeitraum/Kategorie | Ausgabenlimit
 // | Sparziel | Definierter Betrag, den der Nutzer ansparen möchte | Zielbetrag
-| Filter | Funktion zur Einschränkung der angezeigten Transaktionen (z. B  nach Kategorie) | Suchfunktion
+| Filter | Funktion zur Einschränkung der angezeigten Transaktionen (z.B. nach Kategorie) | Suchfunktion
 | Authentifizierung | Überprüfung der Identität eines Nutzers beim Login | Anmeldung
 | Export | Ausgabe von Daten (z.B. Transaktionen) in Formate wie CSV oder Excel | Datenausgabe
 | Import | Einlesen von Daten aus externen Quellen (z.B. CSV-Datei) | Upload/Datenimport
@@ -36,6 +36,7 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 // | Benachrichtigung | Hinweis über bestimmte Ereignisse in der App | Alert, Hinweis
 | Notgroschen | Einstellbarer Betrag, welcher immer auf dem Konto zur Verfügung stehen sollte | Notreserve, Rücklage
 | Delta | Unterschied zwischen Einnahmen und Ausgaben über einen bestimmten Zeitraum  | Differenz, Abstand
+| Verfügbares Kapital | Nach Abzug der Fixkosten freiverwendbares Kapital des aktuellen Monats  | Anteil nach Fixkosten, Nettokapital
 |===
 
 
@@ -51,10 +52,12 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 // | UI *(auskommentieren)* | User Interface | Benutzeroberfläche der Anwendung
 // | UX *(auskommentieren)* | User Experience | Nutzererlebnis bei der Bedienung der Anwendung
 // | JWT *(auskommentieren)* | JSON Web Token | Standard für die sichere Übertragung von Authentifizierungsinformationen
-| MVP | Minimum Viable Product | Minimale funktionsfähige Version eine Produkts
+| MVP | Minimum Viable Product | Minimale funktionsfähige Version eines Produkts
 // | IBAN *(auskommentieren)* | International Bank Account Number | Internationale Kontonummer zur eindeutigen Identifikation eines Bankkontos
 // | TAN *(auskommentieren)* | Transaktionsnummer | Einmaliger Code zur Freigabe einer Transaktion
 // | ETF *(auskommentieren)* | Exchange Traded Fund | Börsengehandelter Indexfonds
+| XLSX | Office Open XML Spreadsheet | Excel-Dateiformat; wird im Import-Kontext erwähnt
+| TXT | Textdatei | Standard-Text-Format; wird im Import-Kontext erwähnt
 |===
 
 == Verzeichnis der Datenstrukturen

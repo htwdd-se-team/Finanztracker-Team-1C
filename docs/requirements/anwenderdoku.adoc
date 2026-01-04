@@ -23,6 +23,7 @@ Der Funktionsumfang von {project-system-name} umfasst:
 * *Analysen*: Auswertungen und Diagramme zur Visualisierung der Finanzdaten.
 * *Daueraufträge*: wiederkehrende Transaktionen anzeigen und verwalten.
 * *Datenimport*: Bankdaten importieren, um Transaktionen schneller zu übernehmen.
+* *Farbschema*: Verschiedene Themes für unterschiedliche Geschmäcker.
 
 == Lauffähiges System
 * URL: XXX
@@ -31,16 +32,9 @@ Der Funktionsumfang von {project-system-name} umfasst:
 ** Passwort : XX
 
 == Mobile Setup am Desktop
-Für den nachfolgenden Guide wird ausschließlich die mobile Ansicht aufzeigt, da diese der Fokus des Projektes war. Zusätzlich ist eine Desktop-Ansicht verfügbar, welche sich nur von der Anordnung der Elemente unterscheidet. Für den Testdesktop Aufruf kann auch die mobile Ansicht aktiviert werden mit Rechtem Mausklick den Reiter untersuchen und dann die mobile Aussicht auswählen. In unserem Beispiel wird das für Chrome gezeigt.
+Für den nachfolgenden Guide wird ausschließlich die mobile Ansicht aufzeigt, da diese der Fokus des Projektes war. Zusätzlich ist eine Desktop-Ansicht verfügbar, welche sich nur von der Anordnung der Elemente unterscheidet. Für den Testdesktop Aufruf kann auch die mobile Ansicht aktiviert werden mit Rechtem Mausklick den Reiter untersuchen und dann die mobile Aussicht auswählen. In unserem Beispiel wird dies für Chrome gezeigt.
 
-1. Schritt +
-image:../images/Guide_Mobile1.png[width=200]
-
-2. Schritt +
-image:../images/Guide_Mobile2.png[width=300]
-
-3. Schritt +
-image:../images/Guide_Mobile3.png[width=200]
+image:../images/Guide_Mobile.png[]
 
 == Aufbau der Benutzeroberfläche
 
