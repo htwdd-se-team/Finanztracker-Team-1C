@@ -425,6 +425,18 @@ export class AnalyticsService {
           type,
           value: amount,
         });
+      }
+    }
+
+    const projectedRows = Array.from(aggregatedRows.values());
+
+    // Calculate future incomes and expenses
+    const futureIncomes = projectedRows
+      .filter((r) => r.type === TransactionType.INCOME)
+      .reduce((sum, r) => sum + r.value, 0);
+
+    const futureExpenses = projectedRows
+      .filter((r) => r.type === TransactionType.EXPENSE)
       .reduce((sum, r) => sum + r.value, 0);
 
     // Available Capital = Current Balance + Future Incomes - Future Expenses
