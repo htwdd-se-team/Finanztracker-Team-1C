@@ -120,6 +120,19 @@ export class MaxValueDto {
   maxPrice: number;
 }
 
+export class FirstTransactionDateDto {
+  @ApiProperty({
+    description: "Date of the user's first transaction",
+    example: "2025-01-15",
+    type: String,
+    nullable: true,
+  })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  date: Date | null;
+}
+
 export class AvailableCapitalItemDto {
   @ApiProperty({
     description: "Unique key for this item",

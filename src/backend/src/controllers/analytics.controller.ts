@@ -10,6 +10,7 @@ import {
   TransactionItemDto,
   AvailableCapitalItemDto,
   MaxValueDto,
+  FirstTransactionDateDto,
 } from "../dto";
 import { JwtAuthGuard } from "../guards";
 import { AnalyticsService } from "../services";
@@ -68,5 +69,17 @@ export class AnalyticsController {
     @UserDecorator() user: User,
   ): Promise<AvailableCapitalItemDto[]> {
     return this.analyticsService.getAvailableCapital(user);
+  }
+
+  @Get("first-transaction-date")
+  @ApiOkResponse({
+    type: FirstTransactionDateDto,
+    description: "Date of the user's first transaction",
+  })
+  async getFirstTransactionDate(
+    @UserDecorator() user: User,
+  ): Promise<FirstTransactionDateDto> {
+    const date = await this.analyticsService.getFirstTransactionDate(user);
+    return { date };
   }
 }
