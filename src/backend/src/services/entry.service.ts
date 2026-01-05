@@ -31,6 +31,7 @@ export class EntryService {
         amount: data.amount,
         description: data.description,
         createdAt: data.createdAt,
+        userId: user.id,
       },
     });
     return existingTransaction !== null;
