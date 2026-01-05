@@ -457,7 +457,7 @@ export class AnalyticsService {
         continue;
       }
 
-      if (next > now && next < endDateTime) {
+      if (next >= now && next < endDateTime) {
         const type = raw["type"] as TransactionType;
         const amount = Number(raw["amount"] ?? 0);
         const categoryId =

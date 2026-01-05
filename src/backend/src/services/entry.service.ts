@@ -338,17 +338,17 @@ export class EntryService {
 
   static getOrderByEntry(
     sortBy: EntrySortBy,
-  ): Prisma.TransactionOrderByWithRelationInput {
+  ): Prisma.TransactionOrderByWithRelationInput[] {
     switch (sortBy) {
       case EntrySortBy.CREATED_AT_ASC:
-        return { createdAt: "asc" };
+        return [{ createdAt: "asc" }, { id: "asc" }];
       case EntrySortBy.AMOUNT_ASC:
-        return { amount: "asc" };
+        return [{ amount: "asc" }, { id: "desc" }];
       case EntrySortBy.AMOUNT_DESC:
-        return { amount: "desc" };
+        return [{ amount: "desc" }, { id: "desc" }];
       case EntrySortBy.CREATED_AT_DESC:
       default:
-        return { createdAt: "desc" };
+        return [{ createdAt: "desc" }, { id: "desc" }];
     }
   }
 }
