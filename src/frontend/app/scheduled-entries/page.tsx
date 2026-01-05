@@ -23,13 +23,18 @@ export default function ScheduledEntriesPage() {
     },
   })
 
-  const totalCount = data?.length ?? 0
-  const totalIncome = data
-  ?.filter(e => e.type === 'INCOME')
-  .reduce((sum, e) => sum + e.amount, 0) ?? 0
-  const totalExpense = data
-  ?.filter(e => e.type === 'EXPENSE')
-  .reduce((sum, e) => sum + e.amount, 0) ?? 0
+  const { data: summaryData } = useQuery({
+    queryKey: ['scheduled-entries-summary'],
+    queryFn: async () => {
+      const res =
+        await apiClient.entries.entryControllerGetScheduledEntriesSummary()
+      return res.data
+    },
+  })
+
+  const totalCount = summaryData?.totalCount ?? 0
+  const totalIncome = summaryData?.totalIncome ?? 0
+  const totalExpense = summaryData?.totalExpense ?? 0
 
   const incomeEntries = (data ?? []).filter(e => e.type === 'INCOME')
   const expenseEntries = (data ?? []).filter(e => e.type === 'EXPENSE')
@@ -40,6 +45,7 @@ export default function ScheduledEntriesPage() {
       await apiClient.entries.entryControllerDelete(entryId)
       toast.success('Terminüberweisung gelöscht')
       queryClient.invalidateQueries({ queryKey: ['scheduled-entries'] })
+      queryClient.invalidateQueries({ queryKey: ['scheduled-entries-summary'] })
     } catch {
       toast.error('Fehler beim Löschen der Terminüberweisung')
     }
@@ -59,31 +65,31 @@ export default function ScheduledEntriesPage() {
         </p>
 
         {/* SUMMARY BOX */}
-        <Card className="p-2 h-[70px] mb-4 border bg-card/90 dark:bg-card/60">
-          <CardContent className="p-0 h-full flex items-center">
-            <div className="grid grid-cols-3 gap-3 text-center w-full">
+        <Card className="bg-card/90 dark:bg-card/60 mb-4 p-2 border h-[70px]">
+          <CardContent className="flex items-center p-0 h-full">
+            <div className="gap-3 grid grid-cols-3 w-full text-center">
               {/* Anzahl Daueraufträge */}
               <div>
-                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
                   Daueraufträge
                 </p>
-                <p className="text-lg font-semibold">{totalCount}</p>
+                <p className="font-semibold text-lg">{totalCount}</p>
               </div>
               {/* Einnahmen */}
               <div>
-                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
                   Einnahmen
                 </p>
-                <p className="text-lg font-semibold text-green-600">
+                <p className="font-semibold text-green-600 text-lg">
                   +{(totalIncome / 100).toFixed(2)} €
                 </p>
               </div>
               {/* Ausgaben */}
               <div>
-                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
                   Ausgaben
                 </p>
-                <p className="text-lg font-semibold text-destructive/90">
+                <p className="font-semibold text-destructive/90 text-lg">
                   -{(totalExpense / 100).toFixed(2)} €
                 </p>
               </div>
@@ -100,7 +106,7 @@ export default function ScheduledEntriesPage() {
             <>
               {/* Einnahmen */}
               {incomeEntries.length > 0 && (
-                <span className="block ml-2 mb-1 text-lg text-foreground text-bold ">
+                <span className="block mb-1 ml-2 text-bold text-foreground text-lg">
                   Einnahmen
                 </span>
               )}
@@ -116,9 +122,9 @@ export default function ScheduledEntriesPage() {
 
               {/* Divider */}
               {incomeEntries.length > 0 && expenseEntries.length > 0 && (
-                  <span className="block ml-2 mb-1 text-lg text-foreground text-bold">
-                    Ausgaben
-                  </span>
+                <span className="block mb-1 ml-2 text-bold text-foreground text-lg">
+                  Ausgaben
+                </span>
               )}
 
               {/* Ausgaben */}
