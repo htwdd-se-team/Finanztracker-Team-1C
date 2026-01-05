@@ -52,7 +52,7 @@ export class ImportService {
       transform: (value) => value.trim(),
     });
 
-    // console.log(parsed.data);
+    console.log(parsed.data);
 
     if (parsed.errors.length > 0) {
       throw new BadRequestException(parsed.errors[0].message);

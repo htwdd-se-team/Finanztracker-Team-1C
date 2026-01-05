@@ -22,6 +22,8 @@ import {
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DateRangePicker, Group, Label } from 'react-aria-components'
+import { useQuery } from '@tanstack/react-query'
+import { apiClient } from '@/api/api-client'
 
 enum RangeType {
   WEEK = '7d',
@@ -69,6 +71,15 @@ export function SelectorTile({
     end: today(getLocalTimeZone()),
   })
 
+  const { data: firstTxData } = useQuery({
+    queryKey: ['analytics', 'first-transaction-date'],
+    queryFn: async () => {
+      const res =
+        await apiClient.analytics.analyticsControllerGetFirstTransactionDate()
+      return res.data
+    },
+  })
+
   const computeRange = useCallback(
     (type: RangeType) => {
       const now = today(getLocalTimeZone())
@@ -80,7 +91,16 @@ export function SelectorTile({
       } else if (type === RangeType.MONTH) {
         start = now.subtract({ days: 30 })
       } else if (type === RangeType.ALL) {
-        start = new CalendarDate(1900, 1, 1)
+        if (firstTxData?.date) {
+          const d = new Date(firstTxData.date)
+          start = new CalendarDate(
+            d.getFullYear(),
+            d.getMonth() + 1,
+            d.getDate()
+          )
+        } else {
+          start = new CalendarDate(1900, 1, 1)
+        }
       } else if (type === RangeType.CUSTOM) {
         start = dateRange.start
         end = dateRange.end
@@ -91,47 +111,35 @@ export function SelectorTile({
         endDate: end.toString(),
       })
     },
-    [dateRange, onRangeChange]
+    [dateRange, onRangeChange, firstTxData]
   )
 
   return (
-    <Card className={cn("h-18 p-0", className)}>
-      <CardContent className="p-0 m-0 h-full w-full">
+    <Card className={cn('p-0 h-18', className)}>
+      <CardContent className="m-0 p-0 w-full h-full">
         <Dialog open={showPicker} onOpenChange={setShowPicker}>
           <Tabs
             value={value}
-            onValueChange={(v) => {
+            onValueChange={v => {
               if (v === RangeType.CUSTOM) {
-                setShowPicker(true);
+                setShowPicker(true)
               } else {
-                computeRange(v as RangeType);
+                computeRange(v as RangeType)
               }
             }}
-            className="h-full w-full"
+            className="w-full h-full"
           >
-            <TabsList className="grid grid-cols-2 grid-rows-2 w-full h-full p-0 bg-transparent rounded-none flex-none">
-              <TabsTrigger
-                value={RangeType.WEEK}
-                className={tabTriggerClass}
-              >
+            <TabsList className="flex-none grid grid-cols-2 grid-rows-2 bg-transparent p-0 rounded-none w-full h-full">
+              <TabsTrigger value={RangeType.WEEK} className={tabTriggerClass}>
                 Woche
               </TabsTrigger>
-              <TabsTrigger
-                value={RangeType.MONTH}
-                className={tabTriggerClass}
-              >
+              <TabsTrigger value={RangeType.MONTH} className={tabTriggerClass}>
                 Monat
               </TabsTrigger>
-              <TabsTrigger
-                value={RangeType.CUSTOM}
-                className={tabTriggerClass}
-              >
+              <TabsTrigger value={RangeType.CUSTOM} className={tabTriggerClass}>
                 Auswahl
               </TabsTrigger>
-              <TabsTrigger
-                value={RangeType.ALL}
-                className={tabTriggerClass}
-              >
+              <TabsTrigger value={RangeType.ALL} className={tabTriggerClass}>
                 Gesamt
               </TabsTrigger>
             </TabsList>

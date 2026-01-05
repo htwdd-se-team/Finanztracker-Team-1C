@@ -155,7 +155,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2026-01-05T11:31:02.615Z"
+   * @example "2026-01-05T13:08:28.734Z"
    */
   createdAt: string;
   /**
@@ -635,6 +635,14 @@ export interface ApiAvailableCapitalItemDto {
    * @example "INCOME"
    */
   type: ApiAvailableCapitalItemDtoTypeEnum;
+}
+
+export interface ApiFirstTransactionDateDto {
+  /**
+   * Date of the user's first transaction
+   * @example "2025-01-15"
+   */
+  date: string | null;
 }
 
 /**
@@ -1520,6 +1528,23 @@ export class Api<
     analyticsControllerGetAvailableCapital: (params: RequestParams = {}) =>
       this.request<ApiAvailableCapitalItemDto[], any>({
         path: `/analytics/available-capital`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags analytics
+     * @name AnalyticsControllerGetFirstTransactionDate
+     * @request GET:/analytics/first-transaction-date
+     * @secure
+     */
+    analyticsControllerGetFirstTransactionDate: (params: RequestParams = {}) =>
+      this.request<ApiFirstTransactionDateDto, any>({
+        path: `/analytics/first-transaction-date`,
         method: "GET",
         secure: true,
         format: "json",
