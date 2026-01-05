@@ -40,15 +40,9 @@ export class EntryService {
     user: User,
     data: CreateEntryDto,
   ): Promise<EntryResponseDto> {
-    // If only date is provided (no specific time), use current time
-    // This ensures newer entries appear at the top when sorting by createdAt
-    const createdAt = data.createdAt;
-    const isDateOnly =
-      createdAt &&
-      createdAt.getHours() === 0 &&
-      createdAt.getMinutes() === 0 &&
-      createdAt.getSeconds() === 0;
-    const finalCreatedAt = !createdAt || isDateOnly ? new Date() : createdAt;
+    // If createdAt is not provided, use current time
+    // Secondary ID sorting ensures newest entries appear at top
+    const finalCreatedAt = data.createdAt || new Date();
 
     // recurring entry
     if (data.isRecurring) {

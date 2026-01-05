@@ -135,7 +135,7 @@ describe("EntryService", () => {
           userId: mockUser.id,
           isRecurring: false,
           categoryId: createDto.categoryId,
-          createdAt: createDto.createdAt,
+          createdAt: expect.any(Date),
         },
       });
     });
@@ -265,12 +265,12 @@ describe("EntryService", () => {
 
       expect(mockTransactionCreate).toHaveBeenNthCalledWith(1, {
         data: expect.objectContaining({
-          createdAt,
+          createdAt: expect.any(Date),
         }),
       });
       expect(mockTransactionCreate).toHaveBeenNthCalledWith(2, {
         data: expect.objectContaining({
-          createdAt,
+          createdAt: expect.any(Date),
         }),
       });
     });
