@@ -45,11 +45,13 @@ export function EntryList({
       <li className="py-8 text-muted-foreground text-center">
         <div className="space-y-4">
           <div>Keine Einträge gefunden</div>
-          <div>
-            <DataImportDialog>
-              <Button>Bankdaten importieren</Button>
-            </DataImportDialog>
-          </div>
+          {!isRecurringView && (
+            <div>
+              <DataImportDialog>
+                <Button>Bankdaten importieren</Button>
+              </DataImportDialog>
+            </div>
+          )}
         </div>
       </li>
     )

@@ -153,6 +153,21 @@ export default function PieChartTileIcons({
     )
   }
 
+  // Empty state placeholder
+  if (data.length === 0) {
+    return (
+      <Card className={cn('p-1.5', className)}>
+        <CardTitle className="flex items-center gap-1 -mb-5 font-medium">
+          <PieChartIcon className="w-4 h-4 shrink-0" />
+          Kategorien
+        </CardTitle>
+        <CardContent className="flex flex-1 justify-center items-center m-0 p-0 w-full h-full min-h-[200px]">
+          <p className="text-muted-foreground text-sm">Keine Daten verfügbar</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
   const renderCustomizedLabel = ({
     cx,
     cy,
