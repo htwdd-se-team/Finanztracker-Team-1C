@@ -258,6 +258,119 @@ export class RecurringEntryService {
   }
 
   /**
+   * Handle parent entry update:
+   * 1. Updates future child entries with new field values (categoryId, amount, description, type)
+   * 2. Generates a new child entry if the createdAt date changed and deletes the old one
+   */
+  async handleParentEntryUpdate(
+    parentId: number,
+    oldCreatedAt: Date,
+    newCreatedAt: Date,
+    updateData: Record<string, unknown>,
+  ): Promise<void> {
+    const parent = await this.prisma.transaction.findUnique({
+      where: { id: parentId },
+    });
+
+    if (!parent || !parent.isRecurring) {
+      return;
+    }
+
+    const todayStart = DateTime.now().startOf("day");
+
+    // Update future child entries with new field values
+    // These are fields that should propagate to children
+    const fieldsToPropagate = ["categoryId", "amount", "description", "type"];
+    const propagateData: Record<string, unknown> = {};
+
+    for (const field of fieldsToPropagate) {
+      if (field in updateData) {
+        propagateData[field] = updateData[field];
+      }
+    }
+
+    if (Object.keys(propagateData).length > 0) {
+      // Update all future children with new field values
+      await this.prisma.transaction.updateMany({
+        where: {
+          transactionId: parentId,
+          createdAt: {
+            gte: todayStart.toJSDate(),
+          },
+        },
+        data: propagateData,
+      });
+
+      this.logger.debug(
+        `Updated future child entries for parent ${parentId} with new field values`,
+      );
+    }
+
+    // Handle createdAt change (date update)
+    if (oldCreatedAt.getTime() !== newCreatedAt.getTime()) {
+      const oldChild = await this.prisma.transaction.findFirst({
+        where: {
+          transactionId: parentId,
+          createdAt: {
+            gte: DateTime.fromJSDate(oldCreatedAt).startOf("day").toJSDate(),
+            lt: DateTime.fromJSDate(oldCreatedAt)
+              .plus({ days: 1 })
+              .startOf("day")
+              .toJSDate(),
+          },
+        },
+      });
+
+      // Delete old child entry if it exists (whether past or future)
+      // This ensures consistency: if the date changes, we want only the new child
+      if (oldChild) {
+        await this.prisma.transaction.delete({
+          where: { id: oldChild.id },
+        });
+
+        this.logger.debug(
+          `Deleted child entry ${oldChild.id} for parent ${parentId} (date changed)`,
+        );
+      }
+
+      // Check if a child already exists for the new date
+      const existingChild = await this.prisma.transaction.findFirst({
+        where: {
+          transactionId: parentId,
+          createdAt: {
+            gte: DateTime.fromJSDate(newCreatedAt).startOf("day").toJSDate(),
+            lt: DateTime.fromJSDate(newCreatedAt)
+              .plus({ days: 1 })
+              .startOf("day")
+              .toJSDate(),
+          },
+        },
+      });
+
+      // If no child exists for the new date, create one
+      if (!existingChild) {
+        await this.prisma.transaction.create({
+          data: {
+            type: parent.type,
+            amount: parent.amount,
+            description: parent.description,
+            currency: parent.currency,
+            userId: parent.userId,
+            isRecurring: false,
+            categoryId: parent.categoryId,
+            createdAt: newCreatedAt,
+            transactionId: parentId,
+          },
+        });
+
+        this.logger.debug(
+          `Created child entry for parent ${parentId} on new date`,
+        );
+      }
+    }
+  }
+
+  /**
    * Re-enable a disabled recurring entry
    */
   async enableRecurringEntry(

@@ -40,6 +40,10 @@ export class EntryService {
     user: User,
     data: CreateEntryDto,
   ): Promise<EntryResponseDto> {
+    // If createdAt is not provided, use current time
+    // Secondary ID sorting ensures newest entries appear at top
+    const finalCreatedAt = data.createdAt || new Date();
+
     // recurring entry
     if (data.isRecurring) {
       // shadow element
@@ -52,7 +56,7 @@ export class EntryService {
           userId: user.id,
           isRecurring: true,
           categoryId: data.categoryId,
-          createdAt: data.createdAt,
+          createdAt: finalCreatedAt,
           recurringType: data.recurringType,
           recurringBaseInterval: data.recurringBaseInterval ?? 1,
           recurringDisabled: false,
@@ -69,7 +73,7 @@ export class EntryService {
           userId: user.id,
           isRecurring: false,
           categoryId: data.categoryId,
-          createdAt: data.createdAt,
+          createdAt: finalCreatedAt,
           transactionId: parentEntry.id,
         },
       });
@@ -87,7 +91,7 @@ export class EntryService {
         userId: user.id,
         isRecurring: false,
         categoryId: data.categoryId,
-        createdAt: data.createdAt,
+        createdAt: finalCreatedAt,
       },
     });
 
@@ -277,6 +281,9 @@ export class EntryService {
       );
     }
 
+    // Store old createdAt for recurring entries
+    const oldCreatedAt = checkEntry.createdAt;
+
     await this.prisma.transaction.updateMany({
       where: {
         id: entryId,
@@ -291,6 +298,17 @@ export class EntryService {
 
     if (!entry) {
       throw new NotFoundException("Entry not found after update");
+    }
+
+    // If this is a parent recurring entry and fields changed, update future children
+    if (entry.isRecurring && !entry.transactionId) {
+      // Always propagate field changes to future children
+      await this.recurringEntryService.handleParentEntryUpdate(
+        entry.id,
+        oldCreatedAt,
+        data.createdAt || oldCreatedAt,
+        data as Record<string, unknown>,
+      );
     }
 
     return EntryService.mapEntryToResponseDto(entry);
@@ -315,17 +333,17 @@ export class EntryService {
 
   static getOrderByEntry(
     sortBy: EntrySortBy,
-  ): Prisma.TransactionOrderByWithRelationInput {
+  ): Prisma.TransactionOrderByWithRelationInput[] {
     switch (sortBy) {
       case EntrySortBy.CREATED_AT_ASC:
-        return { createdAt: "asc" };
+        return [{ createdAt: "asc" }, { id: "asc" }];
       case EntrySortBy.AMOUNT_ASC:
-        return { amount: "asc" };
+        return [{ amount: "asc" }, { id: "desc" }];
       case EntrySortBy.AMOUNT_DESC:
-        return { amount: "desc" };
+        return [{ amount: "desc" }, { id: "desc" }];
       case EntrySortBy.CREATED_AT_DESC:
       default:
-        return { createdAt: "desc" };
+        return [{ createdAt: "desc" }, { id: "desc" }];
     }
   }
 }

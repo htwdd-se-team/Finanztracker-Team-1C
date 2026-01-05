@@ -1,5 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { User, TransactionType } from "@prisma/client";
+import {
+  User,
+  TransactionType,
+  RecurringTransactionType,
+} from "@prisma/client";
 import { sql } from "kysely";
 import { DateTime } from "luxon";
 
@@ -303,6 +307,8 @@ export class AnalyticsService {
     const now = DateTime.now();
     const end = now.plus({ months: 1 }).startOf("month").toJSDate();
 
+    const endDateTime = DateTime.fromJSDate(end);
+
     // Current balance (sum of incomes - sum of expenses) using a single Kysely aggregate
     const aggRaw = await this.kysely
       .selectFrom("Transaction")
@@ -389,12 +395,96 @@ export class AnalyticsService {
       };
     });
 
+    // ---------------------------
+    // Recurring parents projection (future occurrences without existing child)
+    // ---------------------------
+    const parentsRaw = await this.kysely
+      .selectFrom("Transaction")
+      .leftJoin("Category", "Category.id", "Transaction.categoryId")
+      .select((eb) => [
+        eb.ref("Transaction.id").as("parentId"),
+        eb.ref("Transaction.createdAt").as("createdAt"),
+        eb.ref("Transaction.recurringType").as("recurringType"),
+        eb.ref("Transaction.recurringBaseInterval").as("recurringBaseInterval"),
+        eb.ref("Transaction.amount").as("amount"),
+        eb.ref("Transaction.type").as("type"),
+        eb.ref("Transaction.categoryId").as("categoryId"),
+        eb.ref("Category.name").as("categoryName"),
+        eb.ref("Category.icon").as("categoryIcon"),
+      ])
+      .where("Transaction.userId", "=", user.id)
+      .where("Transaction.isRecurring", "=", true)
+      .where("Transaction.recurringDisabled", "=", false)
+      .where(sql<boolean>`"Transaction"."transactionId" IS NULL`)
+      .execute();
+
+    // Helper to add/aggregate rows by category & type
+    const aggregatedRows = new Map<string, ScheduledCategoryRow>();
+    const addRow = (row: ScheduledCategoryRow) => {
+      const key = `${row.categoryId ?? "uncategorized"}|${row.type}`;
+      const existing = aggregatedRows.get(key);
+      if (existing) {
+        existing.value += row.value;
+      } else {
+        aggregatedRows.set(key, { ...row });
+      }
+    };
+
+    // Add existing child rows first
+    for (const r of rows) {
+      addRow(r);
+    }
+
+    // Project parents whose next occurrence is within current month and in the future
+    for (const raw of parentsRaw as Record<string, unknown>[]) {
+      const recurringType = raw[
+        "recurringType"
+      ] as RecurringTransactionType | null;
+      const baseInterval = Number(raw["recurringBaseInterval"] ?? 1);
+      const createdAt = new Date(raw["createdAt"] as string);
+      if (!recurringType) {
+        continue;
+      }
+
+      const next = this.getNextOccurrence(
+        DateTime.fromJSDate(createdAt),
+        recurringType,
+        baseInterval,
+        now,
+      );
+
+      if (!next) {
+        continue;
+      }
+
+      if (next >= now && next < endDateTime) {
+        const type = raw["type"] as TransactionType;
+        const amount = Number(raw["amount"] ?? 0);
+        const categoryId =
+          raw["categoryId"] == null ? null : Number(raw["categoryId"]);
+        const categoryName =
+          typeof raw["categoryName"] === "string" ? raw["categoryName"] : null;
+        const categoryIcon =
+          typeof raw["categoryIcon"] === "string" ? raw["categoryIcon"] : null;
+
+        addRow({
+          categoryId,
+          categoryName,
+          categoryIcon,
+          type,
+          value: amount,
+        });
+      }
+    }
+
+    const projectedRows = Array.from(aggregatedRows.values());
+
     // Calculate future incomes and expenses
-    const futureIncomes = rows
+    const futureIncomes = projectedRows
       .filter((r) => r.type === TransactionType.INCOME)
       .reduce((sum, r) => sum + r.value, 0);
 
-    const futureExpenses = rows
+    const futureExpenses = projectedRows
       .filter((r) => r.type === TransactionType.EXPENSE)
       .reduce((sum, r) => sum + r.value, 0);
 
@@ -414,7 +504,9 @@ export class AnalyticsService {
     });
 
     // Add individual INCOME categories (split by category)
-    for (const r of rows.filter((r) => r.type === TransactionType.INCOME)) {
+    for (const r of projectedRows.filter(
+      (r) => r.type === TransactionType.INCOME,
+    )) {
       const value = r.value ?? 0;
       const categoryId = r.categoryId ?? null;
       items.push({
@@ -427,7 +519,9 @@ export class AnalyticsService {
     }
 
     // Add individual EXPENSE categories (split by category)
-    for (const r of rows.filter((r) => r.type === TransactionType.EXPENSE)) {
+    for (const r of projectedRows.filter(
+      (r) => r.type === TransactionType.EXPENSE,
+    )) {
       const value = r.value ?? 0;
       const categoryId = r.categoryId ?? null;
       items.push({
@@ -440,5 +534,34 @@ export class AnalyticsService {
     }
 
     return items;
+  }
+
+  /**
+   * Compute next occurrence of a recurring entry that is >= now.
+   */
+  private getNextOccurrence(
+    start: DateTime,
+    recurringType: RecurringTransactionType,
+    interval: number,
+    now: DateTime,
+  ): DateTime | null {
+    if (interval <= 0) interval = 1;
+
+    const clampToFuture = (unit: "days" | "weeks" | "months"): DateTime => {
+      if (now <= start) return start;
+      const diff = Math.floor(now.diff(start, unit).as(unit) / interval) + 1;
+      return start.plus({ [unit]: diff * interval } as Record<string, number>);
+    };
+
+    switch (recurringType) {
+      case RecurringTransactionType.DAILY:
+        return clampToFuture("days");
+      case RecurringTransactionType.WEEKLY:
+        return clampToFuture("weeks");
+      case RecurringTransactionType.MONTHLY:
+        return clampToFuture("months");
+      default:
+        return null;
+    }
   }
 }
