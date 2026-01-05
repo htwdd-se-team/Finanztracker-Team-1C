@@ -155,7 +155,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-12-15T17:32:44.358Z"
+   * @example "2026-01-05T11:31:02.615Z"
    */
   createdAt: string;
   /**
@@ -353,6 +353,24 @@ export interface ApiScheduledEntriesResponseDto {
    * @example 10
    */
   count: number;
+}
+
+export interface ApiScheduledEntriesSummaryDto {
+  /**
+   * Total number of scheduled entries
+   * @example 15
+   */
+  totalCount: number;
+  /**
+   * Total income amount in cents
+   * @example 50000
+   */
+  totalIncome: number;
+  /**
+   * Total expense amount in cents
+   * @example 30000
+   */
+  totalExpense: number;
 }
 
 export interface ApiScheduledMonthlyTotalDto {
@@ -1128,6 +1146,34 @@ export class Api<
     ) =>
       this.request<ApiScheduledEntriesResponseDto, void>({
         path: `/entries/scheduled-entries/list`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Entry
+     * @name EntryControllerGetScheduledEntriesSummary
+     * @summary Get summary statistics for all scheduled entries
+     * @request GET:/entries/scheduled-entries/summary
+     * @secure
+     */
+    entryControllerGetScheduledEntriesSummary: (
+      query?: {
+        /**
+         * Filter by disabled status. If not provided, returns all active entries.
+         * @example "false"
+         */
+        disabled?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiScheduledEntriesSummaryDto, any>({
+        path: `/entries/scheduled-entries/summary`,
         method: "GET",
         query: query,
         secure: true,

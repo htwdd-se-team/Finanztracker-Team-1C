@@ -8,6 +8,7 @@ import {
   EntryResponseDto,
   ScheduledEntriesParamsDto,
   ScheduledEntriesResponseDto,
+  ScheduledEntriesSummaryDto,
   ScheduledMonthlyTotalsResponseDto,
 } from "@/dto";
 
@@ -164,6 +165,39 @@ export class RecurringEntryService {
       count: entries.length,
       cursorId:
         entries.length === take ? entries[entries.length - 1]?.id : null,
+    };
+  }
+
+  async getScheduledEntriesSummary(
+    userId: number,
+    disabled?: boolean,
+  ): Promise<ScheduledEntriesSummaryDto> {
+    // Build query to calculate totals directly in the database
+    let query = this.kysely
+      .selectFrom("Transaction")
+      .select([
+        sql<number>`COUNT(*)::int`.as("totalCount"),
+        sql<number>`
+          COALESCE(SUM(CASE WHEN "type" = 'INCOME' THEN "amount" ELSE 0 END), 0)
+        `.as("totalIncome"),
+        sql<number>`
+          COALESCE(SUM(CASE WHEN "type" = 'EXPENSE' THEN "amount" ELSE 0 END), 0)
+        `.as("totalExpense"),
+      ])
+      .where("userId", "=", userId)
+      .where("isRecurring", "=", true);
+
+    // Apply disabled filter if provided
+    if (disabled !== undefined) {
+      query = query.where("recurringDisabled", "=", Boolean(disabled));
+    }
+
+    const result = await query.executeTakeFirstOrThrow();
+
+    return {
+      totalCount: Number(result.totalCount) || 0,
+      totalIncome: Number(result.totalIncome) || 0,
+      totalExpense: Number(result.totalExpense) || 0,
     };
   }
 

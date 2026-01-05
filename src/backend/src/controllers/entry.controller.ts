@@ -33,6 +33,8 @@ import {
   EntryResponseDto,
   ScheduledEntriesParamsDto,
   ScheduledEntriesResponseDto,
+  ScheduledEntriesSummaryDto,
+  ScheduledEntriesSummaryParamsDto,
   ScheduledMonthlyParamsDto,
   ScheduledMonthlyTotalsResponseDto,
   UpdateEntryDto,
@@ -140,6 +142,24 @@ export class EntryController {
     return await this.recurringEntryService.getScheduledEntries(
       user.id,
       params,
+    );
+  }
+
+  /**
+   * Get summary statistics for all scheduled entries
+   */
+  @Get("scheduled-entries/summary")
+  @ApiOkResponse({
+    type: ScheduledEntriesSummaryDto as Type<ScheduledEntriesSummaryDto>,
+    description: "Scheduled entries summary fetched successfully",
+  })
+  async getScheduledEntriesSummary(
+    @UserDecorator() user: User,
+    @Query() { disabled }: ScheduledEntriesSummaryParamsDto,
+  ): Promise<ScheduledEntriesSummaryDto> {
+    return await this.recurringEntryService.getScheduledEntriesSummary(
+      user.id,
+      disabled,
     );
   }
 

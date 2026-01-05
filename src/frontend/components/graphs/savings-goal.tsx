@@ -9,7 +9,12 @@ import { cn } from '@/lib/utils'
 import { apiClient } from '@/api/api-client'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { MeshGradient } from '@paper-design/shaders-react'
 
 function SavingsGoal({ className }: { className?: string }) {
   const queryClient = useQueryClient()
@@ -20,7 +25,7 @@ function SavingsGoal({ className }: { className?: string }) {
   const { data, isLoading } = useQuery({
     queryKey: ['transactions', 'balance'],
     queryFn: apiClient.user.userControllerGetBalance,
-    select: (res) => res.data,
+    select: res => res.data,
   })
 
   // Update emergency reserve mutation
@@ -57,8 +62,13 @@ function SavingsGoal({ className }: { className?: string }) {
 
   if (isLoading || !data) {
     return (
-      <Card className={cn('h-full min-h-[160px] flex items-center justify-center', className)}>
-        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      <Card
+        className={cn(
+          'flex justify-center items-center h-full min-h-[160px]',
+          className
+        )}
+      >
+        <Loader2 className="w-6 h-6 text-muted-foreground animate-spin" />
       </Card>
     )
   }
@@ -66,18 +76,26 @@ function SavingsGoal({ className }: { className?: string }) {
   // Calculate percentages
   const currentAmount = data.balance
   const targetAmount = data.emergencyReserve || 1 // Avoid division by zero
-  const fillPercentage = Math.min(Math.max((currentAmount / targetAmount) * 100, 0), 100)
+  const fillPercentage = Math.min(
+    Math.max((currentAmount / targetAmount) * 100, 0),
+    100
+  )
 
   // Dynamic color based on progress (red -> yellow -> green/primary)
-  let fillColor = 'bg-red-500/20'
   let textColor = 'text-destructive/90'
+  let meshColors: [string, string, string, string] = [
+    '#ef4444',
+    '#dc2626',
+    '#f87171',
+    '#b91c1c',
+  ]
 
   if (fillPercentage >= 100) {
-    fillColor = 'bg-primary/20'
     textColor = 'text-primary'
+    meshColors = ['#22c55e', '#16a34a', '#4ade80', '#15803d']
   } else if (fillPercentage >= 50) {
-    fillColor = 'bg-yellow-500/20'
     textColor = 'text-yellow-600 dark:text-yellow-400'
+    meshColors = ['#eab308', '#facc15', '#ca8a04', '#fde047']
   }
 
   const formatCurrency = (cents: number) =>
@@ -88,113 +106,123 @@ function SavingsGoal({ className }: { className?: string }) {
     })
 
   return (
-    <Card className={cn('relative overflow-hidden p-1.5', className)}>
-        <CardTitle className="ml-2 text-lg">
-          Notgroschen
-        </CardTitle>
-      <div className="absolute top-2 right-2 z-20 flex items-center">
+    <Card className={cn('relative p-1.5 overflow-hidden', className)}>
+      <CardTitle className="ml-2 text-lg">Notgroschen</CardTitle>
+      <div className="top-2 right-2 z-20 absolute flex items-center">
         {isEditing ? (
           <Button
             size="icon"
             variant="ghost"
-            className="h-8 w-8 hover:bg-background/80"
+            className="hover:bg-background/80 w-8 h-8"
             onClick={handleSave}
             disabled={mutation.isPending}
           >
             {mutation.isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <Save className="h-4 w-4" />
+              <Save className="w-4 h-4" />
             )}
           </Button>
         ) : (
           <Button
             size="icon"
             variant="ghost"
-            className="h-8 w-8 text-muted-foreground/50 hover:text-foreground"
+            className="w-8 h-8 text-muted-foreground/50 hover:text-foreground"
             onClick={() => setIsEditing(true)}
           >
-            <Pencil className="h-4 w-4" />
+            <Pencil className="w-4 h-4" />
           </Button>
         )}
         <Popover>
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="h-8 w-8 flex items-center justify-center text-muted-foreground/50 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50 transition rounded-md"
+              className="flex justify-center items-center hover:bg-accent dark:hover:bg-accent/50 rounded-md w-8 h-8 text-muted-foreground/50 hover:text-foreground transition"
               aria-label="Info"
             >
-              <Info className="h-5 w-5" />
+              <Info className="w-5 h-5" />
             </button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-72 text-sm">
             <div className="space-y-1">
               <div className="font-semibold">Notgroschen</div>
               <p className="text-muted-foreground">
-                Legen Sie fest, welcher Betrag als finanzielle Reserve gelten soll.
-                Dieser Wert dient als Orientierung für Ihren Kontostand.
+                Legen Sie fest, welcher Betrag als finanzielle Reserve gelten
+                soll. Dieser Wert dient als Orientierung für Ihren Kontostand.
               </p>
             </div>
           </PopoverContent>
         </Popover>
       </div>
 
-      <CardContent className="p-2 h-full flex flex-col items-center justify-center relative z-10">
+      <CardContent className="z-10 relative flex flex-col justify-center items-center p-2 h-full">
         {/* Main circular visualization */}
-        <div className="relative w-72 h-72 -mt-6">
-            {/* Outer ring */}
-            <div className="absolute inset-0 rounded-full border-4 border-muted/60" />
+        <div className="relative -mt-6 w-72 h-72">
+          {/* Outer ring */}
+          <div className="absolute inset-0 border-4 border-muted/60 rounded-full" />
 
-            {/* Inner fill container */}
-            <div className="absolute inset-2 rounded-full overflow-hidden bg-background/50 backdrop-blur-[2px]">
-                {/* Liquid Fill */}
-                <div
-                    className={cn(
-                        "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out",
-                        fillColor
-                    )}
-                    style={{ height: `${fillPercentage}%` }}
-                >
-                  {/* Wave effect */ }
-                  <div className="absolute -top-6 w-[200%] h-12 left-0 animate-wave"
-                       style={{
-                         backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDQwIDMyMCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIwLjIiIGQ9Ik0wLDk2TDQ4LDExMi4yQzk2LDEyOCwxOTIsMTYwLDI4OCwxNjBDMzg0LDE2MCw0ODAsMTI4LDU3NiwxMTJDNjcyLDk2LDc2OCw5Niw4NjQsMTEyQzk2MCwxMjgsMTA1NiwxNjAsMTE1MiwxNjBDMTI0OCwxNjAsMTM0NCwxMjgsMTM5MiwxMTJMMTQ0MCw5NkwxNDQwLDMyMEwxMzkyLDMyMEMxMzQ0LDMyMCwxMjQ4LDMyMCwxMTUyLDMyMEMxMDU2LDMyMCw5NjAsMzIwLDg2NCwzMjBDNzY4LDMyMCw2NzIsMzIwLDU3NiwzMjBDNDgwLDMyMCwzODQsMzIwLDI4OCwzMjBDMTkyLDMyMCw5NiwzMjAsNDgsMzIwTDAsMzIwWiI+PC9wYXRoPjwvc3ZnPg==')",
-                         backgroundRepeat: 'repeat-x',
-                         backgroundSize: '50% 100%'
-                       }}
-                  />
-                </div>
+          {/* Inner fill container */}
+          <div className="absolute inset-2 bg-background/50 backdrop-blur-[2px] rounded-full overflow-hidden">
+            {/* Liquid Fill with MeshGradient - soft gradient fade at top */}
+            <div
+              className="right-0 bottom-0 left-0 absolute transition-all duration-1000 ease-out"
+              style={{
+                height: `${fillPercentage}%`,
+                maskImage:
+                  'linear-gradient(to bottom, transparent 0%, black 15%, black 100%)',
+                WebkitMaskImage:
+                  'linear-gradient(to bottom, transparent 0%, black 15%, black 100%)',
+              }}
+            >
+              <MeshGradient
+                colors={meshColors}
+                distortion={0.5}
+                swirl={0.6}
+                speed={0.5}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  position: 'absolute',
+                  inset: 0,
+                  opacity: 0.7,
+                }}
+              />
             </div>
+          </div>
 
-            {/* Content Overlay */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+          {/* Content Overlay */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center p-4 text-center">
+            {isEditing ? (
+              <div className="flex justify-center items-center w-32">
+                <Input
+                  value={editValue}
+                  onChange={e => setEditValue(e.target.value)}
+                  className="bg-background/80 backdrop-blur h-8 font-bold text-lg text-center"
+                  placeholder="0.00"
+                  autoFocus
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <span className="font-bold text-3xl sm:text-4xl tracking-tight">
+                  {formatCurrency(currentAmount)}
+                </span>
+                <div className="my-2 bg-border w-12 h-px" />
+                <span className="font-medium text-foreground/80 text-sm">
+                  Ziel: {formatCurrency(targetAmount)}
+                </span>
+              </div>
+            )}
 
-                {isEditing ? (
-                    <div className="flex items-center justify-center w-32">
-                        <Input
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            className="h-8 text-center text-lg font-bold bg-background/80 backdrop-blur"
-                            placeholder="0.00"
-                            autoFocus
-                        />
-                    </div>
-                ) : (
-                    <div className="flex flex-col items-center">
-                        <span className="text-3xl sm:text-4xl font-bold tracking-tight">
-                            {formatCurrency(currentAmount)}
-                        </span>
-                        <div className="h-px w-12 bg-border my-2" />
-                        <span className="text-sm text-foreground/80 font-medium">
-                            Ziel: {formatCurrency(targetAmount)}
-                        </span>
-                    </div>
-                )}
-
-                <div className={cn("mt-2 text-xs font-bold px-2 py-0.5 rounded-full bg-background/60 backdrop-blur-sm border shadow-sm", textColor)}>
-                    {Math.round(fillPercentage)}% Erreicht
-                </div>
+            <div
+              className={cn(
+                'bg-background/60 shadow-sm backdrop-blur-sm mt-2 px-2 py-0.5 border rounded-full font-bold text-xs',
+                textColor
+              )}
+            >
+              {Math.round(fillPercentage)}% Erreicht
             </div>
+          </div>
         </div>
       </CardContent>
     </Card>
