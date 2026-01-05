@@ -48,4 +48,3 @@ declare module "papaparse" {
     config?: ParseConfig<T>,
   ): ParseResult<T>;
 }
-

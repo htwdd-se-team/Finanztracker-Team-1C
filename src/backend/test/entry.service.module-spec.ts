@@ -332,7 +332,7 @@ describe("EntryService", () => {
           NOT: { isRecurring: true },
         }),
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
     });
 
@@ -355,7 +355,7 @@ describe("EntryService", () => {
           },
         }),
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
     });
 
@@ -374,7 +374,7 @@ describe("EntryService", () => {
           type: TransactionType.INCOME,
         }),
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
     });
 
@@ -393,7 +393,7 @@ describe("EntryService", () => {
           categoryId: { in: [1, 2, 3] },
         }),
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
     });
 
@@ -411,7 +411,7 @@ describe("EntryService", () => {
           NOT: { isRecurring: true },
         }),
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
     });
 
@@ -506,7 +506,7 @@ describe("EntryService", () => {
           },
         }),
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
     });
 
@@ -531,7 +531,7 @@ describe("EntryService", () => {
         cursor: { id: 5 },
         skip: 1,
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
     });
 
@@ -580,19 +580,19 @@ describe("EntryService", () => {
       const testCases = [
         {
           sortOption: FilterSortOption.HIGHEST_AMOUNT,
-          expectedOrderBy: { amount: "desc" },
+          expectedOrderBy: [{ amount: "desc" }, { id: "desc" }],
         },
         {
           sortOption: FilterSortOption.LOWEST_AMOUNT,
-          expectedOrderBy: { amount: "asc" },
+          expectedOrderBy: [{ amount: "asc" }, { id: "desc" }],
         },
         {
           sortOption: FilterSortOption.NEWEST_FIRST,
-          expectedOrderBy: { createdAt: "desc" },
+          expectedOrderBy: [{ createdAt: "desc" }, { id: "desc" }],
         },
         {
           sortOption: FilterSortOption.OLDEST_FIRST,
-          expectedOrderBy: { createdAt: "asc" },
+          expectedOrderBy: [{ createdAt: "asc" }, { id: "asc" }],
         },
       ];
 
@@ -635,7 +635,7 @@ describe("EntryService", () => {
       expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.any(Object),
         take: 10,
-        orderBy: { createdAt: "asc" },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
       });
     });
 
@@ -652,7 +652,7 @@ describe("EntryService", () => {
       expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.any(Object),
         take: 10,
-        orderBy: { amount: "asc" },
+        orderBy: [{ amount: "asc" }, { id: "desc" }],
       });
     });
 
@@ -669,7 +669,7 @@ describe("EntryService", () => {
       expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.any(Object),
         take: 10,
-        orderBy: { amount: "desc" },
+        orderBy: [{ amount: "desc" }, { id: "desc" }],
       });
     });
   });

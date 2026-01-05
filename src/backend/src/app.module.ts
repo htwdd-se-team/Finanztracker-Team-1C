@@ -49,7 +49,7 @@ import { JwtStrategy } from "./strategies";
     ScheduleModule.forRoot(),
     MulterModule.register({
       dest: undefined,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call -- multer is not typed
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- multer is not typed
       storage: memoryStorage(),
     }),
   ],
