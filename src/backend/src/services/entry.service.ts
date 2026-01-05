@@ -44,10 +44,11 @@ export class EntryService {
     // This ensures newer entries appear at the top when sorting by createdAt
     const createdAt = data.createdAt;
     const isDateOnly =
+      createdAt &&
       createdAt.getHours() === 0 &&
       createdAt.getMinutes() === 0 &&
       createdAt.getSeconds() === 0;
-    const finalCreatedAt = isDateOnly ? new Date() : createdAt;
+    const finalCreatedAt = !createdAt || isDateOnly ? new Date() : createdAt;
 
     // recurring entry
     if (data.isRecurring) {

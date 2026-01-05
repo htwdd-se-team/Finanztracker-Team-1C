@@ -460,7 +460,7 @@ describe("EntryService", () => {
           },
         }),
         take: 10,
-        orderBy: { amount: "desc" },
+        orderBy: [{ amount: "desc" }, { id: "desc" }],
       });
     });
 
@@ -572,7 +572,7 @@ describe("EntryService", () => {
       expect(mockTransactionFindMany).toHaveBeenCalledWith({
         where: expect.any(Object),
         take: 10,
-        orderBy: { amount: "asc" },
+        orderBy: [{ amount: "asc" }, { id: "desc" }],
       });
     });
 
