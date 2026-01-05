@@ -311,7 +311,7 @@ export function TransactionDialog({
         if (curDate < minDate) {
           form.setValue('createdAt', '')
           toast(
-            'Ausgewähltes Datum wurde zurückgesetzt: Bei Terminaufträgen sind nur Daten innerhalb der letzten 30 Tage oder in der Zukunft zulässig.'
+            'Ausgewähltes Datum wurde zurückgesetzt: Bei Daueraufträgen sind nur Daten innerhalb der letzten 30 Tage oder in der Zukunft zulässig.'
           )
         }
       }
@@ -572,7 +572,7 @@ export function TransactionDialog({
                     className="group inline-block relative"
                     aria-describedby="recurring-tooltip"
                   >
-                    <FormLabel className="cursor-help">Terminauftrag</FormLabel>
+                    <FormLabel className="cursor-help">Dauerauftrag</FormLabel>
                     <div
                       id="recurring-tooltip"
                       role="tooltip"
