@@ -74,6 +74,20 @@ function DeltaTile({
     )
   }
 
+  // Empty state placeholder
+  if (!data || data.length === 0) {
+    return (
+      <Card className={cn('p-1.5', className)}>
+        <CardTitle className="flex items-center gap-1 mb-0 pb-0 font-medium leading-tight">
+          <Triangle className="w-4 h-4 shrink-0" /> Delta
+        </CardTitle>
+        <CardContent className="flex justify-center items-center h-full min-h-[150px]">
+          <p className="text-muted-foreground text-sm">Keine Daten verfügbar</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className={cn('p-1.5', className)}>
       <CardTitle className="flex items-center gap-1 mb-0 pb-0 font-medium leading-tight">

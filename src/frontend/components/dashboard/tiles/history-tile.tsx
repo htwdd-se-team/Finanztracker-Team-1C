@@ -68,6 +68,22 @@ export default function HistoryTile({
     )
   }
 
+  // Empty state placeholder
+  if (graphData.length === 0) {
+    return (
+      <Card className={cn('p-0', className)}>
+        <CardHeader className="p-0 m-0">
+          <CardTitle className="p-0 ml-1.5 mt-1.5 mb-0 flex gap-1 font-medium">
+            <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex justify-center items-center h-full min-h-[150px] sm:min-h-[200px]">
+          <p className="text-muted-foreground text-sm">Keine Daten verfügbar</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
   // Logic behind y-Axis Scale
   const values = graphData.map(item => item.kontostand)
   const trueMin = Math.min(...values)
