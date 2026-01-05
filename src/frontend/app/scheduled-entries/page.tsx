@@ -27,10 +27,12 @@ export default function ScheduledEntriesPage() {
   const totalIncome = data
   ?.filter(e => e.type === 'INCOME')
   .reduce((sum, e) => sum + e.amount, 0) ?? 0
-
   const totalExpense = data
   ?.filter(e => e.type === 'EXPENSE')
   .reduce((sum, e) => sum + e.amount, 0) ?? 0
+
+  const incomeEntries = (data ?? []).filter(e => e.type === 'INCOME')
+  const expenseEntries = (data ?? []).filter(e => e.type === 'EXPENSE')
 
   async function handleDelete(entryId: number) {
     setIsDeleting(true)
@@ -81,7 +83,7 @@ export default function ScheduledEntriesPage() {
                 <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
                   Ausgaben
                 </p>
-                <p className="text-lg font-semibold text-red-700">
+                <p className="text-lg font-semibold text-destructive/90">
                   -{(totalExpense / 100).toFixed(2)} €
                 </p>
               </div>
@@ -95,13 +97,41 @@ export default function ScheduledEntriesPage() {
               <div className="mx-auto border-primary border-b-2 rounded-full w-8 h-8 animate-spin"></div>
             </div>
           ) : (
-            <EntryList
-              entries={data || []}
-              isDeleting={isDeleting}
-              deletingEntryId={deletingEntryId}
-              setDeletingEntryId={setDeletingEntryId}
-              handleDelete={handleDelete}
-            />
+            <>
+              {/* Einnahmen */}
+              {incomeEntries.length > 0 && (
+                <span className="block ml-2 mb-1 text-lg text-foreground text-bold ">
+                  Einnahmen
+                </span>
+              )}
+              {incomeEntries.length > 0 && (
+                <EntryList
+                  entries={incomeEntries}
+                  isDeleting={isDeleting}
+                  deletingEntryId={deletingEntryId}
+                  setDeletingEntryId={setDeletingEntryId}
+                  handleDelete={handleDelete}
+                />
+              )}
+
+              {/* Divider */}
+              {incomeEntries.length > 0 && expenseEntries.length > 0 && (
+                  <span className="block ml-2 mb-1 text-lg text-foreground text-bold">
+                    Ausgaben
+                  </span>
+              )}
+
+              {/* Ausgaben */}
+              {expenseEntries.length > 0 && (
+                <EntryList
+                  entries={expenseEntries}
+                  isDeleting={isDeleting}
+                  deletingEntryId={deletingEntryId}
+                  setDeletingEntryId={setDeletingEntryId}
+                  handleDelete={handleDelete}
+                />
+              )}
+            </>
           )}
         </ul>
       </div>

@@ -177,6 +177,7 @@ export default function PieChartTileIcons({
           y={y - 12}
           width={24}
           height={24}
+          className="pointer-events-none"
           style={{ overflow: 'visible' }}
         >
           <div className="flex justify-center items-center w-6 h-6">

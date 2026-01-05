@@ -1,14 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Pencil, Save, Loader2 } from 'lucide-react'
+import { Pencil, Save, Loader2, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { apiClient } from '@/api/api-client'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 function SavingsGoal({ className }: { className?: string }) {
   const queryClient = useQueryClient()
@@ -66,11 +67,11 @@ function SavingsGoal({ className }: { className?: string }) {
   const currentAmount = data.balance
   const targetAmount = data.emergencyReserve || 1 // Avoid division by zero
   const fillPercentage = Math.min(Math.max((currentAmount / targetAmount) * 100, 0), 100)
-  
+
   // Dynamic color based on progress (red -> yellow -> green/primary)
   let fillColor = 'bg-red-500/20'
-  let textColor = 'text-red-600 dark:text-red-400'
-  
+  let textColor = 'text-destructive/90'
+
   if (fillPercentage >= 100) {
     fillColor = 'bg-primary/20'
     textColor = 'text-primary'
@@ -87,8 +88,11 @@ function SavingsGoal({ className }: { className?: string }) {
     })
 
   return (
-    <Card className={cn('relative overflow-hidden', className)}>
-      <div className="absolute top-3 right-3 z-20">
+    <Card className={cn('relative overflow-hidden p-1.5', className)}>
+        <CardTitle className="ml-2 text-lg">
+          Notgroschen
+        </CardTitle>
+      <div className="absolute top-2 right-2 z-20 flex items-center">
         {isEditing ? (
           <Button
             size="icon"
@@ -107,47 +111,64 @@ function SavingsGoal({ className }: { className?: string }) {
           <Button
             size="icon"
             variant="ghost"
-            className="h-8 w-8 hover:bg-background/80 text-muted-foreground/50 hover:text-foreground"
+            className="h-8 w-8 text-muted-foreground/50 hover:text-foreground"
             onClick={() => setIsEditing(true)}
           >
             <Pencil className="h-4 w-4" />
           </Button>
         )}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className="h-8 w-8 flex items-center justify-center text-muted-foreground/50 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50 transition rounded-md"
+              aria-label="Info"
+            >
+              <Info className="h-5 w-5" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-72 text-sm">
+            <div className="space-y-1">
+              <div className="font-semibold">Notgroschen</div>
+              <p className="text-muted-foreground">
+                Legen Sie fest, welcher Betrag als finanzielle Reserve gelten soll.
+                Dieser Wert dient als Orientierung für Ihren Kontostand.
+              </p>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
-      <CardContent className="p-6 h-full flex flex-col items-center justify-center relative z-10">
+      <CardContent className="p-2 h-full flex flex-col items-center justify-center relative z-10">
         {/* Main circular visualization */}
-        <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+        <div className="relative w-72 h-72 -mt-6">
             {/* Outer ring */}
-            <div className="absolute inset-0 rounded-full border-4 border-muted/30" />
-            
+            <div className="absolute inset-0 rounded-full border-4 border-muted/60" />
+
             {/* Inner fill container */}
             <div className="absolute inset-2 rounded-full overflow-hidden bg-background/50 backdrop-blur-[2px]">
                 {/* Liquid Fill */}
-                <div 
+                <div
                     className={cn(
-                        "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out", 
+                        "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out",
                         fillColor
                     )}
                     style={{ height: `${fillPercentage}%` }}
                 >
                   {/* Wave effect */ }
                   <div className="absolute -top-6 w-[200%] h-12 left-0 animate-wave"
-                       style={{ 
+                       style={{
                          backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDQwIDMyMCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIwLjIiIGQ9Ik0wLDk2TDQ4LDExMi4yQzk2LDEyOCwxOTIsMTYwLDI4OCwxNjBDMzg0LDE2MCw0ODAsMTI4LDU3NiwxMTJDNjcyLDk2LDc2OCw5Niw4NjQsMTEyQzk2MCwxMjgsMTA1NiwxNjAsMTE1MiwxNjBDMTI0OCwxNjAsMTM0NCwxMjgsMTM5MiwxMTJMMTQ0MCw5NkwxNDQwLDMyMEwxMzkyLDMyMEMxMzQ0LDMyMCwxMjQ4LDMyMCwxMTUyLDMyMEMxMDU2LDMyMCw5NjAsMzIwLDg2NCwzMjBDNzY4LDMyMCw2NzIsMzIwLDU3NiwzMjBDNDgwLDMyMCwzODQsMzIwLDI4OCwzMjBDMTkyLDMyMCw5NiwzMjAsNDgsMzIwTDAsMzIwWiI+PC9wYXRoPjwvc3ZnPg==')",
                          backgroundRepeat: 'repeat-x',
-                         backgroundSize: '50% 100%' 
-                       }} 
+                         backgroundSize: '50% 100%'
+                       }}
                   />
                 </div>
             </div>
 
             {/* Content Overlay */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">
-                    Notgroschen
-                </span>
-                
+
                 {isEditing ? (
                     <div className="flex items-center justify-center w-32">
                         <Input
@@ -169,7 +190,7 @@ function SavingsGoal({ className }: { className?: string }) {
                         </span>
                     </div>
                 )}
-                
+
                 <div className={cn("mt-2 text-xs font-bold px-2 py-0.5 rounded-full bg-background/60 backdrop-blur-sm border shadow-sm", textColor)}>
                     {Math.round(fillPercentage)}% Erreicht
                 </div>
