@@ -386,38 +386,8 @@ export class AnalyticsService {
       }
     };
 
-    // Add existing child rows first
-    for (const r of rows) {
-      addRow(r);
-    }
-
     // Project parents whose next occurrence is within current month and in the future
-    // Only project if no child transaction exists for this parent
-    const childParentIds = new Set<number>();
-    const childrenRaw = await this.kysely
-      .selectFrom("Transaction")
-      .select("transactionId")
-      .where("Transaction.userId", "=", user.id)
-      .where(sql<boolean>`"Transaction"."transactionId" IS NOT NULL`)
-      .where("Transaction.createdAt", ">", sql<Date>`NOW()`)
-      .where("Transaction.createdAt", "<", end)
-      .execute();
-
-    for (const child of childrenRaw) {
-      if (child.transactionId) {
-        childParentIds.add(child.transactionId);
-      }
-    }
-
-    // Project parents whose next occurrence is within current month and in the future
-    // Only if no existing child for that parent in this month
     for (const raw of parentsRaw as Record<string, unknown>[]) {
-      const parentId = Number(raw["parentId"] ?? 0);
-      if (childParentIds.has(parentId)) {
-        // Child already exists for this parent in this month, skip projection
-        continue;
-      }
-
       const recurringType = raw[
         "recurringType"
       ] as RecurringTransactionType | null;
@@ -455,18 +425,6 @@ export class AnalyticsService {
           type,
           value: amount,
         });
-      }
-    }
-
-    const projectedRows = Array.from(aggregatedRows.values());
-
-    // Calculate future incomes and expenses
-    const futureIncomes = projectedRows
-      .filter((r) => r.type === TransactionType.INCOME)
-      .reduce((sum, r) => sum + r.value, 0);
-
-    const futureExpenses = projectedRows
-      .filter((r) => r.type === TransactionType.EXPENSE)
       .reduce((sum, r) => sum + r.value, 0);
 
     // Available Capital = Current Balance + Future Incomes - Future Expenses
