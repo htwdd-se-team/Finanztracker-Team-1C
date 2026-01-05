@@ -155,7 +155,7 @@ export interface ApiCategoryResponseDto {
   /**
    * Creation timestamp
    * @format date-time
-   * @example "2025-12-15T11:52:44.010Z"
+   * @example "2025-12-15T17:32:44.358Z"
    */
   createdAt: string;
   /**

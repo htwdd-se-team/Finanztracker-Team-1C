@@ -1,6 +1,6 @@
 'use client'
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ReferenceLine } from 'recharts'
 import { TrendingUp, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
@@ -36,13 +36,27 @@ export default function HistoryTile({
         endDate: endDate,
         granularity: ApiGranularity.DAY,
       }),
-    select: data =>
-      data.data.map(item => ({
+    select: data => {
+      const mapped = data.data.map(item => ({
         date: new Date(item.date).toISOString(),
         kontostand: Math.round(Number(item.value) / 100),
-      })),
+      }))
+      if (mapped.length > 0) {
+        const firstValue = mapped[0].kontostand
+        const userStartISO = new Date(startDate).toISOString()
+
+        // Erster eingetragener Kontostand-Value liegt hinter dem Startdate
+        if (new Date(mapped[0].date) > new Date(startDate)) {
+          mapped.unshift({
+            date: userStartISO,
+            kontostand: firstValue,
+          })
+        }
+      }
+      return mapped
+    },
     placeholderData: previousData => previousData,
-  })
+    })
 
   if (!graphData) {
     return (
@@ -54,23 +68,32 @@ export default function HistoryTile({
     )
   }
 
-  const roundedMinY =
-    Math.floor(Math.min(...graphData.map(item => item.kontostand)) / 1000) *
-    1000
-  const roundedMaxY =
-    Math.ceil(Math.max(...graphData.map(item => item.kontostand)) / 1000) * 1000
+  // Logic behind y-Axis Scale
+  const values = graphData.map(item => item.kontostand)
+  const trueMin = Math.min(...values)
+  const trueMax = Math.max(...values)
+  // Add 15% Buffer
+  const bufferedMin = trueMin < 0 ? trueMin * 1.15 : trueMin * 0.85
+  const bufferedMax = trueMax > 0 ? trueMax * 1.15 : trueMax * 0.85
+  const diff = Math.abs(bufferedMax - bufferedMin)
+  const step = Math.pow(10, Math.floor(Math.log10(diff)))
+  const roundedMinY = Math.floor(bufferedMin / step) * step
+  const roundedMaxY = Math.ceil(bufferedMax / step) * step
+
+  const hasPositive = trueMax > 0
+  const hasNegative = trueMin < 0
 
   return (
-    <Card className={cn('px-2 p-1.5',className)}>
-      <CardHeader className="flex flex-row justify-between p-0">
-        <CardTitle className="flex items-center gap-1 font-medium">
+    <Card className={cn('p-0',className)}>
+      <CardHeader className="p-0 m-0">
+        <CardTitle className="p-0 ml-1.5 mt-1.5 mb-0 flex gap-1 font-medium">
           <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 mr-1.5 mt-0">
         <ChartContainer
           config={chartConfig}
-          className="-mt-2 mb-0 w-full max-h-[150px] md:max-h-[200px]"
+          className="w-full max-h-[150px] sm:max-h-[200px] -mt-4"
         >
           <AreaChart
             data={graphData}
@@ -90,14 +113,26 @@ export default function HistoryTile({
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={false}/>
+            {hasPositive && hasNegative && (
+              <ReferenceLine
+              y={0} stroke="#999" strokeDasharray="3 3"
+              label={{
+                value: "0 €",
+                position: "left",
+                fill: "#666",
+                fontSize: 11,
+                dx: -3,
+              }}/>
+            )}
             <YAxis
-              width={50}
+              width={54}
+              tickMargin={2}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}
               tickCount={3}
-              domain={[roundedMinY, 'auto']}
+              domain={[roundedMinY, roundedMaxY]}
               tickFormatter={value =>
                 roundedMaxY >= 10000 ? `${value / 1000}k €` : `${value} €`
               }
@@ -106,7 +141,7 @@ export default function HistoryTile({
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={6}
               minTickGap={32}
               tickFormatter={value => {
                 const date = new Date(value)
@@ -135,7 +170,7 @@ export default function HistoryTile({
             />
             <Area
               dataKey="kontostand"
-              type="natural"
+              type="monotone"
               fill="url(#fillKontostand)"
               stroke="var(--color-chart-2)"
             />

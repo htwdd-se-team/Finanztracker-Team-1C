@@ -1,5 +1,5 @@
 = Test Cases: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresdsen.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute

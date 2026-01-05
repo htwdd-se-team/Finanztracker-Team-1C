@@ -1,5 +1,5 @@
 = UX-Konzept: {project-name}
-Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Ahmad Ali Nabizada (s87068<at>htw-dresden.de);  Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de) 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
@@ -41,14 +41,14 @@ a| * Budgetbewusst (2/10)
 
 |*Technische Fähigkeiten / Technologie*
 a| * IPhone (4h / Tag)
-* IPad zum lernen (3h / Tag)
+* IPad zum Lernen (3h / Tag)
 * Adobe Photoshop (an Uni Computer)
 * Blender (an Uni Computer)
 
 |*Bedürfnisse / Ziele*
 a| * Superschnelle Eingabe von Ausgaben, z.B. durch Quittung abfotografieren
 * Schöne, minimalistische Visualisierung der Finanzen durch Diagramme
-* Immer „alles auf einen Blick" haben (Saldo, Budget-Status)
+* Immer „Alles auf einen Blick" haben (Saldo, Budget-Status)
 * Vergleich der eigenen Ausgaben mit einem Durchschnittswert und Erhalten von Sparvorschlägen durch die App
 
 |*Hindernisse / Frustrationen*
@@ -198,9 +198,9 @@ a| * Fehlende soziale Interaktion oder Vergleichsmöglichkeiten in der App
 * Belege erfassen, bearbeiten und löschen
 * Verschiedene Ansichten/Reiter für die Funktionen der Anwendung öffnen
 * Filter für die Kategorien oder Zeiträume setzen
-* Einstellungen anpassen für Budgets, Kategorien und generelle Konfigurationen
-* Fixe Ein-/Auszahlungen für den nachfolgenden Monat mit dem verbleibenden Budget
-* Budgetübersicht im Monatsvergleich
+* Einstellungen anpassen für Daueraufträge, Kategorien und generelle Konfigurationen
+* Fixe Ein-/Auszahlungen für den jetzigen Monat mit dem verbleibenden Budget
+* Kontotandübersicht im Monatsvergleich
 
 *Welche Geräte werden verwendet?*
 

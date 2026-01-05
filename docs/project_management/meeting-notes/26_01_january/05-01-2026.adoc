@@ -1,0 +1,77 @@
+= Meeting-Protokoll 05.01.2026
+
+*Datum:* 05.01.2026 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben 
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt
+Wie weit sind alle? Gibt es Probleme?
+*Notizen:* +
+- ... +
+ +
+ +
+
+=== 2. Bugs
+Haben wir Bugs gefunden die wir bearbeiten wollen?
+*Notizen:* +
+- ... +
+ +
+ +
+
+
+
+=== 3. Mail von Ruben
+
+*Notizen:* +
+- ... +
+ +
+ +
+
+
+=== 4. Infos aus Externem Review
+Gab es noch irgend was interessantes?
+*Notizen:* +
+- ... +
+ +
+ +
+
+
+=== 5. Letzter Sprint
+Wurde Anke gefragt ob wir einen langen letzten Sprint (6 Wochen) oder zwei Sprints (4 Wochen und 2 Wochen) machen sollen?
+*Notizen:* +
+- ... +
+ +
+ +
+
+
+
+=== X. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+- ... +
+
+
+
+
+== Nächstes Meeting
+
+- Datum: 12.01.2026
+- Zeit: xx:xx
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt +
+- ... +

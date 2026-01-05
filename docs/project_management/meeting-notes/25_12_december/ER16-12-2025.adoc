@@ -1,0 +1,38 @@
+= Meeting-Protokoll Externes Review
+
+*Datum:* 16.12.2025 +
+*Ort:* Online (Discord) +
+
+==== Anwesenheit: 
+- Elias
+- Cedrick
+- Ben
+- Gruppe 3A
+
+=== Feedback-Session
+* Umgesetzte Features im Vergleich zu SE1
+
+image:../../images/externesReview.jpeg[width=250] 
+
+image:../../images/externesReview2.jpeg[width=250]
+
+image:../../images/externesReview3.jpeg[width=250]
+
+* Vorstellungsideen unterschiedliche Design-Muster
+* Selbst- und Clicktest
+
+
+=== Aktuelle Problempunkte
+
+- Nutzungsbedingungen (Unauthorized)
+- Hochladen-Feature jetzt noch schlechter
+- Sunset Horizon -> Filter erstellen Schrift nicht lesbar (können wir das Farbschema löschen (sieht eh Kacke aus))
+
+
+=== Vorschläge zur Verbesserung
+
+- Zeitraums-Auswahl überarbeiten -> Automatische Zeitraumsverlängerung wenn neues Datum angeklickt wird, wenn schon eins ausgewählt ist 
+- Notgroschen kann 100% übersteigen (als weitere Motivation)
+- Belegliste einschränken, Mittelversion (siehe oben)
+- Desktop version hat viel ungenutzten Platz (Vielleicht Randpadding etwas verringern)
+- Weitere Optionen für das Intervall der Daueraufträge
