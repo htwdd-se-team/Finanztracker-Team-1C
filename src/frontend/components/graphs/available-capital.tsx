@@ -155,6 +155,24 @@ export default function CapitalPieChart({ className }: { className?: string }) {
   }
 
   const { availableCapital, balance, incomes, expenses, uncategorizedIncome, uncategorizedExpense } = data
+  const hasNoData =
+    balance === 0 &&
+    availableCapital === 0 &&
+    incomes.length === 0 &&
+    expenses.length === 0 &&
+    uncategorizedIncome === 0 &&
+    uncategorizedExpense === 0
+
+  if (hasNoData) {
+    return (
+      <Card className={cn('relative overflow-hidden p-1.5', className)}>
+        <CardTitle className="text-lg ml-2">Verfügbares Kapital</CardTitle>
+        <CardContent className="flex justify-center items-center h-full min-h-[150px] mb-10">
+          <p className="text-muted-foreground text-sm">Keine Daten verfügbar</p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   const globalTotal =
     balance +
