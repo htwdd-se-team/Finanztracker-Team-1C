@@ -54,7 +54,7 @@ export default function OverviewPage() {
 
       {/* Entry List Section */}
       <ul className="space-y-2 mt-6 w-full">
-        <h2 className="font-bold text-2xl">Letzte Einträge</h2>
+        <h2 className="font-bold text-2xl">Neueste Einträge</h2>
         <EntryList
           entries={data?.pages.flatMap(page => page?.entries || []) || []}
           isDeleting={isDeleting}
