@@ -354,7 +354,9 @@ export class AnalyticsService {
       type: TransactionType.INCOME,
     });
 
-    // Scheduled transactions in the current month grouped by category (child transactions)
+    // ---------------------------
+    // Recurring parents projection (future occurrences)
+    // ---------------------------
     interface ScheduledCategoryRow {
       categoryId: number | null;
       categoryName: string | null;
@@ -362,52 +364,6 @@ export class AnalyticsService {
       type: TransactionType;
       value: number;
     }
-
-    const rowsRaw = await this.kysely
-      .selectFrom("Transaction")
-      .leftJoin("Category", "Category.id", "Transaction.categoryId")
-      .select((eb) => [
-        eb.ref("Transaction.categoryId").as("categoryId"),
-        eb.ref("Category.name").as("categoryName"),
-        eb.ref("Category.icon").as("categoryIcon"),
-        eb.ref("Transaction.type").as("type"),
-        sql<number>`COALESCE(SUM("Transaction"."amount"), 0)`.as("value"),
-      ])
-      .where("Transaction.userId", "=", user.id)
-      .where(sql<boolean>`"Transaction"."transactionId" IS NOT NULL`)
-      .where("Transaction.createdAt", ">", sql<Date>`NOW()`)
-      .where("Transaction.createdAt", "<", end)
-      .groupBy([
-        "Transaction.categoryId",
-        "Category.name",
-        "Category.icon",
-        "Transaction.type",
-      ])
-      .orderBy("value", "desc")
-      .execute();
-
-    const rows: ScheduledCategoryRow[] = (rowsRaw as unknown[]).map((r) => {
-      const rec = r as Record<string, unknown>;
-      const categoryId =
-        rec["categoryId"] == null ? null : Number(rec["categoryId"]);
-      const categoryName =
-        typeof rec["categoryName"] === "string" ? rec["categoryName"] : null;
-      const categoryIcon =
-        typeof rec["categoryIcon"] === "string" ? rec["categoryIcon"] : null;
-      const type = rec["type"] as TransactionType;
-      const value = Number(rec["value"] ?? 0);
-      return {
-        categoryId,
-        categoryName,
-        categoryIcon,
-        type,
-        value,
-      };
-    });
-
-    // ---------------------------
-    // Recurring parents projection (future occurrences without existing child)
-    // ---------------------------
     const parentsRaw = await this.kysely
       .selectFrom("Transaction")
       .leftJoin("Category", "Category.id", "Transaction.categoryId")
@@ -439,11 +395,6 @@ export class AnalyticsService {
         aggregatedRows.set(key, { ...row });
       }
     };
-
-    // Add existing child rows first
-    for (const r of rows) {
-      addRow(r);
-    }
 
     // Project parents whose next occurrence is within current month and in the future
     for (const raw of parentsRaw as Record<string, unknown>[]) {
