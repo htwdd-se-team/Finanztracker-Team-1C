@@ -74,6 +74,20 @@ function DeltaTile({
     )
   }
 
+  // Empty state placeholder
+  if (!data || data.length === 0) {
+    return (
+      <Card className={cn('p-1.5', className)}>
+        <CardTitle className="flex items-center gap-1 mb-0 pb-0 font-medium leading-tight">
+          <Triangle className="w-4 h-4 shrink-0" /> Delta
+        </CardTitle>
+        <CardContent className="flex justify-center items-center h-full min-h-[150px]">
+          <p className="text-muted-foreground text-sm">Keine Daten verfügbar</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className={cn('p-1.5', className)}>
       <CardTitle className="flex items-center gap-1 mb-0 pb-0 font-medium leading-tight">
@@ -102,10 +116,7 @@ function DeltaTile({
                 Ausgaben:
               </div>
               <div
-                className="font-bold text-base"
-                style={{
-                  color: 'color-mix(in srgb, var(--destructive) 80%, white)',
-                }}
+                className="font-bold text-base text-destructive/90"
               >
                 {expense.toLocaleString('de-DE', {
                   style: 'currency',
@@ -113,16 +124,14 @@ function DeltaTile({
                 })}
               </div>
             </div>
-            <div className="my-1 border-border border-t border-dashed w-9/12"></div>
+            <div className="my-1 border-t border-dashed border-muted-foreground/60 w-7/12"/>
             <div>
               <div className="flex items-center gap-1 font-semibold text-muted-foreground text-sm">
                 Delta:
               </div>
               <div
-                className={`text-base font-bold`}
-                style={{
-                  color: isPositive ? 'var(--chart-1)' : 'var(--destructive)',
-                }}
+                className={cn('text-base font-bold', !isPositive && 'text-destructive/90')}
+                style={isPositive ? { color: 'var(--chart-1)' } : undefined}
               >
                 {delta.toLocaleString('de-DE', {
                   style: 'currency',
@@ -133,14 +142,14 @@ function DeltaTile({
           </div>
           {/* Rechter Bereich: Vertikale Progressbar (1 Spalte) */}
           <div className="flex justify-center items-center col-span-1">
-            <div className="relative flex-shrink-0 bg-muted shadow-sm border border-border rounded-full w-2 h-32">
+            <div className="relative mt-1 flex-shrink-0 bg-muted rounded-full w-2 h-34">
               {/* Expense (Ausgaben) Teil oben */}
               <div
                 className="top-0 left-0 absolute rounded-t-full w-full transition-all duration-300"
                 style={{
                   height: `${expensePercent * 100}%`,
                   backgroundColor: 'var(--destructive)',
-                  opacity: 0.7,
+                  opacity: 0.9,
                 }}
               />
               {/* Income (Einnahmen) Teil unten */}
@@ -149,7 +158,7 @@ function DeltaTile({
                 style={{
                   height: `${incomePercent * 100}%`,
                   backgroundColor: 'var(--chart-1)',
-                  opacity: 0.7,
+                  opacity: 1,
                 }}
               />
             </div>

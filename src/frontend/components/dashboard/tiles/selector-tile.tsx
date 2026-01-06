@@ -22,6 +22,8 @@ import {
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DateRangePicker, Group, Label } from 'react-aria-components'
+import { useQuery } from '@tanstack/react-query'
+import { apiClient } from '@/api/api-client'
 
 enum RangeType {
   WEEK = '7d',
@@ -66,7 +68,16 @@ export function SelectorTile({
     end: CalendarDate
   }>({
     start: startOfMonth(today(getLocalTimeZone())),
-    end: today(getLocalTimeZone()).subtract({ days: 30 }),
+    end: today(getLocalTimeZone()),
+  })
+
+  const { data: firstTxData } = useQuery({
+    queryKey: ['analytics', 'first-transaction-date'],
+    queryFn: async () => {
+      const res =
+        await apiClient.analytics.analyticsControllerGetFirstTransactionDate()
+      return res.data
+    },
   })
 
   const computeRange = useCallback(
@@ -80,7 +91,16 @@ export function SelectorTile({
       } else if (type === RangeType.MONTH) {
         start = now.subtract({ days: 30 })
       } else if (type === RangeType.ALL) {
-        start = now.subtract({ days: 365 })
+        if (firstTxData?.date) {
+          const d = new Date(firstTxData.date)
+          start = new CalendarDate(
+            d.getFullYear(),
+            d.getMonth() + 1,
+            d.getDate()
+          )
+        } else {
+          start = new CalendarDate(1900, 1, 1)
+        }
       } else if (type === RangeType.CUSTOM) {
         start = dateRange.start
         end = dateRange.end
@@ -91,12 +111,12 @@ export function SelectorTile({
         endDate: end.toString(),
       })
     },
-    [dateRange, onRangeChange]
+    [dateRange, onRangeChange, firstTxData]
   )
 
   return (
-    <Card className={cn('h-18', className)}>
-      <CardContent className="p-0 m-0 flex flex-col justify-center h-full">
+    <Card className={cn('p-0 h-18', className)}>
+      <CardContent className="m-0 p-0 w-full h-full">
         <Dialog open={showPicker} onOpenChange={setShowPicker}>
           <Tabs
             value={value}
@@ -107,15 +127,9 @@ export function SelectorTile({
                 computeRange(v as RangeType)
               }
             }}
-            className=""
+            className="w-full h-full"
           >
-            <TabsList className="
-              grid grid-cols-2 grid-rows-2
-              w-full h-full
-              bg-transparent
-              p-0 m-0
-              items-stretch
-            ">
+            <TabsList className="flex-none grid grid-cols-2 grid-rows-2 bg-transparent p-0 rounded-none w-full h-full">
               <TabsTrigger value={RangeType.WEEK} className={tabTriggerClass}>
                 Woche
               </TabsTrigger>
@@ -130,10 +144,12 @@ export function SelectorTile({
               </TabsTrigger>
             </TabsList>
           </Tabs>
+
           <DialogContent className="p-4 w-auto">
             <DialogHeader className="pb-2">
               <DialogTitle>Zeitraum wählen</DialogTitle>
             </DialogHeader>
+
             <DateRangePicker
               className="pb-0"
               value={dateRange}
@@ -158,11 +174,13 @@ export function SelectorTile({
                     <CalendarIcon size={16} />
                   </button>
                 </div>
+
                 <div className="p-2 border rounded-md w-full overflow-hidden">
                   <RangeCalendar />
                 </div>
               </div>
             </DateRangePicker>
+
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowPicker(false)}>
                 Abbrechen

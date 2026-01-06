@@ -17,5 +17,7 @@ export * from "./filter-response.dto";
 export * from "./filter-params.dto";
 export * from "./scheduled-entries-params.dto";
 export * from "./scheduled-entries-response.dto";
+export * from "./scheduled-entries-summary.dto";
+export * from "./scheduled-entries-summary-params.dto";
 export * from "./scheduled-monthly-params.dto";
 export * from "./scheduled-monthly-response.dto";

@@ -303,6 +303,16 @@ export class AnalyticsService {
     return rounded;
   }
 
+  async getFirstTransactionDate(user: User): Promise<Date | null> {
+    const first = await this.prisma.transaction.findFirst({
+      where: { userId: user.id, isRecurring: false },
+      orderBy: { createdAt: "asc" },
+      select: { createdAt: true },
+    });
+
+    return first?.createdAt ?? null;
+  }
+
   async getAvailableCapital(user: User): Promise<AvailableCapitalItemDto[]> {
     const now = DateTime.now();
     const end = now.plus({ months: 1 }).startOf("month").toJSDate();

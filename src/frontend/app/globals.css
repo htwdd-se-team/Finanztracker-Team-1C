@@ -33,7 +33,12 @@
   }
 
   .animate-wave {
-    animation: wave-slide 4s linear infinite;
+    animation: wave-slide 3s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-wave-slow {
+    animation: wave-slide 5s linear infinite;
     will-change: transform;
   }
 }

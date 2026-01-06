@@ -34,6 +34,7 @@ export class ImportService {
     const entries: EntryResponseDto[] = [];
 
     for (const transaction of transactions) {
+      console.log(transaction);
       if (await this.entryService.checkIfEntryExists(user, transaction)) {
         continue;
       }
@@ -51,7 +52,7 @@ export class ImportService {
       transform: (value) => value.trim(),
     });
 
-    // console.log(parsed.data);
+    console.log(parsed.data);
 
     if (parsed.errors.length > 0) {
       throw new BadRequestException(parsed.errors[0].message);
@@ -71,14 +72,17 @@ export class ImportService {
         const day = row["Buchungstag"] ?? row["Buchungsdatum"];
         const amountUnparsed = row["Betrag"] ?? row["Betrag (€)"]; // might be negative or positive with a minus and ,
         const description_purpose = row["Verwendungszweck"];
-        const description_receiver = row["Beguenstigter/Zahlungspflichtiger"];
+        const description_receiver =
+          row["Beguenstigter/Zahlungspflichtiger"] ??
+          row["Name Zahlungsbeteiligter"];
 
         const description = [description_purpose, description_receiver]
           .filter(Boolean)
           .join(" - ")
           .replace(/ +/g, " ");
 
-        const amount = amountUnparsed.replace(/[^0-9.]/g, "").replace(",", ".");
+        // German format: comma is decimal separator, keep digits and comma, then convert comma to dot
+        const amount = amountUnparsed.replace(/[^0-9,]/g, "").replace(",", ".");
         const type = amountUnparsed.startsWith("-")
           ? TransactionType.EXPENSE
           : TransactionType.INCOME;
@@ -115,7 +119,7 @@ export class ImportService {
         }
 
         return {
-          amount: Number(amount),
+          amount: Math.round(Number(amount) * 100), // Convert to cents
           type,
           currency,
           description,

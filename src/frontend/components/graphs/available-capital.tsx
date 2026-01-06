@@ -1,8 +1,9 @@
 'use client'
 
-import { Loader2 } from 'lucide-react'
+import { Loader2, Info } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Pie, PieChart, ResponsiveContainer, Cell, Label } from 'recharts'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
@@ -33,7 +34,7 @@ const chartConfig = {
 const BALANCE_COLOR = 'hsl(210, 60%, 55%)'
 const OTHER_INCOME_COLOR = 'hsl(140, 40%, 70%)'
 const OTHER_EXPENSE_COLOR = 'hsl(0, 40%, 75%)'
-const THRESHOLD_PERCENT = 2
+const THRESHOLD_PERCENT = 3
 
 function generateShades(
   hue: number,
@@ -67,7 +68,7 @@ function applyThreshold(
   const otherValue =
     forcedOtherValue + small.reduce((s, d) => s + d.value, 0)
   const otherPercent = (otherValue / globalTotal) * 100
-  if (otherPercent < 1.5) return large
+  if (otherPercent < 2) return large
   return [
     ...large,
     {
@@ -226,6 +227,7 @@ export default function CapitalPieChart({ className }: { className?: string }) {
         width={24}
         height={24}
         style={{ overflow: 'visible' }}
+        className="pointer-events-none"
       >
         <div className="flex items-center justify-center w-6 h-6">
           <IconComponent className="w-4 h-4 text-white drop-shadow-md" />
@@ -235,17 +237,40 @@ export default function CapitalPieChart({ className }: { className?: string }) {
   }
 
   return (
-    <Card className={cn('p-1.5 shadow-none', className)}>
-      <CardHeader className="p-0">
-        <CardTitle className="ml-2 text-lg">
-          Verfügbares Kapital (Monat)
-        </CardTitle>
-      </CardHeader>
+    <Card className={cn('relative overflow-hidden p-1.5', className)}>
+      <CardTitle className="text-lg ml-2">
+        Verfügbares Kapital
+      </CardTitle>
+
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className="h-8 w-8 flex items-center justify-center text-muted-foreground/50 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50 transition rounded-md"
+              aria-label="Info"
+            >
+              <Info className="w-5 h-5" />
+            </button>
+          </PopoverTrigger>
+
+          <PopoverContent align="end" className="w-72 text-sm">
+            <div className="space-y-1">
+              <div className="font-semibold">Was zeigt dieses Diagramm?</div>
+              <p className="text-muted-foreground">
+                Das aktuell verfügbare Kapital für den laufenden Monat.
+                Es ergibt sich aus dem Kontostand sowie den noch
+                ausstehenden Einnahmen und Ausgaben aus Daueraufträgen.
+              </p>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
 
       <CardContent className="p-0 flex justify-center items-center">
         <ChartContainer
           config={chartConfig}
-          className="w-full aspect-square md:max-h-[200px] -mt-8"
+          className="w-full aspect-square max-h-[300px] -mt-6"
         >
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
