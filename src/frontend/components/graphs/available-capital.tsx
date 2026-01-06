@@ -292,7 +292,25 @@ export default function CapitalPieChart({ className }: { className?: string }) {
         >
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <ChartTooltip />
+              <ChartTooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const item = payload[0].payload as TransformedChartData
+                    return (
+                      <div className="bg-background shadow p-2 rounded text-xs">
+                        <div className="font-semibold">{item.name}</div>
+                        <div>
+                          {item.value.toLocaleString('de-DE', {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}{' '}
+                          €
+                        </div>
+                      </div>
+                    )
+                  }
+                  return null
+                }}/>
               <Pie
                 data={pieData}
                 cx="50%"
