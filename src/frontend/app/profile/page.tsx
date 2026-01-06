@@ -81,7 +81,7 @@ export default function ProfilePage() {
       <div className="mt-4 sm:mt-6 mb-6">
         <h1 className="flex gap-3 font-bold text-2xl ml-2 mt-4 sm:mt-6 mb-2">
           <UserRoundCog className="w-8 h-8" />
-          Profil
+          Profileinstellungen
         </h1>
         <p className="ml-2 mt-2 text-muted-foreground">
           Verwalten Sie Ihre Kontoeinstellungen und Kategorien

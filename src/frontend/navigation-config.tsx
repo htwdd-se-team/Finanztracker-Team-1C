@@ -14,13 +14,13 @@ export enum TabValues {
 
 export const navItems = [
   {
-    title: 'Übersicht',
+    title: 'Überblick',
     url: '/overview',
     icon: Home,
     value: TabValues.OVERVIEW,
   },
   {
-    title: 'Graphen',
+    title: 'Finanzanalysen',
     url: '/graphs',
     icon: ChartNoAxesCombined,
     value: TabValues.CHARTS,
@@ -32,7 +32,7 @@ export const navItems = [
     value: TabValues.TABLE,
   },
   {
-    title: 'Terminüberweisungen',
+    title: 'Daueraufträge',
     url: '/scheduled-entries',
     icon: CalendarClock,
     value: TabValues.SCHEDULED,

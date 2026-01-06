@@ -76,8 +76,8 @@ export function DataImportDialog({ children }: { children?: React.ReactNode }) {
 
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Wähle CSV/TXT/XLSX Dateien aus, die Banktransaktionen enthalten. Du
-            kannst mehrere Dateien gleichzeitig hochladen. Neue Auswahlen werden
+            Wählen Sie CSV/TXT/XLSX Dateien aus, die Banktransaktionen enthalten. Sie
+            können mehrere Dateien gleichzeitig hochladen. Neue Auswahlen werden
             zur bestehenden Liste hinzugefügt.
           </p>
 

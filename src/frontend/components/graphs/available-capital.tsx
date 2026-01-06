@@ -155,6 +155,24 @@ export default function CapitalPieChart({ className }: { className?: string }) {
   }
 
   const { availableCapital, balance, incomes, expenses, uncategorizedIncome, uncategorizedExpense } = data
+  const hasNoData =
+    balance === 0 &&
+    availableCapital === 0 &&
+    incomes.length === 0 &&
+    expenses.length === 0 &&
+    uncategorizedIncome === 0 &&
+    uncategorizedExpense === 0
+
+  if (hasNoData) {
+    return (
+      <Card className={cn('relative overflow-hidden p-1.5', className)}>
+        <CardTitle className="text-lg ml-2">Verfügbares Kapital</CardTitle>
+        <CardContent className="flex justify-center items-center h-full min-h-[150px] mb-10">
+          <p className="text-muted-foreground text-sm">Keine Daten verfügbar</p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   const globalTotal =
     balance +
@@ -274,7 +292,25 @@ export default function CapitalPieChart({ className }: { className?: string }) {
         >
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <ChartTooltip />
+              <ChartTooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const item = payload[0].payload as TransformedChartData
+                    return (
+                      <div className="bg-background shadow p-2 rounded text-xs">
+                        <div className="font-semibold">{item.name}</div>
+                        <div>
+                          {item.value.toLocaleString('de-DE', {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}{' '}
+                          €
+                        </div>
+                      </div>
+                    )
+                  }
+                  return null
+                }}/>
               <Pie
                 data={pieData}
                 cx="50%"
