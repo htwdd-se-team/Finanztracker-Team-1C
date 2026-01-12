@@ -1,6 +1,6 @@
-= Meeting-Protokoll 05.01.2026
+= Meeting-Protokoll 12.01.2026
 
-*Datum:* 05.01.2026 +
+*Datum:* 12.01.2026 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
 *Protokoll:* ... +
@@ -35,17 +35,8 @@ Muss noch was vorbereitet/besprochen werden?
 
 
 
-=== 3.
-
-*Notizen:* +
-- ... +
- +
- +
-
-
-
-=== 4.
-
+=== 3. Fragen für Konsultation
+Hat noch jemand Fragen für die Konsultation?
 *Notizen:* +
 - ... +
  +
@@ -62,7 +53,7 @@ Muss noch was vorbereitet/besprochen werden?
 
 == Nächstes Meeting
 
-- Datum: 12.01.2026
+- Datum: 19.01.2024
 - Zeit: xx:xx
 - Ort: Online (Teams)
 
