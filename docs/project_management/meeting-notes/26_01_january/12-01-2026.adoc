@@ -3,10 +3,10 @@
 *Datum:* 12.01.2026 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Cedrick +
 *Meetingbeginn:* 14:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min +
+*Meetingende:* 14:25 +
+*Dauer:* 25 min +
 
 ==== Anwesenheit: 
 - Elias
@@ -18,35 +18,38 @@
 
 ==  Weekly Stand-up/Backlog Refinement
 === 1. Ticketfortschritt
-Wie weit sind alle? Gibt es Probleme?
+Wie weit sind alle? Gibt es Probleme? +
 *Notizen:* +
-- ... +
+- Eigentlich alle Tickets fertig +
+- Backend refactoring noch offen +
+- Nach Abschluss vom refactorn nochmal testen +
+- kleinere Bugs noch offen +
  +
  +
-
-
 
 === 2. Präsentation 20.01.
-Muss noch was vorbereitet/besprochen werden?
+Muss noch was vorbereitet/besprochen werden? +
 *Notizen:* +
-- ... +
+- ^^ Verschieben auf nächstes Meeting +
+- bis Samstag finale Version, nächstes Meeting nochmla vorstellen +
+- Demo account vorbereiten +
  +
  +
 
 
 
 === 3. Fragen für Konsultation
-Hat noch jemand Fragen für die Konsultation?
+Hat noch jemand Fragen für die Konsultation? +
 *Notizen:* +
-- ... +
+- Wie schreibt man die Projekteinzelreflexion richtig? +
+- Hinweise zum finalen Visionsdokument? +
+- Was genau soll vorgestellt werden beim Technischen Konzept? +
  +
  +
 
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
 
-
-=== X. Weitere organisatorische Aufgaben und/oder offene Punkte
-
-- ... +
+- Nix +
 
 
 
@@ -54,10 +57,10 @@ Hat noch jemand Fragen für die Konsultation?
 == Nächstes Meeting
 
 - Datum: 19.01.2024
-- Zeit: xx:xx
+- Zeit: 14:00
 - Ort: Online (Teams)
 
 ==== Themen nächstes Meeting
 
 - Ticketfortschritt +
-- ... +
+- Präsentation +
