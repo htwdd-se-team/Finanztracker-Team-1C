@@ -64,14 +64,11 @@ const createEntrySchema = z.object({
   createdAt: z.string().optional(),
 }) satisfies z.ZodType<ApiCreateEntryDto>
 
-// Helper to format date to ISO string
 const formatIsoDate = (d: Date): string => d.toISOString().split('T')[0]
 
-// Get date 30 days ago in ISO format
 const getThirtyDaysAgoIso = (): string =>
   formatIsoDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000))
 
-// Type-safe interface for edit data with optional recurring properties
 interface EditDataWithRecurring extends ApiEntryResponseDto {
   isRecurring?: boolean
   recurringBaseInterval?: number
@@ -98,7 +95,6 @@ export function TransactionDialog({
 
   const thirtyDaysAgoIso = getThirtyDaysAgoIso()
 
-  // Helper to build form default values
   const getFormDefaults = (data?: ApiEntryResponseDto): FormValues => {
     if (!data) {
       return {
@@ -121,7 +117,6 @@ export function TransactionDialog({
     }
   }
 
-  // Helper to extract recurring data from edit data
   const getRecurringDataFromEdit = (
     data: ApiEntryResponseDto
   ): { isRecurring: boolean; interval: number | undefined } => {
@@ -145,7 +140,6 @@ export function TransactionDialog({
     defaultValues: getFormDefaults(editData),
   })
 
-  // Update form when dialog opens or editData changes
   useEffect(() => {
     if (open) {
       form.reset(getFormDefaults(editData))
@@ -162,7 +156,6 @@ export function TransactionDialog({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, editData])
 
-  // Validation helper
   const validateRecurrence = (): boolean => {
     if (
       isRecurring &&
@@ -176,7 +169,6 @@ export function TransactionDialog({
     return true
   }
 
-  // Create new entry
   const createNewEntry = async (
     apiValues: Record<string, unknown>
   ): Promise<ApiEntryResponseDto> => {
@@ -197,7 +189,6 @@ export function TransactionDialog({
     ).data
   }
 
-  // Update existing entry
   const updateExistingEntry = async (
     apiValues: Record<string, unknown>
   ): Promise<ApiEntryResponseDto> => {
@@ -303,7 +294,6 @@ export function TransactionDialog({
         setRecurrenceIntervalMonths(1)
       }
 
-      // Reset date if it's earlier than 30 days ago
       const currentDate = form.getValues('createdAt')
       if (currentDate) {
         const curDate = new Date(currentDate)
