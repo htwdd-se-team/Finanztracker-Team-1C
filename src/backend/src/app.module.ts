@@ -15,6 +15,7 @@ import {
   CategoryController,
   AnalyticsController,
   FilterController,
+  DemoController,
 } from "./controllers";
 import { JwtAuthGuard } from "./guards";
 import {
@@ -28,6 +29,7 @@ import {
   UserService,
   RecurringEntryService,
   ImportService,
+  DemoService,
 } from "./services";
 import { JwtStrategy } from "./strategies";
 
@@ -57,6 +59,7 @@ import { JwtStrategy } from "./strategies";
     AppController,
     AuthController,
     CategoryController,
+    DemoController,
     EntryController,
     FilterController,
     UserController,
@@ -67,6 +70,7 @@ import { JwtStrategy } from "./strategies";
     AppService,
     AnalyticsService,
     AuthService,
+    DemoService,
     EntryService,
     CategoryService,
     UserService,

@@ -44,9 +44,11 @@ const colorPalette = [
   'var(--color-chart-5)',
 ]
 
-// Threshold in percent - adjust to test different values
-// Try 5, 10, or 15 to find the appropriate size
-const SMALL_CATEGORY_THRESHOLD_PERCENT = 10
+// Special category ID for "Andere" (uncategorized from backend)
+const ANDERE_CATEGORY_ID = 0
+
+// Threshold: categories below this percentage get merged into "Andere"
+const SMALL_CATEGORY_THRESHOLD_PERCENT = 5
 
 export default function PieChartTileIcons({
   startDate,
@@ -71,6 +73,7 @@ export default function PieChartTileIcons({
         withCategory: true,
       }),
     select: data => {
+      // Aggregate totals by category
       const categoryTotals = data.data.data
         .filter(item => item.type === ApiTransactionType.EXPENSE)
         .filter(item => item.category !== undefined)
@@ -84,11 +87,25 @@ export default function PieChartTileIcons({
           {} as Record<number, number>
         )
 
+      // Transform to chart data format
       const transformedData: TransformedChartData[] = Object.entries(
         categoryTotals
       )
-        .map(([categoryId, totalValue], idx) => {
-          const category = getCategoryFromId(parseInt(categoryId))
+        .map(([categoryIdStr, totalValue], idx) => {
+          const categoryId = parseInt(categoryIdStr)
+
+          // Handle "Andere" category (ID 0) from backend (uncategorized)
+          if (categoryId === ANDERE_CATEGORY_ID) {
+            return {
+              id: ANDERE_CATEGORY_ID,
+              name: 'Andere',
+              value: totalValue,
+              icon: IconNames.RECEIPT,
+              color: colorPalette[idx % colorPalette.length],
+            }
+          }
+
+          const category = getCategoryFromId(categoryId)
           if (category) {
             return {
               id: category.id,
@@ -102,42 +119,59 @@ export default function PieChartTileIcons({
         })
         .filter((item): item is TransformedChartData => item !== null)
 
-      // Calculate total to determine percentages
+      // Calculate total for percentage threshold
       const totalValue = transformedData.reduce(
         (sum, item) => sum + item.value,
         0
       )
 
-      // Separate small and large categories
-      const largeCategoriesWithThreshold = transformedData.filter(
+      if (totalValue === 0) return transformedData
+
+      // Separate large categories (>= threshold) and small categories (< threshold)
+      const largeCategories = transformedData.filter(
         item =>
+          item.id !== ANDERE_CATEGORY_ID &&
           (item.value / totalValue) * 100 >= SMALL_CATEGORY_THRESHOLD_PERCENT
       )
 
       const smallCategories = transformedData.filter(
         item =>
+          item.id !== ANDERE_CATEGORY_ID &&
           (item.value / totalValue) * 100 < SMALL_CATEGORY_THRESHOLD_PERCENT
       )
 
-      // Add small categories to "Other" if they exist
-      if (smallCategories.length > 0) {
-        const otherValue = smallCategories.reduce(
-          (sum, item) => sum + item.value,
-          0
-        )
-        largeCategoriesWithThreshold.push({
-          id: -1,
-          name: 'Sonstiges',
-          value: otherValue,
+      // Find existing "Andere" from uncategorized transactions
+      const existingAndere = transformedData.find(
+        item => item.id === ANDERE_CATEGORY_ID
+      )
+      const andereBaseValue = existingAndere?.value ?? 0
+
+      // Sum small categories into "Andere"
+      const smallCategoriesValue = smallCategories.reduce(
+        (sum, item) => sum + item.value,
+        0
+      )
+
+      const andereTotalValue = andereBaseValue + smallCategoriesValue
+
+      // Re-assign colors to large categories
+      const result = largeCategories.map((item, idx) => ({
+        ...item,
+        color: colorPalette[idx % colorPalette.length],
+      }))
+
+      // Add "Andere" if there's any value
+      if (andereTotalValue > 0) {
+        result.push({
+          id: ANDERE_CATEGORY_ID,
+          name: 'Andere',
+          value: andereTotalValue,
           icon: IconNames.RECEIPT,
-          color:
-            colorPalette[
-              largeCategoriesWithThreshold.length % colorPalette.length
-            ],
+          color: colorPalette[result.length % colorPalette.length],
         })
       }
 
-      return largeCategoriesWithThreshold
+      return result
     },
   })
 

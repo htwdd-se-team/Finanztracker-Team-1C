@@ -70,7 +70,7 @@ export class ImportService {
         }
 
         const day = row["Buchungstag"] ?? row["Buchungsdatum"];
-        const amountUnparsed = row["Betrag"] ?? row["Betrag (€)"]; // might be negative or positive with a minus and ,
+        const amountUnparsed = row["Betrag"] ?? row["Betrag (€)"];
         const description_purpose = row["Verwendungszweck"];
         const description_receiver =
           row["Beguenstigter/Zahlungspflichtiger"] ??

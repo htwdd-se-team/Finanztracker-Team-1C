@@ -41,14 +41,18 @@ export class AnalyticsService {
   ): Promise<TransactionBreakdownResponseDto> {
     const dateTruncPeriod = this.getDateTruncPeriod(granularity);
 
+    // Convert dates to ISO strings for reliable PostgreSQL comparison
+    const startDateStr = startDate.toISOString();
+    const endDateStr = endDate.toISOString();
+
     if (withCategory) {
       const results = await this.kysely
         .with("grouped_transactions", (db) =>
           db
             .selectFrom("Transaction")
             .where("userId", "=", user.id)
-            .where("createdAt", ">=", startDate)
-            .where("createdAt", "<=", endDate)
+            .where(sql<boolean>`"createdAt" >= ${startDateStr}::timestamp`)
+            .where(sql<boolean>`"createdAt" <= ${endDateStr}::timestamp`)
             .where((eb) =>
               eb.or([
                 eb("isRecurring", "=", false),
@@ -78,9 +82,7 @@ export class AnalyticsService {
               ">=",
               sql<Date>`date_trunc(${sql.raw(
                 `'${dateTruncPeriod}'`,
-              )}, ${sql.raw(
-                `'${startDate.toISOString()}'`,
-              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+              )}, ${startDateStr}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
                 `'${this.TIMEZONE}'`,
               )})`,
             ),
@@ -89,9 +91,7 @@ export class AnalyticsService {
               "<=",
               sql<Date>`date_trunc(${sql.raw(
                 `'${dateTruncPeriod}'`,
-              )}, ${sql.raw(
-                `'${endDate.toISOString()}'`,
-              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+              )}, ${endDateStr}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
                 `'${this.TIMEZONE}'`,
               )})`,
             ),
@@ -109,12 +109,15 @@ export class AnalyticsService {
         .orderBy("categoryId")
         .execute();
 
+      // Map uncategorized transactions (null categoryId) to "Andere" (category = 0)
+      const ANDERE_CATEGORY_ID = 0;
+
       return {
         data: results.map((row) => ({
           date: row.date as Date,
           type: row.type,
           value: row.value,
-          category: row.category || undefined,
+          category: row.category ?? ANDERE_CATEGORY_ID,
         })),
       };
     } else {
@@ -123,8 +126,8 @@ export class AnalyticsService {
           db
             .selectFrom("Transaction")
             .where("userId", "=", user.id)
-            .where("createdAt", ">=", startDate)
-            .where("createdAt", "<=", endDate)
+            .where(sql<boolean>`"createdAt" >= ${startDateStr}::timestamp`)
+            .where(sql<boolean>`"createdAt" <= ${endDateStr}::timestamp`)
             .where((eb) =>
               eb.or([
                 eb("isRecurring", "=", false),
@@ -155,9 +158,7 @@ export class AnalyticsService {
               ">=",
               sql<Date>`date_trunc(${sql.raw(
                 `'${dateTruncPeriod}'`,
-              )}, ${sql.raw(
-                `'${startDate.toISOString()}'`,
-              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+              )}, ${startDateStr}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
                 `'${this.TIMEZONE}'`,
               )})`,
             ),
@@ -166,9 +167,7 @@ export class AnalyticsService {
               "<=",
               sql<Date>`date_trunc(${sql.raw(
                 `'${dateTruncPeriod}'`,
-              )}, ${sql.raw(
-                `'${endDate.toISOString()}'`,
-              )}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+              )}, ${endDateStr}::timestamp AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
                 `'${this.TIMEZONE}'`,
               )})`,
             ),
@@ -200,14 +199,19 @@ export class AnalyticsService {
   ): Promise<TransactionItemDto[]> {
     const dateTruncPeriod = this.getDateTruncPeriod(granularity);
 
+    // Convert dates to ISO strings for reliable PostgreSQL comparison
+    // (pg library doesn't serialize JS Date objects correctly for timezone-aware comparisons)
+    const startDateStr = startDate.toISOString();
+    const endDateStr = endDate.toISOString();
+
     const results = await this.kysely
       // Get the initial balance similar to getBalance in user.service.ts
       .with("initial_balance", (db) =>
         db
           .selectFrom("Transaction")
           .where("userId", "=", user.id)
-          .where("createdAt", "<", startDate)
-          .where("createdAt", "<=", sql<Date>`NOW()`)
+          .where(sql<boolean>`"createdAt" < ${startDateStr}::timestamp`)
+          .where(sql<boolean>`"createdAt" <= NOW()`)
           .where("isRecurring", "=", false)
           .select((eb) => [
             eb.fn
@@ -228,15 +232,17 @@ export class AnalyticsService {
         db
           .selectFrom("Transaction")
           .where("userId", "=", user.id)
-          .where("createdAt", ">=", startDate)
-          .where("createdAt", "<=", endDate)
-          .where("createdAt", "<=", sql<Date>`NOW()`)
+          .where(sql<boolean>`"createdAt" >= ${startDateStr}::timestamp`)
+          .where(sql<boolean>`"createdAt" <= ${endDateStr}::timestamp`)
+          .where(sql<boolean>`"createdAt" <= NOW()`)
           .where("isRecurring", "=", false)
           .select((eb) => [
             eb
               .fn("date_trunc", [
                 eb.val(dateTruncPeriod),
-                sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${this.TIMEZONE}`,
+                sql`"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${sql.raw(
+                  `'${this.TIMEZONE}'`,
+                )}`,
               ])
               .as("period_date"),
             eb
@@ -380,8 +386,10 @@ export class AnalyticsService {
       ])
       .where("Transaction.userId", "=", user.id)
       .where("Transaction.isRecurring", "=", true)
+      // Only include active recurring entries (not disabled) - must be explicitly false
       .where("Transaction.recurringDisabled", "=", false)
-      .where(sql<boolean>`"Transaction"."transactionId" IS NULL`)
+      // Only parent entries (not children) - use Kysely native IS NULL check
+      .where("Transaction.transactionId", "is", null)
       .execute();
 
     // Helper to add/aggregate rows by category & type
