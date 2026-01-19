@@ -170,34 +170,79 @@ export class RecurringEntryService {
 
   async getScheduledEntriesSummary(
     userId: number,
-    disabled?: boolean,
   ): Promise<ScheduledEntriesSummaryDto> {
-    // Build query to calculate totals directly in the database
-    let query = this.kysely
-      .selectFrom("Transaction")
-      .select([
-        sql<number>`COUNT(*)::int`.as("totalCount"),
-        sql<number>`
-          COALESCE(SUM(CASE WHEN "type" = 'INCOME' THEN "amount" ELSE 0 END), 0)
-        `.as("totalIncome"),
-        sql<number>`
-          COALESCE(SUM(CASE WHEN "type" = 'EXPENSE' THEN "amount" ELSE 0 END), 0)
-        `.as("totalExpense"),
-      ])
-      .where("userId", "=", userId)
-      .where("isRecurring", "=", true);
+    const now = DateTime.now();
+    const monthStart = now.startOf("month").toJSDate();
 
-    // Apply disabled filter if provided
-    if (disabled !== undefined) {
-      query = query.where("recurringDisabled", "=", Boolean(disabled));
+    // Get all active recurring entries (matching getScheduledEntries logic)
+    const allRecurring = await this.kysely
+      .selectFrom("Transaction")
+      .select(["id", "type", "amount", "recurringType"])
+      .where("userId", "=", userId)
+      .where("isRecurring", "=", true)
+      .where((eb) =>
+        eb.or([
+          eb("recurringDisabled", "=", false),
+          eb("recurringDisabled", "is", null),
+        ]),
+      )
+      .execute();
+
+    this.logger.debug(`Found ${allRecurring.length} active recurring entries`);
+
+    // For each recurring entry, check if it already has a child this period
+    let totalCount = 0;
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    const todayEnd = now.endOf("day").toJSDate();
+
+    for (const entry of allRecurring) {
+      // Determine period start based on recurring type
+      let periodStart: Date;
+
+      switch (entry.recurringType) {
+        case "DAILY":
+          periodStart = now.startOf("day").toJSDate();
+          break;
+        case "WEEKLY":
+          periodStart = now.startOf("week").toJSDate();
+          break;
+        case "MONTHLY":
+        default:
+          periodStart = monthStart;
+          break;
+      }
+
+      // Check if a child exists for this entry that has ALREADY HAPPENED (date <= today)
+      // Children with future dates mean the entry is still "due"
+      const childAlreadyHappened = await this.kysely
+        .selectFrom("Transaction")
+        .select(["id", "createdAt"])
+        .where("transactionId", "=", entry.id)
+        .where("createdAt", ">=", periodStart)
+        .where("createdAt", "<=", todayEnd) // Only count if date is today or earlier
+        .executeTakeFirst();
+
+      // Entry is still due if no child has happened yet in this period
+      if (!childAlreadyHappened) {
+        totalCount++;
+        if (entry.type === "INCOME") {
+          totalIncome += entry.amount;
+        } else {
+          totalExpense += entry.amount;
+        }
+      }
     }
 
-    const result = await query.executeTakeFirstOrThrow();
+    this.logger.debug(
+      `Summary: count=${totalCount}, income=${totalIncome}, expense=${totalExpense}`,
+    );
 
     return {
-      totalCount: Number(result.totalCount) || 0,
-      totalIncome: Number(result.totalIncome) || 0,
-      totalExpense: Number(result.totalExpense) || 0,
+      totalCount,
+      totalIncome,
+      totalExpense,
     };
   }
 

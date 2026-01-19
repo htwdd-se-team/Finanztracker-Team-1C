@@ -47,7 +47,7 @@ export class EntryService {
 
     // recurring entry
     if (data.isRecurring) {
-      // shadow element
+      // shadow element (parent)
       const parentEntry = await this.prisma.transaction.create({
         data: {
           type: data.type,
@@ -64,22 +64,32 @@ export class EntryService {
         },
       });
 
-      // actual transaction
-      const childEntry = await this.prisma.transaction.create({
-        data: {
-          type: data.type,
-          amount: data.amount,
-          description: data.description,
-          currency: data.currency || Currency.EUR,
-          userId: user.id,
-          isRecurring: false,
-          categoryId: data.categoryId,
-          createdAt: finalCreatedAt,
-          transactionId: parentEntry.id,
-        },
-      });
+      // Only create the actual transaction (child) if the date is NOT in the future
+      // Future transactions will be created by the cron job when their date arrives
+      const now = new Date();
+      const todayEnd = new Date(now);
+      todayEnd.setHours(23, 59, 59, 999);
 
-      return EntryService.mapEntryToResponseDto(childEntry);
+      if (finalCreatedAt <= todayEnd) {
+        const childEntry = await this.prisma.transaction.create({
+          data: {
+            type: data.type,
+            amount: data.amount,
+            description: data.description,
+            currency: data.currency || Currency.EUR,
+            userId: user.id,
+            isRecurring: false,
+            categoryId: data.categoryId,
+            createdAt: finalCreatedAt,
+            transactionId: parentEntry.id,
+          },
+        });
+
+        return EntryService.mapEntryToResponseDto(childEntry);
+      }
+
+      // Return the parent entry for future-dated recurring entries
+      return EntryService.mapEntryToResponseDto(parentEntry);
     }
 
     // Create non-recurring entry
