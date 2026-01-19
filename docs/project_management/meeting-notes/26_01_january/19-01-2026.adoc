@@ -1,0 +1,59 @@
+= Meeting-Protokoll 19.01.2026
+
+*Datum:* 19.01.2026 +
+*Ort:* Online (MS Teams) +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:00 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang
+- Christoph
+- Cedrick
+- Ben 
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt/Product backlog
+Wie läuft das Backend refactoring? Welche Bugs sind noch offen/ sind noch Bugs dazu gekommen? +
+*Notizen:* +
+- ... +
+ +
+ +
+
+=== 2. Präsentation 20.01. (Morgen)
+Ist alles vorbereitet? Ist der Demo-Account eingerichtet? +
+*Notizen:* +
+- ... +
+ +
+ +
+
+
+
+=== 3. Geklärte Fragen für Konsultation
+Ist für die Gruppe was wichtiges dabei? +
+*Notizen:* +
+- ... +
+ +
+ +
+
+=== 4. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+- ... +
+
+
+
+
+== Letztes Meeting
+
+- Datum: 26.01.2024 
+- Zeit: 14:00
+- Ort: Online (Teams)
+
+==== Themen nächstes Meeting
+
+- Ticketfortschritt +
+- Abgabedoku +
