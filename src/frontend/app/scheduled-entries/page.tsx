@@ -64,18 +64,18 @@ export default function ScheduledEntriesPage() {
           Verwalten Sie Ihre regelmäßigen Transaktionen
         </p>
 
-        {/* SUMMARY BOX */}
+        {/* SUMMARY BOX - Ausstehend diesen Monat */}
         <Card className="bg-card/90 dark:bg-card/60 mb-4 p-2 border h-[70px]">
           <CardContent className="flex items-center p-0 h-full">
             <div className="gap-3 grid grid-cols-3 w-full text-center">
-              {/* Anzahl Daueraufträge */}
+              {/* Anzahl ausstehend */}
               <div>
                 <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
-                  Daueraufträge
+                  Ausstehend
                 </p>
                 <p className="font-semibold text-lg">{totalCount}</p>
               </div>
-              {/* Einnahmen */}
+              {/* Einnahmen ausstehend */}
               <div>
                 <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
                   Einnahmen
@@ -84,7 +84,7 @@ export default function ScheduledEntriesPage() {
                   +{(totalIncome / 100).toFixed(2)} €
                 </p>
               </div>
-              {/* Ausgaben */}
+              {/* Ausgaben ausstehend */}
               <div>
                 <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
                   Ausgaben

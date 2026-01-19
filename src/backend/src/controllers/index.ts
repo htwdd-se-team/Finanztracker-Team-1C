@@ -5,3 +5,4 @@ export * from "./category.controller";
 export * from "./user.controller";
 export * from "./analytics.controller";
 export * from "./filter.controller";
+export * from "./demo.controller";

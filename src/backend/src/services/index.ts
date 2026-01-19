@@ -8,3 +8,4 @@ export * from "./kysely.service";
 export * from "./filter.service";
 export * from "./recurring-entry.service";
 export * from "./import.service";
+export * from "./demo.service";

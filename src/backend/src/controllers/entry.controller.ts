@@ -34,7 +34,6 @@ import {
   ScheduledEntriesParamsDto,
   ScheduledEntriesResponseDto,
   ScheduledEntriesSummaryDto,
-  ScheduledEntriesSummaryParamsDto,
   ScheduledMonthlyParamsDto,
   ScheduledMonthlyTotalsResponseDto,
   UpdateEntryDto,
@@ -155,12 +154,8 @@ export class EntryController {
   })
   async getScheduledEntriesSummary(
     @UserDecorator() user: User,
-    @Query() { disabled }: ScheduledEntriesSummaryParamsDto,
   ): Promise<ScheduledEntriesSummaryDto> {
-    return await this.recurringEntryService.getScheduledEntriesSummary(
-      user.id,
-      disabled,
-    );
+    return await this.recurringEntryService.getScheduledEntriesSummary(user.id);
   }
 
   @Get("scheduled-entries/monthly-totals")
