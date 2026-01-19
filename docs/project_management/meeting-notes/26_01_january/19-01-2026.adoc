@@ -3,7 +3,7 @@
 *Datum:* 19.01.2026 +
 *Ort:* Online (MS Teams) +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Ben +
 *Meetingbeginn:* 14:00 +
 *Meetingende:* xx:xx +
 *Dauer:* xx min +
@@ -20,24 +20,27 @@
 === 1. Ticketfortschritt/Product backlog
 Wie läuft das Backend refactoring? Welche Bugs sind noch offen/ sind noch Bugs dazu gekommen? +
 *Notizen:* +
-- ... +
- +
+- Backend -> erst nach Präsentation @Elias +
+- Bug (Daueraufträge) -> Parent-Transaktion wird mit im verfügbaren Kapital angezeigt -> gelöstet +
+- Sobald der Betrag kleiner als 1% ist im verfügbaren Kapital wird er zwar reingerechnet und aber nicht visuell angezegit
  +
 
 === 2. Präsentation 20.01. (Morgen)
 Ist alles vorbereitet? Ist der Demo-Account eingerichtet? +
 *Notizen:* +
-- ... +
- +
- +
+- Demo-Account ja, Präsentation so -> demo-account@presi.com / password +
+- Dashboard ausführlicher zeigen -> Kategorien und Kontoverlauf drüber hoovern (15 Sekunden mehr) +
+- Demo-Account noch finalisieren für morgen
+- Präsentation -> noch technischen Konzept Icons anpassen +
+- USB-Stick mit Präsentation und File in Teams herunterladen, sobald fertig
 
 
 
 === 3. Geklärte Fragen für Konsultation
 Ist für die Gruppe was wichtiges dabei? +
 *Notizen:* +
-- ... +
- +
+- Projekteinzelreflexion -> Harmonisierung von Paula sonst Fußnoten und  +
+- OnPremise Meeting in Cafe Listig Montag 14:30 +
  +
 
 === 4. Weitere organisatorische Aufgaben und/oder offene Punkte
