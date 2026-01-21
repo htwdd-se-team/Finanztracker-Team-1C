@@ -26,10 +26,10 @@ Der Funktionsumfang von {project-system-name} umfasst:
 * *Farbschema*: Verschiedene Themes für unterschiedliche Geschmäcker.
 
 == Lauffähiges System
-* URL: XXX
+* URL: https://finanztracker-team-1c.pages.dev/
 * Demo-Account
-** E-Mail: XXX
-** Passwort : XX
+** E-Mail: demo-account@presi.com
+** Passwort : password
 
 == Mobile Setup am Desktop
 Für den nachfolgenden Guide wird ausschließlich die mobile Ansicht aufzeigt, da diese der Fokus des Projektes war. Zusätzlich ist eine Desktop-Ansicht verfügbar, welche sich nur von der Anordnung der Elemente unterscheidet. Für den Testdesktop Aufruf kann auch die mobile Ansicht aktiviert werden mit Rechtem Mausklick den Reiter untersuchen und dann die mobile Aussicht auswählen. In unserem Beispiel wird dies für Chrome gezeigt.
@@ -37,8 +37,55 @@ Für den nachfolgenden Guide wird ausschließlich die mobile Ansicht aufzeigt, d
 image:../images/Guide_Mobile.png[]
 
 == Aufbau der Benutzeroberfläche
+=== Einleitung
+Die Menüs sind farblich markiert. Im Abschnitt "Einteilung der verschiedenen Menüs" sind die App-Bestandteile zu finden, im Abschnitt "Erklärung der verschiedenen Menüs" steht jeweils, was die Farben bedeuten und wie die Bereiche zusammenhängen.
+
+=== Einteilung der verschiedenen Menüs
+[cols="^,^"]
+|===
+| Startseite | Finanzanalysen
+| image:../images/dashboard.png[] | image:../images/finanzanalysen.png[]
+| Belegübersicht | Daueraufträge
+| image:../images/belegübersicht.png[]  | image:../images/daueraufträge.png[]
+2+| Einstellungen
+| image:../images/einstellungen.png[] | image:../images/einstellungen_2.png[]
+|===
+
+=== Erklärung der verschiedenen Menüs
+* *Startseite*
+** *Rot:* Fester Button/Icon für den schnellen Zugriff auf die Einstellungen (in jedem Menü an gleicher Position)
+** *Gelb:* Kontoübersicht, die nur durch reale Einnahmen/Ausgaben verändert wird; Filter im grünen Bereich ändern diesen Wert nicht
+** *Grün:* Filter für die drei Analysen im blauen Bereich: Monat = letzte 30 Tage, Woche = letzte 7 Tage, Auswahl = frei wählbarer Zeitraum (z.B. ganzer Monat)
+** *Blau:* Kontoverlauf als Graph, Kuchendiagramm nach Kategorien (kleine Anteile werden zu "Andere" gebündelt, inkl. ohne Kategorie) und Delta aus Einnahmen/Ausgaben für den gewählten Zeitraum
+** *Orange:* Die fünf neuesten Einträge, nach Datum sortiert
+** *Violett:* Navigationsleiste (von links): Startseite, Finanzanalysen, Transaktion hinzufügen, Belegübersicht, Daueraufträge
+
+* *Finanzanalysen*
+** *Blau:* Verfügbares Kapital als Kuchendiagramm: aktueller Kontostand plus alle offenen Einnahmen/Ausgaben dieses Monats aus Daueraufträgen; sehr kleine Anteile wandern in "Sonstige Einnahmen oder Ausgaben" (In-App-Hinweis verfügbar)
+** *Orange:* Notgroschen-Anzeige: Grün = Ziel erreicht, Gelb = mehr als 50% erreicht, Rot = unter 50% des Ziels (In-App-Hinweis verfügbar)
+
+* *Belegübersicht*
+** *Gelb:* Gespeicherte Filter auswählen, neu anlegen, bearbeiten oder löschen
+** *Grün:* Temporärer, ausklappbarer Filter mit denselben Funktionen wie die gespeicherten Filter
+** *Blau:* Belegliste, standardmäßig nach "Neueste zuerst" sortiert; Scrollen und Nachladen weiterer Einträge am Ende
+
+* *Daueraufträge*
+** *Gelb:* Summe aller in diesem Monat noch offenen Daueraufträge
+** *Grün:* Alle Einnahmen, die in diesem Monat noch durch Daueraufträge anfallen
+** *Rot:* Alle Ausgaben, die in diesem Monat noch durch Daueraufträge anfallen
+** *Blau:* Alle Einnahmen aus Daueraufträgen (offen und bereits ausgeführt in diesem Monat)
+** *Orange:* Alle Ausgaben aus Daueraufträgen (offen und bereits ausgeführt in diesem Monat)
+
+* *Einstellungen*
+** *Rot:* Benutzerinformationen
+** *Gelb:* Import von Bankdaten im CSV- oder TXT-Format
+** *Grün:* Farbschema wählen; "Modern Minimal" im Darkmode ist aktuell am stabilsten unterstützt
+** *Blau:* Kategorien anlegen, konfigurieren und löschen
+** *Orange:* Filter anlegen, konfigurieren und löschen
 
 == Nutzung
+=== Einleitung
+Hier werden die wichtigsten Funktionen per Ablauf dargestellt.
 
 == FAQ
 === Welche Bankimport-Formate werden unterstützt?
@@ -46,6 +93,7 @@ Der Import arbeitet mit *textbasierten CSV-Daten* und wertet die Spaltenübersch
 
 Unterstützt werden:
 
+* 100% gewährleisteter Import für die Sparkasse, Volksbank, ING und DKB
 * CSV-Dateien (`.csv`) und andere Textdateien (z.B. `.txt`), sofern sie die passenden Spaltenüberschriften enthalten.
 * Excel-Dateien (`.xlsx`) sollten vor dem Import als CSV exportiert werden (eine echte XLSX-Datei wird nicht zuverlässig erkannt, da der Import die Inhalte als Text einliest).
 
