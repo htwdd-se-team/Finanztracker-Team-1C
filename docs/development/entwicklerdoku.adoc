@@ -40,16 +40,19 @@ Siehe Architecture Notebook für vollständige Auflistung der Frontend- und Back
 * Auth: JWT Bearer; Public Endpunkte nur wo explizit erlaubt.
 
 == Zusammenarbeit der Komponenten (Sequenzdiagramme)
-Die folgenden Sequenzen stammen aus den bestehenden PlantUML-Modellen im Design-Dokument.
+Die folgenden Sequenzen stammen aus den bestehenden PlantUML-Modellen im Design-Dokument. Die Diagramme sind in den PlantUML-Dateien unter docs/development/plantuml/ zu finden und können mit PlantUML oder Online-Viewern (z.B. http://www.plantuml.com/plantuml/uml/) angezeigt werden.
 
 === Tasks 161/162
-image::images/diagrams/U18_161_162_seq.svg[width=90%]
+* PlantUML-Quelle: docs/development/plantuml/U18_161_162_seq.puml
+* Zeigt den Importflow für Bankdaten (CSV/TXT), Duplikatprüfung und Persistierung
 
 === Tasks 163/164
-image::images/diagrams/U20_163_164_seq.svg[width=90%]
+* PlantUML-Quelle: docs/development/plantuml/U20_163_164_seq.puml
+* Zeigt die Verfügbares-Kapital-Berechnung (aktuelle Balance, zukünftige Einnahmen, fixkosten)
 
 === Tasks 165/166
-image::images/diagrams/U20_165_166_seq.svg[width=90%]
+* PlantUML-Quelle: docs/development/plantuml/U20_165_166_seq.puml
+* Zeigt Notgroschen-Verwaltung (Display, Edit, Persistierung)
 
 == Softwaredokumentation (HTML)
 Ziel: Klassen/Module, Funktionen und Parameter automatisch extrahieren. Werkzeuge bewusst einsetzen, keine manuelle Listenpflege.
