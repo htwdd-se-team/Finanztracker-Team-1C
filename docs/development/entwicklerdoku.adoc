@@ -1,10 +1,7 @@
 include::../_includes/default-attributes.inc.adoc[]
+:doctype: book
 
 = Entwicklerdokumentation {project-system-name}
-{localdatetime}
-:toc:
-:sectnums:
-:icons: font
 
 == Zweck
 Unterstützt künftige Entwicklerinnen und Entwickler bei Wartung und Weiterentwicklung. Verweist auf bestehende Artefakte (Architecture Notebook, Design-Dokumente) und ergänzt sie um Build-/Dokuausleitung.
@@ -74,7 +71,7 @@ pnpm -C src/backend dlx @compodoc/compodoc -p tsconfig.json -d docs/compodoc --s
 . Generierung (Headless, EntryPoints nach Bedarf anpassen):
 +
 ----
-pnpm -C src/frontend dlx typedoc --entryPointStrategy expand --entryPoints src --tsconfig tsconfig.json --out docs/typedoc
+pnpm -C src/frontend dlx typedoc --entryPointStrategy expand --entryPoints app components hooks lib api __generated__ --tsconfig tsconfig.json --out docs/typedoc
 ----
 . Ergebnis: HTML unter `src/frontend/docs/typedoc/index.html` mit Komponenten/Hooks und exportierten Funktionen.
 
