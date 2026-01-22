@@ -1,5 +1,5 @@
-include::../_includes/default-attributes.inc.adoc[]
 :doctype: book
+include::../_includes/default-attributes.inc.adoc[]
 
 = Entwicklerdokumentation {project-system-name}
 
