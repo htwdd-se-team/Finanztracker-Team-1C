@@ -1,4 +1,4 @@
-= Anwenderdokumentation
+= Anwenderdokumentation (Finales Dokument ist eine Word-Datei/PDF)
 include::../_includes/default-attributes.inc.adoc[]
 
 == Einführung

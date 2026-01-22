@@ -1,3 +1,4 @@
+= Veralteter Stand (nicht mehr aktualisiert wurden)
 == 1. Epic User Stories
 
 === E01 - Ausgaben und Einnahmen erfassen

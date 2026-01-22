@@ -7,8 +7,98 @@ include::../_includes/default-attributes.inc.adoc[]
 
 == Allgemeine Informationen
 
-== Test Cases
+=== Test-Infrastruktur
 
-=== Test Case 01
+Das Projekt verwendet eine umfassende Test-Strategie mit automatisierten Tests auf mehreren Ebenen:
 
-=== Test Case 02
+==== Backend-Tests (NestJS)
+
+**Test-Framework:** Jest + ts-jest
+
+**Test-Typen:**
+
+* **Unit-Tests (Module-Specs):** Isolierte Tests einzelner Services und Module
+** Framework: Jest mit ts-jest
+** Dateien: `*.module-spec.ts`
+** Fokus: Geschäftslogik, Datenvalidierung, Service-Methoden
+** Coverage-Ziel: ≥ 70%
+
+* **E2E-Tests (End-to-End):** Vollständige API-Tests über HTTP-Endpunkte
+** Framework: Jest mit Supertest
+** Dateien: `*.e2e-spec.ts`
+** Fokus: REST API-Endpunkte, Request/Response-Validierung, Authentifizierung
+** Coverage-Ziel: ≥ 70%
+
+**Getestete Backend-Module:**
+
+* Authentication & Authorization (Login, Register, JWT)
+* Entry Service (Transaktionen erstellen, bearbeiten, löschen, filtern)
+* Category Service (Kategorien verwalten)
+* Filter Service (Benutzerdefinierte Filter)
+* Analytics Service (Dashboard-Daten, Statistiken, Balance-Verläufe)
+* Recurring Entry Service (Wiederkehrende Transaktionen)
+* User Service (Benutzerverwaltung)
+* Security (Rate-Limiting, Input-Validierung)
+
+==== Frontend-Tests (Next.js)
+
+**Test-Framework:** Playwright
+
+**Browser-Unterstützung:**
+
+* Chromium (Chrome/Edge)
+* Firefox
+* WebKit (Safari)
+
+**Getestete Frontend-Features:**
+
+* Login-Funktionalität
+* Transaktionserstellung
+* UI-Interaktionen
+
+**Konfiguration:**
+
+* Timeout: 60 Sekunden pro Test
+* Retry: 2x bei CI-Umgebung
+* HTML-Reports
+* Trace-Aufzeichnung bei Fehlern
+
+==== CI/CD mit GitHub Actions
+
+**Automatisierte Tests bei jedem Push/Pull Request:**
+
+**Workflow:** `build-check-backend.yml`
+
+**Pipeline-Schritte:**
+
+1. **Code-Qualität:** ESLint für TypeScript
+2. **Unit-Tests:** Alle Module/Service-Tests mit Coverage
+3. **E2E-Tests:** Vollständige API-Tests mit Testdatenbank
+4. **Coverage-Check:** Warnung bei < 70% Coverage
+5. **Docker Build:** Bei erfolgreichen Tests (nur main-Branch)
+
+**Trigger:**
+
+* Push/Pull Request in `src/backend/**`
+* Änderungen an Workflow-Dateien
+* Änderungen an Dependencies (package.json, pnpm-lock.yaml)
+
+**Test-Umgebung:**
+
+* Ubuntu-Latest Runner
+* Node.js 20
+* PostgreSQL-Testdatenbank (aus GitHub Secrets)
+* Prisma ORM mit automatischer Schema-Generierung
+
+**Coverage-Reporting:**
+
+* Separate Coverage-Berichte für Unit- und E2E-Tests
+* JSON- und HTML-Reports
+* Automatische Threshold-Prüfung (70%)
+
+==== Test-Dokumentation
+
+Detaillierte Testfälle sind dokumentiert in:
+
+* `src/backend/test/TEST_CASES.md` - Alle Backend-Testfälle mit Beschreibungen
+* Inline-Dokumentation in Test-Dateien

@@ -106,7 +106,7 @@ Die Verfeinerung des Stakeholders (Nutzer*innen), die das System benutzen, wird 
 | Bedarf | Priorität | Features / Funktionen | Geplantes Release
 
 | Authentifizierung
-| Muss 
+| Muss
 | Account erstellen/Login
 | MVP
 
@@ -117,59 +117,72 @@ a|
 - One-Click-Eingabe 
 - Schnell zu erreichender Button
 - einfache Kategorisierung
-| MVP
+| MVP 
 
 | Sofort verständliche Finanzübersicht
 | Muss 
 a| 
 - Minimalistisches, visuell ansprechendes Dashboard (Saldo, Kategorien, letzte Einträge) 
-| MVP
+| MVP 
 
 | Übersichtliche tabellarische Anzeige
 | Muss
 a|
-- Filter anbieten (Kategorien)
-| MVP
+- Filter anbieten (Kategorien, Datum, Betrag)
+- Speicherbare Filter
+| MVP 
 
-| Tiefgehende Analyse- und Exportmöglichkeiten für datenaffine Nutzer 
+| Analysemöglichkeiten für datenaffine Nutzer 
 | Soll 
-a| - Filter- & Drill-Down-Ansichten - CSV/Excel-Export 
-| xx
-| Automatische Kategorisierung & Budgetwarnungen zum „Denken abnehmen“ 
+a| 
+- Filter- & Drill-Down-Ansichten 
+- CSV/Excel-Import 
+- Graphen und Visualisierungen
+- Transaktionshistorie und Balance-Verlauf
+| Release 1 
+
+| Wiederkehrende Transaktionen
+| Soll
+a|
+- Automatische Wiederholung von Einträgen (monatlich und jährlich)
+- Verwaltung wiederkehrender Buchungen
+| Release 1 
+
+| Automatische Kategorisierung
 | Soll 
 a|
 - KI-gestützte Kategorisierung 
-- Regel-basierte Benachrichtigungen/Vorhersagen 
-| xx
-| Cross-Device-Nutzung inkl. Offline-Modus 
-| Soll a| - Cloud-Sync & lokaler Cache 
-| xx
+| XXX
+| Warnungen & Benachrichtigungen zum „Denken abnehmen" 
+| Kann 
+a|
+- Regelbasierte Benachrichtigungen/Vorhersagen 
+| XXX
 | Sichere Nutzung trotz sensibler Finanzdaten 
 | Kann 
 a| 
-- Ende-zu-Ende-Verschlüsselung - Zwei-Faktor-Authentifizierung 
-| xx
+- Ende-zu-Ende-Verschlüsselung 
+- Zwei-Faktor-Authentifizierung 
+| XXX
 | Gamification für das Motivationslevel 
 | Kann 
 a|
 - Abzeichen
 - Streaks
-| xx
+| XXX
 // | Integration externer Banken / Apps (Open-Banking)
 // | Kann 
 // a| 
 // - Schnittstellen für Giro- & Kredit-karten-konten 
 // | xx
-| Preis-günstige Lösung speziell für Studierende 
-| Kann 
-a| - Freemium-Modell mit rabattierten Upgrade-Plänen
-| xx
-
 | OCR Scannen von Rechnungen und Belegen
 | Kann
 | Vollautomatische Eintragung von Rechnungen und Belegen 
-| xx
-
+|  XXX
+| Sprach/Währungseinstellungen
+| Kann
+| - Nach Sprache-Umstellung auch Möglichkeit automatische Umrechnung in die Heimatwährung
+| XXX
 |===
 
 === Zusätzliche Produktanforderungen
@@ -199,26 +212,34 @@ a| - Freemium-Modell mit rabattierten Upgrade-Plänen
 | Mittel
 | MVP
 
+| Mobile Responsivität & Touch-Optimierung
+| Hoch 
+| Release 1
+
+| Dokumentation: In-App-Hilfe
+| Mittel
+| Release 1
+
 | Offline-Fähigkeit mit automatischer Synchronisierung
 | Niedrig
-| xx
+| XXX
 
 | Datenschutz & Compliance (Ende-zu-Ende-Verschlüsselung)
 | Hoch
-| xx
+| XXX
 
 | Robustheit: Kein Datenverlust bei Abbruch, automatische Wiederherstellung
 | Mittel
-| xx
+| XXX
 
 | OCR-Genauigkeit ≥ 90 % bei Standardbelegen
 | Niedrig
-| xx
+| XXX
 
 
-| Dokumentation: In-App-Hilfe,  Onboarding-Tour
+| Dokumentation: Onboarding-Tour
 | Mittel
-| xx
+| XXX
 
 |===
 
