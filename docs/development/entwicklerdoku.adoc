@@ -43,22 +43,13 @@ Siehe Architecture Notebook für vollständige Auflistung der Frontend- und Back
 Die folgenden Sequenzen stammen aus den bestehenden PlantUML-Modellen im Design-Dokument.
 
 === Tasks 161/162
-[plantuml, "{diagramsdir}/U18_161_162_seq", svg]
-....
-include::{plantumlsdir}/U18_161_162_seq.puml[]
-....
+image::images/diagrams/U18_161_162_seq.svg[width=90%]
 
 === Tasks 163/164
-[plantuml, "{diagramsdir}/U20_163_164_seq", svg]
-....
-include::{plantumlsdir}/U20_163_164_seq.puml[]
-....
+image::images/diagrams/U20_163_164_seq.svg[width=90%]
 
 === Tasks 165/166
-[plantuml, "{diagramsdir}/U20_165_166_seq", svg]
-....
-include::{plantumlsdir}/U20_165_166_seq.puml[]
-....
+image::images/diagrams/U20_165_166_seq.svg[width=90%]
 
 == Softwaredokumentation (HTML)
 Ziel: Klassen/Module, Funktionen und Parameter automatisch extrahieren. Werkzeuge bewusst einsetzen, keine manuelle Listenpflege.
