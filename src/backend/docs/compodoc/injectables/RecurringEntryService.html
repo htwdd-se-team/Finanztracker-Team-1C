@@ -1,0 +1,1644 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>backend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">backend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >RecurringEntryService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/services/recurring-entry.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#logger" >logger</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#createChildEntryForParent" >createChildEntryForParent</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#disableRecurringEntry" >disableRecurringEntry</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#enableRecurringEntry" >enableRecurringEntry</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getScheduledEntries" >getScheduledEntries</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getScheduledEntriesSummary" >getScheduledEntriesSummary</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getScheduledMonthlyTotals" >getScheduledMonthlyTotals</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#handleParentEntryUpdate" >handleParentEntryUpdate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#processRecurringEntries" >processRecurringEntries</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#shouldCreateChild" >shouldCreateChild</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(prisma: <a href="../injectables/PrismaService.html" target="_self">PrismaService</a>, backendConfig: <a href="../classes/BackendConfig.html" target="_self">BackendConfig</a>, kysely: <a href="../injectables/KyselyService.html" target="_self">KyselyService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/services/recurring-entry.service.ts:21</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>prisma</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PrismaService.html" target="_self" >PrismaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>backendConfig</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/BackendConfig.html" target="_self" >BackendConfig</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>kysely</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/KyselyService.html" target="_self" >KyselyService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createChildEntryForParent"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>createChildEntryForParent</b></span>
+                        <a href="#createChildEntryForParent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createChildEntryForParent(parentId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Creates a new child entry based on the parent&#39;s recurring configuration</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>parentId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="disableRecurringEntry"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>disableRecurringEntry</b></span>
+                        <a href="#disableRecurringEntry"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>disableRecurringEntry(parentId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, userId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="315"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:315</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Disable a recurring parent entry (instead of deleting it)</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>parentId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/EntryResponseDto.html" target="_self" >Promise&lt;EntryResponseDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="enableRecurringEntry"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>enableRecurringEntry</b></span>
+                        <a href="#enableRecurringEntry"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>enableRecurringEntry(parentId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, userId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="455"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:455</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Re-enable a disabled recurring entry</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>parentId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/EntryResponseDto.html" target="_self" >Promise&lt;EntryResponseDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getScheduledEntries"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getScheduledEntries</b></span>
+                        <a href="#getScheduledEntries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getScheduledEntries(userId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, : <a href="../classes/ScheduledEntriesParamsDto.html" target="_self">ScheduledEntriesParamsDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="141"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:141</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/ScheduledEntriesParamsDto.html" target="_self" >ScheduledEntriesParamsDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/ScheduledEntriesResponseDto.html" target="_self" >Promise&lt;ScheduledEntriesResponseDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getScheduledEntriesSummary"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getScheduledEntriesSummary</b></span>
+                        <a href="#getScheduledEntriesSummary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getScheduledEntriesSummary(userId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="171"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:171</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/ScheduledEntriesSummaryDto.html" target="_self" >Promise&lt;ScheduledEntriesSummaryDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getScheduledMonthlyTotals"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getScheduledMonthlyTotals</b></span>
+                        <a href="#getScheduledMonthlyTotals"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getScheduledMonthlyTotals(userId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, year?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, month?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="249"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:249</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>year</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>month</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/ScheduledMonthlyTotalsResponseDto.html" target="_self" >Promise&lt;ScheduledMonthlyTotalsResponseDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleParentEntryUpdate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>handleParentEntryUpdate</b></span>
+                        <a href="#handleParentEntryUpdate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleParentEntryUpdate(parentId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, oldCreatedAt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, newCreatedAt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, updateData: Record<string | unknown>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="344"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:344</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handle parent entry update:</p>
+<ol>
+<li>Updates future child entries with new field values (categoryId, amount, description, type)</li>
+<li>Generates a new child entry if the createdAt date changed and deletes the old one</li>
+</ol>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>parentId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>oldCreatedAt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>newCreatedAt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>updateData</td>
+                                            <td>
+                                                        <code>Record&lt;string | unknown&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="processRecurringEntries"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>processRecurringEntries</b></span>
+                        <a href="#processRecurringEntries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>processRecurringEntries()</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Cron(CronExpression.EVERY_30_SECONDS)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="30"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="shouldCreateChild"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>shouldCreateChild</b></span>
+                        <a href="#shouldCreateChild"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>shouldCreateChild(recurringType: <a href="../miscellaneous/variables.html#RecurringTransactionType" target="_self">RecurringTransactionType</a>, recurringBaseInterval: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, lastChildDate: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="112"
+                                    class="link-to-prism">src/services/recurring-entry.service.ts:112</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determines if a new child entry should be created based on the recurring type
+and the date of the last child entry.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recurringType</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/variables.html#RecurringTransactionType" target="_self" >RecurringTransactionType</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>recurringBaseInterval</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>lastChildDate</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logger"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>logger</b></span>
+                        <a href="#logger"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Logger(RecurringEntryService.name)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/services/recurring-entry.service.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Inject, Injectable, Logger } from &quot;@nestjs/common&quot;;
+import { Cron, CronExpression } from &quot;@nestjs/schedule&quot;;
+import { RecurringTransactionType } from &quot;@prisma/client&quot;;
+import { sql } from &quot;kysely&quot;;
+import { DateTime } from &quot;luxon&quot;;
+import { BackendConfig } from &quot;@/backend.config&quot;;
+import {
+  EntryResponseDto,
+  ScheduledEntriesParamsDto,
+  ScheduledEntriesResponseDto,
+  ScheduledEntriesSummaryDto,
+  ScheduledMonthlyTotalsResponseDto,
+} from &quot;@/dto&quot;;
+
+import { EntryService } from &quot;./entry.service&quot;;
+import { KyselyService } from &quot;./kysely.service&quot;;
+import { PrismaService } from &quot;./prisma.service&quot;;
+
+@Injectable()
+export class RecurringEntryService {
+  private readonly logger &#x3D; new Logger(RecurringEntryService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(BackendConfig) private readonly backendConfig: BackendConfig,
+    private readonly kysely: KyselyService,
+  ) {}
+
+  @Cron(CronExpression.EVERY_30_SECONDS)
+  async processRecurringEntries(): Promise&lt;void&gt; {
+    if (!this.backendConfig.RUN_SCHEDULED_ENTRIES) {
+      return;
+    }
+
+    this.logger.debug(&quot;Starting recurring entry processing...&quot;);
+
+    // Get all active (not disabled) parent entries
+    const parentEntries &#x3D; await this.prisma.transaction.findMany({
+      where: {
+        isRecurring: true,
+        recurringDisabled: false,
+        transactionId: null, // Only parents
+      },
+    });
+
+    this.logger.debug(&#x60;Found ${parentEntries.length} active recurring entries&#x60;);
+
+    for (const parent of parentEntries) {
+      await this.createChildEntryForParent(parent.id);
+    }
+
+    this.logger.debug(&quot;Recurring entry processing completed&quot;);
+  }
+
+  /**
+   * Creates a new child entry based on the parent&#x27;s recurring configuration
+   */
+  private async createChildEntryForParent(parentId: number): Promise&lt;void&gt; {
+    try {
+      const parent &#x3D; await this.prisma.transaction.findUnique({
+        where: { id: parentId },
+      });
+
+      if (!parent || !parent.isRecurring || parent.recurringDisabled) {
+        return;
+      }
+
+      // Get the last child entry to check when the next one should be created
+      const lastChild &#x3D; await this.prisma.transaction.findFirst({
+        where: { transactionId: parentId },
+        orderBy: { createdAt: &quot;desc&quot; },
+      });
+
+      // Determine if a new child should be created based on recurringType
+      if (!parent.recurringType) {
+        return;
+      }
+      const shouldCreateChild &#x3D; this.shouldCreateChild(
+        parent.recurringType,
+        parent.recurringBaseInterval ?? 1,
+        lastChild?.createdAt || parent.createdAt,
+      );
+
+      if (shouldCreateChild) {
+        await this.prisma.transaction.create({
+          data: {
+            type: parent.type,
+            amount: parent.amount,
+            description: parent.description,
+            currency: parent.currency,
+            userId: parent.userId,
+            isRecurring: false,
+            categoryId: parent.categoryId,
+            createdAt: DateTime.now().toJSDate(),
+            transactionId: parentId,
+          },
+        });
+
+        this.logger.debug(&#x60;Created child entry for parent ${parentId}&#x60;);
+      }
+    } catch (err) {
+      this.logger.error(
+        &#x60;Error creating child entry for parent ${parentId}: ${err}&#x60;,
+      );
+    }
+  }
+
+  /**
+   * Determines if a new child entry should be created based on the recurring type
+   * and the date of the last child entry.
+   */
+  private shouldCreateChild(
+    recurringType: RecurringTransactionType,
+    recurringBaseInterval: number,
+    lastChildDate: Date,
+  ): boolean {
+    const today &#x3D; DateTime.now().startOf(&quot;day&quot;);
+    const lastDate &#x3D; DateTime.fromJSDate(lastChildDate).startOf(&quot;day&quot;);
+
+    // Calculate when the next occurrence should happen
+    let nextOccurrence: DateTime;
+
+    switch (recurringType) {
+      case RecurringTransactionType.DAILY:
+        nextOccurrence &#x3D; lastDate.plus({ days: recurringBaseInterval });
+        return today &gt;&#x3D; nextOccurrence;
+
+      case RecurringTransactionType.WEEKLY:
+        nextOccurrence &#x3D; lastDate.plus({ weeks: recurringBaseInterval });
+        return today &gt;&#x3D; nextOccurrence;
+
+      case RecurringTransactionType.MONTHLY:
+        nextOccurrence &#x3D; lastDate.plus({ months: recurringBaseInterval });
+        return today &gt;&#x3D; nextOccurrence;
+
+      default:
+        return false;
+    }
+  }
+
+  async getScheduledEntries(
+    userId: number,
+    { disabled, take &#x3D; 10, cursorId }: ScheduledEntriesParamsDto,
+  ): Promise&lt;ScheduledEntriesResponseDto&gt; {
+    const entries &#x3D; await this.prisma.transaction.findMany({
+      where: {
+        userId,
+        isRecurring: true,
+        recurringDisabled: Boolean(disabled),
+      },
+      ...(cursorId &amp;&amp; {
+        cursor: { id: cursorId },
+        skip: 1,
+      }),
+      take: take,
+      orderBy: {
+        amount: &quot;desc&quot;,
+      },
+    });
+
+    return {
+      entries: entries.map((entry) &#x3D;&gt;
+        EntryService.mapEntryToResponseDto(entry),
+      ),
+      count: entries.length,
+      cursorId:
+        entries.length &#x3D;&#x3D;&#x3D; take ? entries[entries.length - 1]?.id : null,
+    };
+  }
+
+  async getScheduledEntriesSummary(
+    userId: number,
+  ): Promise&lt;ScheduledEntriesSummaryDto&gt; {
+    const now &#x3D; DateTime.now();
+    const monthStart &#x3D; now.startOf(&quot;month&quot;).toJSDate();
+
+    // Get all active recurring entries (matching getScheduledEntries logic)
+    const allRecurring &#x3D; await this.kysely
+      .selectFrom(&quot;Transaction&quot;)
+      .select([&quot;id&quot;, &quot;type&quot;, &quot;amount&quot;, &quot;recurringType&quot;])
+      .where(&quot;userId&quot;, &quot;&#x3D;&quot;, userId)
+      .where(&quot;isRecurring&quot;, &quot;&#x3D;&quot;, true)
+      .where((eb) &#x3D;&gt;
+        eb.or([
+          eb(&quot;recurringDisabled&quot;, &quot;&#x3D;&quot;, false),
+          eb(&quot;recurringDisabled&quot;, &quot;is&quot;, null),
+        ]),
+      )
+      .execute();
+
+    this.logger.debug(&#x60;Found ${allRecurring.length} active recurring entries&#x60;);
+
+    // For each recurring entry, check if it already has a child this period
+    let totalCount &#x3D; 0;
+    let totalIncome &#x3D; 0;
+    let totalExpense &#x3D; 0;
+
+    const todayEnd &#x3D; now.endOf(&quot;day&quot;).toJSDate();
+
+    for (const entry of allRecurring) {
+      // Determine period start based on recurring type
+      let periodStart: Date;
+
+      switch (entry.recurringType) {
+        case &quot;DAILY&quot;:
+          periodStart &#x3D; now.startOf(&quot;day&quot;).toJSDate();
+          break;
+        case &quot;WEEKLY&quot;:
+          periodStart &#x3D; now.startOf(&quot;week&quot;).toJSDate();
+          break;
+        case &quot;MONTHLY&quot;:
+        default:
+          periodStart &#x3D; monthStart;
+          break;
+      }
+
+      // Check if a child exists for this entry that has ALREADY HAPPENED (date &lt;&#x3D; today)
+      // Children with future dates mean the entry is still &quot;due&quot;
+      const childAlreadyHappened &#x3D; await this.kysely
+        .selectFrom(&quot;Transaction&quot;)
+        .select([&quot;id&quot;, &quot;createdAt&quot;])
+        .where(&quot;transactionId&quot;, &quot;&#x3D;&quot;, entry.id)
+        .where(&quot;createdAt&quot;, &quot;&gt;&#x3D;&quot;, periodStart)
+        .where(&quot;createdAt&quot;, &quot;&lt;&#x3D;&quot;, todayEnd) // Only count if date is today or earlier
+        .executeTakeFirst();
+
+      // Entry is still due if no child has happened yet in this period
+      if (!childAlreadyHappened) {
+        totalCount++;
+        if (entry.type &#x3D;&#x3D;&#x3D; &quot;INCOME&quot;) {
+          totalIncome +&#x3D; entry.amount;
+        } else {
+          totalExpense +&#x3D; entry.amount;
+        }
+      }
+    }
+
+    this.logger.debug(
+      &#x60;Summary: count&#x3D;${totalCount}, income&#x3D;${totalIncome}, expense&#x3D;${totalExpense}&#x60;,
+    );
+
+    return {
+      totalCount,
+      totalIncome,
+      totalExpense,
+    };
+  }
+
+  async getScheduledMonthlyTotals(
+    userId: number,
+    year?: number,
+    month?: number,
+  ): Promise&lt;ScheduledMonthlyTotalsResponseDto&gt; {
+    const targetYear &#x3D; year ?? DateTime.now().year;
+
+    // If a single month is requested, restrict start/end to that month, otherwise use the whole year
+    let start &#x3D; DateTime.local(targetYear, 1, 1).toJSDate();
+    let end &#x3D; DateTime.local(targetYear + 1, 1, 1).toJSDate();
+    if (month) {
+      start &#x3D; DateTime.local(targetYear, month, 1).startOf(&quot;day&quot;).toJSDate();
+      end &#x3D; DateTime.local(targetYear, month, 1)
+        .plus({ months: 1 })
+        .startOf(&quot;day&quot;)
+        .toJSDate();
+    }
+
+    const rows &#x3D; await this.kysely
+      .selectFrom(&quot;Transaction&quot;)
+      .select([
+        sql&lt;number&gt;&#x60;EXTRACT(MONTH FROM &quot;createdAt&quot;)::int&#x60;.as(&quot;month&quot;),
+        sql&lt;number&gt;&#x60;
+          COALESCE(SUM(CASE WHEN &quot;type&quot; &#x3D; &#x27;INCOME&#x27; THEN &quot;amount&quot; ELSE 0 END), 0)
+        &#x60;.as(&quot;income&quot;),
+        sql&lt;number&gt;&#x60;
+          COALESCE(SUM(CASE WHEN &quot;type&quot; &#x3D; &#x27;EXPENSE&#x27; THEN &quot;amount&quot; ELSE 0 END), 0)
+        &#x60;.as(&quot;expense&quot;),
+      ])
+      .where(&quot;userId&quot;, &quot;&#x3D;&quot;, userId)
+      .where(sql&lt;boolean&gt;&#x60;&quot;transactionId&quot; IS NOT NULL&#x60;)
+      .where(&quot;createdAt&quot;, &quot;&gt;&#x3D;&quot;, start)
+      .where(&quot;createdAt&quot;, &quot;&lt;&quot;, end)
+      .groupBy(sql&#x60;EXTRACT(MONTH FROM &quot;createdAt&quot;)::int&#x60;)
+      .orderBy(&quot;month&quot;)
+      .execute();
+
+    const map &#x3D; new Map&lt;number, { income: number; expense: number }&gt;();
+    for (const r of rows) {
+      const m &#x3D; Number(r.month);
+      map.set(m, {
+        income: Number(r.income) || 0,
+        expense: Number(r.expense) || 0,
+      });
+    }
+
+    const monthsToReturn &#x3D; month
+      ? [month]
+      : Array.from({ length: 12 }, (_, i) &#x3D;&gt; i + 1);
+
+    const totals &#x3D; monthsToReturn.map((m) &#x3D;&gt; {
+      const found &#x3D; map.get(m) ?? { income: 0, expense: 0 };
+      return {
+        month: m,
+        income: found.income,
+        expense: found.expense,
+        net: found.income - found.expense,
+      };
+    });
+
+    return { totals };
+  }
+
+  /**
+   * Disable a recurring parent entry (instead of deleting it)
+   */
+  async disableRecurringEntry(
+    parentId: number,
+    userId: number,
+  ): Promise&lt;EntryResponseDto&gt; {
+    const entry &#x3D; await this.prisma.transaction.findUnique({
+      where: { id: parentId },
+    });
+
+    if (!entry || entry.userId !&#x3D;&#x3D; userId || !entry.isRecurring) {
+      throw new Error(&quot;Invalid recurring entry&quot;);
+    }
+
+    await this.prisma.transaction.update({
+      where: { id: parentId },
+      data: { recurringDisabled: true },
+    });
+
+    const updatedEntry &#x3D; await this.prisma.transaction.findUnique({
+      where: { id: parentId },
+    });
+
+    return EntryService.mapEntryToResponseDto(updatedEntry);
+  }
+
+  /**
+   * Handle parent entry update:
+   * 1. Updates future child entries with new field values (categoryId, amount, description, type)
+   * 2. Generates a new child entry if the createdAt date changed and deletes the old one
+   */
+  async handleParentEntryUpdate(
+    parentId: number,
+    oldCreatedAt: Date,
+    newCreatedAt: Date,
+    updateData: Record&lt;string, unknown&gt;,
+  ): Promise&lt;void&gt; {
+    const parent &#x3D; await this.prisma.transaction.findUnique({
+      where: { id: parentId },
+    });
+
+    if (!parent || !parent.isRecurring) {
+      return;
+    }
+
+    const todayStart &#x3D; DateTime.now().startOf(&quot;day&quot;);
+
+    // Update future child entries with new field values
+    // These are fields that should propagate to children
+    const fieldsToPropagate &#x3D; [&quot;categoryId&quot;, &quot;amount&quot;, &quot;description&quot;, &quot;type&quot;];
+    const propagateData: Record&lt;string, unknown&gt; &#x3D; {};
+
+    for (const field of fieldsToPropagate) {
+      if (field in updateData) {
+        propagateData[field] &#x3D; updateData[field];
+      }
+    }
+
+    if (Object.keys(propagateData).length &gt; 0) {
+      // Update all future children with new field values
+      await this.prisma.transaction.updateMany({
+        where: {
+          transactionId: parentId,
+          createdAt: {
+            gte: todayStart.toJSDate(),
+          },
+        },
+        data: propagateData,
+      });
+
+      this.logger.debug(
+        &#x60;Updated future child entries for parent ${parentId} with new field values&#x60;,
+      );
+    }
+
+    // Handle createdAt change (date update)
+    if (oldCreatedAt.getTime() !&#x3D;&#x3D; newCreatedAt.getTime()) {
+      const oldChild &#x3D; await this.prisma.transaction.findFirst({
+        where: {
+          transactionId: parentId,
+          createdAt: {
+            gte: DateTime.fromJSDate(oldCreatedAt).startOf(&quot;day&quot;).toJSDate(),
+            lt: DateTime.fromJSDate(oldCreatedAt)
+              .plus({ days: 1 })
+              .startOf(&quot;day&quot;)
+              .toJSDate(),
+          },
+        },
+      });
+
+      // Delete old child entry if it exists (whether past or future)
+      // This ensures consistency: if the date changes, we want only the new child
+      if (oldChild) {
+        await this.prisma.transaction.delete({
+          where: { id: oldChild.id },
+        });
+
+        this.logger.debug(
+          &#x60;Deleted child entry ${oldChild.id} for parent ${parentId} (date changed)&#x60;,
+        );
+      }
+
+      // Check if a child already exists for the new date
+      const existingChild &#x3D; await this.prisma.transaction.findFirst({
+        where: {
+          transactionId: parentId,
+          createdAt: {
+            gte: DateTime.fromJSDate(newCreatedAt).startOf(&quot;day&quot;).toJSDate(),
+            lt: DateTime.fromJSDate(newCreatedAt)
+              .plus({ days: 1 })
+              .startOf(&quot;day&quot;)
+              .toJSDate(),
+          },
+        },
+      });
+
+      // If no child exists for the new date, create one
+      if (!existingChild) {
+        await this.prisma.transaction.create({
+          data: {
+            type: parent.type,
+            amount: parent.amount,
+            description: parent.description,
+            currency: parent.currency,
+            userId: parent.userId,
+            isRecurring: false,
+            categoryId: parent.categoryId,
+            createdAt: newCreatedAt,
+            transactionId: parentId,
+          },
+        });
+
+        this.logger.debug(
+          &#x60;Created child entry for parent ${parentId} on new date&#x60;,
+        );
+      }
+    }
+  }
+
+  /**
+   * Re-enable a disabled recurring entry
+   */
+  async enableRecurringEntry(
+    parentId: number,
+    userId: number,
+  ): Promise&lt;EntryResponseDto&gt; {
+    const entry &#x3D; await this.prisma.transaction.findUnique({
+      where: { id: parentId },
+    });
+
+    if (!entry || entry.userId !&#x3D;&#x3D; userId || !entry.isRecurring) {
+      throw new Error(&quot;Invalid recurring entry&quot;);
+    }
+
+    await this.prisma.transaction.update({
+      where: { id: parentId },
+      data: { recurringDisabled: false },
+    });
+
+    const updatedEntry &#x3D; await this.prisma.transaction.findUnique({
+      where: { id: parentId },
+    });
+
+    return EntryService.mapEntryToResponseDto(updatedEntry);
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'RecurringEntryService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

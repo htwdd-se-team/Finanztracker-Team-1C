@@ -1,0 +1,895 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>backend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">backend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  DemoCategory</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/services/demo.service.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#color" 
+>
+                                            color
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#icon" 
+>
+                                            icon
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#name" 
+>
+                                            name
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="color"></a>
+                                        <span class="name "><b>color</b>
+                                            <a href="#color">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>color:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="icon"></a>
+                                        <span class="name "><b>icon</b>
+                                            <a href="#icon">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>icon:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="name"></a>
+                                        <span class="name "><b>name</b>
+                                            <a href="#name">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>name:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Logger } from &quot;@nestjs/common&quot;;
+import {
+  RecurringTransactionType,
+  TransactionType,
+  User,
+} from &quot;@prisma/client&quot;;
+import { DateTime } from &quot;luxon&quot;;
+
+import { RegisterDto } from &quot;../dto&quot;;
+
+import { AuthService } from &quot;./auth.service&quot;;
+import { PrismaService } from &quot;./prisma.service&quot;;
+
+interface DemoCategory {
+  name: string;
+  color: string;
+  icon: string;
+}
+
+interface DemoTransaction {
+  type: TransactionType;
+  amount: number;
+  description: string;
+  categoryName: string;
+  createdAt: Date;
+}
+
+@Injectable()
+export class DemoService {
+  private readonly logger &#x3D; new Logger(DemoService.name);
+
+  // Demo categories configuration (using valid IconNames from frontend)
+  private readonly DEMO_CATEGORIES: DemoCategory[] &#x3D; [
+    { name: &quot;Gehalt&quot;, color: &quot;green&quot;, icon: &quot;dollar-sign&quot; },
+    { name: &quot;Lebensmittel&quot;, color: &quot;orange&quot;, icon: &quot;shopping-cart&quot; },
+    { name: &quot;Wohnung&quot;, color: &quot;blue&quot;, icon: &quot;home&quot; },
+    { name: &quot;Transport&quot;, color: &quot;purple&quot;, icon: &quot;car&quot; },
+    { name: &quot;Freizeit&quot;, color: &quot;pink&quot;, icon: &quot;gamepad2&quot; },
+  ];
+
+  // Monthly salary in cents (2500€)
+  private readonly SALARY_AMOUNT &#x3D; 250000;
+
+  // Fixed monthly expenses in cents
+  private readonly RENT_AMOUNT &#x3D; 75000; // 750€
+  private readonly SUBSCRIPTIONS_AMOUNT &#x3D; 3000; // 30€ (Netflix, Spotify)
+  private readonly INSURANCE_AMOUNT &#x3D; 8000; // 80€ (liability insurance)
+  private readonly UTILITIES_AMOUNT &#x3D; 8000; // 80€ (electricity, internet)
+
+  // Variable expense ranges in cents
+  private readonly GROCERIES_MIN &#x3D; 28000; // 280€
+  private readonly GROCERIES_MAX &#x3D; 38000; // 380€
+  private readonly TRANSPORT_MIN &#x3D; 5000; // 50€
+  private readonly TRANSPORT_MAX &#x3D; 10000; // 100€
+  private readonly ENTERTAINMENT_MIN &#x3D; 6000; // 60€
+  private readonly ENTERTAINMENT_MAX &#x3D; 12000; // 120€
+
+  // Balance threshold for triggering big purchases (5000€)
+  private readonly SPLURGE_THRESHOLD &#x3D; 500000;
+
+  // Random events (regular throughout the year)
+  private readonly RANDOM_EVENTS &#x3D; [
+    { description: &quot;Trip to Berlin&quot;, minAmount: 15000, maxAmount: 30000 },
+    { description: &quot;Concert tickets&quot;, minAmount: 4000, maxAmount: 8000 },
+    { description: &quot;Birthday gift&quot;, minAmount: 2000, maxAmount: 5000 },
+    { description: &quot;New clothes&quot;, minAmount: 4000, maxAmount: 10000 },
+    { description: &quot;Restaurant dinner&quot;, minAmount: 3000, maxAmount: 7000 },
+    { description: &quot;Weekend trip&quot;, minAmount: 10000, maxAmount: 20000 },
+    { description: &quot;Electronics purchase&quot;, minAmount: 5000, maxAmount: 15000 },
+    { description: &quot;Medical expenses&quot;, minAmount: 2000, maxAmount: 6000 },
+    { description: &quot;Home repair&quot;, minAmount: 3000, maxAmount: 10000 },
+    { description: &quot;Gym membership&quot;, minAmount: 2500, maxAmount: 4000 },
+    { description: &quot;Dentist visit&quot;, minAmount: 4000, maxAmount: 10000 },
+    { description: &quot;Car repair&quot;, minAmount: 8000, maxAmount: 18000 },
+    { description: &quot;Night out&quot;, minAmount: 3000, maxAmount: 7000 },
+    { description: &quot;Online shopping&quot;, minAmount: 2000, maxAmount: 5000 },
+  ];
+
+  // Heavy purchases when balance exceeds threshold
+  private readonly SPLURGE_EVENTS &#x3D; [
+    { description: &quot;New laptop&quot;, minAmount: 50000, maxAmount: 80000 },
+    { description: &quot;Vacation to Italy&quot;, minAmount: 60000, maxAmount: 100000 },
+    { description: &quot;New furniture&quot;, minAmount: 30000, maxAmount: 60000 },
+    { description: &quot;New phone&quot;, minAmount: 40000, maxAmount: 70000 },
+    { description: &quot;Winter coat &amp; boots&quot;, minAmount: 20000, maxAmount: 35000 },
+    { description: &quot;City trip to Paris&quot;, minAmount: 40000, maxAmount: 70000 },
+    { description: &quot;New bicycle&quot;, minAmount: 25000, maxAmount: 45000 },
+    { description: &quot;Kitchen appliances&quot;, minAmount: 20000, maxAmount: 40000 },
+  ];
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authService: AuthService,
+  ) {}
+
+  /**
+   * Creates a demo account with 1 year of transaction history
+   */
+  async createDemoAccount(registerDto: RegisterDto): Promise&lt;User&gt; {
+    // Create the user account
+    const user &#x3D; await this.authService.register(registerDto);
+
+    this.logger.log(&#x60;Created demo user: ${user.email}&#x60;);
+
+    // Create demo categories
+    const categoryMap &#x3D; await this.createDemoCategories(user.id);
+
+    // Generate transactions for the past year
+    await this.generateYearOfTransactions(user.id, categoryMap);
+
+    this.logger.log(&#x60;Demo account setup complete for user: ${user.email}&#x60;);
+
+    return user;
+  }
+
+  /**
+   * Creates demo categories and returns a map of category name to ID
+   */
+  private async createDemoCategories(
+    userId: number,
+  ): Promise&lt;Map&lt;string, number&gt;&gt; {
+    const categoryMap &#x3D; new Map&lt;string, number&gt;();
+
+    for (const cat of this.DEMO_CATEGORIES) {
+      const category &#x3D; await this.prisma.category.create({
+        data: {
+          name: cat.name,
+          color: cat.color,
+          icon: cat.icon,
+          userId,
+        },
+      });
+      categoryMap.set(cat.name, category.id);
+    }
+
+    this.logger.debug(&#x60;Created ${this.DEMO_CATEGORIES.length} demo categories&#x60;);
+
+    return categoryMap;
+  }
+
+  /**
+   * Generates 1 year of transaction history
+   */
+  private async generateYearOfTransactions(
+    userId: number,
+    categoryMap: Map&lt;string, number&gt;,
+  ): Promise&lt;void&gt; {
+    const transactions: DemoTransaction[] &#x3D; [];
+    const now &#x3D; DateTime.now();
+    const oneYearAgo &#x3D; now.minus({ years: 1 });
+
+    // Create the recurring salary parent entry
+    const salaryParent &#x3D; await this.createRecurringSalary(
+      userId,
+      categoryMap.get(&quot;Gehalt&quot;),
+      oneYearAgo,
+    );
+
+    // Track running balance to trigger splurge purchases
+    let runningBalance &#x3D; 0;
+    const usedSplurgeEvents &#x3D; new Set&lt;number&gt;();
+
+    // Generate salary child entries for each month
+    for (let month &#x3D; 0; month &lt; 12; month++) {
+      const salaryDate &#x3D; oneYearAgo.plus({ months: month }).set({ day: 1 });
+
+      // Only create if the date is not in the future
+      if (salaryDate &lt;&#x3D; now) {
+        await this.prisma.transaction.create({
+          data: {
+            type: TransactionType.INCOME,
+            amount: this.SALARY_AMOUNT,
+            description: &quot;Gehalt&quot;,
+            currency: &quot;EUR&quot;,
+            userId,
+            isRecurring: false,
+            categoryId: categoryMap.get(&quot;Gehalt&quot;),
+            createdAt: salaryDate.toJSDate(),
+            transactionId: salaryParent.id,
+          },
+        });
+        runningBalance +&#x3D; this.SALARY_AMOUNT;
+      }
+    }
+
+    // Generate monthly expenses for each month
+    for (let month &#x3D; 0; month &lt; 12; month++) {
+      const monthStart &#x3D; oneYearAgo.plus({ months: month });
+
+      // Only generate if the month is not entirely in the future
+      if (monthStart &lt;&#x3D; now) {
+        const monthTransactions &#x3D; this.generateMonthlyExpenses(
+          monthStart,
+          categoryMap,
+          now,
+        );
+
+        // Calculate expenses for this month
+        for (const t of monthTransactions) {
+          runningBalance -&#x3D; t.amount;
+        }
+        transactions.push(...monthTransactions);
+
+        // Check if balance exceeds threshold - trigger a splurge purchase
+        if (runningBalance &gt; this.SPLURGE_THRESHOLD) {
+          const splurgeTransaction &#x3D; this.generateSplurgePurchase(
+            monthStart,
+            now,
+            usedSplurgeEvents,
+          );
+          if (splurgeTransaction) {
+            runningBalance -&#x3D; splurgeTransaction.amount;
+            transactions.push(splurgeTransaction);
+          }
+        }
+      }
+    }
+
+    // Add random events throughout the year (more frequent now)
+    const randomEventTransactions &#x3D; this.generateRandomEvents(oneYearAgo, now);
+    transactions.push(...randomEventTransactions);
+
+    // Bulk insert all transactions
+    await this.prisma.transaction.createMany({
+      data: transactions.map((t) &#x3D;&gt; ({
+        type: t.type,
+        amount: t.amount,
+        description: t.description,
+        currency: &quot;EUR&quot;,
+        userId,
+        isRecurring: false,
+        categoryId: categoryMap.get(t.categoryName),
+        createdAt: t.createdAt,
+      })),
+    });
+
+    this.logger.debug(&#x60;Created ${transactions.length} demo transactions&#x60;);
+  }
+
+  /**
+   * Generates a splurge purchase when balance exceeds threshold
+   */
+  private generateSplurgePurchase(
+    monthStart: DateTime,
+    now: DateTime,
+    usedEvents: Set&lt;number&gt;,
+  ): DemoTransaction | null {
+    // Pick a random splurge event (avoid duplicates if possible)
+    let eventIndex &#x3D; this.randomInt(0, this.SPLURGE_EVENTS.length);
+    if (usedEvents.size &lt; this.SPLURGE_EVENTS.length) {
+      while (usedEvents.has(eventIndex)) {
+        eventIndex &#x3D; this.randomInt(0, this.SPLURGE_EVENTS.length);
+      }
+      usedEvents.add(eventIndex);
+    } else {
+      // All events used, allow duplicates
+      usedEvents.clear();
+      usedEvents.add(eventIndex);
+    }
+
+    const event &#x3D; this.SPLURGE_EVENTS[eventIndex];
+    const daysInMonth &#x3D; monthStart.daysInMonth ?? 28;
+    const day &#x3D; this.randomInt(10, Math.min(25, daysInMonth));
+    const purchaseDate &#x3D; monthStart.set({ day });
+
+    if (purchaseDate &lt;&#x3D; now) {
+      const amount &#x3D; this.randomInt(event.minAmount, event.maxAmount);
+      return {
+        type: TransactionType.EXPENSE,
+        amount,
+        description: event.description,
+        categoryName: &quot;Freizeit&quot;,
+        createdAt: purchaseDate.toJSDate(),
+      };
+    }
+
+    return null;
+  }
+
+  /**
+   * Creates the recurring salary parent entry
+   */
+  private async createRecurringSalary(
+    userId: number,
+    categoryId: number,
+    startDate: DateTime,
+  ) {
+    return this.prisma.transaction.create({
+      data: {
+        type: TransactionType.INCOME,
+        amount: this.SALARY_AMOUNT,
+        description: &quot;Gehalt&quot;,
+        currency: &quot;EUR&quot;,
+        userId,
+        isRecurring: true,
+        categoryId,
+        createdAt: startDate.set({ day: 1 }).toJSDate(),
+        recurringType: RecurringTransactionType.MONTHLY,
+        recurringBaseInterval: 1,
+        recurringDisabled: false,
+      },
+    });
+  }
+
+  /**
+   * Generates monthly expense transactions
+   */
+  private generateMonthlyExpenses(
+    monthStart: DateTime,
+    categoryMap: Map&lt;string, number&gt;,
+    now: DateTime,
+  ): DemoTransaction[] {
+    const transactions: DemoTransaction[] &#x3D; [];
+    const daysInMonth &#x3D; monthStart.daysInMonth ?? 28;
+
+    // Rent - always on the 1st
+    const rentDate &#x3D; monthStart.set({ day: 1 });
+    if (rentDate &lt;&#x3D; now) {
+      transactions.push({
+        type: TransactionType.EXPENSE,
+        amount: this.RENT_AMOUNT,
+        description: &quot;Miete&quot;,
+        categoryName: &quot;Wohnung&quot;,
+        createdAt: rentDate.toJSDate(),
+      });
+    }
+
+    // Utilities - around the 5th
+    const utilitiesDate &#x3D; monthStart.set({ day: 5 });
+    if (utilitiesDate &lt;&#x3D; now) {
+      transactions.push({
+        type: TransactionType.EXPENSE,
+        amount: this.UTILITIES_AMOUNT,
+        description: &quot;Strom &amp; Internet&quot;,
+        categoryName: &quot;Wohnung&quot;,
+        createdAt: utilitiesDate.toJSDate(),
+      });
+    }
+
+    // Insurance - around the 10th
+    const insuranceDate &#x3D; monthStart.set({ day: 10 });
+    if (insuranceDate &lt;&#x3D; now) {
+      transactions.push({
+        type: TransactionType.EXPENSE,
+        amount: this.INSURANCE_AMOUNT,
+        description: &quot;Versicherungen&quot;,
+        categoryName: &quot;Wohnung&quot;,
+        createdAt: insuranceDate.toJSDate(),
+      });
+    }
+
+    // Subscriptions - around the 15th
+    const subscriptionDate &#x3D; monthStart.set({ day: 15 });
+    if (subscriptionDate &lt;&#x3D; now) {
+      transactions.push({
+        type: TransactionType.EXPENSE,
+        amount: this.SUBSCRIPTIONS_AMOUNT,
+        description: &quot;Streaming &amp; Apps&quot;,
+        categoryName: &quot;Freizeit&quot;,
+        createdAt: subscriptionDate.toJSDate(),
+      });
+    }
+
+    // Groceries - 4-6 times per month
+    const groceryCount &#x3D; this.randomInt(4, 7);
+    for (let i &#x3D; 0; i &lt; groceryCount; i++) {
+      const day &#x3D; this.randomInt(1, daysInMonth);
+      const groceryDate &#x3D; monthStart.set({ day });
+      if (groceryDate &lt;&#x3D; now) {
+        const amount &#x3D; this.randomInt(
+          Math.floor(this.GROCERIES_MIN / groceryCount),
+          Math.floor(this.GROCERIES_MAX / groceryCount),
+        );
+        transactions.push({
+          type: TransactionType.EXPENSE,
+          amount,
+          description: this.getRandomGroceryDescription(),
+          categoryName: &quot;Lebensmittel&quot;,
+          createdAt: groceryDate.toJSDate(),
+        });
+      }
+    }
+
+    // Transport - 2-4 times per month
+    const transportCount &#x3D; this.randomInt(2, 5);
+    for (let i &#x3D; 0; i &lt; transportCount; i++) {
+      const day &#x3D; this.randomInt(1, daysInMonth);
+      const transportDate &#x3D; monthStart.set({ day });
+      if (transportDate &lt;&#x3D; now) {
+        const amount &#x3D; this.randomInt(
+          Math.floor(this.TRANSPORT_MIN / transportCount),
+          Math.floor(this.TRANSPORT_MAX / transportCount),
+        );
+        transactions.push({
+          type: TransactionType.EXPENSE,
+          amount,
+          description: this.getRandomTransportDescription(),
+          categoryName: &quot;Transport&quot;,
+          createdAt: transportDate.toJSDate(),
+        });
+      }
+    }
+
+    // Entertainment - 3-5 times per month
+    const entertainmentCount &#x3D; this.randomInt(3, 6);
+    for (let i &#x3D; 0; i &lt; entertainmentCount; i++) {
+      const day &#x3D; this.randomInt(1, daysInMonth);
+      const entertainmentDate &#x3D; monthStart.set({ day });
+      if (entertainmentDate &lt;&#x3D; now) {
+        const amount &#x3D; this.randomInt(
+          Math.floor(this.ENTERTAINMENT_MIN / entertainmentCount),
+          Math.floor(this.ENTERTAINMENT_MAX / entertainmentCount),
+        );
+        transactions.push({
+          type: TransactionType.EXPENSE,
+          amount,
+          description: this.getRandomEntertainmentDescription(),
+          categoryName: &quot;Freizeit&quot;,
+          createdAt: entertainmentDate.toJSDate(),
+        });
+      }
+    }
+
+    return transactions;
+  }
+
+  /**
+   * Generates random special event transactions throughout the year
+   */
+  private generateRandomEvents(
+    startDate: DateTime,
+    endDate: DateTime,
+  ): DemoTransaction[] {
+    const transactions: DemoTransaction[] &#x3D; [];
+    const totalDays &#x3D; Math.floor(endDate.diff(startDate, &quot;days&quot;).days);
+
+    // Generate 8-12 random events throughout the year
+    const eventCount &#x3D; this.randomInt(8, 13);
+    const usedEvents &#x3D; new Set&lt;number&gt;();
+
+    for (let i &#x3D; 0; i &lt; eventCount; i++) {
+      // Pick a random event (allow duplicates after all used once)
+      let eventIndex &#x3D; this.randomInt(0, this.RANDOM_EVENTS.length);
+      if (usedEvents.size &lt; this.RANDOM_EVENTS.length) {
+        while (usedEvents.has(eventIndex)) {
+          eventIndex &#x3D; this.randomInt(0, this.RANDOM_EVENTS.length);
+        }
+        usedEvents.add(eventIndex);
+      } else {
+        // All events used, allow duplicates
+        usedEvents.clear();
+        usedEvents.add(eventIndex);
+      }
+
+      const event &#x3D; this.RANDOM_EVENTS[eventIndex];
+      const randomDay &#x3D; this.randomInt(0, totalDays);
+      const eventDate &#x3D; startDate.plus({ days: randomDay });
+
+      if (eventDate &lt;&#x3D; endDate) {
+        const amount &#x3D; this.randomInt(event.minAmount, event.maxAmount);
+        transactions.push({
+          type: TransactionType.EXPENSE,
+          amount,
+          description: event.description,
+          categoryName: &quot;Freizeit&quot;,
+          createdAt: eventDate.toJSDate(),
+        });
+      }
+    }
+
+    return transactions;
+  }
+
+  /**
+   * Random integer between min (inclusive) and max (exclusive)
+   */
+  private randomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  private getRandomGroceryDescription(): string {
+    const descriptions &#x3D; [
+      &quot;Supermarkt Einkauf&quot;,
+      &quot;Wocheneinkauf&quot;,
+      &quot;REWE&quot;,
+      &quot;Edeka&quot;,
+      &quot;Lidl&quot;,
+      &quot;Aldi&quot;,
+      &quot;Bio Laden&quot;,
+      &quot;Getränkemarkt&quot;,
+    ];
+    return descriptions[this.randomInt(0, descriptions.length)];
+  }
+
+  private getRandomTransportDescription(): string {
+    const descriptions &#x3D; [
+      &quot;Tankfüllung&quot;,
+      &quot;BVG Monatsticket&quot;,
+      &quot;Uber/Taxi&quot;,
+      &quot;DB Ticket&quot;,
+      &quot;Parkgebühren&quot;,
+      &quot;Carsharing&quot;,
+    ];
+    return descriptions[this.randomInt(0, descriptions.length)];
+  }
+
+  private getRandomEntertainmentDescription(): string {
+    const descriptions &#x3D; [
+      &quot;Kino&quot;,
+      &quot;Bar/Club&quot;,
+      &quot;Café&quot;,
+      &quot;Bowling&quot;,
+      &quot;Escape Room&quot;,
+      &quot;Museum&quot;,
+      &quot;Konzert&quot;,
+      &quot;Theater&quot;,
+    ];
+    return descriptions[this.randomInt(0, descriptions.length)];
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'DemoCategory.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
