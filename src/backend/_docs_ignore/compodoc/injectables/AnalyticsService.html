@@ -1,0 +1,1499 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>backend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">backend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >AnalyticsService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/services/analytics.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#TIMEZONE" >TIMEZONE</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getAvailableCapital" >getAvailableCapital</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getDateTruncPeriod" >getDateTruncPeriod</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getFirstTransactionDate" >getFirstTransactionDate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getMaxTransactionAmountForUser" >getMaxTransactionAmountForUser</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getNextOccurrence" >getNextOccurrence</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getTransactionBalanceHistory" >getTransactionBalanceHistory</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getTransactionBreakdown" >getTransactionBreakdown</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(prisma: <a href="../injectables/PrismaService.html" target="_self">PrismaService</a>, kysely: <a href="../injectables/KyselyService.html" target="_self">KyselyService</a>, recurringEntryService: <a href="../injectables/RecurringEntryService.html" target="_self">RecurringEntryService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/services/analytics.service.ts:24</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>prisma</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PrismaService.html" target="_self" >PrismaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>kysely</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/KyselyService.html" target="_self" >KyselyService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>recurringEntryService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/RecurringEntryService.html" target="_self" >RecurringEntryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAvailableCapital"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getAvailableCapital</b></span>
+                        <a href="#getAvailableCapital"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAvailableCapital(user: <a href="../miscellaneous/typealiases.html#User" target="_self">User</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="322"
+                                    class="link-to-prism">src/services/analytics.service.ts:322</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#User" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/AvailableCapitalItemDto.html" target="_self" >Promise&lt;AvailableCapitalItemDto[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDateTruncPeriod"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getDateTruncPeriod</b></span>
+                        <a href="#getDateTruncPeriod"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDateTruncPeriod(granularity: <a href="../miscellaneous/enumerations.html#Granularity" target="_self">Granularity</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="286"
+                                    class="link-to-prism">src/services/analytics.service.ts:286</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>granularity</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/enumerations.html#Granularity" target="_self" >Granularity</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFirstTransactionDate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getFirstTransactionDate</b></span>
+                        <a href="#getFirstTransactionDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getFirstTransactionDate(user: <a href="../miscellaneous/typealiases.html#User" target="_self">User</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="312"
+                                    class="link-to-prism">src/services/analytics.service.ts:312</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#User" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Date | null&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMaxTransactionAmountForUser"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getMaxTransactionAmountForUser</b></span>
+                        <a href="#getMaxTransactionAmountForUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getMaxTransactionAmountForUser(user: <a href="../miscellaneous/typealiases.html#User" target="_self">User</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="301"
+                                    class="link-to-prism">src/services/analytics.service.ts:301</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#User" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;number&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getNextOccurrence"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getNextOccurrence</b></span>
+                        <a href="#getNextOccurrence"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getNextOccurrence(start: DateTime, recurringType: <a href="../miscellaneous/variables.html#RecurringTransactionType" target="_self">RecurringTransactionType</a>, interval: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, now: DateTime)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="511"
+                                    class="link-to-prism">src/services/analytics.service.ts:511</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Compute next occurrence of a recurring entry that is &gt;= now.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>start</td>
+                                            <td>
+                                                        <code>DateTime</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>recurringType</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/variables.html#RecurringTransactionType" target="_self" >RecurringTransactionType</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>interval</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>now</td>
+                                            <td>
+                                                        <code>DateTime</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>DateTime | null</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransactionBalanceHistory"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getTransactionBalanceHistory</b></span>
+                        <a href="#getTransactionBalanceHistory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getTransactionBalanceHistory(user: <a href="../miscellaneous/typealiases.html#User" target="_self">User</a>, : <a href="../classes/TransactionBalanceHistoryParamsDto.html" target="_self">TransactionBalanceHistoryParamsDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="196"
+                                    class="link-to-prism">src/services/analytics.service.ts:196</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#User" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/TransactionBalanceHistoryParamsDto.html" target="_self" >TransactionBalanceHistoryParamsDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/TransactionItemDto.html" target="_self" >Promise&lt;TransactionItemDto[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransactionBreakdown"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getTransactionBreakdown</b></span>
+                        <a href="#getTransactionBreakdown"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getTransactionBreakdown(user: <a href="../miscellaneous/typealiases.html#User" target="_self">User</a>, : <a href="../classes/TransactionBreakdownParamsDto.html" target="_self">TransactionBreakdownParamsDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="33"
+                                    class="link-to-prism">src/services/analytics.service.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#User" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/TransactionBreakdownParamsDto.html" target="_self" >TransactionBreakdownParamsDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/TransactionBreakdownResponseDto.html" target="_self" >Promise&lt;TransactionBreakdownResponseDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="TIMEZONE"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>TIMEZONE</b></span>
+                        <a href="#TIMEZONE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;Europe/Berlin&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/services/analytics.service.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &quot;@nestjs/common&quot;;
+import {
+  User,
+  TransactionType,
+  RecurringTransactionType,
+} from &quot;@prisma/client&quot;;
+import { sql } from &quot;kysely&quot;;
+import { DateTime } from &quot;luxon&quot;;
+
+import {
+  Granularity,
+  TransactionBreakdownParamsDto,
+  TransactionBreakdownResponseDto,
+  TransactionItemDto,
+  TransactionBalanceHistoryParamsDto,
+  AvailableCapitalItemDto,
+} from &quot;../dto&quot;;
+
+import { KyselyService } from &quot;./kysely.service&quot;;
+import { PrismaService } from &quot;./prisma.service&quot;;
+import { RecurringEntryService } from &quot;./recurring-entry.service&quot;;
+
+@Injectable()
+export class AnalyticsService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly kysely: KyselyService,
+    private readonly recurringEntryService: RecurringEntryService,
+  ) {}
+
+  private TIMEZONE &#x3D; &quot;Europe/Berlin&quot;;
+
+  async getTransactionBreakdown(
+    user: User,
+    {
+      startDate,
+      endDate,
+      granularity,
+      withCategory,
+    }: TransactionBreakdownParamsDto,
+  ): Promise&lt;TransactionBreakdownResponseDto&gt; {
+    const dateTruncPeriod &#x3D; this.getDateTruncPeriod(granularity);
+
+    // Convert dates to ISO strings for reliable PostgreSQL comparison
+    const startDateStr &#x3D; startDate.toISOString();
+    const endDateStr &#x3D; endDate.toISOString();
+
+    if (withCategory) {
+      const results &#x3D; await this.kysely
+        .with(&quot;grouped_transactions&quot;, (db) &#x3D;&gt;
+          db
+            .selectFrom(&quot;Transaction&quot;)
+            .where(&quot;userId&quot;, &quot;&#x3D;&quot;, user.id)
+            .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &gt;&#x3D; ${startDateStr}::timestamp&#x60;)
+            .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &lt;&#x3D; ${endDateStr}::timestamp&#x60;)
+            .where((eb) &#x3D;&gt;
+              eb.or([
+                eb(&quot;isRecurring&quot;, &quot;&#x3D;&quot;, false),
+                eb(&quot;transactionId&quot;, &quot;is not&quot;, null),
+              ]),
+            )
+            .select((eb) &#x3D;&gt; [
+              eb
+                .fn(&quot;date_trunc&quot;, [
+                  eb.val(dateTruncPeriod),
+                  sql&#x60;&quot;createdAt&quot; AT TIME ZONE &#x27;UTC&#x27; AT TIME ZONE ${sql.raw(
+                    &#x60;&#x27;${this.TIMEZONE}&#x27;&#x60;,
+                  )}&#x60;,
+                ])
+                .as(&quot;date_period&quot;),
+              &quot;type&quot;,
+              &quot;categoryId&quot;,
+              &quot;amount&quot;,
+            ]),
+        )
+        .selectFrom(&quot;grouped_transactions&quot;)
+        .where((eb) &#x3D;&gt; {
+          // Filter by timezone-aware date_period to match the grouping
+          return eb.and([
+            eb(
+              &quot;date_period&quot;,
+              &quot;&gt;&#x3D;&quot;,
+              sql&lt;Date&gt;&#x60;date_trunc(${sql.raw(
+                &#x60;&#x27;${dateTruncPeriod}&#x27;&#x60;,
+              )}, ${startDateStr}::timestamp AT TIME ZONE &#x27;UTC&#x27; AT TIME ZONE ${sql.raw(
+                &#x60;&#x27;${this.TIMEZONE}&#x27;&#x60;,
+              )})&#x60;,
+            ),
+            eb(
+              &quot;date_period&quot;,
+              &quot;&lt;&#x3D;&quot;,
+              sql&lt;Date&gt;&#x60;date_trunc(${sql.raw(
+                &#x60;&#x27;${dateTruncPeriod}&#x27;&#x60;,
+              )}, ${endDateStr}::timestamp AT TIME ZONE &#x27;UTC&#x27; AT TIME ZONE ${sql.raw(
+                &#x60;&#x27;${this.TIMEZONE}&#x27;&#x60;,
+              )})&#x60;,
+            ),
+          ]);
+        })
+        .select((eb) &#x3D;&gt; [
+          &quot;date_period as date&quot;,
+          &quot;type&quot;,
+          &quot;categoryId as category&quot;,
+          eb.fn.sum&lt;string&gt;(&quot;amount&quot;).as(&quot;value&quot;),
+        ])
+        .groupBy([&quot;date_period&quot;, &quot;type&quot;, &quot;categoryId&quot;])
+        .orderBy(&quot;date_period&quot;)
+        .orderBy(&quot;type&quot;)
+        .orderBy(&quot;categoryId&quot;)
+        .execute();
+
+      // Map uncategorized transactions (null categoryId) to &quot;Andere&quot; (category &#x3D; 0)
+      const ANDERE_CATEGORY_ID &#x3D; 0;
+
+      return {
+        data: results.map((row) &#x3D;&gt; ({
+          date: row.date as Date,
+          type: row.type,
+          value: row.value,
+          category: row.category ?? ANDERE_CATEGORY_ID,
+        })),
+      };
+    } else {
+      const results &#x3D; await this.kysely
+        .with(&quot;grouped_transactions&quot;, (db) &#x3D;&gt;
+          db
+            .selectFrom(&quot;Transaction&quot;)
+            .where(&quot;userId&quot;, &quot;&#x3D;&quot;, user.id)
+            .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &gt;&#x3D; ${startDateStr}::timestamp&#x60;)
+            .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &lt;&#x3D; ${endDateStr}::timestamp&#x60;)
+            .where((eb) &#x3D;&gt;
+              eb.or([
+                eb(&quot;isRecurring&quot;, &quot;&#x3D;&quot;, false),
+                eb(&quot;transactionId&quot;, &quot;is not&quot;, null),
+              ]),
+            )
+            .select((eb) &#x3D;&gt; [
+              eb
+                .fn(&quot;date_trunc&quot;, [
+                  eb.val(dateTruncPeriod),
+                  sql&#x60;&quot;createdAt&quot; AT TIME ZONE &#x27;UTC&#x27; AT TIME ZONE ${sql.raw(
+                    &#x60;&#x27;${this.TIMEZONE}&#x27;&#x60;,
+                  )}&#x60;,
+                ])
+                .as(&quot;date_period&quot;),
+              &quot;type&quot;,
+              &quot;amount&quot;,
+            ]),
+        )
+        .selectFrom(&quot;grouped_transactions&quot;)
+        .where((eb) &#x3D;&gt; {
+          // Filter by timezone-aware date_period to match the grouping
+          // This ensures transactions are filtered based on their timezone-aware date,
+          // not just UTC timestamp, matching how they&#x27;re grouped
+          return eb.and([
+            eb(
+              &quot;date_period&quot;,
+              &quot;&gt;&#x3D;&quot;,
+              sql&lt;Date&gt;&#x60;date_trunc(${sql.raw(
+                &#x60;&#x27;${dateTruncPeriod}&#x27;&#x60;,
+              )}, ${startDateStr}::timestamp AT TIME ZONE &#x27;UTC&#x27; AT TIME ZONE ${sql.raw(
+                &#x60;&#x27;${this.TIMEZONE}&#x27;&#x60;,
+              )})&#x60;,
+            ),
+            eb(
+              &quot;date_period&quot;,
+              &quot;&lt;&#x3D;&quot;,
+              sql&lt;Date&gt;&#x60;date_trunc(${sql.raw(
+                &#x60;&#x27;${dateTruncPeriod}&#x27;&#x60;,
+              )}, ${endDateStr}::timestamp AT TIME ZONE &#x27;UTC&#x27; AT TIME ZONE ${sql.raw(
+                &#x60;&#x27;${this.TIMEZONE}&#x27;&#x60;,
+              )})&#x60;,
+            ),
+          ]);
+        })
+        .select((eb) &#x3D;&gt; [
+          &quot;date_period as date&quot;,
+          &quot;type&quot;,
+          eb.fn.sum&lt;string&gt;(&quot;amount&quot;).as(&quot;value&quot;),
+        ])
+        .groupBy([&quot;date_period&quot;, &quot;type&quot;])
+        .orderBy(&quot;date_period&quot;)
+        .orderBy(&quot;type&quot;)
+        .execute();
+
+      return {
+        data: results.map((row) &#x3D;&gt; ({
+          date: row.date as Date,
+          type: row.type,
+          value: row.value,
+        })),
+      };
+    }
+  }
+
+  async getTransactionBalanceHistory(
+    user: User,
+    { startDate, endDate, granularity }: TransactionBalanceHistoryParamsDto,
+  ): Promise&lt;TransactionItemDto[]&gt; {
+    const dateTruncPeriod &#x3D; this.getDateTruncPeriod(granularity);
+
+    // Convert dates to ISO strings for reliable PostgreSQL comparison
+    // (pg library doesn&#x27;t serialize JS Date objects correctly for timezone-aware comparisons)
+    const startDateStr &#x3D; startDate.toISOString();
+    const endDateStr &#x3D; endDate.toISOString();
+
+    const results &#x3D; await this.kysely
+      // Get the initial balance similar to getBalance in user.service.ts
+      .with(&quot;initial_balance&quot;, (db) &#x3D;&gt;
+        db
+          .selectFrom(&quot;Transaction&quot;)
+          .where(&quot;userId&quot;, &quot;&#x3D;&quot;, user.id)
+          .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &lt; ${startDateStr}::timestamp&#x60;)
+          .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &lt;&#x3D; NOW()&#x60;)
+          .where(&quot;isRecurring&quot;, &quot;&#x3D;&quot;, false)
+          .select((eb) &#x3D;&gt; [
+            eb.fn
+              .sum(
+                eb
+                  .case()
+                  .when(&quot;type&quot;, &quot;&#x3D;&quot;, &quot;INCOME&quot;)
+                  .then(eb.ref(&quot;amount&quot;))
+                  .when(&quot;type&quot;, &quot;&#x3D;&quot;, &quot;EXPENSE&quot;)
+                  .then(eb.neg(eb.ref(&quot;amount&quot;)))
+                  .else(0)
+                  .end(),
+              )
+              .as(&quot;initial_balance&quot;),
+          ]),
+      )
+      .with(&quot;transaction_impacts&quot;, (db) &#x3D;&gt;
+        db
+          .selectFrom(&quot;Transaction&quot;)
+          .where(&quot;userId&quot;, &quot;&#x3D;&quot;, user.id)
+          .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &gt;&#x3D; ${startDateStr}::timestamp&#x60;)
+          .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &lt;&#x3D; ${endDateStr}::timestamp&#x60;)
+          .where(sql&lt;boolean&gt;&#x60;&quot;createdAt&quot; &lt;&#x3D; NOW()&#x60;)
+          .where(&quot;isRecurring&quot;, &quot;&#x3D;&quot;, false)
+          .select((eb) &#x3D;&gt; [
+            eb
+              .fn(&quot;date_trunc&quot;, [
+                eb.val(dateTruncPeriod),
+                sql&#x60;&quot;createdAt&quot; AT TIME ZONE &#x27;UTC&#x27; AT TIME ZONE ${sql.raw(
+                  &#x60;&#x27;${this.TIMEZONE}&#x27;&#x60;,
+                )}&#x60;,
+              ])
+              .as(&quot;period_date&quot;),
+            eb
+              .case()
+              .when(&quot;type&quot;, &quot;&#x3D;&quot;, &quot;INCOME&quot;)
+              .then(eb.ref(&quot;amount&quot;))
+              .when(&quot;type&quot;, &quot;&#x3D;&quot;, &quot;EXPENSE&quot;)
+              .then(eb.neg(eb.ref(&quot;amount&quot;)))
+              .else(0)
+              .end()
+              .as(&quot;impact&quot;),
+          ]),
+      )
+      .with(&quot;period_totals&quot;, (db) &#x3D;&gt;
+        db
+          .selectFrom(&quot;transaction_impacts&quot;)
+          .select((eb) &#x3D;&gt; [
+            &quot;period_date&quot;,
+            eb.fn.sum&lt;string&gt;(&quot;impact&quot;).as(&quot;net_amount&quot;),
+          ])
+          .groupBy(&quot;period_date&quot;)
+          .orderBy(&quot;period_date&quot;),
+      )
+      .selectFrom(&quot;period_totals&quot;)
+      .crossJoin(&quot;initial_balance&quot;)
+      .select([
+        &quot;period_date as date&quot;,
+        sql&lt;string&gt;&#x60;COALESCE(initial_balance, 0) + sum(net_amount) over (order by period_date)&#x60;.as(
+          &quot;cumulative_balance&quot;,
+        ),
+      ])
+      .orderBy(&quot;period_date&quot;)
+      .execute();
+
+    return results.map((row) &#x3D;&gt; ({
+      date: row.date as Date,
+      value: row.cumulative_balance,
+    }));
+  }
+
+  private getDateTruncPeriod(granularity: Granularity): string {
+    switch (granularity) {
+      case Granularity.DAY:
+        return &quot;day&quot;;
+      case Granularity.WEEK:
+        return &quot;week&quot;;
+      case Granularity.MONTH:
+        return &quot;month&quot;;
+      case Granularity.YEAR:
+        return &quot;year&quot;;
+      default:
+        return &quot;day&quot;;
+    }
+  }
+
+  async getMaxTransactionAmountForUser(user: User): Promise&lt;number&gt; {
+    const agg &#x3D; await this.prisma.transaction.aggregate({
+      where: { userId: user.id },
+      _max: { amount: true },
+    });
+
+    const max &#x3D; agg._max?.amount ?? 0;
+    const rounded &#x3D; max &gt; 0 ? Math.ceil(max / 100) * 100 : 0;
+    return rounded;
+  }
+
+  async getFirstTransactionDate(user: User): Promise&lt;Date | null&gt; {
+    const first &#x3D; await this.prisma.transaction.findFirst({
+      where: { userId: user.id, isRecurring: false },
+      orderBy: { createdAt: &quot;asc&quot; },
+      select: { createdAt: true },
+    });
+
+    return first?.createdAt ?? null;
+  }
+
+  async getAvailableCapital(user: User): Promise&lt;AvailableCapitalItemDto[]&gt; {
+    const now &#x3D; DateTime.now();
+    const end &#x3D; now.plus({ months: 1 }).startOf(&quot;month&quot;).toJSDate();
+
+    const endDateTime &#x3D; DateTime.fromJSDate(end);
+
+    // Current balance (sum of incomes - sum of expenses) using a single Kysely aggregate
+    const aggRaw &#x3D; await this.kysely
+      .selectFrom(&quot;Transaction&quot;)
+      .where(&quot;userId&quot;, &quot;&#x3D;&quot;, user.id)
+      .where(&quot;createdAt&quot;, &quot;&lt;&#x3D;&quot;, sql&lt;Date&gt;&#x60;NOW()&#x60;)
+      .where(&quot;isRecurring&quot;, &quot;&#x3D;&quot;, false)
+      .select((eb) &#x3D;&gt; [
+        eb.fn
+          .sum(
+            eb
+              .case()
+              .when(&quot;type&quot;, &quot;&#x3D;&quot;, &quot;INCOME&quot;)
+              .then(eb.ref(&quot;amount&quot;))
+              .when(&quot;type&quot;, &quot;&#x3D;&quot;, &quot;EXPENSE&quot;)
+              .then(eb.neg(eb.ref(&quot;amount&quot;)))
+              .else(0)
+              .end(),
+          )
+          .as(&quot;balance&quot;),
+      ])
+      .executeTakeFirst();
+
+    const agg &#x3D; aggRaw as Record&lt;string, unknown&gt; | undefined;
+    const balance &#x3D; Number(agg?.[&quot;balance&quot;] ?? 0);
+
+    const items: AvailableCapitalItemDto[] &#x3D; [];
+
+    items.push({
+      key: &quot;available_capital&quot;,
+      label: &quot;Available Capital&quot;,
+      icon: &quot;account-balance&quot;,
+      value: balance,
+      type: TransactionType.INCOME,
+    });
+
+    // ---------------------------
+    // Recurring parents projection (future occurrences)
+    // ---------------------------
+    interface ScheduledCategoryRow {
+      categoryId: number | null;
+      categoryName: string | null;
+      categoryIcon: string | null;
+      type: TransactionType;
+      value: number;
+    }
+    const parentsRaw &#x3D; await this.kysely
+      .selectFrom(&quot;Transaction&quot;)
+      .leftJoin(&quot;Category&quot;, &quot;Category.id&quot;, &quot;Transaction.categoryId&quot;)
+      .select((eb) &#x3D;&gt; [
+        eb.ref(&quot;Transaction.id&quot;).as(&quot;parentId&quot;),
+        eb.ref(&quot;Transaction.createdAt&quot;).as(&quot;createdAt&quot;),
+        eb.ref(&quot;Transaction.recurringType&quot;).as(&quot;recurringType&quot;),
+        eb.ref(&quot;Transaction.recurringBaseInterval&quot;).as(&quot;recurringBaseInterval&quot;),
+        eb.ref(&quot;Transaction.amount&quot;).as(&quot;amount&quot;),
+        eb.ref(&quot;Transaction.type&quot;).as(&quot;type&quot;),
+        eb.ref(&quot;Transaction.categoryId&quot;).as(&quot;categoryId&quot;),
+        eb.ref(&quot;Category.name&quot;).as(&quot;categoryName&quot;),
+        eb.ref(&quot;Category.icon&quot;).as(&quot;categoryIcon&quot;),
+      ])
+      .where(&quot;Transaction.userId&quot;, &quot;&#x3D;&quot;, user.id)
+      .where(&quot;Transaction.isRecurring&quot;, &quot;&#x3D;&quot;, true)
+      // Only include active recurring entries (not disabled) - must be explicitly false
+      .where(&quot;Transaction.recurringDisabled&quot;, &quot;&#x3D;&quot;, false)
+      // Only parent entries (not children) - use Kysely native IS NULL check
+      .where(&quot;Transaction.transactionId&quot;, &quot;is&quot;, null)
+      .execute();
+
+    // Helper to add/aggregate rows by category &amp; type
+    const aggregatedRows &#x3D; new Map&lt;string, ScheduledCategoryRow&gt;();
+    const addRow &#x3D; (row: ScheduledCategoryRow) &#x3D;&gt; {
+      const key &#x3D; &#x60;${row.categoryId ?? &quot;uncategorized&quot;}|${row.type}&#x60;;
+      const existing &#x3D; aggregatedRows.get(key);
+      if (existing) {
+        existing.value +&#x3D; row.value;
+      } else {
+        aggregatedRows.set(key, { ...row });
+      }
+    };
+
+    // Project parents whose next occurrence is within current month and in the future
+    for (const raw of parentsRaw as Record&lt;string, unknown&gt;[]) {
+      const recurringType &#x3D; raw[
+        &quot;recurringType&quot;
+      ] as RecurringTransactionType | null;
+      const baseInterval &#x3D; Number(raw[&quot;recurringBaseInterval&quot;] ?? 1);
+      const createdAt &#x3D; new Date(raw[&quot;createdAt&quot;] as string);
+      if (!recurringType) {
+        continue;
+      }
+
+      const next &#x3D; this.getNextOccurrence(
+        DateTime.fromJSDate(createdAt),
+        recurringType,
+        baseInterval,
+        now,
+      );
+
+      if (!next) {
+        continue;
+      }
+
+      if (next &gt;&#x3D; now &amp;&amp; next &lt; endDateTime) {
+        const type &#x3D; raw[&quot;type&quot;] as TransactionType;
+        const amount &#x3D; Number(raw[&quot;amount&quot;] ?? 0);
+        const categoryId &#x3D;
+          raw[&quot;categoryId&quot;] &#x3D;&#x3D; null ? null : Number(raw[&quot;categoryId&quot;]);
+        const categoryName &#x3D;
+          typeof raw[&quot;categoryName&quot;] &#x3D;&#x3D;&#x3D; &quot;string&quot; ? raw[&quot;categoryName&quot;] : null;
+        const categoryIcon &#x3D;
+          typeof raw[&quot;categoryIcon&quot;] &#x3D;&#x3D;&#x3D; &quot;string&quot; ? raw[&quot;categoryIcon&quot;] : null;
+
+        addRow({
+          categoryId,
+          categoryName,
+          categoryIcon,
+          type,
+          value: amount,
+        });
+      }
+    }
+
+    const projectedRows &#x3D; Array.from(aggregatedRows.values());
+
+    // Calculate future incomes and expenses
+    const futureIncomes &#x3D; projectedRows
+      .filter((r) &#x3D;&gt; r.type &#x3D;&#x3D;&#x3D; TransactionType.INCOME)
+      .reduce((sum, r) &#x3D;&gt; sum + r.value, 0);
+
+    const futureExpenses &#x3D; projectedRows
+      .filter((r) &#x3D;&gt; r.type &#x3D;&#x3D;&#x3D; TransactionType.EXPENSE)
+      .reduce((sum, r) &#x3D;&gt; sum + r.value, 0);
+
+    // Available Capital &#x3D; Current Balance + Future Incomes - Future Expenses
+    const availableCapital &#x3D; balance + futureIncomes - futureExpenses;
+
+    // Update the available_capital item with the calculated total
+    items[0].value &#x3D; availableCapital;
+
+    // Add current balance as a separate item
+    items.push({
+      key: &quot;current_balance&quot;,
+      label: &quot;Current Balance&quot;,
+      icon: &quot;account-balance-wallet&quot;,
+      value: balance,
+      type: TransactionType.INCOME,
+    });
+
+    // Add individual INCOME categories (split by category)
+    for (const r of projectedRows.filter(
+      (r) &#x3D;&gt; r.type &#x3D;&#x3D;&#x3D; TransactionType.INCOME,
+    )) {
+      const value &#x3D; r.value ?? 0;
+      const categoryId &#x3D; r.categoryId ?? null;
+      items.push({
+        key: &#x60;scheduled_category_${categoryId ?? &quot;uncategorized&quot;}&#x60;,
+        label: r.categoryName ?? &quot;uncategorized&quot;,
+        icon: r.categoryIcon ?? &quot;category&quot;,
+        value: value,
+        type: r.type,
+      });
+    }
+
+    // Add individual EXPENSE categories (split by category)
+    for (const r of projectedRows.filter(
+      (r) &#x3D;&gt; r.type &#x3D;&#x3D;&#x3D; TransactionType.EXPENSE,
+    )) {
+      const value &#x3D; r.value ?? 0;
+      const categoryId &#x3D; r.categoryId ?? null;
+      items.push({
+        key: &#x60;scheduled_category_${categoryId ?? &quot;uncategorized&quot;}&#x60;,
+        label: r.categoryName ?? &quot;uncategorized&quot;,
+        icon: r.categoryIcon ?? &quot;category&quot;,
+        value: -value,
+        type: r.type,
+      });
+    }
+
+    return items;
+  }
+
+  /**
+   * Compute next occurrence of a recurring entry that is &gt;&#x3D; now.
+   */
+  private getNextOccurrence(
+    start: DateTime,
+    recurringType: RecurringTransactionType,
+    interval: number,
+    now: DateTime,
+  ): DateTime | null {
+    if (interval &lt;&#x3D; 0) interval &#x3D; 1;
+
+    const clampToFuture &#x3D; (unit: &quot;days&quot; | &quot;weeks&quot; | &quot;months&quot;): DateTime &#x3D;&gt; {
+      if (now &lt;&#x3D; start) return start;
+      const diff &#x3D; Math.floor(now.diff(start, unit).as(unit) / interval) + 1;
+      return start.plus({ [unit]: diff * interval } as Record&lt;string, number&gt;);
+    };
+
+    switch (recurringType) {
+      case RecurringTransactionType.DAILY:
+        return clampToFuture(&quot;days&quot;);
+      case RecurringTransactionType.WEEKLY:
+        return clampToFuture(&quot;weeks&quot;);
+      case RecurringTransactionType.MONTHLY:
+        return clampToFuture(&quot;months&quot;);
+      default:
+        return null;
+    }
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'AnalyticsService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
