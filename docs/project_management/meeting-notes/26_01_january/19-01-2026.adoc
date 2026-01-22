@@ -5,8 +5,8 @@
 *Leitung:* Paula +
 *Protokoll:* Ben +
 *Meetingbeginn:* 14:00 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min +
+*Meetingende:* 15:17 +
+*Dauer:* 77 min +
 
 ==== Anwesenheit: 
 - Elias
@@ -53,8 +53,8 @@ Ist für die Gruppe was wichtiges dabei? +
 == Letztes Meeting
 
 - Datum: 26.01.2024 
-- Zeit: 14:00
-- Ort: Online (Teams)
+- Zeit: 14:30
+- Ort: akutell Cafe
 
 ==== Themen nächstes Meeting
 
