@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
 } from "class-validator";
 
 export class UserResponseDto {
@@ -68,5 +69,6 @@ export class UpdateEmergencyReserveDto {
     example: 150000,
   })
   @IsNumber()
+  @Min(0)
   emergencyReserve: number;
 }

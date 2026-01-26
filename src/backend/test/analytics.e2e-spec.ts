@@ -1,7 +1,16 @@
 import { INestApplication } from "@nestjs/common";
 import { App } from "supertest/types";
 import { DateTime } from "luxon";
-import { Api, ApiTransactionType, ApiCurrency, ApiGranularity } from "api-client";
+import { 
+  Api, 
+  ApiTransactionType, 
+  ApiCurrency, 
+  ApiGranularity,
+  ApiMaxValueDto,
+  ApiTransactionBreakdownResponseDto,
+  ApiTransactionItemDto,
+  ApiUserBalanceResponseDto
+} from "api-client";
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
@@ -472,6 +481,34 @@ describe("AnalyticsController (e2e)", () => {
       const netBalance = totalIncome - totalExpense;
       // Net should be negative: 16000 - 20000 = -4000
       expect(netBalance).toBe(-4000);
+    });
+  });
+
+  describe("GET /analytics/available-capital", () => {
+    it("should get available capital breakdown", async () => {
+      const response = await api.analytics.analyticsControllerGetAvailableCapital();
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+      
+      const capitalItem = response.data.find(i => i.key === "available_capital");
+      expect(capitalItem).toBeDefined();
+      expect(typeof capitalItem!.value).toBe("number");
+    });
+  });
+
+  describe("GET /analytics/first-transaction-date", () => {
+    it("should get the date of the first transaction", async () => {
+      const response = await api.analytics.analyticsControllerGetFirstTransactionDate();
+      expect(response.status).toBe(200);
+      expect(response.data.date).toBeDefined();
+      expect(typeof response.data.date).toBe("string");
+      
+      // Should be older than or equal to our baseDate
+      const firstDate = new Date(response.data.date!);
+      const baseDate = new Date();
+      baseDate.setDate(baseDate.getDate() - 10);
+      expect(firstDate <= new Date()).toBe(true);
     });
   });
 });

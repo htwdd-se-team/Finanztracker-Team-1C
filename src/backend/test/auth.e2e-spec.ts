@@ -1,6 +1,6 @@
 import { INestApplication } from "@nestjs/common";
 import { App } from "supertest/types";
-import { Api } from "api-client";
+import { Api, ApiLoginDto } from "api-client";
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 

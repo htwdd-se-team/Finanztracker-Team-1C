@@ -77,4 +77,34 @@ describe("UserController (e2e)", () => {
       expect(response.data.transactionCount).toBe(0);
     });
   });
+
+  describe("POST /user/emergency-reserve", () => {
+    it("should update emergency reserve", async () => {
+      api.setSecurityData(testUser.token);
+      const newReserve = 250000; // 2500.00 EUR
+      
+      const response = await api.user.userControllerUpdateEmergencyReserve({
+        emergencyReserve: newReserve
+      });
+      
+      expect(response.status).toBe(201);
+      expect(response.data.emergencyReserve).toBe(newReserve);
+
+      // Verify via getBalance
+      const balanceResponse = await api.user.userControllerGetBalance();
+      expect(balanceResponse.data.emergencyReserve).toBe(newReserve);
+    });
+
+    it("should fail with negative emergency reserve", async () => {
+      api.setSecurityData(testUser.token);
+      const response = await api.instance.post("/user/emergency-reserve", {
+        emergencyReserve: -100
+      }, { 
+        headers: { Authorization: `Bearer ${testUser.token}` },
+        validateStatus: () => true 
+      });
+      
+      expect(response.status).toBe(400);
+    });
+  });
 });
