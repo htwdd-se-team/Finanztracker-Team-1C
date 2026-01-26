@@ -105,6 +105,7 @@ describe("RecurringEntries (e2e)", () => {
         recurringBaseInterval: 1,
         createdAt: initialDate.toISOString()
       });
+      expect(createResponse.status).toBe(201);
       
       const entry = createResponse.data;
       const parentId = entry.transactionId ?? entry.id;
