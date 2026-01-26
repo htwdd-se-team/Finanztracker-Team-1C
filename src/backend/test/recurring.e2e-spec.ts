@@ -90,6 +90,39 @@ describe("RecurringEntries (e2e)", () => {
       expect(response.data.totalCount).toBeGreaterThan(0);
     });
 
+    it("should handle parent entry update (date change)", async () => {
+      const initialDate = new Date();
+      initialDate.setDate(initialDate.getDate() - 20); // 20 days ago, within 30 days limit
+
+      // Create recurring entry in the past
+      const createResponse = await api.entries.entryControllerCreate({
+        type: ApiTransactionType.EXPENSE,
+        amount: 1000,
+        currency: ApiCurrency.EUR,
+        description: "Old Date Entry",
+        isRecurring: true,
+        recurringType: ApiRecurringTransactionType.MONTHLY,
+        recurringBaseInterval: 1,
+        createdAt: initialDate.toISOString()
+      });
+      
+      const entry = createResponse.data;
+      const parentId = entry.transactionId ?? entry.id;
+
+      // Update the date to a different day
+      const newDate = new Date(initialDate);
+      newDate.setDate(newDate.getDate() + 5);
+
+      const updateResponse = await api.entries.entryControllerUpdate(parentId, {
+        createdAt: newDate.toISOString()
+      });
+
+      expect(updateResponse.status).toBe(200);
+      // The update logic in backend should have handled child creation/deletion
+      // We verify the update succeeded.
+      expect(updateResponse.data.createdAt).toBe(newDate.toISOString());
+    });
+
     it("should get scheduled monthly totals", async () => {
       const response = await api.entries.entryControllerGetScheduledMonthlyTotals({
         year: new Date().getFullYear()

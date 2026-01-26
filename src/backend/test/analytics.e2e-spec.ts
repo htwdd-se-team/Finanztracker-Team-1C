@@ -1,16 +1,14 @@
 import { INestApplication } from "@nestjs/common";
-import { App } from "supertest/types";
-import { DateTime } from "luxon";
-import { 
-  Api, 
-  ApiTransactionType, 
-  ApiCurrency, 
+import {
+  Api,
+  ApiTransactionType,
+  ApiCurrency,
   ApiGranularity,
-  ApiMaxValueDto,
-  ApiTransactionBreakdownResponseDto,
-  ApiTransactionItemDto,
-  ApiUserBalanceResponseDto
+  ApiRecurringTransactionType,
 } from "api-client";
+import { DateTime } from "luxon";
+import { App } from "supertest/types";
+
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
@@ -36,10 +34,11 @@ describe("AnalyticsController (e2e)", () => {
     url = testApp.url;
     testUser = await registerTestUser(url);
 
-    api = new Api({ 
-      baseURL: url, 
+    api = new Api({
+      baseURL: url,
       validateStatus: () => true,
-      securityWorker: (token) => token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+      securityWorker: (token) =>
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {},
     });
     api.setSecurityData(testUser.token);
 
@@ -75,7 +74,7 @@ describe("AnalyticsController (e2e)", () => {
       createdAt: baseDate.toISO(),
     });
     expect([200, 201]).toContain(entry1.status);
-    
+
     createdEntries.push({
       id: entry1.data.id,
       type: ApiTransactionType.INCOME,
@@ -216,11 +215,12 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().minus({ days: 10 }).toISO();
       const endDate = DateTime.now().plus({ days: 1 }).toISO();
 
-      const response = await api.analytics.analyticsControllerGetTransactionBreakdown({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY,
-      });
+      const response =
+        await api.analytics.analyticsControllerGetTransactionBreakdown({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+        });
       expect(response.status).toBe(200);
 
       const breakdownResponse = response.data;
@@ -250,11 +250,12 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().minus({ days: 10 }).toISO();
       const endDate = DateTime.now().plus({ days: 1 }).toISO();
 
-      const response = await api.analytics.analyticsControllerGetTransactionBreakdown({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY,
-      });
+      const response =
+        await api.analytics.analyticsControllerGetTransactionBreakdown({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+        });
       expect(response.status).toBe(200);
 
       const breakdownResponse = response.data;
@@ -267,9 +268,10 @@ describe("AnalyticsController (e2e)", () => {
         expect(item).toHaveProperty("date");
         expect(item).toHaveProperty("type");
         expect(item).toHaveProperty("value");
-        expect([ApiTransactionType.INCOME, ApiTransactionType.EXPENSE]).toContain(
-          item.type,
-        );
+        expect([
+          ApiTransactionType.INCOME,
+          ApiTransactionType.EXPENSE,
+        ]).toContain(item.type);
         expect(parseInt(item.value)).toBeGreaterThan(0);
       });
     });
@@ -278,12 +280,13 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().minus({ days: 10 }).toISO();
       const endDate = DateTime.now().plus({ days: 1 }).toISO();
 
-      const response = await api.analytics.analyticsControllerGetTransactionBreakdown({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY,
-        withCategory: true,
-      });
+      const response =
+        await api.analytics.analyticsControllerGetTransactionBreakdown({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+          withCategory: true,
+        });
       expect(response.status).toBe(200);
 
       const breakdownResponse = response.data;
@@ -305,11 +308,12 @@ describe("AnalyticsController (e2e)", () => {
         ApiGranularity.MONTH,
         ApiGranularity.YEAR,
       ]) {
-        const response = await api.analytics.analyticsControllerGetTransactionBreakdown({
-          startDate,
-          endDate,
-          granularity,
-        });
+        const response =
+          await api.analytics.analyticsControllerGetTransactionBreakdown({
+            startDate,
+            endDate,
+            granularity,
+          });
         expect(response.status).toBe(200);
 
         const breakdownResponse = response.data;
@@ -324,11 +328,12 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().minus({ days: 10 }).toISO();
       const endDate = DateTime.now().plus({ days: 1 }).toISO();
 
-      const response = await api.analytics.analyticsControllerGetTransactionBalanceHistory({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY,
-      });
+      const response =
+        await api.analytics.analyticsControllerGetTransactionBalanceHistory({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+        });
       expect(response.status).toBe(200);
 
       const balanceHistory = response.data;
@@ -377,11 +382,12 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().minus({ days: 10 }).toISO();
       const endDate = DateTime.now().plus({ days: 1 }).toISO();
 
-      const historyResponse = await api.analytics.analyticsControllerGetTransactionBalanceHistory({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY,
-      });
+      const historyResponse =
+        await api.analytics.analyticsControllerGetTransactionBalanceHistory({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+        });
       expect(historyResponse.status).toBe(200);
 
       const balanceHistory = historyResponse.data;
@@ -402,11 +408,12 @@ describe("AnalyticsController (e2e)", () => {
         ApiGranularity.MONTH,
         ApiGranularity.YEAR,
       ]) {
-        const response = await api.analytics.analyticsControllerGetTransactionBalanceHistory({
-          startDate,
-          endDate,
-          granularity,
-        });
+        const response =
+          await api.analytics.analyticsControllerGetTransactionBalanceHistory({
+            startDate,
+            endDate,
+            granularity,
+          });
         expect(response.status).toBe(200);
 
         const balanceHistory = response.data;
@@ -435,11 +442,12 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().minus({ days: 30 }).toISO();
       const endDate = DateTime.now().plus({ days: 1 }).toISO();
 
-      const historyResponse = await api.analytics.analyticsControllerGetTransactionBalanceHistory({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY,
-      });
+      const historyResponse =
+        await api.analytics.analyticsControllerGetTransactionBalanceHistory({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+        });
       expect(historyResponse.status).toBe(200);
 
       const balanceHistory = historyResponse.data;
@@ -457,11 +465,12 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().minus({ days: 10 }).toISO();
       const endDate = DateTime.now().plus({ days: 1 }).toISO();
 
-      const breakdownResponse = await api.analytics.analyticsControllerGetTransactionBreakdown({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY,
-      });
+      const breakdownResponse =
+        await api.analytics.analyticsControllerGetTransactionBreakdown({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+        });
       expect(breakdownResponse.status).toBe(200);
 
       const breakdown = breakdownResponse.data;
@@ -486,26 +495,30 @@ describe("AnalyticsController (e2e)", () => {
 
   describe("GET /analytics/available-capital", () => {
     it("should get available capital breakdown", async () => {
-      const response = await api.analytics.analyticsControllerGetAvailableCapital();
+      const response =
+        await api.analytics.analyticsControllerGetAvailableCapital();
       expect(response.status).toBe(200);
       expect(Array.isArray(response.data)).toBe(true);
       expect(response.data.length).toBeGreaterThan(0);
-      
-      const capitalItem = response.data.find(i => i.key === "available_capital");
+
+      const capitalItem = response.data.find(
+        (i) => i.key === "available_capital",
+      );
       expect(capitalItem).toBeDefined();
-      expect(typeof capitalItem!.value).toBe("number");
+      expect(typeof capitalItem.value).toBe("number");
     });
   });
 
   describe("GET /analytics/first-transaction-date", () => {
     it("should get the date of the first transaction", async () => {
-      const response = await api.analytics.analyticsControllerGetFirstTransactionDate();
+      const response =
+        await api.analytics.analyticsControllerGetFirstTransactionDate();
       expect(response.status).toBe(200);
       expect(response.data.date).toBeDefined();
       expect(typeof response.data.date).toBe("string");
-      
+
       // Should be older than or equal to our baseDate
-      const firstDate = new Date(response.data.date!);
+      const firstDate = new Date(response.data.date);
       const baseDate = new Date();
       baseDate.setDate(baseDate.getDate() - 10);
       expect(firstDate <= new Date()).toBe(true);
@@ -519,26 +532,29 @@ describe("AnalyticsController (e2e)", () => {
       const balance = balanceResponse.data.balance;
       const reserve = balanceResponse.data.emergencyReserve;
 
-      const capitalResponse = await api.analytics.analyticsControllerGetAvailableCapital();
-      const capital = capitalResponse.data.find(i => i.key === "available_capital")?.value;
-      
+      const capitalResponse =
+        await api.analytics.analyticsControllerGetAvailableCapital();
+      const capital = capitalResponse.data.find(
+        (i) => i.key === "available_capital",
+      )?.value;
+
       // Available capital should be balance - reserve (if implemented that way)
       // or check specific logic. Assuming available = balance - reserve for now or just check it exists.
       // Based on typical logic: Available = Balance - Emergency Reserve.
       // Let's verify if that holds.
       // Update: Logic is Balance + Future - Future. With no future, it should equal Balance.
-      console.log('DEBUG: Balance:', balance, 'Reserve:', reserve, 'Capital:', capital);
       expect(capital).toBe(balance);
     });
 
     it("should return null for first transaction date if no transactions", async () => {
       const newUser = await registerTestUser(url);
       api.setSecurityData(newUser.token);
-      
-      const response = await api.analytics.analyticsControllerGetFirstTransactionDate();
+
+      const response =
+        await api.analytics.analyticsControllerGetFirstTransactionDate();
       expect(response.status).toBe(200);
       expect(response.data.date).toBeNull();
-      
+
       // Restore main test user
       api.setSecurityData(testUser.token);
     });
@@ -548,42 +564,49 @@ describe("AnalyticsController (e2e)", () => {
       const startDate = DateTime.now().plus({ years: 10 }).toISO();
       const endDate = DateTime.now().plus({ years: 10, months: 1 }).toISO();
 
-      const response = await api.analytics.analyticsControllerGetTransactionBreakdown({
-        startDate,
-        endDate,
-        granularity: ApiGranularity.DAY
-      });
-      
+      const response =
+        await api.analytics.analyticsControllerGetTransactionBreakdown({
+          startDate,
+          endDate,
+          granularity: ApiGranularity.DAY,
+        });
+
       expect(response.status).toBe(200);
       expect(response.data.data.length).toBe(0);
     });
 
     it("should return 400 for invalid dates in history", async () => {
       // Invalid date format
-      const response = await api.instance.get("/analytics/transaction-balance-history", {
-        params: {
-          startDate: "invalid-date",
-          endDate: "another-invalid",
-          granularity: ApiGranularity.DAY
+      const response = await api.instance.get(
+        "/analytics/transaction-balance-history",
+        {
+          params: {
+            startDate: "invalid-date",
+            endDate: "another-invalid",
+            granularity: ApiGranularity.DAY,
+          },
+          headers: { Authorization: `Bearer ${testUser.token}` },
+          validateStatus: () => true,
         },
-        headers: { Authorization: `Bearer ${testUser.token}` },
-        validateStatus: () => true
-      });
-      
+      );
+
       expect(response.status).toBe(400);
     });
 
     it("should return 400 for invalid granularity", async () => {
-      const response = await api.instance.get("/analytics/transaction-breakdown", {
-        params: {
-          startDate: DateTime.now().toISO(),
-          endDate: DateTime.now().toISO(),
-          granularity: "INVALID_GRANULARITY"
+      const response = await api.instance.get(
+        "/analytics/transaction-breakdown",
+        {
+          params: {
+            startDate: DateTime.now().toISO(),
+            endDate: DateTime.now().toISO(),
+            granularity: "INVALID_GRANULARITY",
+          },
+          headers: { Authorization: `Bearer ${testUser.token}` },
+          validateStatus: () => true,
         },
-        headers: { Authorization: `Bearer ${testUser.token}` },
-        validateStatus: () => true
-      });
-      
+      );
+
       expect(response.status).toBe(400);
     });
 
@@ -592,19 +615,58 @@ describe("AnalyticsController (e2e)", () => {
       api.setSecurityData(newUser.token);
 
       // New user should have 0 capital (or -reserve if balance is 0 and logic subtracts)
-      // Default reserve is 100000 (1000 EUR) from User model default? 
+      // Default reserve is 100000 (1000 EUR) from User model default?
       // Checking auth-helper/user service... user service mock had 100000.
       // Real DB default?
       // Let's just check it is NOT the same as the main test user's capital
-      const response = await api.analytics.analyticsControllerGetAvailableCapital();
-      const newCapital = response.data.find(i => i.key === "available_capital")?.value;
+      const response =
+        await api.analytics.analyticsControllerGetAvailableCapital();
+      const newCapital = response.data.find(
+        (i) => i.key === "available_capital",
+      )?.value;
 
       // Switch back to main user
       api.setSecurityData(testUser.token);
-      const mainResponse = await api.analytics.analyticsControllerGetAvailableCapital();
-      const mainCapital = mainResponse.data.find(i => i.key === "available_capital")?.value;
+      const mainResponse =
+        await api.analytics.analyticsControllerGetAvailableCapital();
+      const mainCapital = mainResponse.data.find(
+        (i) => i.key === "available_capital",
+      )?.value;
 
       expect(newCapital).not.toBe(mainCapital);
+    });
+
+    it("should include future recurring entries in available capital", async () => {
+      // Create a recurring income starting tomorrow
+      const tomorrow = DateTime.now().plus({ days: 1 });
+      const endOfMonth = DateTime.now().endOf("month");
+
+      // Only run this test if there are days left in the month, otherwise projection is 0
+      if (tomorrow < endOfMonth) {
+        const amount = 5000;
+        await api.entries.entryControllerCreate({
+          type: ApiTransactionType.INCOME,
+          amount: amount,
+          currency: ApiCurrency.EUR,
+          description: "Future Recurring Income",
+          isRecurring: true,
+          recurringType: ApiRecurringTransactionType.DAILY,
+          recurringBaseInterval: 1,
+          createdAt: tomorrow.toISO(),
+        });
+
+        const response =
+          await api.analytics.analyticsControllerGetAvailableCapital();
+        const capital = response.data.find(
+          (i) => i.key === "available_capital",
+        )?.value;
+        const balance = response.data.find(
+          (i) => i.key === "current_balance",
+        )?.value;
+
+        // Projected capital should be > balance because of future income
+        expect(capital).toBeGreaterThan(balance);
+      }
     });
   });
 });
