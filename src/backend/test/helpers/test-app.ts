@@ -4,7 +4,10 @@ import { App } from "supertest/types";
 
 import { AppModule } from "../../src/app.module";
 
-export async function createTestApp(): Promise<INestApplication<App>> {
+export async function createTestApp(): Promise<{
+  app: INestApplication<App>;
+  url: string;
+}> {
   const moduleFixture = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
@@ -25,6 +28,8 @@ export async function createTestApp(): Promise<INestApplication<App>> {
   );
 
   await app.init();
+  await app.listen(0);
+  const url = await app.getUrl();
 
-  return app;
+  return { app, url };
 }

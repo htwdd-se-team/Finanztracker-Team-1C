@@ -75,6 +75,9 @@ importers:
       '@types/bcryptjs':
         specifier: ^3.0.0
         version: 3.0.0
+      api-client:
+        specifier: workspace:*
+        version: link:../api-client
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -434,9 +437,6 @@ importers:
       eslint-config-next:
         specifier: 15.3.3
         version: 15.3.3(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
-      swagger-typescript-api:
-        specifier: ^13.2.4
-        version: 13.2.4
       tailwindcss:
         specifier: ^4
         version: 4.1.8

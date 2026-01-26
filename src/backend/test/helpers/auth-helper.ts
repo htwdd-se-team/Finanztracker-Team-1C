@@ -1,6 +1,4 @@
-import { INestApplication } from "@nestjs/common";
-import * as request from "supertest";
-import { App } from "supertest/types";
+import { Api } from "api-client";
 
 export interface TestUser {
   email: string;
@@ -35,31 +33,25 @@ export function generateRandomName(): string {
  * Registers a new user and returns user credentials with JWT token
  */
 export async function registerTestUser(
-  app: INestApplication<App>,
+  url: string,
 ): Promise<TestUser> {
   const email = generateRandomEmail();
   const password = generateRandomPassword();
   const givenName = generateRandomName();
 
-  const response = await request(app.getHttpServer())
-    .post("/auth/register")
-    .send({
-      email,
-      password,
-      givenName,
-      familyName: "TestUser",
-    })
-    .expect((res) => {
-      if (![200, 201].includes(res.status)) {
-        throw new Error(`Expected status 200 or 201, got ${res.status}`);
-      }
-    });
+  const api = new Api({ baseURL: url });
+  
+  const response = await api.auth.authControllerRegister({
+    email,
+    password,
+    givenName,
+    familyName: "TestUser",
+  });
 
-  const body = response.body as { token: string };
   return {
     email,
     password,
-    token: body.token,
+    token: response.data.token,
   };
 }
 
@@ -67,19 +59,16 @@ export async function registerTestUser(
  * Logs in an existing user and returns JWT token
  */
 export async function loginTestUser(
-  app: INestApplication<App>,
+  url: string,
   email: string,
   password: string,
 ): Promise<string> {
-  const response = await request(app.getHttpServer())
-    .post("/auth/login")
-    .send({ email, password })
-    .expect((res) => {
-      if (![200, 201].includes(res.status)) {
-        throw new Error(`Expected status 200 or 201, got ${res.status}`);
-      }
-    });
+  const api = new Api({ baseURL: url });
+  
+  const response = await api.auth.authControllerLogin({
+    email,
+    password,
+  });
 
-  const body = response.body as { token: string };
-  return body.token;
+  return response.data.token;
 }
