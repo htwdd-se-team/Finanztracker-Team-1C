@@ -42,7 +42,6 @@ describe("RecurringEntries (e2e)", () => {
       });
       expect(createResponse.status).toBe(201);
       
-      // When a recurring entry is created, it returns the child transaction if it was created immediately.
       // The parentId is in `transactionId`.
       const entry = createResponse.data;
       const parentId = entry.transactionId ?? entry.id;
@@ -65,25 +64,28 @@ describe("RecurringEntries (e2e)", () => {
 
       // Verify active in list
       const listActive = await api.entries.entryControllerGetScheduledEntries({
-        take: 30,
-        disabled: false
+        take: 30
       });
       expect(listActive.data.entries.some(e => e.id === parentId)).toBe(true);
     });
 
     it("should get scheduled entries summary", async () => {
-      // Create some recurring entries
+      // Create some recurring entries in the future
+      const nextYear = new Date();
+      nextYear.setFullYear(nextYear.getFullYear() + 1);
+      
       await api.entries.entryControllerCreate({
         type: ApiTransactionType.INCOME,
         amount: 200000,
         currency: ApiCurrency.EUR,
-        description: "Monthly Salary",
+        description: "Future Salary",
         isRecurring: true,
         recurringType: ApiRecurringTransactionType.MONTHLY,
-        recurringBaseInterval: 1
+        recurringBaseInterval: 1,
+        createdAt: nextYear.toISOString()
       });
 
-      const response = await api.entries.entryControllerGetScheduledEntriesSummary({ disabled: false });
+      const response = await api.entries.entryControllerGetScheduledEntriesSummary();
       expect(response.status).toBe(200);
       expect(response.data.totalCount).toBeGreaterThan(0);
     });

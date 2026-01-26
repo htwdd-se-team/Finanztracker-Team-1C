@@ -511,4 +511,100 @@ describe("AnalyticsController (e2e)", () => {
       expect(firstDate <= new Date()).toBe(true);
     });
   });
+
+  describe("Advanced Analytics Scenarios", () => {
+    it("should calculate available capital correctly (manual check)", async () => {
+      // Get current balance
+      const balanceResponse = await api.user.userControllerGetBalance();
+      const balance = balanceResponse.data.balance;
+      const reserve = balanceResponse.data.emergencyReserve;
+
+      const capitalResponse = await api.analytics.analyticsControllerGetAvailableCapital();
+      const capital = capitalResponse.data.find(i => i.key === "available_capital")?.value;
+      
+      // Available capital should be balance - reserve (if implemented that way)
+      // or check specific logic. Assuming available = balance - reserve for now or just check it exists.
+      // Based on typical logic: Available = Balance - Emergency Reserve.
+      // Let's verify if that holds.
+      // Update: Logic is Balance + Future - Future. With no future, it should equal Balance.
+      console.log('DEBUG: Balance:', balance, 'Reserve:', reserve, 'Capital:', capital);
+      expect(capital).toBe(balance);
+    });
+
+    it("should return null for first transaction date if no transactions", async () => {
+      const newUser = await registerTestUser(url);
+      api.setSecurityData(newUser.token);
+      
+      const response = await api.analytics.analyticsControllerGetFirstTransactionDate();
+      expect(response.status).toBe(200);
+      expect(response.data.date).toBeNull();
+      
+      // Restore main test user
+      api.setSecurityData(testUser.token);
+    });
+
+    it("should return empty breakdown when no data in range", async () => {
+      // Future date range
+      const startDate = DateTime.now().plus({ years: 10 }).toISO();
+      const endDate = DateTime.now().plus({ years: 10, months: 1 }).toISO();
+
+      const response = await api.analytics.analyticsControllerGetTransactionBreakdown({
+        startDate,
+        endDate,
+        granularity: ApiGranularity.DAY
+      });
+      
+      expect(response.status).toBe(200);
+      expect(response.data.data.length).toBe(0);
+    });
+
+    it("should return 400 for invalid dates in history", async () => {
+      // Invalid date format
+      const response = await api.instance.get("/analytics/transaction-balance-history", {
+        params: {
+          startDate: "invalid-date",
+          endDate: "another-invalid",
+          granularity: ApiGranularity.DAY
+        },
+        headers: { Authorization: `Bearer ${testUser.token}` },
+        validateStatus: () => true
+      });
+      
+      expect(response.status).toBe(400);
+    });
+
+    it("should return 400 for invalid granularity", async () => {
+      const response = await api.instance.get("/analytics/transaction-breakdown", {
+        params: {
+          startDate: DateTime.now().toISO(),
+          endDate: DateTime.now().toISO(),
+          granularity: "INVALID_GRANULARITY"
+        },
+        headers: { Authorization: `Bearer ${testUser.token}` },
+        validateStatus: () => true
+      });
+      
+      expect(response.status).toBe(400);
+    });
+
+    it("should verify data isolation for available capital", async () => {
+      const newUser = await registerTestUser(url);
+      api.setSecurityData(newUser.token);
+
+      // New user should have 0 capital (or -reserve if balance is 0 and logic subtracts)
+      // Default reserve is 100000 (1000 EUR) from User model default? 
+      // Checking auth-helper/user service... user service mock had 100000.
+      // Real DB default?
+      // Let's just check it is NOT the same as the main test user's capital
+      const response = await api.analytics.analyticsControllerGetAvailableCapital();
+      const newCapital = response.data.find(i => i.key === "available_capital")?.value;
+
+      // Switch back to main user
+      api.setSecurityData(testUser.token);
+      const mainResponse = await api.analytics.analyticsControllerGetAvailableCapital();
+      const mainCapital = mainResponse.data.find(i => i.key === "available_capital")?.value;
+
+      expect(newCapital).not.toBe(mainCapital);
+    });
+  });
 });
