@@ -1,4 +1,4 @@
-import { ApiCategoryResponseDto, ApiCategorySortBy } from '@/__generated__/api'
+import { ApiCategoryResponseDto, ApiCategorySortBy } from 'api-client'
 import { apiClient } from '@/api/api-client'
 import { CategoryColors } from '@/lib/color-map'
 import { IconNames } from '@/lib/icon-map'

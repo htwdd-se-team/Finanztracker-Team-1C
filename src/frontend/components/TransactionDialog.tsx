@@ -47,7 +47,7 @@ import {
   ApiCreateEntryDto,
   ApiUpdateEntryDto,
   ApiRecurringTransactionType,
-} from '@/__generated__/api'
+} from 'api-client'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -510,8 +510,8 @@ export function TransactionDialog({
                         </Popover>
                       </FormControl>
                       {isFutureDate && (
-                        <p className="flex items-center text-sm text-gray-600 -mt-1.5 whitespace-nowrap">
-                          <AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5 mr-1 flex-shrink-0" />
+                        <p className="flex items-center -mt-1.5 text-gray-600 text-sm whitespace-nowrap">
+                          <AlertTriangle className="flex-shrink-0 mt-0.5 mr-1 w-4 h-4 text-yellow-500" />
                           Dieses Datum liegt in der Zukunft
                         </p>
                       )}
@@ -550,7 +550,7 @@ export function TransactionDialog({
 
             {/* Recurring toggle + interval input */}
             <Separator />
-            <div className="flex items-center justify-between gap-4 min-h-10">
+            <div className="flex justify-between items-center gap-4 min-h-10">
               <div className="flex items-center gap-3">
                 <Switch
                   checked={isRecurring}
@@ -566,7 +566,7 @@ export function TransactionDialog({
                     <div
                       id="recurring-tooltip"
                       role="tooltip"
-                      className="hidden group-hover:block absolute top-full right-0 mt-2 w-64 p-2 rounded bg-card border border-border shadow-md text-sm text-muted-foreground z-20"
+                      className="hidden group-hover:block top-full right-0 z-20 absolute bg-card shadow-md mt-2 p-2 border border-border rounded w-64 text-muted-foreground text-sm"
                     >
                       Wenn aktiviert, wird die Transaktion in dem angegebenen
                       Intervall automatisch wiederholt.

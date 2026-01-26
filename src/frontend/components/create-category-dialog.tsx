@@ -32,7 +32,7 @@ import {
   ApiCategoryResponseDto,
   ApiCreateCategoryDto,
   ApiUpdateCategoryDto,
-} from '@/__generated__/api'
+} from 'api-client'
 import { cn } from '@/lib/utils'
 import { useCategory } from '@/components/provider/category-provider'
 import { useEffect } from 'react'
@@ -283,7 +283,7 @@ function CategoryPreview({
     <div className="flex flex-col items-center space-y-2 bg-muted/50 p-4 border-2 border-muted-foreground/20 border-dashed rounded-lg">
       <div
         className={cn(
-          'flex items-center gap-2 px-3 py-2 rounded-md border text-sm font-medium transition-colors',
+          'flex items-center gap-2 px-3 py-2 border rounded-md font-medium text-sm transition-colors',
           getCategoryColorClasses(color)
         )}
       >

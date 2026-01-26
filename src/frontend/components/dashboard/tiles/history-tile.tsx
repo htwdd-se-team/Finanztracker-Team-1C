@@ -1,12 +1,24 @@
 'use client'
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ReferenceLine } from 'recharts'
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  ReferenceLine,
+} from 'recharts'
 import { TrendingUp, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart'
 import { apiClient } from '@/api/api-client'
 import { useQuery } from '@tanstack/react-query'
-import { ApiGranularity } from '@/__generated__/api'
+import { ApiGranularity } from 'api-client'
 import { cn } from '@/lib/utils'
 
 type HistoryTileProps = {
@@ -27,7 +39,6 @@ export default function HistoryTile({
   endDate,
   className,
 }: HistoryTileProps) {
-
   const { data: graphData } = useQuery({
     queryKey: ['transactions', 'history-tile', startDate, endDate],
     queryFn: () =>
@@ -56,7 +67,7 @@ export default function HistoryTile({
       return mapped
     },
     placeholderData: previousData => previousData,
-    })
+  })
 
   if (!graphData) {
     return (
@@ -72,8 +83,8 @@ export default function HistoryTile({
   if (graphData.length === 0) {
     return (
       <Card className={cn('p-0', className)}>
-        <CardHeader className="p-0 m-0">
-          <CardTitle className="p-0 ml-1.5 mt-1.5 mb-0 flex gap-1 font-medium">
+        <CardHeader className="m-0 p-0">
+          <CardTitle className="flex gap-1 mt-1.5 mb-0 ml-1.5 p-0 font-medium">
             <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf
           </CardTitle>
         </CardHeader>
@@ -100,16 +111,16 @@ export default function HistoryTile({
   const hasNegative = trueMin < 0
 
   return (
-    <Card className={cn('p-0',className)}>
-      <CardHeader className="p-0 m-0">
-        <CardTitle className="p-0 ml-1.5 mt-1.5 mb-0 flex gap-1 font-medium">
+    <Card className={cn('p-0', className)}>
+      <CardHeader className="m-0 p-0">
+        <CardTitle className="flex gap-1 mt-1.5 mb-0 ml-1.5 p-0 font-medium">
           <TrendingUp className="w-4 h-4 shrink-0" /> Kontoverlauf
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0 mr-1.5 mt-0">
+      <CardContent className="mt-0 mr-1.5 p-0">
         <ChartContainer
           config={chartConfig}
-          className="w-full max-h-[150px] sm:max-h-[200px] -mt-4"
+          className="-mt-4 w-full max-h-[150px] sm:max-h-[200px]"
         >
           <AreaChart
             data={graphData}
@@ -129,17 +140,20 @@ export default function HistoryTile({
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false}/>
+            <CartesianGrid vertical={false} />
             {hasPositive && hasNegative && (
               <ReferenceLine
-              y={0} stroke="#999" strokeDasharray="3 3"
-              label={{
-                value: "0 €",
-                position: "left",
-                fill: "#666",
-                fontSize: 11,
-                dx: -3,
-              }}/>
+                y={0}
+                stroke="#999"
+                strokeDasharray="3 3"
+                label={{
+                  value: '0 €',
+                  position: 'left',
+                  fill: '#666',
+                  fontSize: 11,
+                  dx: -3,
+                }}
+              />
             )}
             <YAxis
               width={54}

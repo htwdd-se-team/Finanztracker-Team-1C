@@ -7,7 +7,7 @@ import { useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { toast } from 'sonner'
 import React from 'react'
-import { ApiEntryPageDto } from '@/__generated__/api'
+import { ApiEntryPageDto } from 'api-client'
 
 export default function OverviewPage() {
   const [deletingEntryId, setDeletingEntryId] = useState<number | undefined>()
@@ -48,7 +48,7 @@ export default function OverviewPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-2 pt-2 sm:p-6 container">
+    <div className="mx-auto sm:p-6 px-2 pt-2 max-w-4xl container">
       {/* Graph Grids Section */}
       <GraphGrids />
 

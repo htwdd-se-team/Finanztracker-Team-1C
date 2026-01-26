@@ -1,6 +1,6 @@
 'use client'
 
-import { ApiUserResponseDto } from '@/__generated__/api'
+import { ApiUserResponseDto } from 'api-client'
 import { apiClient, apiClearToken } from '@/api/api-client'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'

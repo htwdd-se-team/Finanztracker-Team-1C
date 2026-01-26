@@ -19,7 +19,7 @@ import {
   ApiFilterResponseDto,
   ApiFilterSortOption,
   ApiTransactionType,
-} from '@/__generated__/api'
+} from 'api-client'
 import { DateValue, parseDate } from '@internationalized/date'
 import { TableProperties } from 'lucide-react'
 
@@ -140,14 +140,14 @@ export default function TablePage() {
 
   return (
     <>
-      <div className="mx-auto max-w-4xl px-2 sm:px-6 relative flex flex-col container">
+      <div className="relative flex flex-col mx-auto px-2 sm:px-6 max-w-4xl container">
         <Background />
         <div className="">
-          <h1 className="flex gap-3 font-bold text-2xl ml-2 mt-4 sm:mt-6 mb-2">
+          <h1 className="flex gap-3 mt-4 sm:mt-6 mb-2 ml-2 font-bold text-2xl">
             <TableProperties className="w-8 h-8" />
             Belegübersicht
           </h1>
-          <p className="ml-2 mt-2 text-muted-foreground mb-6">
+          <p className="mt-2 mb-6 ml-2 text-muted-foreground">
             Einsicht über Ihre Belege
           </p>
         </div>

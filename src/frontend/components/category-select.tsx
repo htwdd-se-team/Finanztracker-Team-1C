@@ -15,7 +15,7 @@ import { IconRender } from '@/lib/icon-map'
 import { cn } from '@/lib/utils'
 import { getCategoryColorClasses } from '@/lib/color-map'
 import { Plus } from 'lucide-react'
-import { ApiCategoryResponseDto } from '@/__generated__/api'
+import { ApiCategoryResponseDto } from 'api-client'
 import { Button } from './ui/button'
 
 interface CategorySelectProps {

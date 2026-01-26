@@ -26,7 +26,7 @@ import { apiClient, apiSetToken } from '@/api/api-client'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
-import { ApiLoginDto } from '@/__generated__/api'
+import { ApiLoginDto } from 'api-client'
 import { LoggedInCard } from '@/components/user/logged-in-card'
 import FinAppLogo from '@/components/nav/finapp-logo'
 

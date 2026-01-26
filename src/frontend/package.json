@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "build:api": "tsx buildApiClient.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
@@ -66,7 +65,8 @@
     "sonner": "^2.0.4",
     "tailwind-merge": "^3.3.0",
     "vaul": "^1.1.2",
-    "zod": "^3.25.48"
+    "zod": "^3.25.48",
+    "api-client": "workspace:*"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

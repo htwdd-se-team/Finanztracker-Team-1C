@@ -1,4 +1,4 @@
-import { Api } from "@/__generated__/api"
+import { Api } from "api-client"
 import { toast } from "sonner"
 
 export const apiClient = new Api({

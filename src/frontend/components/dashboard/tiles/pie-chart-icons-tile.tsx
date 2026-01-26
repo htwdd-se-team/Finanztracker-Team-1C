@@ -3,10 +3,14 @@
 import { Loader2, PieChartIcon } from 'lucide-react'
 import { Pie, PieChart, ResponsiveContainer, Cell, Label } from 'recharts'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart'
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+} from '@/components/ui/chart'
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
-import { ApiGranularity, ApiTransactionType } from '@/__generated__/api'
+import { ApiGranularity, ApiTransactionType } from 'api-client'
 import { useCategory } from '@/components/provider/category-provider'
 import { IconMap, IconNames } from '@/lib/icon-map'
 import { CategoryColors } from '@/lib/color-map'
@@ -59,7 +63,6 @@ export default function PieChartTileIcons({
   endDate: string
   className?: string
 }) {
-
   const { getCategoryFromId } = useCategory()
 
   const { data } = useQuery({
