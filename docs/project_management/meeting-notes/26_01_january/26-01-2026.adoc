@@ -1,0 +1,65 @@
+= Meeting-Protokoll 26.01.2026
+
+*Datum:* 26.01.2026 +
+*Ort:* Café Listig +
+*Leitung:* Paula +
+*Protokoll:* ... +
+*Meetingbeginn:* 14:30 +
+*Meetingende:* xx:xx +
+*Dauer:* xx min +
+
+==== Anwesenheit: 
+- Elias
+- Paula
+- Khang (abgemeldet)
+- Christoph
+- Cedrick
+- Ben 
+
+
+==  Weekly Stand-up/Backlog Refinement
+=== 1. Ticketfortschritt/Product backlog
+Wie läuft das Backend refactoring? Welche Bugs sind noch offen/ sind noch Bugs dazu gekommen? +
+
+*Notizen:* +
+- ... +
+ +
+ +
+
+
+=== 2. Abgaben
+Wie weit sind alle mit ihren Abgaben? +
+
+*Notizen:* +
+- Einzelreflexionen (2/6)
+- Gruppenreflexion (In Progress) -> Review?
+
+- Softwareprodukt (In Progress)
+
+- Visionsdokumentation (In Review)
+- Entwicklerdokumentation (In Review) -> Will nochmal jemand drüber schauen, aktuell ist keiner festgelegt
+- Testdokumentation (To-Do) -> Review?
+- Anwenderdokumentation (Done)
+- Betriebsdokumentation (To-Do) -> Review?
+
+
+- Bitte schickt mir (@Paula) alle eure Einzelreflexionen und Dokus bis ... zu 
+    (oder sagt mir Bescheid, dass ich es mir aus dem Repo ziehen kann)
+ +
+ +
+
+
+=== 3. Weitere organisatorische Aufgaben und/oder offene Punkte
+
+- ... + 
+ +
+ +
+
+
+
+== keine Meetings mehr :)
+
+- Datum: xx.xx.xxx 
+- Zeit: :xx
+- Ort: xxx
+
