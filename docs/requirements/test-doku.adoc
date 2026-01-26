@@ -6,10 +6,11 @@ include::../_includes/default-attributes.inc.adoc[]
 
 === Ziel der Testdokumentation
 
-Diese Dokumentation dient dem Nachweis der Qualität des Finanztracker-Systems sowie der umfassenden Dokumentation aller Teststrukturen. Sie beschreibt das Testkonzept, die durchgeführten Testmethoden und die erzielten Ergebnisse.
+Diese Dokumentation dient dem Nachweis der Qualität der Finanztracker-App sowie der umfassenden Dokumentation aller Teststrukturen. Sie beschreibt das Testkonzept, die durchgeführten Testmethoden und die erzielten Ergebnisse.
+
 
 === Umfang
-Das Finanztracker-System ist eine Webanwendung zur Verwaltung persönlicher Finanzen. Die Anwendung besteht aus:
+Die Finanztracker-App ist eine Webanwendung zur Verwaltung persönlicher Finanzen. Die Anwendung besteht aus:
 
 * **Backend**: NestJS-Server mit REST API und PostgreSQL-Datenbank
 * **Frontend**: Next.js-Webanwendung mit React-Komponenten
@@ -21,24 +22,7 @@ Das Finanztracker-System ist eine Webanwendung zur Verwaltung persönlicher Fina
 
 Das Projekt folgt der klassischen Testpyramide mit drei Ebenen:
 
-[plantuml, test-pyramid, svg]
-----
-@startuml
-skinparam defaultTextAlignment center
-
-rectangle "E2E Tests\n(Playwright)" as e2e #lightblue
-rectangle "Integrationstests\n(Jest + Supertest)" as integration #lightyellow
-rectangle "Unit-Tests\n(Jest Module-Specs)" as unit #lightgreen
-
-e2e -[hidden]-> integration
-integration -[hidden]-> unit
-
-note right of e2e : 2 Testdateien\n~20 Tests
-note right of integration : 11 Testdateien\n~100+ Tests
-note right of unit : 8 Testdateien\n119 Tests
-
-@enduml
-----
+image:../images/test_pyramid.png[]
 
 ==== Unit-Tests (Basis der Pyramide)
 
