@@ -3,10 +3,10 @@
 *Datum:* 26.01.2026 +
 *Ort:* Café Listig +
 *Leitung:* Paula +
-*Protokoll:* ... +
+*Protokoll:* Ben +
 *Meetingbeginn:* 14:30 +
-*Meetingende:* xx:xx +
-*Dauer:* xx min +
+*Meetingende:* 15:00 +
+*Dauer:* 30 min +
 
 ==== Anwesenheit: 
 - Elias
@@ -22,8 +22,8 @@
 Wie läuft das Backend refactoring? Welche Bugs sind noch offen/ sind noch Bugs dazu gekommen? +
 
 *Notizen:* +
-- ... +
- +
+- Elias probiert es zu fixen und noch nach DDD umzustellen -> Soweit wir kommen +
+- Bugs noch aufnehmen, aber nicht mehr fixen -> @Ben ins Backlog aufnehmen +
  +
 
 
@@ -32,22 +32,23 @@ Wie weit sind alle mit ihren Abgaben? +
 
 *Notizen:* +
 - Einzelreflexionen (2/6)
-- Gruppenreflexion (In Progress) -> Review?
+- Gruppenreflexion (In Progress) -> Review? -> @Ben drüber gucken
 
-- Softwareprodukt (In Progress)
+- Softwareprodukt (In Progress) -> @Elias meldet sich bei Paula mit dem 
 
-- Visionsdokumentation (In Review)
-- Entwicklerdokumentation (In Review) -> Will nochmal jemand drüber schauen, aktuell ist keiner festgelegt
-- Testdokumentation (To-Do) -> Review?
+- Visionsdokumentation (In Review) -> @Paula 
+- Entwicklerdokumentation (In Review) -> Will nochmal jemand drüber schauen, aktuell ist keiner festgelegt -> @Elias
+- Testdokumentation (To-Do) -> Review? -> @Elias
 - Anwenderdokumentation (Done)
-- Betriebsdokumentation (To-Do) -> Review?
+- Betriebsdokumentation (To-Do) -> Review? -> @Elias reviewed sich selbst
+- @Elias -> Architekturnotebook upgraden
 
 
 - Bitte schickt mir (@Paula) alle eure Einzelreflexionen und Dokus bis ... zu 
     (oder sagt mir Bescheid, dass ich es mir aus dem Repo ziehen kann)
  +
  +
-
+*Feste Deadline für alle Dokumente am Donnerstag um 10Uhr*
 
 === 3. Weitere organisatorische Aufgaben und/oder offene Punkte
 
@@ -58,8 +59,4 @@ Wie weit sind alle mit ihren Abgaben? +
 
 
 == keine Meetings mehr :)
-
-- Datum: xx.xx.xxx 
-- Zeit: :xx
-- Ort: xxx
 
