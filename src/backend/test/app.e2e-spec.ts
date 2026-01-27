@@ -1,6 +1,7 @@
 import { INestApplication } from "@nestjs/common";
-import { App } from "supertest/types";
 import { Api } from "api-client";
+import { App } from "supertest/types";
+
 import { createTestApp } from "./helpers/test-app";
 
 describe("AppController (e2e)", () => {

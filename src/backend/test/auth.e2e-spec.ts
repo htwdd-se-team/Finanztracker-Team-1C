@@ -1,6 +1,7 @@
 import { INestApplication } from "@nestjs/common";
+import { Api } from "api-client";
 import { App } from "supertest/types";
-import { Api, ApiLoginDto } from "api-client";
+
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
@@ -51,7 +52,7 @@ describe("AuthController (e2e)", () => {
         email: testUser.email,
         password: testUser.password,
       });
-      
+
       expect([200, 201]).toContain(response.status);
 
       const authResponse = response.data;

@@ -1,5 +1,10 @@
 import { INestApplication } from "@nestjs/common";
-import { Api, ApiTransactionType, ApiCurrency, ApiCategorySortBy } from "api-client";
+import {
+  Api,
+  ApiTransactionType,
+  ApiCurrency,
+  ApiCategorySortBy,
+} from "api-client";
 import { App } from "supertest/types";
 
 import { registerTestUser } from "./helpers/auth-helper";

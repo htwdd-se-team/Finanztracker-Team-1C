@@ -1,7 +1,8 @@
 import { INestApplication } from "@nestjs/common";
-import { App } from "supertest/types";
-import { DateTime } from "luxon";
 import { Api, ApiTransactionType, ApiCurrency } from "api-client";
+import { DateTime } from "luxon";
+import { App } from "supertest/types";
+
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
@@ -19,10 +20,11 @@ describe("FilterController (e2e)", () => {
     url = testApp.url;
     testUser = await registerTestUser(url);
 
-    api = new Api({ 
-      baseURL: url, 
+    api = new Api({
+      baseURL: url,
       validateStatus: () => true,
-      securityWorker: (token) => token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+      securityWorker: (token) =>
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {},
     });
     api.setSecurityData(testUser.token);
 
@@ -111,7 +113,10 @@ describe("FilterController (e2e)", () => {
         maxPrice: 6000,
       };
 
-      const response = await api.filters.filterControllerUpdate(filterId, updateDto);
+      const response = await api.filters.filterControllerUpdate(
+        filterId,
+        updateDto,
+      );
       expect(response.status).toBe(200);
 
       const updatedFilter = response.data;
@@ -122,7 +127,9 @@ describe("FilterController (e2e)", () => {
     });
 
     it("should fail to update non-existent filter", async () => {
-      const response = await api.filters.filterControllerUpdate(99999, { title: "Test" });
+      const response = await api.filters.filterControllerUpdate(99999, {
+        title: "Test",
+      });
       expect(response.status).toBe(404);
     });
   });
@@ -134,17 +141,22 @@ describe("FilterController (e2e)", () => {
         title: `Delete Me ${Math.random().toString(36).substring(2, 9)}`,
       };
 
-      const createResponse = await api.filters.filterControllerCreate(filterDto);
+      const createResponse =
+        await api.filters.filterControllerCreate(filterDto);
       expect([200, 201]).toContain(createResponse.status);
 
       const deleteFilterId = createResponse.data.id;
 
       // Delete the filter
-      const deleteResponse = await api.filters.filterControllerDelete(deleteFilterId);
+      const deleteResponse =
+        await api.filters.filterControllerDelete(deleteFilterId);
       expect(deleteResponse.status).toBe(200);
 
       // Verify filter is deleted
-      const updateResponse = await api.filters.filterControllerUpdate(deleteFilterId, { title: "Test" });
+      const updateResponse = await api.filters.filterControllerUpdate(
+        deleteFilterId,
+        { title: "Test" },
+      );
       expect(updateResponse.status).toBe(404);
     });
   });

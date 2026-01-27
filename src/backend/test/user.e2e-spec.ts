@@ -1,6 +1,7 @@
 import { INestApplication } from "@nestjs/common";
-import { App } from "supertest/types";
 import { Api } from "api-client";
+import { App } from "supertest/types";
+
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
@@ -16,10 +17,11 @@ describe("UserController (e2e)", () => {
     url = testApp.url;
     testUser = await registerTestUser(url);
 
-    api = new Api({ 
-      baseURL: url, 
+    api = new Api({
+      baseURL: url,
       validateStatus: () => true,
-      securityWorker: (token) => token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+      securityWorker: (token) =>
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {},
     });
   });
 
@@ -31,7 +33,7 @@ describe("UserController (e2e)", () => {
     it("should get current user info", async () => {
       api.setSecurityData(testUser.token);
       const response = await api.user.userControllerGetCurrentUser();
-      
+
       expect([200, 201]).toContain(response.status);
 
       expect(response.data).toHaveProperty("email", testUser.email);
@@ -57,7 +59,7 @@ describe("UserController (e2e)", () => {
     it("should get user balance", async () => {
       api.setSecurityData(testUser.token);
       const response = await api.user.userControllerGetBalance();
-      
+
       expect([200, 201]).toContain(response.status);
 
       expect(response.data).toHaveProperty("balance");
@@ -70,7 +72,7 @@ describe("UserController (e2e)", () => {
       const newUser = await registerTestUser(url);
       api.setSecurityData(newUser.token);
       const response = await api.user.userControllerGetBalance();
-      
+
       expect([200, 201]).toContain(response.status);
 
       expect(response.data.balance).toBe(0);
@@ -82,11 +84,11 @@ describe("UserController (e2e)", () => {
     it("should update emergency reserve", async () => {
       api.setSecurityData(testUser.token);
       const newReserve = 250000; // 2500.00 EUR
-      
+
       const response = await api.user.userControllerUpdateEmergencyReserve({
-        emergencyReserve: newReserve
+        emergencyReserve: newReserve,
       });
-      
+
       expect(response.status).toBe(201);
       expect(response.data.emergencyReserve).toBe(newReserve);
 
@@ -97,13 +99,17 @@ describe("UserController (e2e)", () => {
 
     it("should fail with negative emergency reserve", async () => {
       api.setSecurityData(testUser.token);
-      const response = await api.instance.post("/user/emergency-reserve", {
-        emergencyReserve: -100
-      }, { 
-        headers: { Authorization: `Bearer ${testUser.token}` },
-        validateStatus: () => true 
-      });
-      
+      const response = await api.instance.post(
+        "/user/emergency-reserve",
+        {
+          emergencyReserve: -100,
+        },
+        {
+          headers: { Authorization: `Bearer ${testUser.token}` },
+          validateStatus: () => true,
+        },
+      );
+
       expect(response.status).toBe(400);
     });
   });

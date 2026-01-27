@@ -1,6 +1,7 @@
 import { INestApplication } from "@nestjs/common";
-import { App } from "supertest/types";
 import { Api } from "api-client";
+import { App } from "supertest/types";
+
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
@@ -16,10 +17,11 @@ describe("Security (e2e)", () => {
     url = testApp.url;
     testUser = await registerTestUser(url);
 
-    api = new Api({ 
-      baseURL: url, 
+    api = new Api({
+      baseURL: url,
       validateStatus: () => true,
-      securityWorker: (token) => token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+      securityWorker: (token) =>
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {},
     });
   });
 
@@ -311,14 +313,18 @@ describe("Security (e2e)", () => {
 
         // Second user should have no entries initially
         api.setSecurityData(secondUser.token);
-        const listResponse = await api.entries.entryControllerList({ take: 10 });
+        const listResponse = await api.entries.entryControllerList({
+          take: 10,
+        });
         expect(listResponse.status).toBe(200);
 
         expect(listResponse.data.entries.length).toBe(0);
 
         // First user's entries should not be accessible to second user
         api.setSecurityData(testUser.token);
-        const firstUserListResponse = await api.entries.entryControllerList({ take: 10 });
+        const firstUserListResponse = await api.entries.entryControllerList({
+          take: 10,
+        });
         expect(firstUserListResponse.status).toBe(200);
 
         // If first user has entries, verify second user cannot see them
@@ -328,7 +334,8 @@ describe("Security (e2e)", () => {
           // Second user should not be able to access first user's entry
           // Try to delete it (as get by id is not in the list of endpoints used in tests, only delete/update by id)
           api.setSecurityData(secondUser.token);
-          const response = await api.entries.entryControllerDelete(firstUserEntryId);
+          const response =
+            await api.entries.entryControllerDelete(firstUserEntryId);
           expect(response.status).toBe(404);
         }
       });
@@ -339,7 +346,9 @@ describe("Security (e2e)", () => {
 
         // Second user should have no categories initially
         api.setSecurityData(secondUser.token);
-        const listResponse = await api.categories.categoryControllerList({ take: 10 });
+        const listResponse = await api.categories.categoryControllerList({
+          take: 10,
+        });
         expect(listResponse.status).toBe(200);
 
         const initialCount = listResponse.data.length;
@@ -357,13 +366,17 @@ describe("Security (e2e)", () => {
 
         // Second user should still have the same number of categories
         api.setSecurityData(secondUser.token);
-        const secondUserListResponse = await api.categories.categoryControllerList({ take: 10 });
+        const secondUserListResponse =
+          await api.categories.categoryControllerList({ take: 10 });
         expect(secondUserListResponse.status).toBe(200);
 
         expect(secondUserListResponse.data.length).toBe(initialCount);
 
         // Second user should not be able to access first user's category
-        const response = await api.categories.categoryControllerUpdate(categoryId, { name: "Hacked" });
+        const response = await api.categories.categoryControllerUpdate(
+          categoryId,
+          { name: "Hacked" },
+        );
         expect(response.status).toBe(404);
       });
     });
@@ -420,145 +433,205 @@ describe("Security (e2e)", () => {
     });
   });
 
-  // For Malformed/Invalid Data tests, we need to bypass type checking 
+  // For Malformed/Invalid Data tests, we need to bypass type checking
   // or use the underlying axios instance to send invalid payloads
   describe("Malformed/Invalid Data Handling", () => {
     describe("POST /auth/login - Invalid Data", () => {
       it("should reject completely invalid JSON structure", async () => {
-        const response = await api.instance.post("/auth/login", { test: "test" }, { validateStatus: () => true });
+        const response = await api.instance.post(
+          "/auth/login",
+          { test: "test" },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject missing all required fields", async () => {
-        const response = await api.instance.post("/auth/login", {}, { validateStatus: () => true });
+        const response = await api.instance.post(
+          "/auth/login",
+          {},
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject wrong data types - email as number", async () => {
-        const response = await api.instance.post("/auth/login", {
+        const response = await api.instance.post(
+          "/auth/login",
+          {
             email: 12345,
             password: "ValidPass123!",
-          }, { validateStatus: () => true });
+          },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject null values", async () => {
-        const response = await api.instance.post("/auth/login", {
+        const response = await api.instance.post(
+          "/auth/login",
+          {
             email: null,
             password: "ValidPass123!",
-          }, { validateStatus: () => true });
+          },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject undefined values", async () => {
         // undefined fields are usually stripped by JSON.stringify
         // sending empty object effectively
-        const response = await api.instance.post("/auth/login", {
+        const response = await api.instance.post(
+          "/auth/login",
+          {
             email: undefined,
             password: "ValidPass123!",
-          }, { validateStatus: () => true });
+          },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject extra unexpected fields", async () => {
-        const response = await api.instance.post("/auth/login", {
+        const response = await api.instance.post(
+          "/auth/login",
+          {
             email: "test@example.com",
             password: "ValidPass123!",
             maliciousField: "hack attempt",
             anotherField: 12345,
-          }, { validateStatus: () => true });
+          },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400); // Should reject due to forbidNonWhitelisted
       });
 
       it("should reject array instead of object", async () => {
-        const response = await api.instance.post("/auth/login", ["test", "data"], { validateStatus: () => true });
+        const response = await api.instance.post(
+          "/auth/login",
+          ["test", "data"],
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject string instead of object", async () => {
-        const response = await api.instance.post("/auth/login", "just a string", { 
-            headers: { 'Content-Type': 'application/json' },
-            validateStatus: () => true 
-        });
+        const response = await api.instance.post(
+          "/auth/login",
+          "just a string",
+          {
+            headers: { "Content-Type": "application/json" },
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
     });
 
     describe("POST /auth/register - Invalid Data", () => {
       it("should reject completely invalid JSON structure", async () => {
-        const response = await api.instance.post("/auth/register", { random: "data", stuff: 123 }, { validateStatus: () => true });
+        const response = await api.instance.post(
+          "/auth/register",
+          { random: "data", stuff: 123 },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject missing required fields", async () => {
-        const response = await api.instance.post("/auth/register", {
+        const response = await api.instance.post(
+          "/auth/register",
+          {
             email: "test@example.com",
             // missing password and givenName
-          }, { validateStatus: () => true });
+          },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject extra unexpected fields", async () => {
-        const response = await api.instance.post("/auth/register", {
+        const response = await api.instance.post(
+          "/auth/register",
+          {
             email: `test_${Math.random().toString(36).substring(2, 15)}@example.com`,
             password: "ValidPass123!",
             givenName: "Test",
             admin: true,
             role: "admin",
             maliciousField: "hack",
-          }, { validateStatus: () => true });
+          },
+          { validateStatus: () => true },
+        );
         expect(response.status).toBe(400); // Should reject due to forbidNonWhitelisted
       });
     });
 
     describe("POST /categories - Invalid Data", () => {
-        // Need token
+      // Need token
       beforeEach(() => {
         api.setSecurityData(testUser.token);
       });
 
       it("should reject completely invalid JSON structure", async () => {
-        const response = await api.instance.post("/categories", { invalid: "data", test: 123 }, { 
+        const response = await api.instance.post(
+          "/categories",
+          { invalid: "data", test: 123 },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject missing required fields", async () => {
-        const response = await api.instance.post("/categories", {
+        const response = await api.instance.post(
+          "/categories",
+          {
             color: "Blue",
             // missing name
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject extra unexpected fields", async () => {
-        const response = await api.instance.post("/categories", {
+        const response = await api.instance.post(
+          "/categories",
+          {
             name: "Test Category",
             color: "Blue",
             icon: "test",
             userId: 999, // trying to set user ID
             maliciousField: "hack",
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400); // Should reject due to forbidNonWhitelisted
       });
 
       it("should reject null required fields", async () => {
-        const response = await api.instance.post("/categories", {
+        const response = await api.instance.post(
+          "/categories",
+          {
             name: null,
             color: "Blue",
             icon: "test",
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
     });
@@ -569,72 +642,96 @@ describe("Security (e2e)", () => {
       });
 
       it("should reject completely invalid JSON structure", async () => {
-        const response = await api.instance.post("/entries/create", { random: "stuff", invalid: true }, { 
+        const response = await api.instance.post(
+          "/entries/create",
+          { random: "stuff", invalid: true },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject missing required fields", async () => {
-        const response = await api.instance.post("/entries/create", {
+        const response = await api.instance.post(
+          "/entries/create",
+          {
             description: "Test entry",
             // missing type, amount, currency
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject invalid enum values", async () => {
-        const response = await api.instance.post("/entries/create", {
+        const response = await api.instance.post(
+          "/entries/create",
+          {
             type: "INVALID_TYPE",
             amount: 1000,
             currency: "EUR",
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject negative amounts", async () => {
-        const response = await api.instance.post("/entries/create", {
+        const response = await api.instance.post(
+          "/entries/create",
+          {
             type: "EXPENSE",
             amount: -1000,
             currency: "EUR",
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject zero amounts", async () => {
-        const response = await api.instance.post("/entries/create", {
+        const response = await api.instance.post(
+          "/entries/create",
+          {
             type: "EXPENSE",
             amount: 0,
             currency: "EUR",
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject extra unexpected fields", async () => {
-        const response = await api.instance.post("/entries/create", {
+        const response = await api.instance.post(
+          "/entries/create",
+          {
             type: "EXPENSE",
             amount: 1000,
             currency: "EUR",
             userId: 999, // trying to set user ID
             maliciousField: "hack",
             admin: true,
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400); // Should reject due to forbidNonWhitelisted
       });
     });
@@ -645,22 +742,30 @@ describe("Security (e2e)", () => {
       });
 
       it("should reject completely invalid JSON structure", async () => {
-        const response = await api.instance.patch("/entries/1", { invalid: "data" }, { 
+        const response = await api.instance.patch(
+          "/entries/1",
+          { invalid: "data" },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject extra unexpected fields", async () => {
-        const response = await api.instance.patch("/entries/1", {
+        const response = await api.instance.patch(
+          "/entries/1",
+          {
             amount: 1000,
             userId: 999,
             maliciousField: "hack",
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400); // Should reject due to forbidNonWhitelisted
       });
     });
@@ -671,34 +776,40 @@ describe("Security (e2e)", () => {
       });
 
       it("should reject invalid query parameter types", async () => {
-        const response = await api.instance.get("/entries/list?take=not_a_number", { 
+        const response = await api.instance.get(
+          "/entries/list?take=not_a_number",
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject invalid query parameter values", async () => {
-        const response = await api.instance.get("/entries/list?take=-1", { 
-            headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
+        const response = await api.instance.get("/entries/list?take=-1", {
+          headers: { Authorization: `Bearer ${testUser.token}` },
+          validateStatus: () => true,
         });
         expect(response.status).toBe(400);
       });
 
       it("should reject take exceeding maximum", async () => {
-        const response = await api.instance.get("/entries/list?take=100", { 
-            headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
+        const response = await api.instance.get("/entries/list?take=100", {
+          headers: { Authorization: `Bearer ${testUser.token}` },
+          validateStatus: () => true,
         });
         expect(response.status).toBe(400);
       });
 
       it("should reject invalid transaction type enum", async () => {
-        const response = await api.instance.get("/entries/list?transactionType=INVALID_TYPE", { 
+        const response = await api.instance.get(
+          "/entries/list?transactionType=INVALID_TYPE",
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
     });
@@ -709,73 +820,97 @@ describe("Security (e2e)", () => {
       });
 
       it("should reject completely invalid JSON structure", async () => {
-        const response = await api.instance.post("/filters/create", { random: "data" }, { 
+        const response = await api.instance.post(
+          "/filters/create",
+          { random: "data" },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject missing required fields", async () => {
-        const response = await api.instance.post("/filters/create", {
+        const response = await api.instance.post(
+          "/filters/create",
+          {
             minPrice: 1000,
             // missing title
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject negative prices", async () => {
-        const response = await api.instance.post("/filters/create", {
+        const response = await api.instance.post(
+          "/filters/create",
+          {
             title: "Test Filter",
             minPrice: -1000,
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject extra unexpected fields", async () => {
-        const response = await api.instance.post("/filters/create", {
+        const response = await api.instance.post(
+          "/filters/create",
+          {
             title: "Test Filter",
             userId: 999,
             maliciousField: "hack",
-          }, { 
+          },
+          {
             headers: { Authorization: `Bearer ${testUser.token}` },
-            validateStatus: () => true 
-        });
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400); // Should reject due to forbidNonWhitelisted
       });
     });
 
     describe("General Malformed Requests", () => {
       it("should reject empty body on POST requests", async () => {
-        // Axios strips Content-Type if body is empty/undefined, so we might need to force it 
+        // Axios strips Content-Type if body is empty/undefined, so we might need to force it
         // or just let the app handle it.
-        const response = await api.instance.post("/auth/login", undefined, { 
-            validateStatus: () => true 
+        const response = await api.instance.post("/auth/login", undefined, {
+          validateStatus: () => true,
         });
         expect(response.status).toBe(400);
       });
 
       it("should reject malformed JSON", async () => {
         // Need to bypass axios JSON serialization
-        const response = await api.instance.post("/auth/login", '{"email": "test@example.com", "password": "test"', { 
-            headers: { 'Content-Type': 'application/json' },
-            transformRequest: [(data) => data], // prevent axios from trying to serialize/deserialize
-            validateStatus: () => true 
-        });
+        const response = await api.instance.post(
+          "/auth/login",
+          '{"email": "test@example.com", "password": "test"',
+          {
+            headers: { "Content-Type": "application/json" },
+            transformRequest: [(data: string) => data], // prevent axios from trying to serialize/deserialize
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
 
       it("should reject requests with wrong Content-Type", async () => {
-        const response = await api.instance.post("/auth/login", "email=test@example.com&password=test", { 
-            headers: { 'Content-Type': 'text/plain' },
-            validateStatus: () => true 
-        });
+        const response = await api.instance.post(
+          "/auth/login",
+          "email=test@example.com&password=test",
+          {
+            headers: { "Content-Type": "text/plain" },
+            validateStatus: () => true,
+          },
+        );
         expect(response.status).toBe(400);
       });
     });

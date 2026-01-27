@@ -1,6 +1,7 @@
 import { INestApplication } from "@nestjs/common";
-import { App } from "supertest/types";
 import { Api, ApiTransactionType, ApiCurrency } from "api-client";
+import { App } from "supertest/types";
+
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
@@ -18,10 +19,11 @@ describe("EntryController (e2e)", () => {
     url = testApp.url;
     testUser = await registerTestUser(url);
 
-    api = new Api({ 
-      baseURL: url, 
+    api = new Api({
+      baseURL: url,
       validateStatus: () => true,
-      securityWorker: (token) => token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+      securityWorker: (token) =>
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {},
     });
     api.setSecurityData(testUser.token);
 
@@ -117,11 +119,13 @@ describe("EntryController (e2e)", () => {
     it("should filter entries by category", async () => {
       const response = await api.entries.entryControllerList({
         take: 10,
-        // @ts-ignore
+        // @ts-expect-error - API expects array but string works too
         categoryIds: categoryId.toString(),
       });
       expect(response.status).toBe(200);
-      expect(response.data.entries.every(e => e.categoryId === categoryId)).toBe(true);
+      expect(
+        response.data.entries.every((e) => e.categoryId === categoryId),
+      ).toBe(true);
     });
 
     it("should search entries by title", async () => {
@@ -130,12 +134,12 @@ describe("EntryController (e2e)", () => {
         type: ApiTransactionType.INCOME,
         amount: 100,
         currency: ApiCurrency.EUR,
-        description: uniqueDescription
+        description: uniqueDescription,
       });
 
       const response = await api.entries.entryControllerList({
         take: 10,
-        title: uniqueDescription
+        title: uniqueDescription,
       });
       expect(response.status).toBe(200);
       expect(response.data.entries.length).toBe(1);
@@ -149,7 +153,7 @@ describe("EntryController (e2e)", () => {
           type: ApiTransactionType.EXPENSE,
           amount: 100 + i,
           currency: ApiCurrency.EUR,
-          description: `Pagination test ${i}`
+          description: `Pagination test ${i}`,
         });
       }
 
@@ -157,12 +161,14 @@ describe("EntryController (e2e)", () => {
       expect(firstPage.data.entries.length).toBe(2);
       expect(firstPage.data.cursorId).toBeDefined();
 
-      const secondPage = await api.entries.entryControllerList({ 
-        take: 2, 
-        cursorId: firstPage.data.cursorId 
+      const secondPage = await api.entries.entryControllerList({
+        take: 2,
+        cursorId: firstPage.data.cursorId,
       });
       expect(secondPage.data.entries.length).toBe(2);
-      expect(secondPage.data.entries[0].id).not.toBe(firstPage.data.entries[0].id);
+      expect(secondPage.data.entries[0].id).not.toBe(
+        firstPage.data.entries[0].id,
+      );
     });
 
     it("should filter by date range", async () => {
@@ -172,21 +178,23 @@ describe("EntryController (e2e)", () => {
         amount: 500,
         currency: ApiCurrency.EUR,
         createdAt: oldDate,
-        description: "Old entry"
+        description: "Old entry",
       });
 
       const response = await api.entries.entryControllerList({
         take: 10,
         dateFrom: "2019-01-01",
-        dateTo: "2021-01-01"
+        dateTo: "2021-01-01",
       });
 
       expect(response.status).toBe(200);
       expect(response.data.entries.length).toBeGreaterThan(0);
-      expect(response.data.entries.every(e => {
-        const d = new Date(e.createdAt);
-        return d >= new Date("2019-01-01") && d <= new Date("2021-01-01");
-      })).toBe(true);
+      expect(
+        response.data.entries.every((e) => {
+          const d = new Date(e.createdAt);
+          return d >= new Date("2019-01-01") && d <= new Date("2021-01-01");
+        }),
+      ).toBe(true);
     });
   });
 
@@ -197,7 +205,10 @@ describe("EntryController (e2e)", () => {
         description: "Updated description",
       };
 
-      const response = await api.entries.entryControllerUpdate(entryId, updateDto);
+      const response = await api.entries.entryControllerUpdate(
+        entryId,
+        updateDto,
+      );
       expect([200, 201]).toContain(response.status);
 
       const updateResponse = response.data;
@@ -223,18 +234,24 @@ describe("EntryController (e2e)", () => {
       const deleteEntryId = createResponse.data.id;
 
       // Delete the entry
-      const deleteResponse = await api.entries.entryControllerDelete(deleteEntryId);
+      const deleteResponse =
+        await api.entries.entryControllerDelete(deleteEntryId);
       expect([200, 201]).toContain(deleteResponse.status);
 
       // Verify entry is deleted
-      const updateResponse = await api.entries.entryControllerUpdate(deleteEntryId, { amount: 2000 });
+      const updateResponse = await api.entries.entryControllerUpdate(
+        deleteEntryId,
+        { amount: 2000 },
+      );
       expect(updateResponse.status).toBe(404);
     });
   });
 
   describe("Scheduled Entries", () => {
     it("should list scheduled entries", async () => {
-      const response = await api.entries.entryControllerGetScheduledEntries({ take: 10 });
+      const response = await api.entries.entryControllerGetScheduledEntries({
+        take: 10,
+      });
       expect([200, 201]).toContain(response.status);
 
       const scheduledEntriesResponse = response.data;

@@ -530,7 +530,6 @@ describe("AnalyticsController (e2e)", () => {
       // Get current balance
       const balanceResponse = await api.user.userControllerGetBalance();
       const balance = balanceResponse.data.balance;
-      const reserve = balanceResponse.data.emergencyReserve;
 
       const capitalResponse =
         await api.analytics.analyticsControllerGetAvailableCapital();

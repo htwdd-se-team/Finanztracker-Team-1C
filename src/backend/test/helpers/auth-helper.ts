@@ -32,15 +32,13 @@ export function generateRandomName(): string {
 /**
  * Registers a new user and returns user credentials with JWT token
  */
-export async function registerTestUser(
-  url: string,
-): Promise<TestUser> {
+export async function registerTestUser(url: string): Promise<TestUser> {
   const email = generateRandomEmail();
   const password = generateRandomPassword();
   const givenName = generateRandomName();
 
   const api = new Api({ baseURL: url });
-  
+
   const response = await api.auth.authControllerRegister({
     email,
     password,
@@ -64,7 +62,7 @@ export async function loginTestUser(
   password: string,
 ): Promise<string> {
   const api = new Api({ baseURL: url });
-  
+
   const response = await api.auth.authControllerLogin({
     email,
     password,

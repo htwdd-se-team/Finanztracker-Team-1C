@@ -1,15 +1,12 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsOptional, IsEnum } from "class-validator";
 
+import { CategorySortBy } from "../domain/repositories/category.repository.interface";
+
 import { PaginationDto } from "./pagination.dto";
 
-export enum CategorySortBy {
-  USAGE_DESC = "usage_desc",
-  CREATED_AT_DESC = "createdAt_desc",
-  CREATED_AT_ASC = "createdAt_asc",
-  ALPHA_ASC = "alpha_asc",
-  ALPHA_DESC = "alpha_desc",
-}
+// Re-export for backwards compatibility
+export { CategorySortBy } from "../domain/repositories/category.repository.interface";
 
 export class CategoryPaginationParamsDto extends PaginationDto {
   @ApiPropertyOptional({
