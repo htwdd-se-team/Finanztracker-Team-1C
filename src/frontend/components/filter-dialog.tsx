@@ -45,8 +45,8 @@ import {
   ApiFilterResponseDto,
   ApiCreateFilterDto,
   ApiUpdateFilterDto,
-} from '@/__generated__/api'
-import { ApiFilterSortOption, ApiTransactionType } from '@/__generated__/api'
+} from 'api-client'
+import { ApiFilterSortOption, ApiTransactionType } from 'api-client'
 
 interface FilterDialogProps {
   open: boolean
@@ -279,7 +279,7 @@ export default function FilterDialog({
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-[42px] px-0 justify-center cursor-pointer"
+                    className="justify-center px-0 w-[42px] cursor-pointer"
                     title="Icon auswählen"
                   >
                     {icon ? (
@@ -299,7 +299,7 @@ export default function FilterDialog({
             </div>
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center">
               <Label>Betragsspanne (€)</Label>
               <Switch
                 checked={useAmountRange}
@@ -350,7 +350,7 @@ export default function FilterDialog({
                             prev.filter(id => id !== categoryId)
                           )
                         }}
-                        className="text-inherit hover:opacity-70 cursor-pointer"
+                        className="hover:opacity-70 text-inherit cursor-pointer"
                         title="Kategorie entfernen"
                       >
                         ×
@@ -386,9 +386,9 @@ export default function FilterDialog({
               <Button
                 variant="outline"
                 onClick={() => {}}
-                className="w-full justify-start text-left font-normal"
+                className="justify-start w-full font-normal text-left"
               >
-                <Calendar className="mr-2 h-4 w-4" />
+                <Calendar className="mr-2 w-4 h-4" />
                 <span>
                   {dateRange.start && dateRange.end
                     ? `${new Date(dateRange.start.toString()).toLocaleDateString()} - ${new Date(
@@ -401,7 +401,7 @@ export default function FilterDialog({
                 <PopoverTrigger asChild>
                   <div className="absolute inset-0 cursor-pointer" />
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="p-0 w-auto" align="start">
                   <DateRangePicker
                     value={
                       dateRange.start && dateRange.end
@@ -426,7 +426,7 @@ export default function FilterDialog({
               placeholder="Nach Beschreibung suchen..."
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="gap-4 grid grid-cols-2">
             <div>
               <Label className="mb-2">Transaktionstyp</Label>
               <Select
@@ -442,19 +442,19 @@ export default function FilterDialog({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     value="all"
                   >
                     Alle Transaktionen
                   </SelectItem>
                   <SelectItem
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     value={ApiTransactionType.EXPENSE}
                   >
                     {'Ausgabe'}
                   </SelectItem>
                   <SelectItem
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     value={ApiTransactionType.INCOME}
                   >
                     {'Einnahme'}
@@ -471,32 +471,32 @@ export default function FilterDialog({
                   setSortOption(v as ApiFilterSortOption)
                 }
               >
-                <SelectTrigger className="cursor-pointer w-full">
+                <SelectTrigger className="w-full cursor-pointer">
                   <div className="w-full truncate">
                     <SelectValue className="block w-full truncate" />
                   </div>
                 </SelectTrigger>
                 <SelectContent className="truncate">
                   <SelectItem
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     value={ApiFilterSortOption.HIGHEST_AMOUNT}
                   >
                     {'Höchster Betrag zuerst'}
                   </SelectItem>
                   <SelectItem
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     value={ApiFilterSortOption.LOWEST_AMOUNT}
                   >
                     {'Niedrigster Betrag zuerst'}
                   </SelectItem>
                   <SelectItem
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     value={ApiFilterSortOption.OLDEST_FIRST}
                   >
                     {'Älteste zuerst'}
                   </SelectItem>
                   <SelectItem
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
                     value={ApiFilterSortOption.NEWEST_FIRST}
                   >
                     {'Neueste zuerst'}
@@ -508,14 +508,14 @@ export default function FilterDialog({
         </div>
 
         <DialogFooter>
-          <div className="flex gap-2 w-full justify-between">
+          <div className="flex justify-between gap-2 w-full">
             <div>
               {initialFilter && (
                 <Button
                   variant="destructive"
                   onClick={handleDelete}
                   disabled={isSaving}
-                  className="cursor-pointer hover:bg-destructive/90"
+                  className="hover:bg-destructive/90 cursor-pointer"
                 >
                   Löschen
                 </Button>
@@ -530,7 +530,7 @@ export default function FilterDialog({
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
               >
                 {isSaving
                   ? 'Speichert...'

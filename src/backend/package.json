@@ -51,7 +51,8 @@
     "pg": "^8.16.2",
     "prisma": "^6.10.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "api-client": "workspace:*"
   },
   "devDependencies": {
     "@darraghor/eslint-plugin-nestjs-typed": "^6.6.7",

@@ -1,4 +1,4 @@
-import { ApiGranularity, ApiTransactionType } from '@/__generated__/api'
+import { ApiGranularity, ApiTransactionType } from 'api-client'
 import { apiClient } from '@/api/api-client'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -115,22 +115,23 @@ function DeltaTile({
               <div className="font-semibold text-muted-foreground text-sm">
                 Ausgaben:
               </div>
-              <div
-                className="font-bold text-base text-destructive/90"
-              >
+              <div className="font-bold text-destructive/90 text-base">
                 {expense.toLocaleString('de-DE', {
                   style: 'currency',
                   currency: 'EUR',
                 })}
               </div>
             </div>
-            <div className="my-1 border-t border-dashed border-muted-foreground/60 w-7/12"/>
+            <div className="my-1 border-muted-foreground/60 border-t border-dashed w-7/12" />
             <div>
               <div className="flex items-center gap-1 font-semibold text-muted-foreground text-sm">
                 Delta:
               </div>
               <div
-                className={cn('text-base font-bold', !isPositive && 'text-destructive/90')}
+                className={cn(
+                  'font-bold text-base',
+                  !isPositive && 'text-destructive/90'
+                )}
                 style={isPositive ? { color: 'var(--chart-1)' } : undefined}
               >
                 {delta.toLocaleString('de-DE', {
@@ -142,7 +143,7 @@ function DeltaTile({
           </div>
           {/* Rechter Bereich: Vertikale Progressbar (1 Spalte) */}
           <div className="flex justify-center items-center col-span-1">
-            <div className="relative mt-1 flex-shrink-0 bg-muted rounded-full w-2 h-34">
+            <div className="relative flex-shrink-0 bg-muted mt-1 rounded-full w-2 h-34">
               {/* Expense (Ausgaben) Teil oben */}
               <div
                 className="top-0 left-0 absolute rounded-t-full w-full transition-all duration-300"

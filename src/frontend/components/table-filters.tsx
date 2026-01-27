@@ -38,7 +38,7 @@ import {
   ApiEntrySortBy,
   ApiTransactionType,
   ApiFilterResponseDto,
-} from '@/__generated__/api'
+} from 'api-client'
 import { IconRender } from '@/lib/icon-map'
 
 interface TableFiltersProps {
@@ -167,11 +167,11 @@ export function TableFilters({
   const [accordionOpen, setAccordionOpen] = useState(false)
 
   return (
-    <div className="bg-card/90 dark:bg-card/60 mb-4 border rounded-xl shadow-sm">
+    <div className="bg-card/90 dark:bg-card/60 shadow-sm mb-4 border rounded-xl">
       {/* Always visible row: Description, filters, and expand/reset buttons */}
       <div className="flex justify-between items-center gap-2 p-4">
         {/* Filter Management (moved search into expanded panel) */}
-        <div className="flex items-center gap-2 flex-1 min-w-0">
+        <div className="flex flex-1 items-center gap-2 min-w-0">
           <Select
             value={selectedFilter?.id?.toString() || 'none'}
             onValueChange={value => {
@@ -188,13 +188,13 @@ export function TableFilters({
               }
             }}
           >
-            <SelectTrigger className="flex-1 min-w-0 cursor-pointer hover:bg-accent hover:text-accent-foreground">
+            <SelectTrigger className="flex-1 hover:bg-accent min-w-0 hover:text-accent-foreground cursor-pointer">
               {selectedFilter ? (
                 <div className="flex items-center gap-2 min-w-0">
                   {selectedFilter.icon && (
                     <IconRender
                       iconName={selectedFilter.icon}
-                      className="w-4 h-4 flex-shrink-0"
+                      className="flex-shrink-0 w-4 h-4"
                     />
                   )}
                   <span className="truncate">{selectedFilter.title}</span>
@@ -222,7 +222,7 @@ export function TableFilters({
               <SelectSeparator />
               <SelectItem
                 value="none"
-                className="cursor-pointer hover:bg-accent hover:text-accent-foreground group"
+                className="group hover:bg-accent hover:text-accent-foreground cursor-pointer"
               >
                 <span className="text-muted-foreground group-hover:text-accent-foreground">
                   Kein Filter
@@ -250,13 +250,13 @@ export function TableFilters({
             <Button
               variant="outline"
               size="icon"
-              className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+              className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
               onClick={() => {
                 onFilterDialogOpen(selectedFilter)
               }}
               title="Filter bearbeiten"
             >
-              <Edit className="h-4 w-4" />
+              <Edit className="w-4 h-4" />
             </Button>
           )}
         </div>
@@ -271,7 +271,7 @@ export function TableFilters({
                 onReset()
                 onFilterChange(null)
               }}
-              className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+              className="hover:bg-accent hover:text-accent-foreground cursor-pointer"
               title="Filter zurücksetzen"
             >
               <RotateCcw className="w-4 h-4" />
@@ -281,7 +281,7 @@ export function TableFilters({
             variant="outline"
             size="icon"
             onClick={() => setAccordionOpen(!accordionOpen)}
-            className="cursor-pointer hover:bg-accent hover:text-accent-foreground bg-transparent dark:bg-input/30"
+            className="bg-transparent hover:bg-accent dark:bg-input/30 hover:text-accent-foreground cursor-pointer"
             title="Filter öffnen"
           >
             <ChevronDown
@@ -445,8 +445,8 @@ export function TableFilters({
                         onSortByChange(value as ApiEntrySortBy)
                       }
                     >
-                      <SelectTrigger className="min-w-0 w-full px-2">
-                        <div className="truncate w-full">
+                      <SelectTrigger className="px-2 w-full min-w-0">
+                        <div className="w-full truncate">
                           <SelectValue />
                         </div>
                       </SelectTrigger>

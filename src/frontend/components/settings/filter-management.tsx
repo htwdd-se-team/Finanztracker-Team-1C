@@ -20,7 +20,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/api-client'
 import { toast } from 'sonner'
 import FilterDialog from '@/components/filter-dialog'
-import { ApiFilterResponseDto } from '@/__generated__/api'
+import { ApiFilterResponseDto } from 'api-client'
 
 interface FilterCardProps {
   filter: ApiFilterResponseDto
@@ -31,7 +31,7 @@ interface FilterCardProps {
 
 function FilterCard({ filter, onEdit, onDelete, isDeleting }: FilterCardProps) {
   return (
-    <Card className="group relative shadow-sm hover:shadow-md border-0 overflow-hidden transition-all duration-50 bg-primary/10 hover:bg-primary/20">
+    <Card className="group relative bg-primary/10 hover:bg-primary/20 shadow-sm hover:shadow-md border-0 overflow-hidden transition-all duration-50">
       <CardContent className="relative m-0 mx-4 p-4">
         <div className="flex justify-between items-center">
           <div className="flex flex-1 items-center gap-2.5 min-w-0">
@@ -59,7 +59,7 @@ function FilterCard({ filter, onEdit, onDelete, isDeleting }: FilterCardProps) {
               variant="ghost"
               size="sm"
               onClick={() => onEdit(filter)}
-              className="cursor-pointer hover:bg-white/80 dark:hover:bg-black/20 p-0 w-7 h-7"
+              className="hover:bg-white/80 dark:hover:bg-black/20 p-0 w-7 h-7 cursor-pointer"
             >
               <Edit className="w-3.5 h-3.5" />
               <span className="sr-only">Filter bearbeiten</span>
@@ -70,7 +70,7 @@ function FilterCard({ filter, onEdit, onDelete, isDeleting }: FilterCardProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="cursor-pointer hover:bg-destructive/10 dark:hover:bg-destructive/20 p-0 w-7 h-7 text-destructive hover:text-destructive transition-colors"
+                  className="hover:bg-destructive/10 dark:hover:bg-destructive/20 p-0 w-7 h-7 text-destructive hover:text-destructive transition-colors cursor-pointer"
                   disabled={isDeleting}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -144,7 +144,7 @@ export function FilterManagement() {
 
   return (
     <>
-      <Card className="overflow-hidden bg-card/90 dark:bg-card/60 p-0">
+      <Card className="bg-card/90 dark:bg-card/60 p-0 overflow-hidden">
         <CardHeader className="p-4">
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">

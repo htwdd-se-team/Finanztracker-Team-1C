@@ -1,30 +1,27 @@
 import { INestApplication } from "@nestjs/common";
-import { Test, TestingModule } from "@nestjs/testing";
-import * as request from "supertest";
+import { Api } from "api-client";
 import { App } from "supertest/types";
 
-import { AppModule } from "./../src/app.module";
+import { createTestApp } from "./helpers/test-app";
 
 describe("AppController (e2e)", () => {
   let app: INestApplication<App>;
+  let url: string;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    const testApp = await createTestApp();
+    app = testApp.app;
+    url = testApp.url;
   });
 
   afterEach(async () => {
     await app.close();
   });
 
-  it("/ (GET)", () => {
-    return request(app.getHttpServer())
-      .get("/")
-      .expect(200)
-      .expect("Hello World!");
+  it("/ (GET)", async () => {
+    const api = new Api({ baseURL: url });
+    const response = await api.appControllerGetHello();
+    expect(response.status).toBe(200);
+    expect(response.data).toBe("Hello World!");
   });
 });

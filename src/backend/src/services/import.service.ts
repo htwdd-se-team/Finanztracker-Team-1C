@@ -34,7 +34,6 @@ export class ImportService {
     const entries: EntryResponseDto[] = [];
 
     for (const transaction of transactions) {
-      console.log(transaction);
       if (await this.entryService.checkIfEntryExists(user, transaction)) {
         continue;
       }
@@ -51,8 +50,6 @@ export class ImportService {
       transformHeader: (header) => header.trim(),
       transform: (value) => value.trim(),
     });
-
-    console.log(parsed.data);
 
     if (parsed.errors.length > 0) {
       throw new BadRequestException(parsed.errors[0].message);

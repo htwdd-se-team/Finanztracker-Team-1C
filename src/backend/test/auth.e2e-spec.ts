@@ -1,19 +1,23 @@
 import { INestApplication } from "@nestjs/common";
-import * as request from "supertest";
+import { Api } from "api-client";
 import { App } from "supertest/types";
-
-import { LoginResponseDto } from "../src/dto/auth.dto";
 
 import { registerTestUser } from "./helpers/auth-helper";
 import { createTestApp } from "./helpers/test-app";
 
 describe("AuthController (e2e)", () => {
   let app: INestApplication<App>;
+  let url: string;
   let testUser: Awaited<ReturnType<typeof registerTestUser>>;
+  let api: Api<unknown>;
 
   beforeAll(async () => {
-    app = await createTestApp();
-    testUser = await registerTestUser(app);
+    const testApp = await createTestApp();
+    app = testApp.app;
+    url = testApp.url;
+    // Configure api to not throw on error status codes for testing negative cases
+    api = new Api({ baseURL: url, validateStatus: () => true });
+    testUser = await registerTestUser(url);
   });
 
   afterAll(async () => {
@@ -22,7 +26,7 @@ describe("AuthController (e2e)", () => {
 
   describe("POST /auth/register", () => {
     it("should register a new user and return JWT token", async () => {
-      const user = await registerTestUser(app);
+      const user = await registerTestUser(url);
 
       expect(user.token).toBeDefined();
       expect(typeof user.token).toBe("string");
@@ -32,54 +36,45 @@ describe("AuthController (e2e)", () => {
     });
 
     it("should fail to register with duplicate email", async () => {
-      await request(app.getHttpServer())
-        .post("/auth/register")
-        .send({
-          email: testUser.email,
-          password: "DifferentPassword123!",
-          givenName: "Duplicate",
-          familyName: "User",
-        })
-        .expect(400);
+      const response = await api.auth.authControllerRegister({
+        email: testUser.email,
+        password: "DifferentPassword123!",
+        givenName: "Duplicate",
+        familyName: "User",
+      });
+      expect(response.status).toBe(400);
     });
   });
 
   describe("POST /auth/login", () => {
     it("should login with valid credentials", async () => {
-      const response = await request(app.getHttpServer())
-        .post("/auth/login")
-        .send({
-          email: testUser.email,
-          password: testUser.password,
-        })
-        .expect((res) => {
-          expect([200, 201]).toContain(res.status);
-        });
+      const response = await api.auth.authControllerLogin({
+        email: testUser.email,
+        password: testUser.password,
+      });
 
-      const authResponse = response.body as LoginResponseDto;
+      expect([200, 201]).toContain(response.status);
+
+      const authResponse = response.data;
       expect(authResponse).toHaveProperty("token");
       expect(typeof authResponse.token).toBe("string");
       expect(authResponse.token.length).toBeGreaterThan(0);
     });
 
     it("should fail login with wrong password", async () => {
-      await request(app.getHttpServer())
-        .post("/auth/login")
-        .send({
-          email: testUser.email,
-          password: "wrongpassword123",
-        })
-        .expect(401);
+      const response = await api.auth.authControllerLogin({
+        email: testUser.email,
+        password: "wrongpassword123",
+      });
+      expect(response.status).toBe(401);
     });
 
     it("should fail login with non-existent email", async () => {
-      await request(app.getHttpServer())
-        .post("/auth/login")
-        .send({
-          email: "nonexistent@example.com",
-          password: "SomePassword123!",
-        })
-        .expect(404);
+      const response = await api.auth.authControllerLogin({
+        email: "nonexistent@example.com",
+        password: "SomePassword123!",
+      });
+      expect(response.status).toBe(404);
     });
   });
 });

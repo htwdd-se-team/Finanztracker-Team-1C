@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { apiClient, apiSetToken } from '@/api/api-client'
 import { useMutation } from '@tanstack/react-query'
-import { ApiRegisterDto } from '@/__generated__/api'
+import { ApiRegisterDto } from 'api-client'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import {
