@@ -9,8 +9,9 @@ WORKDIR /app
 # Copy workspace configuration files from root
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Copy only the backend package
+# Copy backend and api-client packages (api-client is a workspace dependency)
 COPY src/backend ./src/backend
+COPY src/api-client ./src/api-client
 
 # Install dependencies for the backend only
 RUN pnpm --filter backend install --frozen-lockfile
