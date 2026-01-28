@@ -293,7 +293,7 @@ image:../images/test_pyramid.png[]
 | GitHub Actions (automatisch)
 
 | Lokale Entwicklung
-| Betroffene Unit-Tests
+| Betroffene Unit-Tests / neue Komponenten
 | Entwickler (manuell)
 
 | Pre-Merge
@@ -543,31 +543,6 @@ jobs:
 
 === Erkannte Abweichungen und Konsequenzen
 
-==== Behobene Issues
-
-[cols="1,2,2,1", options="header"]
-|===
-| ID | Beschreibung | Konsequenz | Status
-
-| #1
-| Haben wir hier welche?
-| 
-| 
-|===
-
-==== Offene Punkte
-
-[cols="1,2,2,1", options="header"]
-|===
-| ID | Beschreibung | Geplante Maßnahme | Priorität
-
-| #2
-| 
-| 
-| 
-
-|===
-
 ==== Konsequenzen aus Abweichungen
 
 [cols="2,3", options="header"]
@@ -575,16 +550,16 @@ jobs:
 | Abweichung | Maßnahme
 
 | Coverage unter 70% in einzelnen Bereichen
-| Zusätzliche Unit-Tests für unterabgedeckte Pfade hinzufügen
+| Zusätzliche Unit-Tests für unterabgedeckte Pfade hinzufügen (Umgesetzt)
 
 | Flaky Tests in CI
-| Test-Stabilisierung durch erhöhte Timeouts und bessere Isolation
+| Test-Stabilisierung durch erhöhte Timeouts und bessere Isolation (Geplant)
 
 | Fehlende Mobile-Tests
-| Playwright-Konfiguration für Mobile-Viewports erweitern
+| Playwright-Konfiguration für Mobile-Viewports erweitern (Geplant)
 
 | Keine Last-Tests
-| Artillery/k6 für Performance-Tests evaluieren
+| Artillery/k6 für Performance-Tests evaluieren (Geplant)
 |===
 
 == Test-Infrastruktur
