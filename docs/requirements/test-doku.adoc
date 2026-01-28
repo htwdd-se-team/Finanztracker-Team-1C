@@ -1,0 +1,709 @@
+= Testdokumentation: {project-name}
+Ben Eisold; Paula Grahlow; Tuan Khang Pham; Christoph Prasser; Cedrick Richter; Elias Blume
+include::../_includes/default-attributes.inc.adoc[]
+
+== Einleitung
+
+=== Ziel der Testdokumentation
+
+Diese Dokumentation dient dem Nachweis der Qualität der Finanztracker-App sowie der umfassenden Dokumentation aller Teststrukturen. Sie beschreibt das Testkonzept, die durchgeführten Testmethoden und die erzielten Ergebnisse.
+
+
+=== Umfang
+Die Finanztracker-App ist eine Webanwendung zur Verwaltung persönlicher Finanzen. Die Anwendung besteht aus:
+
+* **Backend**: NestJS-Server mit REST API und PostgreSQL-Datenbank
+* **Frontend**: Next.js-Webanwendung mit React-Komponenten
+* **Datenbank**: PostgreSQL mit Prisma ORM
+
+== Testkonzept
+
+=== Teststrategie nach Testpyramide
+
+Das Projekt folgt der klassischen Testpyramide mit drei Ebenen:
+
+image:../images/test_pyramid.png[]
+
+==== Unit-Tests (Basis der Pyramide)
+
+**Umfang:** 120 Testfälle in 7 Testdateien
+
+**Testobjekte:**
+
+[cols="2,3,1", options="header"]
+|===
+| Service-Modul | Beschreibung | Anzahl Tests
+
+| `EntryService`
+| Transaktionen erstellen, lesen, aktualisieren, löschen, Pagination, Filterung
+| 30
+
+| `AuthService`
+| Benutzerregistrierung, Login, JWT-Token-Generierung, Passwort-Hashing
+| 19
+
+| `AnalyticsService`
+| Transaktionsübersichten, Saldoverlauf, Granularitäten (Tag/Woche/Monat/Jahr)
+| 22
+
+| `RecurringEntryService`
+| Wiederkehrende Transaktionen, Scheduling, Enable/Disable
+| 21
+
+| `FilterService`
+| Benutzerdefinierte Filter erstellen und verwalten
+| 15
+
+| `UserService`
+| Benutzerdaten abrufen, Saldo berechnen
+| 12
+
+| `AppController`
+| Basis-Controller-Funktionalität
+| 1
+|===
+
+**Testmethoden:**
+
+* **Mocking mit @golevelup/ts-jest**: Isolierung der Services durch Mock-Objekte
+* **Dependency Injection Testing**: Überprüfung korrekter Service-Instantiierung
+* **Edge Case Testing**: Grenzwertanalyse für alle Eingabeparameter
+* **Exception Testing**: Validierung korrekter Fehlerbehandlung
+
+==== Integrationstests (API-Ebene)
+
+**Umfang:** 11 E2E-Testdateien mit 114 Testfällen
+
+**Testobjekte:**
+
+[cols="2,3", options="header"]
+|===
+| Testdatei | Getestete Funktionalität
+
+| `auth.e2e-spec.ts`
+| Benutzerregistrierung, Login mit gültigen/ungültigen Credentials, Duplicate-Email-Handling
+
+| `entry.e2e-spec.ts`
+| CRUD-Operationen für Transaktionen, Pagination, Filterung, Kategoriezuweisung
+
+| `category.e2e-spec.ts`
+| Kategorienverwaltung, CRUD-Operationen, Sortieroptionen
+
+| `analytics.e2e-spec.ts`
+| Dashboard-Daten, Transaktionsbreakdowns, Saldoverlauf, Granularitäten
+
+| `filter.e2e-spec.ts`
+| Benutzerdefinierte Filter, Filteranwendung auf Transaktionen
+
+| `user.e2e-spec.ts`
+| Benutzerprofil, Saldo-Abfrage, Emergency Reserve
+
+| `security.e2e-spec.ts`
+| Eingabevalidierung, SQL-Injection-Schutz, XSS-Schutz, Rate-Limiting
+
+| `recurring.e2e-spec.ts`
+| Wiederkehrende Transaktionen, Scheduling-Logik
+
+| `import.e2e-spec.ts`
+| CSV-Import von Transaktionen
+
+| `demo.e2e-spec.ts`
+| Demo-Modus Funktionalität
+
+| `app.e2e-spec.ts`
+| Basis-Applikationstest
+|===
+
+**Testmethoden:**
+
+* **Supertest HTTP Testing**: Vollständige HTTP-Request/Response-Zyklen
+* **Real Database Testing**: Tests gegen PostgreSQL-Testdatenbank
+* **JWT Authentication Testing**: Validierung der Authentifizierung über Token
+* **Input Validation Testing**: Überprüfung der DTO-Validierung
+
+==== End-to-End-Tests (UI-Ebene)
+
+**Umfang:** 2 Playwright-Testdateien mit 13 Testfällen
+
+**Testobjekte:**
+
+[cols="2,3", options="header"]
+|===
+| Testdatei | Getestete Funktionalität
+
+| `login.spec.ts`
+| Login-Formular anzeigen, Eingabevalidierung, erfolgreicher Login, Fehlerbehandlung (7 Tests)
+
+| `transaction.spec.ts`
+| Transaktionsdialog öffnen, neue Transaktion erstellen, Formularvalidierung (6 Tests)
+|===
+
+**Testmethoden:**
+
+* **Cross-Browser Testing**: Chromium, Firefox, WebKit
+* **Visual Testing**: UI-Element-Sichtbarkeit und -Interaktion
+* **Form Validation Testing**: Client-seitige Validierung
+* **Navigation Testing**: Seitenübergänge und Redirects
+
+=== Getestete Komponenten im Detail
+
+==== Backend-Komponenten
+
+===== Authentication & Authorization
+
+[cols="1,3", options="header"]
+|===
+| Aspekt | Testabdeckung
+
+| Registrierung
+| Erfolgreiche Registrierung, Duplicate-Email-Ablehnung, Validierung (Email-Format, Passwortlänge 8-30 Zeichen)
+
+| Login
+| Gültige Credentials, falsche Passwörter, nicht existierende Benutzer
+
+| JWT-Token
+| Token-Generierung, Token-Validierung, Token-Unterschiede pro Benutzer
+
+| Passwort-Sicherheit
+| Hashing mit bcrypt, Salt-Generierung, Passwortvergleich
+|===
+
+===== Entry Management (Transaktionen)
+
+[cols="1,3", options="header"]
+|===
+| Aspekt | Testabdeckung
+
+| CRUD-Operationen
+| Erstellen (Einnahmen/Ausgaben), Lesen mit Pagination, Aktualisieren, Löschen
+
+| Filterung
+| Datumsbereich, Transaktionstyp, Kategorien, kombinierte Filter
+
+| Pagination
+| Cursor-basierte Pagination, Sortieroptionen (Datum, Betrag auf-/absteigend)
+
+| Wiederkehrende Transaktionen
+| Erstellung mit Parent/Child, Intervall-Typen (täglich/wöchentlich/monatlich), Enable/Disable
+|===
+
+===== Analytics Service
+
+[cols="1,3", options="header"]
+|===
+| Aspekt | Testabdeckung
+
+| Transaktionsbreakdown
+| Mit/ohne Kategorien, verschiedene Granularitäten
+
+| Saldoverlauf
+| Kumulative Balance, Initialberechnung, leere Ergebnisse
+
+| Maximalwerte
+| Rundung auf nächste 100, Null-Handling
+
+| Granularitäten
+| Tag, Woche, Monat, Jahr
+|===
+
+===== Security
+
+[cols="1,3", options="header"]
+|===
+| Aspekt | Testabdeckung
+
+| Input Validation
+| Email-Format (fehlende @, Domain, lokaler Teil), Passwortlänge, leere Eingaben
+
+| SQL Injection
+| Getestete Payloads in allen Eingabefeldern
+
+| XSS Protection
+| Script-Tags in Eingaben, HTML-Entities
+
+| Authorization
+| Zugriff auf fremde Ressourcen, fehlende Tokens
+|===
+
+==== Frontend-Komponenten
+
+===== Login-Modul
+
+[cols="1,3", options="header"]
+|===
+| Aspekt | Testabdeckung
+
+| UI-Elemente
+| Formular-Anzeige, Email-Input, Passwort-Input, Submit-Button
+
+| Validierung
+| Ungültige Email-Formate, zu kurze Passwörter
+
+| Fehlerbehandlung
+| Toast-Nachrichten bei ungültigen Credentials
+
+| Erfolgreicher Login
+| Redirect zu /overview, Token-Speicherung
+
+| UX
+| Disabled-State während Login
+|===
+
+===== Transaktions-Modul
+
+[cols="1,3", options="header"]
+|===
+| Aspekt | Testabdeckung
+
+| Dialog öffnen
+| "Neue Transaktion" Button, Dialog-Anzeige
+
+| Formular
+| Betragsfeld, Kategorie-Auswahl, Beschreibung
+
+| Erstellung
+| Erfolgreiche Erstellung, Formular-Reset
+|===
+
+=== Testmethoden
+
+==== Black-Box-Testmethoden
+
+* **Äquivalenzklassenbildung**: Gruppierung von Eingabewerten in gültige/ungültige Klassen
+* **Grenzwertanalyse**: Test an Grenzen (z.B. Passwort mit 7, 8, 30, 31 Zeichen)
+* **Zustandsbasiertes Testen**: Authentifizierungs-States, Transaktions-Workflows
+
+==== White-Box-Testmethoden
+
+* **Statement Coverage**: Sicherstellung, dass alle Code-Zeilen ausgeführt werden
+* **Branch Coverage**: Überprüfung aller Verzweigungen in if/else-Strukturen
+* **Path Coverage**: Test verschiedener Ausführungspfade
+
+==== Spezielle Testmethoden
+
+* **Mocking**: Isolierung von Dependencies für Unit-Tests
+* **Snapshot Testing**: Nicht verwendet (bewusste Entscheidung)
+* **Contract Testing**: Implizit durch DTO-Validierung
+
+=== Testdurchführungsplanung
+
+==== Automatisierte Testausführung
+
+[cols="1,2,2", options="header"]
+|===
+| Trigger | Tests | Verantwortlich
+
+| Push/Pull Request
+| Alle Unit- und E2E-Tests
+| GitHub Actions (automatisch)
+
+| Lokale Entwicklung
+| Betroffene Unit-Tests / neue Komponenten
+| Entwickler (manuell)
+
+| Pre-Merge
+| Vollständige Testsuite
+| GitHub Actions (automatisch)
+
+| Deployment
+| E2E-Tests + Smoke-Tests
+| CI/CD Pipeline, Entwickler (manuell)
+|===
+
+==== CI/CD-Pipeline
+
+Die automatisierte Testausführung erfolgt über GitHub Actions:
+
+```yaml
+# Workflow: build-check-backend.yml
+jobs:
+  lint-and-test:
+    steps:
+      - Checkout & Setup
+      - Install Dependencies (pnpm)
+      - Generate Prisma Client
+      - Run Linter (ESLint)
+      - Run Unit Tests (test:module --coverage)
+      - Run E2E Tests (test:e2e --coverage)
+      - Check Coverage Thresholds (≥70%)
+```
+
+==== Test-Befehle
+
+[cols="2,3", options="header"]
+|===
+| Befehl | Beschreibung
+
+| `pnpm test`
+| Alle Jest-Tests ausführen
+
+| `pnpm test:module`
+| Nur Unit-Tests (*.module-spec.ts)
+
+| `pnpm test:e2e`
+| Nur E2E-Tests (*.e2e-spec.ts)
+
+| `pnpm test:cov`
+| Tests mit Coverage-Report
+
+| `pnpm test:watch`
+| Tests im Watch-Modus
+
+| `pnpm test:all`
+| Unit- und E2E-Tests nacheinander
+|===
+
+==== Rollen und Verantwortlichkeiten
+
+[cols="1,2,2", options="header"]
+|===
+| Rolle | Verantwortung | Frequenz
+
+| Entwickler
+| Unit-Tests für neue Features schreiben, lokale Testausführung
+| Bei jeder Code-Änderung
+
+| QA-Team / Reviewer
+| Code-Review inkl. Test-Review, E2E-Test-Erweiterung
+| Bei jedem Pull Request
+
+| CI/CD-System
+| Automatische Testausführung, Coverage-Überwachung
+| Bei jedem Push
+
+| Tech Lead
+| Test-Strategie, Coverage-Ziele definieren
+| Quartalsweise
+|===
+
+== Testergebnisse
+
+=== Test-Metriken
+
+==== Testabdeckung
+
+[cols="1,1,1,1", options="header"]
+|===
+| Kategorie | Anzahl Tests | Status | Coverage-Ziel
+
+| Unit-Tests (Module-Specs)
+| 120
+| Stabil
+| ≥70%
+
+| Integrationstests (E2E)
+| 114
+| Stabil
+| ≥70%
+
+| UI-Tests (Playwright)
+| 13
+| Stabil
+| Kritische Pfade
+
+| **Gesamt**
+| **247**
+| Stabil
+| ≥70% (Durchschnitt)
+|===
+
+==== Coverage-Bereiche
+
+[cols="2,1,3", options="header"]
+|===
+| Bereich | Coverage | Anmerkungen
+
+| Authentication Services
+| Hoch
+| Umfassende Sicherheitstests
+
+| Entry/Transaction Services
+| Hoch
+| Vollständige CRUD-Abdeckung
+
+| Analytics Services
+| Hoch
+| Alle Granularitäten getestet
+
+| Category Services
+| Hoch
+| CRUD + Sortierung (E2E-Tests)
+
+| Filter Services
+| Mittel-Hoch
+| Basis-Funktionalität abgedeckt
+
+| Security (Input Validation)
+| Sehr Hoch
+| Umfangreiche Sicherheitstests
+|===
+
+=== Ergebnisübersicht nach Testtyp
+
+==== Unit-Test-Ergebnisse (Module-Specs)
+
+[cols="2,1,1,2", options="header"]
+|===
+| Service | Tests | Status | Besonderheiten
+
+| EntryService
+| 30
+| Bestanden
+| Pagination, Recurring, Filter
+
+| AuthService
+| 19
+| Bestanden
+| JWT, Hashing, Validation
+
+| AnalyticsService
+| 22
+| Bestanden
+| Alle Granularitäten
+
+| RecurringEntryService
+| 21
+| Bestanden
+| Scheduling
+
+| FilterService
+| 15
+| Bestanden
+| CRUD
+
+| UserService
+| 12
+| Bestanden
+| Balance-Berechnung
+
+| AppController
+| 1
+| Bestanden
+| Basis-Setup
+|===
+
+==== E2E-Test-Ergebnisse
+
+[cols="2,1,1,2", options="header"]
+|===
+| Controller/Feature | Tests | Status | Besonderheiten
+
+| AuthController
+| 5
+| Bestanden
+| Register/Login-Flow
+
+| EntryController
+| 10
+| Bestanden
+| Vollständiger CRUD
+
+| CategoryController
+| 8
+| Bestanden
+| CRUD + Sortierung
+
+| AnalyticsController
+| 17
+| Bestanden
+| Dashboard-Daten
+
+| FilterController
+| 6
+| Bestanden
+| Filter-Management
+
+| UserController
+| 6
+| Bestanden
+| Profil, Saldo, Emergency Reserve
+
+| Security
+| 55
+| Bestanden
+| Umfangreiche Validierung
+
+| RecurringController
+| 4
+| Bestanden
+| Wiederkehrende Transaktionen
+
+| ImportController
+| 1
+| Bestanden
+| CSV-Import
+
+| DemoController
+| 1
+| Bestanden
+| Demo-Modus
+
+| AppController
+| 1
+| Bestanden
+| Basis-Test
+|===
+
+==== UI-Test-Ergebnisse (Playwright)
+
+[cols="2,1,1,2", options="header"]
+|===
+| Feature | Tests | Status | Browser
+
+| Login-Formular
+| 7
+| Bestanden
+| Chromium, Firefox, WebKit
+
+| Transaktions-Dialog
+| 6
+| Bestanden
+| Chromium, Firefox, WebKit
+|===
+
+=== Erkannte Abweichungen und Konsequenzen
+
+==== Konsequenzen aus Abweichungen
+
+[cols="2,3", options="header"]
+|===
+| Abweichung | Maßnahme
+
+| Coverage unter 70% in einzelnen Bereichen
+| Zusätzliche Unit-Tests für unterabgedeckte Pfade hinzufügen (Umgesetzt)
+
+| Flaky Tests in CI
+| Test-Stabilisierung durch erhöhte Timeouts und bessere Isolation (Geplant)
+
+| Fehlende Mobile-Tests
+| Playwright-Konfiguration für Mobile-Viewports erweitern (Geplant)
+
+| Keine Last-Tests
+| Artillery/k6 für Performance-Tests evaluieren (Geplant)
+|===
+
+== Test-Infrastruktur
+
+=== Testumgebungen
+
+[cols="1,2,2", options="header"]
+|===
+| Umgebung | Konfiguration | Verwendung
+
+| Lokal
+| PostgreSQL, Jest Watch-Modus
+| Entwicklung, schnelle Feedback-Loops
+
+| CI (GitHub Actions)
+| PostgreSQL Testdatenbank, Ubuntu Runner
+| Automatisierte Tests bei Push-/Pullrequest
+
+| Staging
+| PostgreSQL (Cloud), vollständige Konfiguration
+| Pre-Production-Tests
+|===
+
+=== Test-Frameworks und Tools
+
+[cols="1,2,2", options="header"]
+|===
+| Tool | Version | Verwendung
+
+| Jest
+| 29.x
+| Unit- und E2E-Tests Backend
+
+| ts-jest
+| 29.x
+| TypeScript-Transformation
+
+| Supertest
+| 6.x
+| HTTP-Assertions für E2E
+
+| @golevelup/ts-jest
+| 0.7.x
+| Auto-Mocking für NestJS
+
+| Playwright
+| 1.x
+| UI-Tests Frontend
+
+| @nestjs/testing
+| 11.x
+| NestJS Test-Utilities
+|===
+
+=== Test-Helper und Utilities
+
+==== Backend Test-Helpers
+
+* **`createTestApp()`**: Erstellt NestJS-Anwendung für E2E-Tests
+* **`registerTestUser()`**: Registriert Testbenutzer und gibt Token zurück
+* **`loginTestUser()`**: Authentifiziert bestehenden Benutzer
+* **`createTestModule()`**: Erstellt TestingModule mit konfigurierten Mocks
+
+==== Frontend Test-Helpers
+
+* **`login(page)`**: Automatisierte Login-Funktion für Playwright-Tests
+* **Umgebungsvariablen**: `TEST_URL`, `TEST_EMAIL`, `TEST_PASSWORD`
+
+== Qualitätsziele und Metriken
+
+=== Coverage-Ziele
+
+[cols="2,1,2", options="header"]
+|===
+| Metrik | Ziel | Aktueller Stand
+
+| Line Coverage (Unit)
+| ≥70%
+| ~75% (geschätzt)
+
+| Line Coverage (E2E)
+| ≥70%
+| ~80% (geschätzt)
+
+| Branch Coverage
+| ≥60%
+| ~65% (geschätzt)
+
+| Kritische Pfade
+| 100%
+| ~95%
+|===
+
+=== Qualitätskriterien
+
+[cols="2,3,1", options="header"]
+|===
+| Kriterium | Definition | Status
+
+| Testautomatisierung
+| Alle Tests laufen automatisiert in CI
+| Erfüllt
+
+| Schnelle Feedback-Loops
+| Unit-Tests < 30s, E2E < 5min
+| Erfüllt
+
+| Reproduzierbarkeit
+| Tests liefern konsistente Ergebnisse
+| Erfüllt
+
+| Isolation
+| Tests beeinflussen sich nicht gegenseitig
+| Erfüllt
+
+| Dokumentation
+| Alle Testfälle sind dokumentiert
+| Erfüllt
+|===
+
+== Anhang
+
+=== Referenzen
+
+* link:../test/test_cases.adoc[Test-Doku Prototyp]
+* link:../../src/backend/test/TEST_CASES.md[Alle Backend-Test-Cases]
+* link:../../.github/workflows/build-check-backend.yml[CI/CD Workflow-Konfiguration]
