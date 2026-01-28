@@ -15,10 +15,12 @@ Unterstützt künftige Entwicklerinnen und Entwickler bei Wartung und Weiterentw
 
 == Systemarchitektur (C4)
 === Kontext (Level 1)
-image::../architecture/images/c4-l1-drawio.png[width=90%]
+:imagesdir: ../architecture/images
+image::c4-l1-drawio.png[width=90%]
 
 === Container (Level 2)
-image::../architecture/images/architecture-diagram-drawio.png[width=90%]
+image::architecture-diagram-drawio.png[width=90%]
+:imagesdir: images
 
 === Komponenten (Level 3, Auszug)
 Siehe Architecture Notebook für vollständige Auflistung der Frontend- und Backend-Komponenten. Wichtige Backend-Komponenten: Controllers (Auth, User, Category, Entry, Filter, Analytics), Use-Cases (DDD-Architektur mit Application Layer), Data-Layer (Prisma/Kysely), Security (JwtAuthGuard/JwtStrategy).
@@ -55,25 +57,34 @@ Die folgenden Sequenzen stammen aus den bestehenden PlantUML-Modellen im Design-
 Ziel: Klassen/Module, Funktionen und Parameter automatisch extrahieren. Werkzeuge bewusst einsetzen, keine manuelle Listenpflege.
 
 === Backend (NestJS) mit Compodoc
-. Installieren (lokal, falls nicht vorhanden):
-+
+Dokumentation der Backend-Module, Controller, Services und deren Methoden:
+
 ----
-pnpm -C src/backend dlx @compodoc/compodoc -p tsconfig.json -d docs/compodoc
+# Aus Projekt-Root
+pnpm dlx @compodoc/compodoc -p src/backend/tsconfig.json -d src/backend/docs/compodoc
 ----
-. Dokumentation bauen:
-+
-----
-pnpm -C src/backend dlx @compodoc/compodoc -p tsconfig.json -d docs/compodoc --silent
-----
-. Ergebnis: HTML unter `src/backend/docs/compodoc/index.html` mit Modulen, Controllern, Services und allen Methoden.
+
+Ergebnis: HTML unter `src/backend/docs/compodoc/index.html`
 
 === Frontend (Next.js) mit TypeDoc
-. Generierung (Headless, EntryPoints nach Bedarf anpassen):
-+
+Dokumentation der Frontend-Komponenten, Hooks und Utils:
+
 ----
-pnpm -C src/frontend dlx typedoc --entryPointStrategy expand --entryPoints app components hooks lib api __generated__ --tsconfig tsconfig.json --out docs/typedoc
+# Aus Projekt-Root
+pnpm dlx typedoc --entryPointStrategy expand --entryPoints src/frontend/app src/frontend/components src/frontend/hooks src/frontend/lib --tsconfig src/frontend/tsconfig.json --out src/frontend/docs/typedoc
 ----
-. Ergebnis: HTML unter `src/frontend/docs/typedoc/index.html` mit Komponenten/Hooks und exportierten Funktionen.
+
+Ergebnis: HTML unter `src/frontend/docs/typedoc/index.html`
+
+=== API Client Generierung
+Der API Client wird aus der OpenAPI-Spezifikation des Backends generiert und liegt als separates Workspace-Package vor:
+
+----
+# Aus Projekt-Root
+pnpm --filter api-client generate
+----
+
+Voraussetzung: Backend muss laufen (http://localhost:3111), damit die OpenAPI-Spec abgerufen werden kann.
 
 == Konsistenzsicherung
 * C4-Container/Komponenten gegen Module/Packages abgleichen (Backend: `src/backend/src`, Frontend: `src/frontend/app`, `src/frontend/lib`).
