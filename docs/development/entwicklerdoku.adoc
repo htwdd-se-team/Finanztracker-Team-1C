@@ -21,11 +21,11 @@ image::../architecture/images/c4-l1-drawio.png[width=90%]
 image::../architecture/images/architecture-diagram-drawio.png[width=90%]
 
 === Komponenten (Level 3, Auszug)
-Siehe Architecture Notebook für vollständige Auflistung der Frontend- und Backend-Komponenten. Wichtige Backend-Komponenten: Controllers (Auth, User, Category, Entry, Analytics), Services (Auth, User, Category, Entry, Analytics), Data-Layer (Prisma/Kysely), Security (JwtAuthGuard/JwtStrategy).
+Siehe Architecture Notebook für vollständige Auflistung der Frontend- und Backend-Komponenten. Wichtige Backend-Komponenten: Controllers (Auth, User, Category, Entry, Filter, Analytics), Use-Cases (DDD-Architektur mit Application Layer), Data-Layer (Prisma/Kysely), Security (JwtAuthGuard/JwtStrategy).
 
 == Technische Entscheidungen (Begründet)
 * Programmiersprachen: TypeScript (Frontend/Backend) für Typsicherheit.
-* Frameworks: Next.js 15 (SSR/SSG, Routing), NestJS 11 (DI, Module, Swagger), Prisma ORM + Kysely (typsichere DB-Zugriffe), Redis optional für Cache.
+* Frameworks: Next.js 15 (SSR/SSG, Routing), NestJS 11 (DI, Module, Swagger), Prisma ORM + Kysely (typsichere DB-Zugriffe).
 * Datenbank: PostgreSQL 16 (ACID, Open Source).
 * API-Stil: REST mit OpenAPI/Swagger-Doku (`/api`, `/api-json`).
 * Build/Deploy: pnpm Monorepo; Frontend als Static Export; Backend als Node-Service/Container.
@@ -78,7 +78,7 @@ pnpm -C src/frontend dlx typedoc --entryPointStrategy expand --entryPoints app c
 == Konsistenzsicherung
 * C4-Container/Komponenten gegen Module/Packages abgleichen (Backend: `src/backend/src`, Frontend: `src/frontend/app`, `src/frontend/lib`).
 * Sequenzdiagramme mit Integrationstests (E2E unter `src/backend/test`) und API-Routen abgleichen.
-* Bei API-Änderungen: OpenAPI neu ausliefern (`http://localhost:3111/api-json`) und Frontend-API-Client regenerieren (`pnpm -C src/frontend run build:api`).
+* Bei API-Änderungen: OpenAPI neu ausliefern (`http://localhost:3111/api-json`) und Frontend-API-Client regenerieren (`pnpm --filter api-client generate`).
 
 == Artefakt-Export
 * PDF dieser Entwicklerdoku: `asciidoctor-pdf -r asciidoctor-diagram docs/development/entwicklerdoku.adoc`

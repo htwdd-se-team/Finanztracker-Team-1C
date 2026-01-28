@@ -1,0 +1,556 @@
+# Betriebsdokumentation Finanztracker
+
+## 1. Systemübersicht
+
+Der Finanztracker ist eine moderne Webanwendung zur Verwaltung persönlicher Finanzen, bestehend aus:
+
+- **Backend (API)**: NestJS-Anwendung mit PostgreSQL-Datenbank
+- **Frontend**: Next.js 15 Single-Page-Application (deployed auf Cloudflare Pages)
+- **Architektur**: Monorepo mit pnpm Workspaces
+
+**Live-Demo**: [https://finanztracker-team-1c.pages.dev/](https://finanztracker-team-1c.pages.dev/)
+
+## 2. Voraussetzungen
+
+- **Docker & Docker Compose** (für Datenbank und optional Backend)
+- **Node.js 20+** und **pnpm 9.15.9+** (für lokale Entwicklung)
+- **Git** zum Klonen des Repositories
+
+## 3. Setup-Optionen
+
+Es gibt zwei Möglichkeiten, das System zu betreiben:
+
+### Option A: Produktions-Setup (Containerized)
+
+- **Datenbank**: PostgreSQL in Docker
+- **Backend**: NestJS in Docker
+- **Frontend**: Statisch gehostet auf Cloudflare Pages
+
+### Option B: Entwicklungs-Setup (Lokal)
+
+- **Datenbank**: PostgreSQL in Docker
+- **Backend**: Lokal über `pnpm dev`
+- **Frontend**: Lokal über `pnpm dev`
+
+---
+
+## 4. Option A: Produktions-Setup (Containerized)
+
+### 4.1 Docker Compose Konfiguration
+
+Die benötigten Dateien liegen in `docs/deployment/`:
+
+- `docker-compose.yml` - Produktions-Setup
+- `.env.example` - Umgebungsvariablen-Vorlage
+
+**Verwendung:**
+
+```bash
+# 1. Deployment-Dateien kopieren
+cp docs/deployment/docker-compose.yml .
+cp docs/deployment/.env.example .env
+
+# 2. .env anpassen
+nano .env
+```
+
+**Inhalt `docker-compose.yml`:**
+
+```yaml
+version: "3.8"
+
+services:
+  # PostgreSQL Datenbank
+  postgres:
+    image: postgres:16-alpine
+    container_name: finapp-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PW}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    # Healthcheck: Stellt sicher, dass DB bereit ist, bevor Backend startet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}"]
+      interval: 10s # Prüfung alle 10 Sekunden
+      timeout: 5s # Timeout nach 5 Sekunden
+      retries: 5 # 5 Fehlversuche bevor "unhealthy"
+
+  # PgAdmin (optional - standardmäßig deaktiviert)
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: finapp-pgadmin
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PW}
+  #   ports:
+  #     - "5050:80"
+
+  # Backend API
+  finapp-backend:
+    image: ghcr.io/htwdd-se-team/finapp-backend:main
+    container_name: finapp-backend
+    restart: always
+    # Wartet bis Datenbank gesund ist
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Wichtig: Hostname ist Service-Name 'postgres', nicht localhost!
+      DATABASE_URL: postgresql://${DATABASE_USER}:${DATABASE_PW}@postgres:5432/${DATABASE_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 3000
+
+      # CORS: Kommaseparierte Liste erlaubter Frontend-URLs
+      # Wildcard '*' in Subdomain erlaubt alle Preview-Deployments
+      CORS_ORIGIN: https://finanztracker-team-1c.pages.dev,http://localhost:*,https://*.finanztracker-team-1c.pages.dev
+
+      # Aktiviert geplante Transaktionen (täglich um Mitternacht)
+      RUN_SCHEDULED_ENTRIES: true
+    ports:
+      - "3000:3000"
+
+volumes:
+  db-data:
+```
+
+### 4.2 Umgebungsvariablen (.env)
+
+Die Datei `docs/deployment/.env.example` dient als Vorlage:
+
+**Inhalt `.env.example`:**
+
+```env
+# Datenbank Zugangsdaten
+DATABASE_USER=dbFinappUser
+DATABASE_PW=CHANGE_ME_TO_SECURE_PASSWORD
+DATABASE_NAME=finappDb
+
+# Backend Sicherheit
+# JWT Secret generieren: openssl rand -base64 32
+JWT_SECRET=CHANGE_ME_TO_RANDOM_SECRET_MIN_32_CHARS
+
+# Optional: PgAdmin (nur wenn aktiviert)
+PGADMIN_EMAIL=admin@example.com
+```
+
+**⚠️ Sicherheitshinweise:**
+
+- **Niemals** die `.env` Datei in Git committen!
+- Sichere Passwörter verwenden (z.B. mit `openssl rand -base64 32`)
+- `JWT_SECRET` muss mindestens 32 Zeichen haben
+- In Produktion andere Werte als in der Beispiel-Datei nutzen!
+
+### 4.3 Deployment-Schritte
+
+```bash
+# 1. Docker Compose starten
+docker compose up -d
+
+# 2. Datenbank-Schema deployen (einmalig oder nach Schema-Änderungen)
+docker exec -it finapp-backend npx prisma migrate deploy
+
+# 3. Status prüfen
+docker compose ps
+docker compose logs -f finapp-backend
+
+# 4. Backend ist erreichbar unter:
+# - API: http://localhost:3000
+# - Swagger Docs: http://localhost:3000/api
+```
+
+### 4.4 Erklärung komplexer Konfigurationen
+
+#### `depends_on: condition: service_healthy`
+
+**Komplexität: Niedrig**
+
+Das Backend versucht beim Start sofort, sich mit der Datenbank zu verbinden. Ohne diese Konfiguration würde es crashen, wenn die DB noch nicht bereit ist. Der `healthcheck` des Postgres-Containers prüft mit `pg_isready`, ob die DB Verbindungen akzeptiert. Erst dann startet das Backend.
+
+#### `DATABASE_URL: postgresql://...@postgres:5432/...`
+
+**Komplexität: Mittel**
+
+**Wichtig**: Der Hostname ist `postgres` (Service-Name), **nicht** `localhost` oder eine IP! Docker Compose erstellt ein internes Netzwerk, in dem Services sich gegenseitig über ihre Namen erreichen.
+
+Von außerhalb (z.B. lokaler Entwicklung) wäre es: `localhost:5432`
+
+#### `CORS_ORIGIN`
+
+**Komplexität: Mittel**
+
+Cross-Origin Resource Sharing verhindert, dass fremde Websites Ihre API nutzen. Hier werden drei Patterns erlaubt:
+
+- `https://finanztracker-team-1c.pages.dev` - Produktions-URL
+- `http://localhost:*` - Alle lokalen Ports für Entwicklung (z.B. 3000, 3001)
+- `https://*.finanztracker-team-1c.pages.dev` - Alle Cloudflare Preview-Deployments
+
+**Sicherheit**: Wildcard `*` nur bei vertrauenswürdigen Subdomains verwenden!
+
+#### `RUN_SCHEDULED_ENTRIES: true`
+
+**Komplexität: Niedrig**
+
+Aktiviert einen Cron-Job (via NestJS `@nestjs/schedule`), der täglich um Mitternacht wiederkehrende Transaktionen (monatliche Miete, wöchentliches Abonnement etc.) automatisch erstellt.
+
+**Empfehlung**: Nur in **einer** Instanz aktivieren! Bei mehreren Backend-Containern würden Duplikate entstehen.
+
+---
+
+## 5. Option B: Entwicklungs-Setup (Lokal)
+
+Ideal für aktive Entwicklung mit Hot-Reload und Debugging.
+
+### 5.1 Repository klonen
+
+```bash
+git clone <repository-url>
+cd SE-Projekt
+```
+
+### 5.2 Datenbank starten
+
+Die Datei `docs/deployment/docker-compose.dev.yml` nutzen:
+
+```bash
+# Aus Projekt-Root
+docker compose -f docs/deployment/docker-compose.dev.yml up -d
+```
+
+**Inhalt `docker-compose.dev.yml`:**
+
+```yaml
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: finapp-dev-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dbFinappUser
+      POSTGRES_PASSWORD: devpassword123
+      POSTGRES_DB: finappDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+
+volumes:
+  dev-db-data:
+```
+
+---
+### 5.3 Projekt-Setup
+
+```bash
+# 1. Alle Dependencies installieren (Monorepo)
+pnpm install
+
+# 2. Prisma Client generieren
+cd src/backend
+pnpm prisma:generate
+
+# 3. Datenbank-Schema deployen
+pnpm prisma:migrate
+```
+
+**Wichtig**: `prisma:migrate` muss **immer** ausgeführt werden, wenn:
+
+- Das Projekt zum ersten Mal aufgesetzt wird
+- Das Prisma-Schema (`schema.prisma`) geändert wurde
+- Nach einem `git pull` mit Schema-Änderungen
+
+### 5.4 Backend-Konfiguration
+
+Erstellen Sie `src/backend/.env`:
+
+```env
+DATABASE_URL=postgresql://dbFinappUser:devpassword123@localhost:5432/finappDb
+JWT_SECRET=dev-secret-key-change-in-production
+# Optional:
+# RUN_SCHEDULED_ENTRIES=true
+# PORT=3111
+```
+
+### 5.5 Starten
+
+**Option 1: Alles parallel starten**
+
+```bash
+# Im Projekt-Root
+pnpm dev
+```
+
+- Backend: `http://localhost:3111`
+- Frontend: `http://localhost:3000`
+
+**Option 2: Einzeln starten**
+
+```bash
+# Terminal 1 - Backend
+pnpm dev:backend
+
+# Terminal 2 - Frontend
+pnpm dev:frontend
+```
+
+### 5.6 Nützliche Entwicklungs-Commands
+
+```bash
+# Prisma Studio (DB GUI)
+cd src/backend
+pnpm prisma studio
+# Öffnet http://localhost:5555
+
+# API Client neu generieren (nach Backend-Änderungen)
+cd src/api-client
+pnpm generate
+
+# Tests
+pnpm test              # Alle Tests
+pnpm test:e2e          # Playwright E2E Tests
+pnpm --filter backend test:e2e  # Backend E2E Tests
+
+# Linting
+pnpm lint
+```
+
+---
+
+## 6. Frontend (Cloudflare Pages)
+
+Das Frontend ist eine statische Next.js-App und wird **separat** vom Backend deployed.
+
+### 6.1 Produktions-Deployment
+
+**Plattform**: Cloudflare Pages
+**Live-URL**: [https://finanztracker-team-1c.pages.dev/](https://finanztracker-team-1c.pages.dev/)
+
+#### Build-Konfiguration in Cloudflare
+
+```yaml
+Build Command: pnpm install && pnpm build:frontend
+Build Output Directory: src/frontend/out
+Root Directory: (leer lassen)
+Node Version: 20
+```
+
+#### Umgebungsvariablen
+
+```env
+NEXT_PUBLIC_BACKEND_URL=https://finapp-backend.elias-blu.me
+```
+
+**Wichtig**: Diese URL muss in der `CORS_ORIGIN` des Backends eingetragen sein!
+
+### 6.2 Wie funktioniert das Deployment?
+
+1. **Git Push**: Code-Änderungen werden gepusht
+2. **Cloudflare Build**:
+   - Installiert Dependencies mit `pnpm`
+   - Führt `pnpm build:frontend` aus
+   - Generiert statische HTML/CSS/JS in `src/frontend/out/`
+3. **Deployment**: Statische Dateien werden auf Cloudflare CDN deployed
+4. **Preview**: Jeder PR bekommt eine eigene Preview-URL (`<branch-name>.finanztracker-team-1c.pages.dev`)
+
+### 6.3 Lokales Frontend-Testing gegen Live-Backend
+
+```bash
+# .env.local in src/frontend/ erstellen
+NEXT_PUBLIC_BACKEND_URL=https://finapp-backend.elias-blu.me
+
+pnpm dev:frontend
+```
+
+Jetzt kommuniziert das lokale Frontend mit dem Produktions-Backend.
+
+---
+
+## 7. Prisma Schema Deployment
+
+**Achtung**: Sowohl bei Option A als auch Option B muss das Datenbank-Schema deployed werden!
+
+### 7.1 In Docker (Option A)
+
+```bash
+docker exec -it finapp-backend npx prisma migrate deploy
+```
+
+### 7.2 Lokal (Option B)
+
+```bash
+cd src/backend
+pnpm prisma:migrate
+```
+
+### 7.3 Wann muss migriert werden?
+
+- **Initial**: Beim ersten Setup (leere Datenbank)
+- **Nach Schema-Änderungen**: Neue Tabellen, Spalten, Relationen
+- **Nach Git Pull**: Wenn Teammitglieder Migrationen hinzugefügt haben
+
+### 7.4 Migrations-Workflow
+
+```bash
+# 1. Schema bearbeiten
+# Datei: src/backend/prisma/schema.prisma
+
+# 2. Migration erstellen (nur in Entwicklung!)
+pnpm prisma:migrate
+
+# 3. Migration wird in prisma/migrations/ gespeichert
+# 4. Migration committen und pushen
+
+# 5. Auf Produktions-Server
+docker exec -it finapp-backend npx prisma migrate deploy
+```
+
+---
+
+## 8. Monitoring & Troubleshooting
+
+### 8.1 Container Logs
+
+```bash
+# Alle Logs
+docker compose logs -f
+
+# Nur Backend
+docker compose logs -f finapp-backend
+
+# Nur Datenbank
+docker compose logs -f postgres
+```
+
+### 8.2 Häufige Probleme
+
+#### Problem: Backend startet nicht - "Can't reach database server"
+
+**Lösung**: Datenbank nicht bereit oder falsche `DATABASE_URL`
+
+```bash
+# 1. DB Status prüfen
+docker compose ps postgres
+
+# 2. Healthcheck prüfen
+docker inspect finapp-postgres | grep -A5 Health
+
+# 3. DATABASE_URL prüfen (Hostname muss 'postgres' sein, nicht 'localhost')
+docker compose exec finapp-backend env | grep DATABASE_URL
+```
+
+#### Problem: Frontend kann Backend nicht erreichen
+
+**Lösung**: CORS-Fehler - Frontend-URL nicht in `CORS_ORIGIN`
+
+```bash
+# Backend-Logs checken auf CORS-Fehler
+docker compose logs -f finapp-backend
+
+# CORS_ORIGIN ergänzen und neu starten
+docker compose down
+docker compose up -d
+```
+
+#### Problem: Prisma Schema out of sync
+
+**Fehlermeldung**: "Prisma schema is out of sync with database"
+
+```bash
+# Option 1: Migrationen anwenden
+docker exec -it finapp-backend npx prisma migrate deploy
+
+# Option 2: Schema ohne Migration synchronisieren (nur Dev!)
+docker exec -it finapp-backend npx prisma db push
+```
+
+#### Problem: Port bereits belegt
+
+**Fehlermeldung**: "port is already allocated"
+
+```bash
+# Port-Nutzung prüfen
+# Windows
+netstat -ano | findstr :3000
+
+# Linux/Mac
+lsof -i :3000
+
+# Port in docker-compose.yml ändern
+ports:
+  - "3001:3000"  # Extern 3001, intern bleibt 3000
+```
+
+### 8.3 Datenbank-Backup
+
+```bash
+# Backup erstellen
+docker exec finapp-postgres pg_dump -U dbFinappUser finappDb > backup.sql
+
+# Backup wiederherstellen
+docker exec -i finapp-postgres psql -U dbFinappUser finappDb < backup.sql
+```
+
+---
+
+## 9. Sicherheits-Checkliste
+
+- [ ] `.env` Datei in `.gitignore` (niemals committen!)
+- [ ] Starke Passwörter generieren (nicht die Beispiel-Werte nutzen!)
+- [ ] `JWT_SECRET` mindestens 32 Zeichen, zufällig
+- [ ] PostgreSQL Port nicht öffentlich freigeben (nur via Reverse Proxy)
+- [ ] CORS nur für vertrauenswürdige Domains aktivieren
+- [ ] Regelmäßige Backups der Datenbank
+- [ ] Docker Images regelmäßig updaten (`docker compose pull`)
+
+---
+
+## 10. Zusammenfassung: Quick Start
+
+### Produktion (Docker)
+
+```bash
+# 1. Deployment-Dateien kopieren
+cp docs/deployment/docker-compose.yml .
+cp docs/deployment/.env.example .env
+
+# 2. .env mit sicheren Werten füllen
+nano .env
+
+# 3. Starten
+docker compose up -d
+docker exec -it finapp-backend npx prisma migrate deploy
+
+# Backend: http://localhost:3000
+# Frontend: https://finanztracker-team-1c.pages.dev/
+```
+
+### Entwicklung (Lokal)
+
+```bash
+# 1. Datenbank starten
+docker compose -f docs/deployment/docker-compose.dev.yml up -d
+
+# 2. Projekt Setup
+pnpm install
+cd src/backend && pnpm prisma:generate && pnpm prisma:migrate
+
+# 3. Starten
+cd ../..
+pnpm dev
+
+# Backend: http://localhost:3111
+# Frontend: http://localhost:3000
+```
+
+---
+
+**Dokumentations-Stand**: Januar 2026
+**Projekt**: HTW Dresden SE-Projekt
+**Team**: team@htwd-se-team.de

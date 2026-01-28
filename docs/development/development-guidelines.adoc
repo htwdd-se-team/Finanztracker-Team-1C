@@ -149,6 +149,8 @@ Triggert bei Änderungen in:
 
 **Checks:**
 * **Linting**: `pnpm --filter backend lint` für Code-Qualität
+* **Unit Tests**: `pnpm --filter backend test:module --coverage` (70% Coverage-Threshold Warning)
+* **E2E Tests**: `pnpm --filter backend test:e2e --coverage` (70% Coverage-Threshold Warning)
 * **Prisma Generate**: `pnpm --filter backend prisma:generate`
 * **Dependencies Installation**: `pnpm install --frozen-lockfile`
 

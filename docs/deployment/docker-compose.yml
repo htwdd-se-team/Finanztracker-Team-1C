@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Datenbank
+  postgres:
+    image: postgres:16-alpine
+    container_name: finapp-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PW}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    # Healthcheck: Stellt sicher, dass DB bereit ist, bevor Backend startet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}"]
+      interval: 10s # Prüfung alle 10 Sekunden
+      timeout: 5s # Timeout nach 5 Sekunden
+      retries: 5 # 5 Fehlversuche bevor "unhealthy"
+
+  # PgAdmin (optional - standardmäßig deaktiviert)
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: finapp-pgadmin
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PW}
+  #   ports:
+  #     - "5050:80"
+
+  # Backend API
+  finapp-backend:
+    image: ghcr.io/htwdd-se-team/finapp-backend:main
+    container_name: finapp-backend
+    restart: always
+    # Wartet bis Datenbank gesund ist
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Wichtig: Hostname ist Service-Name 'postgres', nicht localhost!
+      DATABASE_URL: postgresql://${DATABASE_USER}:${DATABASE_PW}@postgres:5432/${DATABASE_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 3000
+
+      # CORS: Kommaseparierte Liste erlaubter Frontend-URLs
+      # Wildcard '*' in Subdomain erlaubt alle Preview-Deployments
+      CORS_ORIGIN: https://finanztracker-team-1c.pages.dev,http://localhost:*,https://*.finanztracker-team-1c.pages.dev
+
+      # Aktiviert geplante Transaktionen (täglich um Mitternacht)
+      RUN_SCHEDULED_ENTRIES: true
+    ports:
+      - "3000:3000"
+
+volumes:
+  db-data:

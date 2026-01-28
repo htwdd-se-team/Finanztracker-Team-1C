@@ -84,12 +84,13 @@ React-Frontend mit Next.js Framework, ShadCN UI-Komponenten, zustandsbasiertes R
 
 **Logikschicht:**
 
-NestJS Backend mit modularer Controller-Service-Architektur:
+NestJS Backend mit modularer DDD-Architektur (Domain-Driven Design):
 
 * AuthController: Benutzerregistrierung und -anmeldung
 * UserController: Benutzerprofilverwaltung
 * CategoryController: Kategorienverwaltung
 * EntryController: Transaktionsverwaltung
+* FilterController: Filterverwaltung für gespeicherte Suchabfragen
 * AnalyticsController: Berichte und Statistiken
 
 **Datenzugriffsschicht:**
@@ -197,9 +198,10 @@ Das Frontend und Backend bestehen aus spezialisierten Komponenten, die jeweils k
 **Controller-Layer (API-Endpunkte):**
 
 * `AuthController` (POST /auth/login, POST /auth/register)
-* `UserController` (GET /user/me, GET /user/balance)
+* `UserController` (GET /user/me, GET /user/balance, PATCH /user/emergency-reserve)
 * `CategoryController` (CRUD für Kategorien mit Pagination)
 * `EntryController` (CRUD für Transaktionen mit Filterung)
+* `FilterController` (CRUD für gespeicherte Filter)
 * `AnalyticsController` (Berichte und Datenanalyse)
 
 **Service-Layer (Geschäftslogik):**
@@ -224,10 +226,11 @@ Das Frontend und Backend bestehen aus spezialisierten Komponenten, die jeweils k
 
 **Hauptentitäten:**
 
-* `User` (Benutzerdaten, E-Mail, Passwort-Hash, Namen)
+* `User` (Benutzerdaten, E-Mail, Passwort-Hash, Namen, Notgroschen)
 * `Category` (Kategorien mit Farben, Icons, Benutzer-Zuordnung)
 * `Transaction` (Transaktionen mit Typ INCOME/EXPENSE, Beträge in Cent)
-* Unterstützung für wiederkehrende Transaktionen mit verschiedenen Intervallen
+* `Filter` (Gespeicherte Filtereinstellungen für Transaktionsabfragen)
+* Unterstützung für wiederkehrende Transaktionen mit verschiedenen Intervallen (DAILY, WEEKLY, MONTHLY)
 
 === Deployment-Diagramm
 
@@ -242,8 +245,7 @@ Das Frontend und Backend bestehen aus spezialisierten Komponenten, die jeweils k
 
 * Docker-Container für Backend und Datenbank
 * PostgreSQL-Instanz
-* Redis für Session-Management
-* PgAdmin für Datenbankadministration
+* PgAdmin für Datenbankadministration (optional)
 
 **Kommunikation:**
 
