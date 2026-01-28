@@ -26,7 +26,7 @@ image:../images/test_pyramid.png[]
 
 ==== Unit-Tests (Basis der Pyramide)
 
-**Umfang:** 119 Testfälle in 8 Testdateien
+**Umfang:** 120 Testfälle in 7 Testdateien
 
 **Testobjekte:**
 
@@ -36,35 +36,31 @@ image:../images/test_pyramid.png[]
 
 | `EntryService`
 | Transaktionen erstellen, lesen, aktualisieren, löschen, Pagination, Filterung
-| 27
+| 30
 
 | `AuthService`
 | Benutzerregistrierung, Login, JWT-Token-Generierung, Passwort-Hashing
-| 18
+| 19
 
 | `AnalyticsService`
 | Transaktionsübersichten, Saldoverlauf, Granularitäten (Tag/Woche/Monat/Jahr)
-| 18
-
-| `CategoryService`
-| Kategorien verwalten, Sortierung, Nutzungszähler
-| 15
+| 22
 
 | `RecurringEntryService`
 | Wiederkehrende Transaktionen, Scheduling, Enable/Disable
-| 14
+| 21
 
 | `FilterService`
 | Benutzerdefinierte Filter erstellen und verwalten
-| 12
+| 15
 
 | `UserService`
 | Benutzerdaten abrufen, Saldo berechnen
-| 11
+| 12
 
-| `AppModule`
-| Basis-Modul-Funktionalität
-| 4
+| `AppController`
+| Basis-Controller-Funktionalität
+| 1
 |===
 
 **Testmethoden:**
@@ -76,7 +72,7 @@ image:../images/test_pyramid.png[]
 
 ==== Integrationstests (API-Ebene)
 
-**Umfang:** 11 E2E-Testdateien mit vollständiger API-Abdeckung
+**Umfang:** 11 E2E-Testdateien mit 114 Testfällen
 
 **Testobjekte:**
 
@@ -100,13 +96,22 @@ image:../images/test_pyramid.png[]
 | Benutzerdefinierte Filter, Filteranwendung auf Transaktionen
 
 | `user.e2e-spec.ts`
-| Benutzerprofil, Saldo-Abfrage
+| Benutzerprofil, Saldo-Abfrage, Emergency Reserve
 
 | `security.e2e-spec.ts`
 | Eingabevalidierung, SQL-Injection-Schutz, XSS-Schutz, Rate-Limiting
 
-| `recurring-entry.service.module-spec.ts`
+| `recurring.e2e-spec.ts`
 | Wiederkehrende Transaktionen, Scheduling-Logik
+
+| `import.e2e-spec.ts`
+| CSV-Import von Transaktionen
+
+| `demo.e2e-spec.ts`
+| Demo-Modus Funktionalität
+
+| `app.e2e-spec.ts`
+| Basis-Applikationstest
 |===
 
 **Testmethoden:**
@@ -118,7 +123,7 @@ image:../images/test_pyramid.png[]
 
 ==== End-to-End-Tests (UI-Ebene)
 
-**Umfang:** 2 Playwright-Testdateien
+**Umfang:** 2 Playwright-Testdateien mit 13 Testfällen
 
 **Testobjekte:**
 
@@ -127,10 +132,10 @@ image:../images/test_pyramid.png[]
 | Testdatei | Getestete Funktionalität
 
 | `login.spec.ts`
-| Login-Formular anzeigen, Eingabevalidierung, erfolgreicher Login, Fehlerbehandlung
+| Login-Formular anzeigen, Eingabevalidierung, erfolgreicher Login, Fehlerbehandlung (7 Tests)
 
 | `transaction.spec.ts`
-| Transaktionsdialog öffnen, neue Transaktion erstellen, Formularvalidierung
+| Transaktionsdialog öffnen, neue Transaktion erstellen, Formularvalidierung (6 Tests)
 |===
 
 **Testmethoden:**
@@ -382,22 +387,22 @@ jobs:
 | Kategorie | Anzahl Tests | Status | Coverage-Ziel
 
 | Unit-Tests (Module-Specs)
-| 119
+| 120
 | Stabil
 | ≥70%
 
 | Integrationstests (E2E)
-| ~100+
+| 114
 | Stabil
 | ≥70%
 
 | UI-Tests (Playwright)
-| ~20
+| 13
 | Stabil
 | Kritische Pfade
 
 | **Gesamt**
-| **~240+**
+| **247**
 | Stabil
 | ≥70% (Durchschnitt)
 |===
@@ -422,7 +427,7 @@ jobs:
 
 | Category Services
 | Hoch
-| CRUD + Sortierung
+| CRUD + Sortierung (E2E-Tests)
 
 | Filter Services
 | Mittel-Hoch
@@ -442,42 +447,37 @@ jobs:
 | Service | Tests | Status | Besonderheiten
 
 | EntryService
-| 27
+| 30
 | Bestanden
 | Pagination, Recurring, Filter
 
 | AuthService
-| 18
+| 19
 | Bestanden
 | JWT, Hashing, Validation
 
 | AnalyticsService
-| 18
+| 22
 | Bestanden
 | Alle Granularitäten
 
-| CategoryService
-| 15
-| Bestanden
-| Sortierungen
-
 | RecurringEntryService
-| 14
+| 21
 | Bestanden
 | Scheduling
 
 | FilterService
-| 12
+| 15
 | Bestanden
 | CRUD
 
 | UserService
-| 11
+| 12
 | Bestanden
 | Balance-Berechnung
 
-| AppModule
-| 4
+| AppController
+| 1
 | Bestanden
 | Basis-Setup
 |===
@@ -489,39 +489,59 @@ jobs:
 | Controller/Feature | Tests | Status | Besonderheiten
 
 | AuthController
-| ~10
+| 5
 | Bestanden
 | Register/Login-Flow
 
 | EntryController
-| ~15
+| 10
 | Bestanden
 | Vollständiger CRUD
 
 | CategoryController
-| ~10
+| 8
 | Bestanden
 | CRUD + Sortierung
 
 | AnalyticsController
-| ~20
+| 17
 | Bestanden
 | Dashboard-Daten
 
 | FilterController
-| ~10
+| 6
 | Bestanden
 | Filter-Management
 
 | UserController
-| ~5
+| 6
 | Bestanden
-| Profil, Saldo
+| Profil, Saldo, Emergency Reserve
 
 | Security
-| ~30+
+| 55
 | Bestanden
 | Umfangreiche Validierung
+
+| RecurringController
+| 4
+| Bestanden
+| Wiederkehrende Transaktionen
+
+| ImportController
+| 1
+| Bestanden
+| CSV-Import
+
+| DemoController
+| 1
+| Bestanden
+| Demo-Modus
+
+| AppController
+| 1
+| Bestanden
+| Basis-Test
 |===
 
 ==== UI-Test-Ergebnisse (Playwright)
@@ -531,12 +551,12 @@ jobs:
 | Feature | Tests | Status | Browser
 
 | Login-Formular
-| ~10
+| 7
 | Bestanden
 | Chromium, Firefox, WebKit
 
 | Transaktions-Dialog
-| ~10
+| 6
 | Bestanden
 | Chromium, Firefox, WebKit
 |===
@@ -684,6 +704,6 @@ jobs:
 
 === Referenzen
 
-* link:../test/test_cases.adoc[Detaillierte Testfälle]
-* link:../../src/backend/test/TEST_CASES.md[Backend Test Cases (Markdown)]
+* link:../test/test_cases.adoc[Test-Doku Prototyp]
+* link:../../src/backend/test/TEST_CASES.md[Alle Backend-Test-Cases]
 * link:../../.github/workflows/build-check-backend.yml[CI/CD Workflow-Konfiguration]
