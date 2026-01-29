@@ -1,3 +1,5 @@
+:doctype: book
+
 = Betriebsdokumentation: FinanzTracker
 Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de)
 {localdatetime}
@@ -12,6 +14,14 @@ Der Finanztracker ist eine moderne Webanwendung zur Verwaltung persönlicher Fin
 * *Architektur*: Monorepo mit pnpm Workspaces
 
 *Live-Demo*: link:https://finanztracker-team-1c.pages.dev/[https://finanztracker-team-1c.pages.dev/]
+
+=== Deployment-Architektur
+
+Die folgende Abbildung zeigt die Systemarchitektur mit den Deployment-Details:
+
+:imagesdir: ../architecture/images
+image::architecture-diagram-wdeploy.png[Deployment-Architektur,width=90%]
+:imagesdir: images
 
 == 2. Voraussetzungen
 

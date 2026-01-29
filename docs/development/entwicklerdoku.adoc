@@ -91,10 +91,6 @@ Voraussetzung: Backend muss laufen (http://localhost:3111), damit die OpenAPI-Sp
 * Sequenzdiagramme mit Integrationstests (E2E unter `src/backend/test`) und API-Routen abgleichen.
 * Bei API-Änderungen: OpenAPI neu ausliefern (`http://localhost:3111/api-json`) und Frontend-API-Client regenerieren (`pnpm --filter api-client generate`).
 
-== Artefakt-Export
-* PDF dieser Entwicklerdoku: `asciidoctor-pdf -r asciidoctor-diagram docs/development/entwicklerdoku.adoc`
-* HTML-Softwaredoku: siehe Compodoc/TypeDoc-Schritte oben.
-
 == Referenzen
 * Architecture Notebook: docs/architecture/architecture_notebook.adoc
 * Design-Dokument (Klassendiagramme/Sequenzen): docs/development/design.adoc

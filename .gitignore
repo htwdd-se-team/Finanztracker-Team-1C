@@ -53,6 +53,11 @@ Thumbs.db
 tmp/
 temp/
 
+# Documentation exports
+export/
+docs/**/*.pdf
+export-docs.sh
+
 # Vercel
 .vercel
 
