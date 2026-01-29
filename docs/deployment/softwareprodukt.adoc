@@ -1,0 +1,26 @@
+:doctype: book
+
+= Softwareprodukt: FinanzTracker
+Ben Eisold (s87191<at>htw-dresden.de); Paula Grahlow (s86261<at>htw-dresden.de); Tuan Khang Pham (s87088<at>htw-dresden.de); Christoph Prasser (s87530<at>htw-dresden.de); Cedrick Richter (s87073<at>htw-dresden.de); Elias Blume (s87142<at>htw-dresden.de)
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Name des Systems
+
+*FinanzTracker* - Finanztracker-Anwendung für Studierende zur Verwaltung persönlicher Finanzen
+
+== Lauffähige Instanz
+
+*URL*: link:https://finanztracker-team-1c.pages.dev/[https://finanztracker-team-1c.pages.dev/]
+
+== Docker Image
+
+*Backend Image*: `ghcr.io/htwdd-se-team/finapp-backend:main`
+
+*Deployment-Dateien*: `docs/deployment/docker-compose.yml` und `docs/deployment/.env.example`
+
+== Demo-Login
+
+* *E-Mail*: demo-account@presi.com
+* *Passwort*: password
+
